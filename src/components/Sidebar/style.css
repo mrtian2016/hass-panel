@@ -11,6 +11,12 @@
   flex-direction: column;
   box-sizing: border-box;
   box-shadow: 2px 0 8px var(--color-shadow);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.hidden {
+  transform: translateX(-100%);
 }
 
 .menu-items {
@@ -50,9 +56,31 @@
   font-weight: 500;
 }
 
-/* 移动端隐藏侧边栏 */
+/* 修改移动端样式 */
 @media (max-width: 768px) {
   .sidebar {
-    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar:not(.hidden) {
+    transform: translateX(0);
+  }
+  
+  /* 添加遮罩层 */
+  .sidebar:not(.hidden)::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
   }
 } 

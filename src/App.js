@@ -1,14 +1,25 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { HassConnect } from '@hakit/core';
 import { ThemeProvider } from './theme/ThemeContext';
 import Bottom from './components/Bottom';
 import Sidebar from './components/Sidebar';
-import Routes from './routes';
+import Home from './pages/home';
+import AppRoutes from './routes';
 import './App.css';
 
 function App() {
+  const [sidebarVisible, setSidebarVisible] = useState(() => {
+    const saved = localStorage.getItem('sidebar-visible');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+
+  // 保存侧边栏状态到 localStorage
+  useEffect(() => {
+    localStorage.setItem('sidebar-visible', JSON.stringify(sidebarVisible));
+  }, [sidebarVisible]);
+
   const isDesktop = useMediaQuery({ minWidth: 768 });
 
   return (
@@ -17,13 +28,16 @@ function App() {
         hassUrl={process.env.REACT_APP_HASS_URL} 
         hassToken={process.env.REACT_APP_HASS_TOKEN}
       >
-        <BrowserRouter>
+        <Router>
           <div className="App">
-            {isDesktop && <Sidebar />}
-            <Routes />
+            {isDesktop && <Sidebar visible={sidebarVisible} />}
+            <Routes>
+              <Route path="/" element={<Home sidebarVisible={sidebarVisible} setSidebarVisible={setSidebarVisible} />} />
+              {AppRoutes()}
+            </Routes>
             {!isDesktop && <Bottom />}
           </div>
-        </BrowserRouter>
+        </Router>
       </HassConnect>
     </ThemeProvider>
   );

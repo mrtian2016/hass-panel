@@ -8,7 +8,7 @@ import {
 } from '@mdi/js';
 import './style.css';
 
-function Sidebar() {
+function Sidebar({ visible }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
@@ -32,7 +32,7 @@ function Sidebar() {
   ];
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${visible ? '' : 'hidden'}`}>
       <div className="menu-items">
         {menuItems.map(item => (
           <button

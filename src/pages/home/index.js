@@ -9,6 +9,7 @@ import {
   mdiRefresh,
   mdiViewGrid,
   mdiViewColumn,
+  mdiMenu,
 } from '@mdi/js';
 import { useWeather, useEntity,useHistory} from '@hakit/core';
 import { useTheme } from '../../theme/ThemeContext';
@@ -33,7 +34,7 @@ import WaterPurifierCard from '../../components/WaterPurifierCard';
 import './style.css';
 import { entityConfig } from '../../config/index';
 
-function Home() {
+function Home({ sidebarVisible, setSidebarVisible }) {
   const { theme, toggleTheme } = useTheme();
 
   const handleRefresh = () => {
@@ -221,7 +222,7 @@ function Home() {
   };
 
   return (
-    <div className="page-container">
+    <div className={`page-container ${!sidebarVisible ? 'sidebar-hidden' : ''}`}>
       {/* <PullToRefresh
         onRefresh={handleRefresh}
         pullingText="下拉刷新"
@@ -270,6 +271,18 @@ function Home() {
                 />
               </button>
             )}
+
+            <button 
+              className="sidebar-toggle"
+              onClick={() => setSidebarVisible(!sidebarVisible)}
+              title={sidebarVisible ? '隐藏侧边栏' : '显示侧边栏'}
+            >
+              <Icon
+                path={mdiMenu}
+                size={1}
+                color="var(--color-text-primary)"
+              />
+            </button>
           </div>
           
           <Responsive

@@ -526,6 +526,7 @@
   height: 100vh;
   padding-bottom: calc(70px + env(safe-area-inset-bottom));
   scrollbar-width: none;
+  transition: margin-left 0.3s ease;
 }
 
 .content {
@@ -629,10 +630,19 @@
 
 @media (min-width: 768px) {
   .page-container {
-    margin-left: 200px;
+    margin-left: var(--sidebar-width, 200px);
     padding: 20px;
   }
   
+  .page-container.sidebar-hidden {
+    margin-left: 0;
+  }
+  
+  /* 当侧边栏隐藏时调整内容最大宽度 */
+  .page-container.sidebar-hidden .content {
+    max-width: 100%;
+  }
+
   .content {
     padding: 0;
     margin: 0;
@@ -984,4 +994,26 @@
     bottom: calc(env(safe-area-inset-bottom) + 64px);
     right: 16px;
   }
+}
+
+.sidebar-toggle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.sidebar-toggle:hover {
+  background: var(--color-background);
+}
+
+.sidebar-toggle:active {
+  transform: scale(0.95);
 } 
