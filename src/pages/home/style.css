@@ -1016,4 +1016,98 @@
 
 .sidebar-toggle:active {
   transform: scale(0.95);
+}
+
+
+.settings-toggle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.settings-toggle:hover {
+  background: var(--color-background);
+}
+
+.settings-toggle:active {
+  transform: scale(0.95);
+}
+/* 添加设置面板样式 */
+.settings-panel {
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 80vh;
+  overflow-y: auto;
+  min-width: 240px;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.settings-header button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-visibility-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.card-visibility-item:hover {
+  background: var(--color-hover);
+}
+
+.card-visibility-item .checkbox-icon {
+  color: var(--color-primary);
+}
+
+.card-visibility-item .eye-icon {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+.card-visibility-item span {
+  color: var(--color-text-primary);
+  font-size: 14px;
 } 

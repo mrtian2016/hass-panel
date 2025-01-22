@@ -16,8 +16,10 @@ import BaseCard from '../BaseCard';
 import './style.css';
 import { useEntity } from '@hakit/core';
 function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
-  const radius = 80;
-  const strokeWidth = 12;
+  // 使用相对单位定义尺寸
+  const viewBoxSize = 200;  // 用于 SVG viewBox
+  const strokeWidth = viewBoxSize * 0.08;  // 笔画宽度设为 viewBox 的 6%
+  const radius = viewBoxSize / 2;  // 半径为 viewBox 的一半
   const normalizedRadius = radius - strokeWidth * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDashoffset = circumference - (value / 100) * circumference;
@@ -26,8 +28,9 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
     <div className="circular-progress-container">
       <div className="circular-progress">
         <svg
-          height={radius * 2}
-          width={radius * 2}
+          viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
+          width="100%"
+          height="100%"
         >
           <circle
             stroke="var(--color-border)"
@@ -41,7 +44,7 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
             stroke={color}
             fill="transparent"
             strokeWidth={strokeWidth}
-            strokeDasharray={circumference + ' ' + circumference}
+            strokeDasharray={`${circumference} ${circumference}`}
             style={{ strokeDashoffset }}
             strokeLinecap="round"
             r={normalizedRadius}

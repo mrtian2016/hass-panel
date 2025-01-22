@@ -10,6 +10,10 @@ import {
   mdiViewGrid,
   mdiViewColumn,
   mdiMenu,
+  mdiCog,
+  mdiEyeOutline,
+  mdiCheckboxMarked,
+  mdiCheckboxBlankOutline,
 } from '@mdi/js';
 import { useWeather, useEntity,useHistory} from '@hakit/core';
 import { useTheme } from '../../theme/ThemeContext';
@@ -33,6 +37,35 @@ import ScriptPanel from '../../components/ScriptPanel';
 import WaterPurifierCard from '../../components/WaterPurifierCard';
 import './style.css';
 import { entityConfig } from '../../config/index';
+
+// 获取当前断点
+const getCurrentBreakpoint = (width) => {
+  if (width >= 1200) return 'lg';
+  if (width >= 768) return 'md';
+  return 'sm';
+};
+
+// 获取列布局图标
+const getColumnLayoutIcon = (columns) => {
+  return mdiViewColumn;
+};
+
+// 修改卡片配置，添加动态卡片的处理
+const CARD_CONFIGS = [
+  { key: 'time', label: '时间' },
+  { key: 'weather', label: '天气', showIf: config => config.weather?.length > 0 },
+  { key: 'lights_status', label: '灯光状态', showIf: config => config.lights },
+  { key: 'lights_overview', label: '灯光总览', showIf: config => config.lightsOverview },
+  { key: 'cameras', label: '监控画面', showIf: config => config.cameras?.length > 0 },
+  { key: 'sensors', label: '环境监测', showIf: config => config.sensors?.length > 0 },
+  { key: 'router', label: '路由监控', showIf: config => config.router },
+  { key: 'nas', label: 'NAS监控', showIf: config => config.syno_nas },
+  { key: 'media', label: '播放器控制', showIf: config => config.mediaPlayers?.length > 0 },
+  { key: 'curtains', label: '窗帘控制', showIf: config => config.curtains?.length > 0 },
+  { key: 'electricity', label: '电量监控', showIf: config => config.electricity },
+  { key: 'scripts', label: '快捷指令', showIf: config => config.scripts },
+  { key: 'waterpuri', label: '净水器', showIf: config => config.waterpuri }
+];
 
 function Home({ sidebarVisible, setSidebarVisible }) {
   const { theme, toggleTheme } = useTheme();
@@ -103,6 +136,25 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       const containerPadding = isMobile ? 32 : 40;
       const availableWidth = window.innerWidth - sidebarWidth - containerPadding;
       setWidth(availableWidth);
+      
+      // 获取保存的列数设置
+      const savedColumns = localStorage.getItem('dashboard-columns');
+      const currentColumns = savedColumns ? JSON.parse(savedColumns) : { lg: 3, md: 3, sm: 1 };
+      
+      if (isMobile) {
+        // 移动端强制使用1列
+        const newColumnCount = { ...currentColumns, lg: 1, md: 1, sm: 1 };
+        setColumnCount(newColumnCount);
+        localStorage.setItem('dashboard-columns', JSON.stringify(newColumnCount));
+      } else if (!savedColumns) {
+        // 非移动端且没有保存的设置时，使用默认值
+        setColumnCount({ lg: 3, md: 3, sm: 1 });
+        localStorage.setItem('dashboard-columns', JSON.stringify({ lg: 3, md: 3, sm: 1 }));
+      } else {
+        // 非移动端且有保存的设置时，使用保存的值
+        setColumnCount(currentColumns);
+      }
+      
       setIsMobile(isMobile);
     }
 
@@ -213,12 +265,75 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
   // 处理列数变化
   const handleColumnsChange = (breakpoint) => {
+    if (isMobile) {
+      return;
+    }
     const newColumnCount = {
       ...columnCount,
       [breakpoint]: columnCount[breakpoint] >= 5 ? 3 : columnCount[breakpoint] + 1
     };
     setColumnCount(newColumnCount);
     localStorage.setItem('dashboard-columns', JSON.stringify(newColumnCount));
+  };
+
+  // 添加设置面板状态
+  const [showSettings, setShowSettings] = useState(false);
+  
+  // 获取所有动态卡片配置
+  const getDynamicCardConfigs = () => {
+    const dynamicConfigs = [];
+    
+    // 添加空调卡片配置
+    entityConfig.climates?.forEach((climate, index) => {
+      dynamicConfigs.push({
+        key: `climate-${index}`,
+        label: climate.name || `空调 ${index + 1}`,
+        type: 'climate'
+      });
+    });
+
+    return dynamicConfigs;
+  };
+
+  // 添加卡片显示状态
+  const [visibleCards, setVisibleCards] = useState(() => {
+    const saved = localStorage.getItem('dashboard-visible-cards');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    
+    // 生成默认的显示状态，包括静态和动态卡片
+    const defaultState = CARD_CONFIGS.reduce((acc, card) => {
+      if (!card.showIf || card.showIf(entityConfig)) {
+        acc[card.key] = true;
+      }
+      return acc;
+    }, {});
+
+    // 添加动态卡片的默认状态
+    getDynamicCardConfigs().forEach(card => {
+      defaultState[card.key] = true;
+    });
+
+    return defaultState;
+  });
+
+  // 获取所有可显示的卡片配置（静态 + 动态）
+  const getAllVisibleCardConfigs = () => {
+    const staticCards = CARD_CONFIGS.filter(card => !card.showIf || card.showIf(entityConfig));
+    const dynamicCards = getDynamicCardConfigs();
+    return [...staticCards, ...dynamicCards];
+  };
+
+  // 处理卡片显示状态变化
+  const handleCardVisibilityChange = (cardKey) => {
+    const newVisibleCards = {
+      ...visibleCards,
+      [cardKey]: !visibleCards[cardKey]
+    };
+    setVisibleCards(newVisibleCards);
+    
+    localStorage.setItem('dashboard-visible-cards', JSON.stringify(newVisibleCards));
   };
 
   return (
@@ -271,20 +386,84 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 />
               </button>
             )}
-
+          {!isMobile && (
             <button 
-              className="sidebar-toggle"
-              onClick={() => setSidebarVisible(!sidebarVisible)}
-              title={sidebarVisible ? '隐藏侧边栏' : '显示侧边栏'}
+              className="column-adjust"
+              onClick={() => handleColumnsChange(getCurrentBreakpoint(width))}
+              title={`当前 ${columnCount[getCurrentBreakpoint(width)]} 列，点击切换`}
+            >
+              <Icon
+                path={getColumnLayoutIcon(columnCount[getCurrentBreakpoint(width)])}
+                size={1}
+                color="var(--color-text-primary)"
+              />
+              <span className="column-count">
+                  {columnCount[getCurrentBreakpoint(width)]}
+                </span>
+              </button>
+            )}
+
+            {!isMobile && (
+              <button 
+                className="sidebar-toggle"
+                onClick={() => setSidebarVisible(!sidebarVisible)}
+                title={sidebarVisible ? '隐藏侧边栏' : '显示侧边栏'}
             >
               <Icon
                 path={mdiMenu}
                 size={1}
                 color="var(--color-text-primary)"
               />
-            </button>
+              </button>
+            )}
+
+            {!isMobile && (
+              <button 
+                className="settings-toggle"
+                onClick={() => setShowSettings(!showSettings)}
+                title="显示/隐藏卡片"
+              >
+                <Icon
+                  path={mdiCog}
+                  size={1}
+                  color="var(--color-text-primary)"
+                />
+              </button>
+            )}
           </div>
           
+          {showSettings && (
+            <div className="settings-panel">
+              <div className="settings-header">
+                <h3>卡片显示设置</h3>
+                <button onClick={() => setShowSettings(false)}>
+                  <Icon path={mdiCheck} size={1} />
+                </button>
+              </div>
+              <div className="settings-content">
+                {getAllVisibleCardConfigs().map(card => (
+                  <div 
+                    key={card.key}
+                    className="card-visibility-item"
+                    onClick={() => handleCardVisibilityChange(card.key)}
+                  >
+                    <Icon 
+                      path={visibleCards[card.key] ? mdiCheckboxMarked : mdiCheckboxBlankOutline}
+                      size={1}
+                      className="checkbox-icon"
+                    />
+                    <Icon 
+                      path={mdiEyeOutline} 
+                      size={0.9} 
+                      className="eye-icon" 
+                    />
+                    <span>{card.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <Responsive
             className={`layout ${isEditing ? 'editing' : ''}`}
             layouts={currentLayouts}
@@ -314,14 +493,16 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               }
             }}
           >
-            <div key="time">
-              <TimeCard timeFormat='HH:mm:ss' dateFormat={'YYYY年MM月DD日'} />
-            </div>
+            {visibleCards.time && (
+              <div key="time">
+                <TimeCard timeFormat='HH:mm:ss' dateFormat={'YYYY年MM月DD日'} />
+              </div>
+            )}
             
-            {entityConfig.weather.length > 0 && 
+            {entityConfig.weather?.length > 0 && visibleCards.weather && 
               entityConfig.weather.map((entityId, index) => (
                 <div key={`weather-${index}`}>
-                  <WeatherCard key={`weather-${index}`} entityId={entityId} />
+                  <WeatherCard entityId={entityId} />
                 </div>
               ))
             }
@@ -373,14 +554,15 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </div>
             )}
             
-            {entityConfig.climates.length > 0 && 
-              entityConfig.climates.map((climate, index) => (
-                <div key={`climate-${index}`}>
-                  <ClimateCard 
-                    config={climate}
-                  />
-                </div>
-              ))
+            {entityConfig.climates?.length > 0 && 
+              entityConfig.climates.map((climate, index) => {
+                const cardKey = `climate-${index}`;
+                return visibleCards[cardKey] ? (
+                  <div key={cardKey}>
+                    <ClimateCard config={climate} />
+                  </div>
+                ) : null;
+              })
             }
             
             {entityConfig.syno_nas && (
