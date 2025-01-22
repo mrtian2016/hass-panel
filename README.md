@@ -2,6 +2,10 @@
 
 一个基于 React 的智能家居控制面板，基于Home Assistant Websocket api。
 
+## 视频预览
+[![一个基于 React 的智能家居控制面板](https://img.youtube.com/vi/H6tz_ZBFPSM/0.jpg)](https://youtu.be/H6tz_ZBFPSM)
+
+
 ## 预览图
 ![预览图](./screenshots/iShot_2025-01-22_15.40.25.png)
 
