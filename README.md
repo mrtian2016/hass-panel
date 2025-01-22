@@ -32,6 +32,11 @@
 
 1. 复制示例配置文件：
    ```bash
+   # 克隆项目
+   git clone https://github.com/mrtian2016/hass-panel.git
+
+   cd hass-panel
+   
    cp public/config/userConfig.json.example public/config/userConfig.json
    ```
 
@@ -136,14 +141,9 @@
 ```
 
 
-### 安装
+### 启动
 
 ```bash
-# 克隆项目
-git clone https://github.com/mrtian2016/hass-panel.git
-
-# 进入项目目录
-cd hass-panel
 
 # 修改docker-compose.yml中的REACT_APP_HASS_URL为你的Home Assistant实例地址, 然后启动
 docker-compose up -d
