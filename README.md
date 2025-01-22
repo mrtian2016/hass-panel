@@ -1,4 +1,4 @@
-# HA-Dashboard
+# Hass-Panel
 
 一个基于 React 的智能家居控制面板，基于Home Assistant Websocket api。
 
