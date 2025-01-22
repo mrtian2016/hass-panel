@@ -167,6 +167,8 @@
   flex-wrap: wrap;
 }
 
+
+.pc-edit-toggle,
 .theme-toggle,
 .edit-toggle,
 .reset-layout {
@@ -188,13 +190,13 @@
 .reset-layout:hover {
   background: var(--color-background);
 }
-
+.pc-edit-toggle:active,
 .theme-toggle:active,
 .edit-toggle:active,
 .reset-layout:active {
   transform: scale(0.95);
 }
-
+.pc-edit-toggle.active,
 .edit-toggle.active {
   background: var(--color-primary);
   color: white;

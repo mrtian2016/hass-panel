@@ -54,8 +54,8 @@ const getColumnLayoutIcon = (columns) => {
 const CARD_CONFIGS = [
   { key: 'time', label: '时间' },
   { key: 'weather', label: '天气', showIf: config => config.weather?.length > 0 },
-  { key: 'lights_status', label: '灯光状态', showIf: config => config.lights },
-  { key: 'lights_overview', label: '灯光总览', showIf: config => config.lightsOverview },
+  { key: 'lights_status', label: '照明状态', showIf: config => config.lights },
+  { key: 'lights_overview', label: '房间状态', showIf: config => config.lightsOverview },
   { key: 'cameras', label: '监控画面', showIf: config => config.cameras?.length > 0 },
   { key: 'sensors', label: '环境监测', showIf: config => config.sensors?.length > 0 },
   { key: 'router', label: '路由监控', showIf: config => config.router },
@@ -372,15 +372,28 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 />
               </button>
             )}
-
             {isEditing && (
               <button 
                 className="reset-layout"
-                onClick={handleResetLayout}
+                onClick={() => handleResetLayout()}
                 title="重置布局"
               >
                 <Icon
                   path={mdiRefresh}
+                  size={1}
+                  color="var(--color-text-primary)"
+                />
+              </button>
+            )}
+            {isEditing && !isMobile && (
+              <button 
+                className={`pc-edit-toggle ${isEditing ? 'active' : ''}`}
+                onClick={() => setIsEditing(false)}
+                
+                title="完成编辑"
+              >
+                <Icon
+                  path={mdiCheck}
                   size={1}
                   color="var(--color-text-primary)"
                 />
@@ -506,49 +519,49 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 </div>
               ))
             }
-            {entityConfig.lights  && (
+            {entityConfig.lights && visibleCards.lights_status && (
               <div key="lights_status">
                 <LightStatusCard config={entityConfig.lights} />
               </div>
             )}
             
-            {entityConfig.lightsOverview && (
+            {entityConfig.lightsOverview && visibleCards.lights_overview && (
               <div key="lights_overview">
                 <LightOverviewCard config={entityConfig.lightsOverview} />
               </div>
             )}
             
-            {entityConfig.cameras.length > 0 && (
+            {entityConfig.cameras.length > 0 && visibleCards.cameras && (
               <div key="cameras">
                 <CameraSection config={entityConfig.cameras} />
               </div>
             )}
             
-            {entityConfig.sensors.length > 0 && (
+            {entityConfig.sensors.length > 0 && visibleCards.sensors && (
               <div key="sensors">
                 <SensorCard config={entityConfig.sensors} />
               </div>
             )}
             
-            {entityConfig.router && (
+            {entityConfig.router && visibleCards.router && (
               <div key="router">
                 <RouterCard config={entityConfig.router} />
               </div>
             )}
             
-            {entityConfig.mediaPlayers.length > 0 && (
+            {entityConfig.mediaPlayers.length > 0 && visibleCards.media && (
               <div key="media">
                 <MediaPlayerCard config={entityConfig.mediaPlayers} />
               </div>
             )}
             
-            {entityConfig.curtains.length > 0 && (
+            {entityConfig.curtains.length > 0 && visibleCards.curtains && (
               <div key="curtains">
                 <CurtainCard curtains={entityConfig.curtains} />
               </div>
             )}
             
-            {entityConfig.electricity && (
+            {entityConfig.electricity && visibleCards.electricity && (
               <div key="electricity">
                 <ElectricityCard config={entityConfig.electricity} />
               </div>
@@ -565,26 +578,26 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               })
             }
             
-            {entityConfig.syno_nas && (
+            {entityConfig.syno_nas && visibleCards.nas && (
               <div key="nas">
                 <NASCard config={entityConfig.syno_nas} />
               </div>
             )}
             
-            {entityConfig.scripts && (
+            {entityConfig.scripts && visibleCards.scripts && (
               <div key="scripts">
                 <ScriptPanel config={entityConfig.scripts} />
               </div>
             )}
             
-            {entityConfig.waterpuri && (
+            {entityConfig.waterpuri && visibleCards.waterpuri && (
               <div key="waterpuri">
                 <WaterPurifierCard config={entityConfig.waterpuri} />
               </div>
             )}
           </Responsive>
 
-          {isEditing && (
+          {isEditing && isMobile && (
             <button 
               className="edit-toggle active"
               onClick={() => setIsEditing(false)}
