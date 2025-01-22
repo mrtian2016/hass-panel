@@ -1,0 +1,160 @@
+.camera-card {
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.camera-card:hover {
+  transform: translateY(-2px);
+}
+
+.camera-preview {
+  position: relative;
+  cursor: pointer;
+  background: var(--color-background);
+  height: 150px;
+}
+
+.camera-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background);
+  z-index: 1;
+}
+
+.camera-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.camera-image.loaded {
+  opacity: 1;
+}
+
+.camera-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 2;
+}
+
+.camera-stream {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  position: relative;
+}
+
+.stream-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  overflow: hidden;
+}
+
+.stream-iframe.loading {
+  opacity: 0;
+}
+
+.loading-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 1;
+}
+
+.loading-text {
+  color: white;
+  font-size: 14px;
+}
+
+.error-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.error-text {
+  color: #ff4d4f;
+  font-size: 14px;
+}
+
+.camera-skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+  z-index: 1;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: calc(100% - 40px);
+  background: var(--color-border);
+  border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+}
+
+.skeleton-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.camera-image {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.camera-image.loaded {
+  opacity: 1;
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+} 

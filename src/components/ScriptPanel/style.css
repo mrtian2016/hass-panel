@@ -1,0 +1,48 @@
+.script-panel {
+  height: 100%;
+}
+
+.script-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.script-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-background);
+  cursor: pointer;
+  transition: all 0.3s;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.script-button:hover {
+  background: var(--color-primary-light);
+  border-color: transparent;
+}
+
+.script-button:active {
+  transform: scale(0.98);
+}
+
+.script-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.script-icon {
+  color: var(--color-text-primary);
+}
+
+.script-button:hover .script-icon,
+.script-button:hover .script-name {
+  color: var(--color-card-bg);
+} 

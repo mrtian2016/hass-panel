@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-background);
+  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: env(safe-area-inset-top);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(50px + env(safe-area-inset-bottom));
+}
+
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: var(--color-card-bg);
+}

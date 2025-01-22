@@ -1,0 +1,91 @@
+.sensor-card {
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  margin-top: var(--spacing-lg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  box-sizing: border-box;
+  padding: 0;
+  overflow: visible;
+}
+
+.sensor-data {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin: 0;
+  padding: var(--spacing-lg);
+}
+
+.room-sensor {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  cursor: default;
+}
+
+.room-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  flex: 1;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.sensor-items {
+  display: flex;
+  gap: var(--spacing-md);
+  flex: 2;
+  justify-content: flex-start;
+}
+
+.sensor-item {
+  display: flex;
+  align-items: center;
+  justify-content:space-around;
+
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border);
+  flex: 1;
+  max-width: 110px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  cursor: default;
+  
+}
+.sensor-icon {
+  flex: 0 1 auto;
+}
+.sensor-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  flex: 1;
+}
+
+.sensor-info .label {
+  
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.sensor-info .value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  min-width: 60px;
+  text-align: center;
+}

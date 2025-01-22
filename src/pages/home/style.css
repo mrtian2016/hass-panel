@@ -1,0 +1,987 @@
+@import '../../theme/variables.css';
+
+.weather-card,
+.light-status-card,
+.sensor-card {
+  width: 100%;
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  margin-top: var(--spacing-lg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0;
+}
+
+.light-status-card,
+.sensor-card {
+  padding: 0;
+  overflow: visible;
+}
+
+.weather-card {
+  overflow: hidden;
+}
+
+.current-weather {
+  padding: var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.weather-item {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.weather-item .label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.weather-item .value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.forecast {
+  padding: var(--spacing-md) var(--spacing-sm);
+  display: flex;
+  justify-content: space-between;
+}
+
+.forecast-day {
+  flex: 1;
+  text-align: center;
+  padding: 4px;
+  min-width: 0;
+}
+
+.date {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.icon {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.temp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.high {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.low {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.card-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.weather-card .card-header {
+  padding: 16px 20px;
+}
+
+.light-summary {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.light-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin: 0;
+  padding: var(--spacing-lg);
+}
+
+.light-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-background);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid var(--color-border);
+}
+
+.light-button:hover {
+  background: var(--color-primary-light);
+  color: var(--color-card-bg);
+  border-color: transparent;
+}
+
+.light-button:active {
+  transform: scale(0.98);
+}
+
+.light-name {
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+
+.light-indicators,
+.light-indicator {
+  display: none;
+}
+
+.header {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  padding: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.theme-toggle,
+.edit-toggle,
+.reset-layout {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.theme-toggle:hover,
+.edit-toggle:hover,
+.reset-layout:hover {
+  background: var(--color-background);
+}
+
+.theme-toggle:active,
+.edit-toggle:active,
+.reset-layout:active {
+  transform: scale(0.95);
+}
+
+.edit-toggle.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.edit-toggle.active svg {
+  color: white;
+}
+
+.sensor-data {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin: 0;
+  padding: var(--spacing-lg);
+}
+
+.room-sensor {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  cursor: default;
+}
+
+.room-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  width: 45px;
+  flex-shrink: 0;
+}
+
+.sensor-items {
+  display: flex;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.sensor-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border);
+  flex: 1;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  cursor: default;
+}
+
+.sensor-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sensor-info .label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.sensor-info .value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  min-width: 70px;
+}
+
+.App {
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.content {
+  width: 100%;
+  max-width: calc(100vw - 240px);
+  margin: 0 auto;
+  height: 100%;
+  overflow: visible;
+}
+
+.adm-modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.adm-modal-body {
+  padding: var(--spacing-md);
+}
+
+.media-player-card {
+  width: 100%;
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  margin-top: var(--spacing-lg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.media-players {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.media-player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  position: relative;
+  overflow: hidden;
+}
+
+.media-player::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(5px);
+  opacity: 0.3;
+  transform: scale(1.2);
+  z-index: 0;
+}
+
+.media-player[data-has-cover="true"]::before {
+  background-image: var(--cover-image);
+}
+
+.player-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.player-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.player-info-row {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.player-cover {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-card-bg);
+}
+
+.cover-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+}
+
+.player-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.player-state {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-artist {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-controls-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-xs);
+}
+
+.player-volume {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.volume-slider {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--color-border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.control-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.play-button {
+  width: 40px;
+  height: 40px;
+  background: var(--color-primary);
+  color: white;
+}
+
+.volume-buttons .control-button {
+  width: 32px;
+  height: 32px;
+  box-shadow: none;
+  background: transparent;
+}
+
+.volume-buttons .control-button:not(:disabled):hover {
+  background: var(--color-background);
+  transform: none;
+  box-shadow: none;
+}
+
+.volume-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--color-border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.volume-slider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-container {
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 100vh;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  scrollbar-width: none;
+}
+
+.content {
+  width: 100%;
+  max-width: calc(100vw - 240px);
+  margin: 0 auto;
+  height: 100%;
+  overflow: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.layout {
+  position: relative;
+  width: 100% !important;
+  margin: 0 auto;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+  display: flex !important;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.react-grid-item > div {
+  flex: 1;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  overflow: visible;
+}
+
+/* 响应式布局调整 */
+@media (max-width: 767px) {
+  .page-container {
+    padding: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .content {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .react-grid-item {
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .react-grid-item > div {
+    pointer-events: auto !important;
+  }
+
+  /* 移动端卡片样式优化 */
+  .react-grid-item > div {
+    margin: 8px 0 !important;
+    border-radius: calc(var(--border-radius-medium) - 4px);
+  }
+
+  /* 移动端编辑模式样式 */
+  .layout.editing .card-header {
+    cursor: move;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .layout.editing .card-header::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+  }
+
+  /* 拖拽时的样式 */
+  .react-grid-item.react-draggable-dragging {
+    z-index: 100;
+  }
+
+  .react-grid-item.react-draggable-dragging > div {
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px var(--color-shadow);
+  }
+
+  .edit-toggle {
+    bottom: calc(env(safe-area-inset-bottom) + 16px);
+    right: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .page-container {
+    margin-left: 200px;
+    padding: 20px;
+  }
+  
+  .content {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+/* 隐藏滚动条但保持功能 */
+.react-grid-item > div::-webkit-scrollbar {
+  display: none;
+}
+
+.react-grid-item > div {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cameras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.curtain-card-wrapper {
+  margin-top: var(--spacing-lg);
+}
+
+.curtains-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: var(--spacing-lg);
+}
+
+@media (max-width: 480px) {
+  .curtains-section {
+    padding: var(--spacing-md);
+  }
+}
+
+.cards-grid {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .weather-card,
+  .camera-section {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1200px) {
+  .weather-card,
+  .camera-section {
+    grid-column: span 3;
+  }
+}
+
+.adm-modal-content {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.adm-modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+.sensor-data,
+.media-players,
+.light-buttons,
+.curtains-section,
+.router-info,
+.climate-controls {
+  overflow: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sensor-data::-webkit-scrollbar,
+.media-players::-webkit-scrollbar,
+.light-buttons::-webkit-scrollbar {
+  display: none;
+}
+
+.media-player .control-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.media-player .control-button .icon {
+  font-size: 1.2em;
+}
+
+.volume-buttons .control-button {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+.react-grid-placeholder {
+  background: var(--color-primary) !important;
+  opacity: 0.2;
+  border-radius: var(--border-radius-medium);
+}
+
+.react-resizable-handle {
+  display: none;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: var(--color-primary) !important;
+  opacity: 0.2;
+  border-radius: var(--border-radius-medium);
+}
+
+.base-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.base-card > div:not(.card-header) {
+  /* flex: 1; */
+  overflow: visible;
+}
+
+/* 编辑模式下的卡片样式 */
+.layout.editing .react-grid-item {
+  cursor: move;
+}
+
+.layout:not(.editing) .react-grid-item {
+  cursor: default;
+}
+
+/* 添加抖动动画关键帧 */
+@keyframes shake {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  25% {
+    transform: translate(-1px, 0) rotate(-0.2deg);
+  }
+  75% {
+    transform: translate(1px, 0) rotate(0.2deg);
+  }
+}
+
+/* 编辑模式下的卡片内容抖动 */
+.layout.editing .react-grid-item > div {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) infinite;
+  transform-origin: center;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* 当卡片被拖拽时停止抖动 */
+.layout.editing .react-grid-item.react-draggable-dragging > div {
+  animation: none;
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* 非编辑模式下停止抖动 */
+.layout:not(.editing) .react-grid-item > div {
+  animation: none;
+}
+
+/* 编辑模式下禁止文本选择 */
+.layout.editing {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.layout.editing .react-grid-item > div {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) infinite;
+  transform-origin: center;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  pointer-events: none; /* 防止内部元素的事件干扰 */
+}
+
+/* 确保拖拽手柄可以响应事件 */
+.layout.editing .react-grid-item {
+  pointer-events: auto;
+  cursor: move;
+}
+
+/* 当卡片被拖拽时停止抖动并恢复内部元素的事件 */
+.layout.editing .react-grid-item.react-draggable-dragging > div {
+  animation: none;
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+/* 确保所有可滚动容器都不显示滚动条 */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* 编辑模式下显示调整手柄 */
+.layout.editing .react-resizable-handle {
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+');
+  background-position: bottom right;
+  padding: 0 3px 3px 0;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  cursor: se-resize;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.layout.editing .react-resizable-handle:hover {
+  opacity: 1;
+}
+
+/* 调整大小时的样式 */
+.layout.editing .react-grid-item.resizing {
+  z-index: 1;
+}
+
+.layout.editing .react-grid-item.resizing > div {
+  animation: none;
+  box-shadow: 0 4px 16px var(--color-shadow);
+}
+
+.column-adjust {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.column-adjust:hover {
+  background: var(--color-background);
+}
+
+.column-adjust:active {
+  transform: scale(0.95);
+}
+
+.column-count {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 10px;
+  background: var(--color-primary);
+  color: white;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 编辑按钮基础样式 */
+.edit-toggle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.edit-toggle:hover {
+  background: var(--color-background);
+}
+
+.edit-toggle:active {
+  transform: scale(0.95);
+}
+
+/* 编辑模式下的悬浮样式 */
+.edit-toggle.active {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 20px);
+  right: 20px;
+  z-index: 1000;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.edit-toggle.active svg {
+  color: white !important;
+}
+
+.edit-toggle.active:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  background: var(--color-primary);
+}
+
+.edit-toggle.active:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 767px) {
+  .edit-toggle.active {
+    bottom: calc(env(safe-area-inset-bottom) + 64px);
+    right: 16px;
+  }
+} 

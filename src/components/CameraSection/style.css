@@ -1,0 +1,29 @@
+.camera-section-card {
+  width: calc(100vw - 40px);
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  margin-top: var(--spacing-lg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+}
+
+.cameras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: var(--spacing-lg);
+}
+
+@media screen and (min-width: 768px) {
+  .cameras-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 767px) and (min-width: 480px) {
+  .cameras-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+} 

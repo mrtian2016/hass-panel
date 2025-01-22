@@ -1,0 +1,443 @@
+.climate-card {
+  margin-bottom: var(--spacing-lg);
+}
+
+.climate-content {
+  padding: var(--spacing-lg);
+}
+
+.climate-status {
+  margin-bottom: var(--spacing-lg);
+}
+
+.climate-readings {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}
+
+.reading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  text-align: center;
+  padding: var(--spacing-md);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+}
+
+.reading-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-secondary);
+  font-size: 0.9em;
+}
+
+.reading-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+}
+
+.reading-value .value {
+  font-size: 1.6em;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.reading-value .unit {
+  font-size: 0.9em;
+  color: var(--color-text-secondary);
+}
+
+.climate-circle {
+  width: 240px;
+  height: 240px;
+  margin: var(--spacing-xl) auto;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-bottom: 0;
+}
+
+.target-temp {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-left: 12px;
+  margin-bottom: var(--spacing-xl);
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+/* 当不能调节温度时，温度显示变暗 */
+.target-temp.disabled {
+  opacity: 0.5;
+}
+
+.temp-value {
+  font-size: 4em;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.temp-unit {
+  font-size: 1.4em;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5em;
+}
+
+.temp-controls {
+  display: flex;
+  gap: var(--spacing-lg);
+  position: absolute;
+  bottom: var(--spacing-xl);
+}
+
+.temp-button {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.temp-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.temp-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.temp-button:not(:disabled):hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.climate-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+.mode-button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.mode-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mode-button:not(:disabled):hover,
+.mode-button.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 480px) {
+  .climate-content {
+    padding: var(--spacing-md);
+  }
+
+  .climate-circle {
+    width: 200px;
+    height: 200px;
+  }
+
+  .temp-value {
+    font-size: 3.2em;
+  }
+
+  .temp-unit {
+    font-size: 1.2em;
+  }
+
+  .temp-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .temp-button svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.mode-value {
+  font-size: 0.8em;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+
+.fan-mode-popup {
+  padding: var(--spacing-md);
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+:global(.adm-list-item) {
+  padding: var(--spacing-md) !important;
+}
+
+:global(.adm-list-item.active-mode) {
+  color: var(--color-primary);
+  font-weight: 500;
+  background-color: var(--color-background);
+}
+
+:global(.adm-list-item.active-mode)::before {
+  content: '•';
+  position: absolute;
+  left: 8px;
+  color: var(--color-primary);
+}
+
+:global(.adm-popup-body) {
+  background-color: var(--color-card-bg) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.power-button {
+  background: none;
+  border: 2px solid transparent;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  width: 36px;
+  height: 36px;
+}
+
+.power-button:hover {
+  background: var(--color-background);
+}
+
+/* 开机状态 */
+.power-button:not(.off) {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* 关机状态 */
+.power-button.off {
+  background: var(--color-background);
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+}
+
+/* 悬停效果 */
+.power-button:not(.off):hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.power-button.off:hover {
+  opacity: 1;
+  background: var(--color-text-secondary);
+  color: white;
+}
+
+:root {
+  --color-primary-light: rgba(var(--color-primary-rgb), 0.1);
+}
+
+.climate-functions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  padding: 0 var(--spacing-md);
+}
+
+.function-button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.8em;
+  min-width: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.function-button.active {
+  background: var(--color-background);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.function-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 1.5px;
+}
+
+.function-button:not(:disabled):hover {
+  background: var(--color-background);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.function-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.function-button svg {
+  width: 18px;
+  height: 18px;
+  transition: all 0.3s;
+}
+
+.function-button.active svg {
+  color: var(--color-primary);
+}
+
+@media (max-width: 480px) {
+  .climate-functions {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .function-button {
+    padding: 6px;
+    font-size: 0.75em;
+    min-width: auto;
+  }
+  
+  .function-button svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .function-button.active::after {
+    height: 2px;
+  }
+} 
+
+/* 移除所有按钮的点击效果 */
+.climate-card button {
+  -webkit-tap-highlight-color: transparent;  /* 移除移动端点击高亮 */
+}
+
+.mode-button:active,
+.function-button:active,
+.temp-button:active,
+.power-button:active {
+  transform: none;  /* 移除点击时的变形效果 */
+}
+
+/* 修改function-button的点击效果 */
+.function-button {
+  /* 保持现有样式 */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;  /* 防止文字被选中 */
+}
+
+.function-button:active {
+  background: var(--color-background) !important;  /* 强制保持背景色不变 */
+}
+
+/* 修改mode-button的点击效果 */
+.mode-button {
+  /* 保持现有样式 */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.mode-button:active {
+  background: var(--color-card-bg) !important;
+}
+
+/* 修改temp-button的点击效果 */
+.temp-button {
+  /* 保持现有样式 */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.temp-button:active {
+  background: var(--color-background) !important;
+}
+
+/* 修改power-button的点击效果 */
+.power-button {
+  /* 保持现有样式 */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.power-button:active {
+  background: none !important;
+} 

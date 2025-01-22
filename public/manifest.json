@@ -1,0 +1,35 @@
+{
+  "short_name": "智能家居",
+  "name": "智能家居控制面板",
+  "icons": [
+      {
+      "sizes": "192x192",
+      "src": "/android-chrome-192x192.png",
+      "type": "image/png"
+      },
+      {
+      "sizes": "512x512",
+      "src": "/android-chrome-512x512.png",
+      "type": "image/png"
+      }
+],
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "theme_color": "#1677ff",
+  "background_color": "#f0f5ff",
+  "description": "智能家居控制面板，支持离线访问",
+  "lang": "zh-CN",
+  "categories": ["utilities", "lifestyle"],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "智能家居",
+      "url": "/",
+      "description": "打开智能家居控制面板"
+    }
+  ]
+}

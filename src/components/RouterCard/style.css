@@ -1,0 +1,146 @@
+.router-data {
+  padding: var(--spacing-md);
+}
+
+.usage-section {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+}
+
+.circular-progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.circular-progress {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circular-progress svg {
+  transform: rotate(-90deg);
+}
+
+.circular-progress circle {
+  transition: stroke-dashoffset 0.35s;
+  transform-origin: 50% 50%;
+}
+
+.progress-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-value {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.progress-label {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.metrics-section {
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.network-speeds {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.speed-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: 8px 0;
+}
+
+.speed-item .label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.speed-item span:last-child {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.network-speeds .speed-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.network-speeds .speed-item svg {
+  color: var(--color-text-secondary);
+}
+
+.divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--spacing-xs) 0;
+}
+
+.metric-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.metric-label .label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.speed-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 4px 0;
+}
+
+.speed-row .speed-item {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  line-height: 1;
+}
+
+.speed-value {
+  font-size: 28px !important;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.speed-value span {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.speed-row .speed-item svg {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 1px;
+} 

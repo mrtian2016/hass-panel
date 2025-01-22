@@ -1,0 +1,508 @@
+.light-overview-card {
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  margin-top: var(--spacing-lg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+}
+
+.light-overview {
+  padding: var(--spacing-md);
+}
+
+.floor-plan {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+}
+
+.base-layer {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.light-layer {
+  position: absolute;
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.light-layer.active {
+  opacity: 1;
+}
+
+.room-area {
+  position: absolute;
+  cursor: pointer;
+  z-index: 1;
+  transition: background-color 0.3s;
+}
+
+.room-area:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.room-light-button {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-card-bg);
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px var(--color-shadow);
+  z-index: 1;
+  transform: translate(-50%, -50%);
+}
+
+.room-light-button .light-icon {
+  color: var(--color-text-secondary);
+  transition: color 0.3s ease;
+}
+
+/* .room-light-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px var(--color-shadow);
+} */
+
+.room-light-button.active {
+  background: var(--color-primary);
+}
+
+.room-light-button.active .light-icon {
+  color: white;
+}
+
+/* .room-light-button:active {
+  transform: scale(0.95);
+}  */
+
+.light-control {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* 滑动条行 */
+.sliders-row {
+  display: flex;
+  justify-content: center;
+  gap: calc(var(--spacing-xl) * 2);
+}
+
+.brightness-control,
+.color-temp-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 80px;
+}
+
+.slider-container {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-secondary);
+}
+
+/* 自定义滑动条容器 */
+.custom-slider {
+  position: relative;
+  width: 42px;
+  height: 150px;
+  background: #e8e8e8;
+  border-radius: 12px;
+  touch-action: none;
+  cursor: pointer;
+  user-select: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+/* 滑动条轨道 */
+.slider-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 滑动条手柄 */
+.slider-handle {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--value-percent, 50%) - 8px);
+  width: 32px;
+  height: 5px;
+  background: white;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: bottom 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  user-select: none;
+  pointer-events: all;
+  z-index: 10;
+  touch-action: none;
+}
+
+/* 添加伪元素扩大点击区域 */
+.slider-handle::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  z-index: -1;
+}
+
+/* 确保拖动时的样式正确应用 */
+.custom-slider.dragging {
+  cursor: grabbing;
+}
+
+.custom-slider.dragging .slider-handle {
+  cursor: grabbing !important;
+  transition: none !important;
+}
+
+.custom-slider.dragging .slider-fill {
+  transition: none !important;
+}
+
+/* 隐藏原生滑动条 */
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* 预设颜色行 */
+.presets-row {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+.temp-presets {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.temp-preset {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgb(198, 194, 194);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.temp-preset:nth-child(1) { background: #ffd6aa; }
+.temp-preset:nth-child(2) { background: #ffe0c0; }
+.temp-preset:nth-child(3) { background: #fff0e6; }
+.temp-preset:nth-child(4) { background: #ffffff; }
+
+.temp-preset.active {
+  border-color: var(--color-primary);
+}
+
+.effects-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin: 0;
+}
+
+.effect-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  min-width: 100px;
+  transition: all 0.3s ease;
+}
+
+.effect-trigger:hover {
+  border-color: var(--color-primary);
+}
+
+.effect-value {
+  color: var(--color-text-primary);
+  font-size: 0.9em;
+}
+
+/* Popup 样式 */
+:global(.adm-list-header) {
+  padding: var(--spacing-md);
+  font-size: 1em;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+:global(.adm-list-item) {
+  padding: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+:global(.adm-list-item.active) {
+  color: var(--color-primary);
+  background: var(--color-background-hover);
+}
+
+:global(.adm-list-item-content) {
+  padding: 0;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .sliders-row {
+    gap: var(--spacing-xl);
+  }
+  
+  .brightness-control,
+  .color-temp-control {
+    width: 60px;
+  }
+  
+  .temp-preset {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .effect-trigger {
+    min-width: 80px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+/* 亮度滑动条填充部分保持不变 */
+.brightness-control .slider-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--value-percent, 50%);
+  background: #FFC799;
+  transition: height 0.2s ease;
+  border-radius: 12px;
+}
+
+/* 色温滑动条特殊样式 */
+.color-temp-control .slider-track {
+  background: linear-gradient(
+    to bottom,
+    rgb(255, 147, 41) 0%,    /* 暖色 */
+    rgb(255, 255, 255) 100%  /* 冷色 */
+  );
+}
+
+/* 色温滑动条不需要填充效果 */
+.color-temp-control .slider-fill {
+  display: none;
+}
+
+/* 色温滑动条背景色 */
+.color-temp-control .custom-slider {
+  background: transparent;
+}
+
+/* 禁用长按选中的通用样式 */
+.light-control,
+.custom-slider,
+.slider-handle,
+.effect-trigger,
+.control-label,
+.adm-list-item {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 禁用图标和文本的事件 */
+.control-label svg,
+.control-label span,
+.effect-value,
+.adm-list-item-content {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 确保滑块的手柄可以正常拖动 */
+.slider-handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+/* 拖动时的状态 */
+.custom-slider.dragging .slider-handle {
+  cursor: grabbing !important;
+}
+
+/* 弹出层内容禁用选中 */
+.adm-popup-body {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 修改电源控制样式 */
+.power-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.power-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px var(--color-shadow);
+  margin-bottom: var(--spacing-xs);
+  opacity: 0.8;
+}
+
+.power-button:hover {
+  opacity: 1;
+}
+
+.power-button:active {
+  transform: scale(0.95);
+}
+
+.power-button.active {
+  background: #FFB74D !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.power-button:not(.active) {
+  background: var(--color-background) !important;
+  color: var(--color-text-secondary) !important;
+}
+
+/* 确保电源按钮在移动端也有良好的触摸体验 */
+@media (max-width: 768px) {
+  .power-button {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+/* 禁用状态的样式 */
+.brightness-control.disabled,
+.color-temp-control.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.brightness-control.disabled .custom-slider,
+.color-temp-control.disabled .custom-slider {
+  cursor: not-allowed;
+}
+
+.brightness-control.disabled .slider-handle,
+.color-temp-control.disabled .slider-handle {
+  cursor: not-allowed;
+}
+
+/* 修改底部控制区域样式 */
+.light-control > div:last-of-type {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--spacing-lg);
+  gap: var(--spacing-xl);
+}
+
+/* 调整灯光效果控制样式 */
+.presets-row {
+  margin: 0;
+}
+
+.effects-control {
+  margin: 0;
+}
+
+.effect-trigger {
+  min-width: 100px;
+}
+
+/* 调整电源控制样式 */
+.power-control {
+  margin: 0;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .light-control > div:last-of-type {
+    gap: var(--spacing-lg);
+  }
+  
+  .effect-trigger {
+    min-width: 80px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}

@@ -1,0 +1,134 @@
+.water-purifier-content {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.device-status {
+  font-size: 0.9em;
+  color: var(--color-text-secondary);
+  padding: 4px 12px;
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+}
+
+.tds-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) 0;
+  position: relative;
+}
+
+.tds-value {
+  font-size: 4em;
+  font-weight: 200;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.tds-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.tds-label span:first-child {
+  font-size: 0.9em;
+  color: var(--color-text-secondary);
+}
+
+.tds-label .good {
+  color: var(--color-primary);
+  font-size: 0.85em;
+}
+
+.tds-label .warning {
+  color: var(--color-warning);
+  font-size: 0.85em;
+}
+
+.water-info {
+  display: flex;
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-sm);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.info-item .label {
+  color: var(--color-text-secondary);
+  font-size: 0.85em;
+}
+
+.info-item .value {
+  color: var(--color-text-primary);
+  font-size: 0.9em;
+}
+
+.filter-status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm);
+}
+
+.filter-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.filter-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-name {
+  font-size: 0.9em;
+  color: var(--color-text-primary);
+}
+
+.filter-life-bar {
+  height: 8px;
+  background: var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.life-remaining {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.life-percentage {
+  font-size: 0.8em;
+  color: var(--color-text-secondary);
+} 

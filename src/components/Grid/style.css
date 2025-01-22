@@ -1,0 +1,35 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.col {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0;
+}
+
+/* 24栅格系统 */
+.col-24 { width: 100%; }
+.col-12 { width: 50%; }
+.col-8 { width: 33.33333%; }
+.col-6 { width: 25%; }
+
+/* 平板 */
+@media (min-width: 768px) {
+  .col-md-24 { width: 100%; }
+  .col-md-12 { width: 50%; }
+  .col-md-8 { width: 33.33333%; }
+  .col-md-6 { width: 25%; }
+}
+
+/* 桌面 */
+@media (min-width: 1200px) {
+  .col-lg-24 { width: 100%; }
+  .col-lg-12 { width: 50%; }
+  .col-lg-8 { width: 33.33333%; }
+  .col-lg-6 { width: 25%; }
+} 

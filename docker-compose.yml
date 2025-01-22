@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  hass-panel:
+    image: ghcr.io/mrtian2016/hass-panel:latest
+    container_name: hass-panel
+    restart: unless-stopped
+    ports:
+      - "5123:80"
+    environment:
+      - REACT_APP_HASS_URL=your-hass-instance:8123 # 请替换为你的Home Assistant实例地址
+    volumes:  
+      - ./public/media:/usr/share/nginx/html/static/media # 媒体资源，主要是房间图片
+      - ./public/config/userConfig.json:/usr/share/nginx/html/config/userConfig.json # 用户配置

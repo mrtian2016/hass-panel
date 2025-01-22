@@ -1,0 +1,58 @@
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  background: var(--color-background);
+  border-right: 1px solid var(--color-border);
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  box-shadow: 2px 0 8px var(--color-shadow);
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  text-align: left;
+}
+
+.menu-item:hover {
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+}
+
+.menu-item.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.menu-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 移动端隐藏侧边栏 */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+} 

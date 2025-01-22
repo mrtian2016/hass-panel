@@ -1,0 +1,38 @@
+import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import Icon from '@mdi/react';
+import { mdiClose } from '@mdi/js';
+import { useTheme } from '../../theme/ThemeContext';
+import './style.css';
+
+function Modal({ visible, onClose, title, children, width }) {
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    if (visible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [visible]);
+
+  if (!visible) return null;
+
+  return createPortal(
+    <div className="modal-overlay" onClick={onClose}>
+      <div className={`modal-content ${theme}`} onClick={e => e.stopPropagation()} style={width ? { width } : undefined}>
+        {title && <div className="modal-title">{title}</div>}
+        <button className="modal-close" onClick={onClose}>
+          <Icon path={mdiClose} size={1} color="#ffffff" />
+        </button>
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+export default Modal; 

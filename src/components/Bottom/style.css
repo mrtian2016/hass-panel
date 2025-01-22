@@ -1,0 +1,42 @@
+:root {
+  --adm-color-primary: var(--color-primary);
+  --adm-color-text: var(--color-text-primary);
+  --adm-color-text-secondary: var(--color-text-secondary);
+  --adm-color-background: var(--color-card-bg);
+  --adm-border-color: var(--color-border);
+}
+
+.adm-tab-bar {
+  --adm-color-background: var(--color-card-bg) !important;
+  background-color: var(--color-card-bg) !important;
+  border-top: 1px solid var(--color-border);
+  padding-bottom: env(safe-area-inset-bottom);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+/* 在PC端隐藏底部导航栏 */
+@media (min-width: 768px) {
+  .adm-tab-bar {
+    display: none;
+  }
+}
+
+.adm-tab-bar-item {
+  color: var(--color-text-light) !important;
+}
+
+.adm-tab-bar-item-active {
+  color: var(--color-primary) !important;
+}
+
+.adm-tab-bar-item-icon {
+  color: inherit !important;
+}
+
+.adm-tab-bar-item-title {
+  color: inherit !important;
+} 

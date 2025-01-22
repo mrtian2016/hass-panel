@@ -1,0 +1,143 @@
+.electricity-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.electricity-usage-card {
+  margin-bottom: var(--spacing-lg);
+}
+
+.electricity-content {
+  padding: var(--spacing-lg);
+}
+
+.electricity-main-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg);
+}
+
+.electricity-main-value .value {
+  font-size: 2.8em;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.electricity-main-value .unit {
+  font-size: 1.2em;
+  color: var(--color-text-secondary);
+}
+
+.electricity-chart {
+  height: 80px;
+  margin: var(--spacing-lg) 0;
+  position: relative;
+}
+
+.electricity-chart > div {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.electricity-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.electricity-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  text-align: center;
+  border-radius: var(--border-radius-small);
+  padding: var(--spacing-md);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-secondary);
+  font-size: 0.9em;
+  justify-content: center;
+}
+
+.electricity-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+  justify-content: center;
+}
+
+.electricity-value .value {
+  font-size: 1.6em;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.electricity-value .unit {
+  font-size: 0.9em;
+  color: var(--color-text-secondary);
+}
+
+.electricity-yearly-info {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-lg) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.yearly-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  text-align: center;
+  border-radius: var(--border-radius-small);
+  padding: var(--spacing-md);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+}
+
+.yearly-item .info-label {
+  justify-content: center;
+}
+
+.yearly-item .electricity-value {
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .electricity-content {
+    padding: var(--spacing-md);
+  }
+  
+  .electricity-info-grid {
+    gap: var(--spacing-md);
+  }
+  
+  .electricity-main-value .value {
+    font-size: 2.4em;
+  }
+  
+  .electricity-value .value {
+    font-size: 1.4em;
+  }
+  
+  .electricity-yearly-info {
+    padding: var(--spacing-md) 0;
+    margin: var(--spacing-md) 0;
+    gap: var(--spacing-md);
+  }
+} 
