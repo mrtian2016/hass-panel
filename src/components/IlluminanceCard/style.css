@@ -1,0 +1,39 @@
+.illuminance-sensors {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.illuminance-sensor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border);
+}
+
+.sensor-name {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.sensor-value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.sensor-value .value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-warning);
+}
+
+.sensor-value .unit {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+} 

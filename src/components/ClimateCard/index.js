@@ -58,16 +58,16 @@ function ClimateCard({
       },
     }), {});
 
-  // const { getServices } = useHass();
-  // const [services, setServices] = useState(null);
-  // useEffect(() => {
-  //   async function fetchServices() {
-  //     const services = await getServices();
-  //     setServices(services);
-  //   }
-  //   fetchServices();
-  // }, []);
-  // console.log(services);
+  const { getServices } = useHass();
+  const [services, setServices] = useState(null);
+  useEffect(() => {
+    async function fetchServices() {
+      const services = await getServices();
+      setServices(services);
+    }
+    fetchServices();
+  }, []);
+  console.log(services);
 
   const [showFanModes, setShowFanModes] = useState(false);
   const [showSwingModes, setShowSwingModes] = useState(false);

@@ -13,7 +13,7 @@ function CameraCard({ camera, streamUrl, name }) {
   // console.log(camera);
 
   const previewUrl = camera.poster?.url || 
-    process.env.REACT_APP_HASS_URL + camera.attributes.entity_picture;
+    window.env?.REACT_APP_HASS_URL + camera.attributes.entity_picture;
 
   const handleClick = () => {
     setIsModalVisible(true);

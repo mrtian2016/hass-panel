@@ -29,3 +29,5 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 public/config/userConfig.json
+public/env.js
+docker-compose-dev.yml

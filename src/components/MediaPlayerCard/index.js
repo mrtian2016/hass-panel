@@ -61,9 +61,9 @@ function MediaPlayerCard({ config }) {
     >
       <div className="media-players">
         {mediaPlayerEntities.map((player, index) => {
-          // console.log(player);
+          console.log(player);
           const coverUrl = player.entity?.attributes?.entity_picture 
-            ? `${process.env.REACT_APP_HASS_URL}${player.entity.attributes.entity_picture}`
+            ? `${window.env?.REACT_APP_HASS_URL}${player.entity.attributes.entity_picture}`
             : null;
 
           return (

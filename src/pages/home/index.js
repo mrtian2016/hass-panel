@@ -35,6 +35,7 @@ import RouterCard from '../../components/RouterCard';
 import NASCard from '../../components/NASCard';
 import ScriptPanel from '../../components/ScriptPanel';
 import WaterPurifierCard from '../../components/WaterPurifierCard';
+import IlluminanceCard from '../../components/IlluminanceCard';
 import './style.css';
 import { entityConfig } from '../../config/index';
 
@@ -64,7 +65,8 @@ const CARD_CONFIGS = [
   { key: 'curtains', label: '窗帘控制', showIf: config => config.curtains?.length > 0 },
   { key: 'electricity', label: '电量监控', showIf: config => config.electricity },
   { key: 'scripts', label: '快捷指令', showIf: config => config.scripts },
-  { key: 'waterpuri', label: '净水器', showIf: config => config.waterpuri }
+  { key: 'waterpuri', label: '净水器', showIf: config => config.waterpuri },
+  { key: 'illuminance', label: '光照传感器', showIf: config => config.illuminanceSensors?.length > 0 },
 ];
 
 function Home({ sidebarVisible, setSidebarVisible }) {
@@ -107,18 +109,17 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     ],
     sm: [
       { i: 'time', x: 0, y: 0, w: 1, h: 5 },
-      { i: 'lights_status', x: 0, y: 0, w: 1, h: 12},
-      { i: 'lights', x: 0, y: 3, w: 1, h: 11 },
-      { i: 'lights_overview', x: 0, y: 6, w: 1, h: 11 },
+      { i: 'lights_status', x: 0, y: 3, w: 1, h: 12},
+      { i: 'lights_overview', x: 0, y: 1, w: 1, h: 11 },
       { i: 'sensors', x: 0, y: 9, w: 1, h: 8 },
       { i: 'cameras', x: 0, y: 11, w: 1, h: 10 },
       { i: 'router', x: 0, y: 11, w: 1, h: 13 },
       { i: 'nas', x: 0, y: 11, w: 1, h: 18 },
-      { i: 'media', x: 0, y: 13, w: 1, h: 14 },
+      { i: 'media', x: 0, y: 13, w: 1, h: 18 },
       { i: 'curtains', x: 0, y: 15, w: 1, h: 14 },
       { i: 'electricity', x: 0, y: 17, w: 1, h: 13 },
-      { i: 'scripts', x: 0, y: 0, w: 1, h: 7 },
-      { i: 'waterpuri', x: 0, y: 0, w: 1, h: 12 },
+      { i: 'scripts', x: 0, y: 9, w: 1, h: 7 },
+      { i: 'waterpuri', x: 0, y: 10, w: 1, h: 12 },
     ]
   };
 
@@ -196,9 +197,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
     // 为每个 weather 设备添加布局配置
     const weatherLayouts = entityConfig.weather.map((weather, index) => ({
-      lg: { i: `weather-${index}`, x: 0, y: 11 + (index * 15), w: 1, h: 9 },
-      md: { i: `weather-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 9 },
-      sm: { i: `weather-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 9 }
+      lg: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 },
+      md: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 },
+      sm: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 }
     }));
 
     // 合并基础布局和空调布局
@@ -226,9 +227,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     }));
 
     const weatherLayouts = entityConfig.weather.map((weather, index) => ({
-      lg: { i: `weather-${index}`, x: 0, y: 11 + (index * 15), w: 1, h: 9 },
-      md: { i: `weather-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 9 },
-      sm: { i: `weather-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 9 }
+      lg: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 },
+      md: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 },
+      sm: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 }
     }));
 
     const resetLayouts = {
@@ -430,7 +431,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </button>
             )}
 
-            {!isMobile && (
+            
               <button 
                 className="settings-toggle"
                 onClick={() => setShowSettings(!showSettings)}
@@ -442,7 +443,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                   color="var(--color-text-primary)"
                 />
               </button>
-            )}
+            
           </div>
           
           {showSettings && (
@@ -561,7 +562,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </div>
             )}
             
-            {entityConfig.electricity && visibleCards.electricity && (
+            {false && entityConfig.electricity && visibleCards.electricity && (
               <div key="electricity">
                 <ElectricityCard config={entityConfig.electricity} />
               </div>
@@ -593,6 +594,12 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             {entityConfig.waterpuri && visibleCards.waterpuri && (
               <div key="waterpuri">
                 <WaterPurifierCard config={entityConfig.waterpuri} />
+              </div>
+            )}
+
+            {false && entityConfig.illuminanceSensors && visibleCards.illuminance && (
+              <div key="illuminance">
+                <IlluminanceCard config={entityConfig.illuminanceSensors} />
               </div>
             )}
           </Responsive>

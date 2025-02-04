@@ -25,8 +25,8 @@ function App() {
   return (
     <ThemeProvider>
       <HassConnect 
-        hassUrl={process.env.REACT_APP_HASS_URL} 
-        hassToken={process.env.REACT_APP_HASS_TOKEN}
+        hassUrl={window.env?.REACT_APP_HASS_URL} 
+        hassToken={window.env?.REACT_APP_HASS_TOKEN}
       >
         <Router>
           <div className="App">
