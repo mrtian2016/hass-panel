@@ -123,18 +123,12 @@ function ElectricityCard({
       className="electricity-usage-card"
     >
       <div className="electricity-content">
-        <div className="electricity-main-value">
-          <span className="label">今日用电量：</span>
+        {/* <div className="electricity-main-value">
+          <span className="label">过去7天用电量</span>
           <span className="value">{electricityEntities.todayUsage.entity.state || '0'}</span>
           <span className="unit">kWh</span>
 
-        </div>
-        <div className="electricity-main-value">
-          <span className="label">当前总功率：</span>
-          <span className="value">{electricityEntities.currentPower.entity.state || '0'}</span>
-          <span className="unit">W</span>
-
-        </div>
+        </div> */}
 
      
         
@@ -145,18 +139,38 @@ function ElectricityCard({
           />
         </div>
 
-        {/* <div className="electricity-yearly-info">
+        <div className="electricity-yearly-info">
           <div className="yearly-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>当前总功率</span>
+              <span>实时电压</span>
+            </div>
+            <div className="electricity-value">
+              <span className="value">{electricityEntities.voltage.entity.state || '0'}</span>
+              <span className="unit">V</span>
+            </div>
+          </div>
+          <div className="yearly-item">
+            <div className="info-label">
+              <Icon path={mdiLightningBolt} size={0.8} />
+                <span>实时电流</span>
+            </div>
+            <div className="electricity-value">
+              <span className="value">{electricityEntities.electric_current.entity.state || '0'}</span>
+                <span className="unit">A</span>
+            </div>
+          </div>
+          <div className="yearly-item">
+            <div className="info-label">
+              <Icon path={mdiLightningBolt} size={0.8} />
+              <span>实时功率</span>
             </div>
             <div className="electricity-value">
               <span className="value">{electricityEntities.currentPower.entity.state || '0'}</span>
               <span className="unit">W</span>
             </div>
           </div>
-        </div> */}
+        </div>
 
         <div className="electricity-info-grid">
        
