@@ -562,7 +562,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </div>
             )}
             
-            {false && entityConfig.electricity && visibleCards.electricity && (
+            { entityConfig.electricity && visibleCards.electricity && (
               <div key="electricity">
                 <ElectricityCard config={entityConfig.electricity} />
               </div>

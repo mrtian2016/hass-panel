@@ -18,14 +18,11 @@ async function loadUserConfig() {
 // 导出配置加载函数
 export async function loadConfig() {
   const userConfig = await loadUserConfig();
-  return {
-    ...defaultConfig,
-    ...userConfig,
-  };
+  return userConfig
 }
 
 // 初始配置使用默认值
-export let entityConfig = defaultConfig;
+export let entityConfig = null;
 
 // 初始化配置
 loadConfig().then(config => {
@@ -33,7 +30,7 @@ loadConfig().then(config => {
 });
 
 // 导出配置验证函数
-export const validateConfig = (config) => {
+// export const validateConfig = (config) => {
   // TODO: 添加配置验证逻辑
-  return true;
-}; 
+//   return true;
+// }; 

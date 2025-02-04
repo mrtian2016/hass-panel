@@ -33,6 +33,7 @@
 .electricity-chart {
   height: 80px;
   margin: var(--spacing-lg) 0;
+  margin-top: 50px;
   position: relative;
 }
 

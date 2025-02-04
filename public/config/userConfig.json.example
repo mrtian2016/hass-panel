@@ -133,7 +133,7 @@
                 "image": "/static/media/卫生间门口.webp"
             },
             {
-                "entity_id": "light.yeelink_cn_396777994_lamp22_s_2",
+                "entity_id": "light.lumi_cn_72219288_acn01_s_3",
                 "name": "阳台灯",
                 "room": "balcony",
                 "position": {
@@ -197,13 +197,13 @@
     "cameras": [
         {
             "entity_id": "camera.ke_ting_mainstream",
-            "stream_url": "https://xxx.xx.xx.xx/go2rtc/webrtc.html?src=living_room&media=video+audio",
+            "stream_url": "https://xxx.xxx.xx.xx/go2rtc/webrtc.html?src=living_room&media=video+audio",
             "name": "客厅摄像头",
             "room": "living_room"
         },
         {
             "entity_id": "camera.hikvision_ds_2cd3386fwdv3_ls_mainstream",
-            "stream_url": "https://xxx.xx.xx.xx:32443/go2rtc/webrtc.html?src=entrance&media=video+audio",
+            "stream_url": "https://xxx.xxx.xx.xx/go2rtc/webrtc.html?src=entrance&media=video+audio",
             "name": "门口摄像头",
             "room": "entrance"
         }
@@ -288,42 +288,15 @@
             "entity_id": "media_player.xiaomi_x08e_7aca_play_control",
             "name": "书房小爱音箱",
             "room": "study_room"
+        },
+
+        {
+            "entity_id": "media_player.xiaomi_l05c_ef75_play_control",
+            "name": "次卧小爱音箱",
+            "room": "second_bedroom"
         }
     ],
-    "electricity": {
-        "lastUsage": {
-            "entity_id": "sensor.electricity_daily_usage",
-            "name": "当前用电量"
-        },
-        "dailyDate": {
-            "entity_id": "sensor.electricity_daily_date",
-            "name": "日期"
-        },
-        "chargeBalance": {
-            "entity_id": "sensor.electricity_balance",
-            "name": "电费余额"
-        },
-        "yearlyUsage": {
-            "entity_id": "sensor.electricity_yearly_usage",
-            "name": "年度用电量"
-        },
-        "yearlyCharge": {
-            "entity_id": "sensor.electricity_yearly_charge",
-            "name": "年度电费"
-        },
-        "monthUsage": {
-            "entity_id": "sensor.electricity_month_usage",
-            "name": "月度用电量"
-        },
-        "monthCharge": {
-            "entity_id": "sensor.electricity_month_charge",
-            "name": "月度电费"
-        },
-        "dailyHistory": {
-            "entity_id": "sensor.electricity_daily_history_data",
-            "name": "每日用电量"
-        }
-    },
+    
     "router": {
         "sysName": {
             "entity_id": "sensor.ikuai_sysname",
@@ -603,6 +576,43 @@
         "status": {
             "entity_id": "sensor.xiaomi_cn_826991840_800f4_status_p_2_3",
             "name": "状态"
+        }
+    },
+    "illuminanceSensors": [
+        {
+            "entity_id": "sensor.lumi_cn_lumi_158d000486797b_aq2_illumination_p_2_2",
+            "name": "状态"
+        }
+    ],
+    "electricity": {
+        "dailyHistory": {
+            "entity_id": "sensor.last_7_days_power_usage",
+            "name": "每日用电量"
+        },
+        "todayUsage": {
+            "entity_id": "sensor.shuang_lu_hu_gan_dian_biao_today_energy_b",
+            "name": "今日用电量"
+        },
+        "yesterdayUsage": {
+            "entity_id": "sensor.zuo_tian_yong_dian_liang",
+            "name": "昨日用电量"
+        },
+        "yearlyUsage": {
+            "entity_id": "sensor.ben_nian_yong_dian_liang",
+            "name": "年度用电量"
+        },
+
+        "currentPower": {
+            "entity_id": "sensor.shuang_lu_hu_gan_dian_biao_gong_lu_b",
+            "name": "当前总功率"
+        },
+        "monthUsage": {
+            "entity_id": "sensor.ben_yue_yong_dian_liang",
+            "name": "月度用电量"
+        },
+        "lastMonthUsage": {
+            "entity_id": "sensor.shang_yue_yong_dian_liang",
+            "name": "上月用电量"
         }
     }
 }

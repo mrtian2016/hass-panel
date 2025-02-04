@@ -21,15 +21,20 @@ function ElectricityCard({
     };
     return acc;
   }, {});
-  const dailyHistory = useHistory("sensor.shuang_lu_hu_gan_dian_biao_total_energy_b");
-  console.log(dailyHistory);
-
-  const historyData = JSON.parse(electricityEntities.dailyHistory.entity.state)
+  const historyData = electricityEntities.dailyHistory.entity.state;
+  // 解析历史数据字符串
+  const parsedData = historyData.split('\n').map(line => {
+    const [date, usage] = line.split(': ');
+    return {
+      date: date,
+      usage: parseFloat(usage.replace(' kWh', ''))
+    };
+  });
   
   const chartData = {
-    dates: historyData.map(item => item.date),
-    values: historyData.map(item => item.usage)
-  }
+    dates: parsedData.map(item => item.date),
+    values: parsedData.map(item => item.usage)
+  };
 
   // 图表配置
   const chartOption = {
@@ -109,7 +114,7 @@ function ElectricityCard({
       }
     }
   };
-  // console.log(lastUsage)
+
   return (
     
     <BaseCard 
@@ -119,9 +124,19 @@ function ElectricityCard({
     >
       <div className="electricity-content">
         <div className="electricity-main-value">
-          <span className="value">{electricityEntities.lastUsage.entity.state || '0'}</span>
+          <span className="label">今日用电量：</span>
+          <span className="value">{electricityEntities.todayUsage.entity.state || '0'}</span>
           <span className="unit">kWh</span>
+
         </div>
+        <div className="electricity-main-value">
+          <span className="label">当前总功率：</span>
+          <span className="value">{electricityEntities.currentPower.entity.state || '0'}</span>
+          <span className="unit">W</span>
+
+        </div>
+
+     
         
         <div className="electricity-chart">
           <ReactECharts 
@@ -130,71 +145,63 @@ function ElectricityCard({
           />
         </div>
 
-        <div className="electricity-yearly-info">
+        {/* <div className="electricity-yearly-info">
           <div className="yearly-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>年度用电量</span>
+              <span>当前总功率</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.yearlyUsage.entity.state || '0'}</span>
-              <span className="unit">度</span>
+              <span className="value">{electricityEntities.currentPower.entity.state || '0'}</span>
+              <span className="unit">W</span>
             </div>
           </div>
-{/* 
-          <div className="yearly-item">
-            <div className="info-label">
-              <Icon path={mdiCurrencyUsd} size={0.8} />
-              <span>年度电费</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{electricityEntities.yearlyCharge.entity.state || '0'}</span>
-              <span className="unit">元</span>
-            </div>
-          </div> */}
-        </div>
+        </div> */}
 
         <div className="electricity-info-grid">
-          {/* <div className="electricity-info-item">
-            <div className="info-label">
-              <Icon path={mdiCurrencyUsd} size={0.8} />
-              <span>上月电费</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{electricityEntities.monthCharge.entity.state || '0'}</span>
-              <span className="unit">元</span>
-            </div>
-          </div> */}
+       
 
           <div className="electricity-info-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>上月用电量</span>
+              <span>当月用电量</span>
             </div>
             <div className="electricity-value">
               <span className="value">{electricityEntities.monthUsage.entity.state || '0'}</span>
               <span className="unit">度</span>
             </div>
           </div>
-
-          {/* <div className="electricity-info-item">
+          <div className="electricity-info-item">
             <div className="info-label">
-              <Icon path={mdiCurrencyUsd} size={0.8} />
-              <span>电费余额</span>
+              <Icon path={mdiLightningBolt} size={0.8} />
+              <span>上月用电量</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.chargeBalance.entity.state || '0'}</span>
-              <span className="unit">元</span>
+              <span className="value">{electricityEntities.lastMonthUsage.entity.state || '0'}</span>
+              <span className="unit">度</span>
             </div>
-          </div> */}
+          </div>
+
+         
 
           <div className="electricity-info-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              {/* <span>{electricityEntities.dailyDate.entity.state.slice(5, 10)} 用电量</span> */}
+              <span>今日用电量</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.lastUsage.entity.state || '0'}</span>
+              <span className="value">{electricityEntities.todayUsage.entity.state || '0'}</span>
+              <span className="unit">度</span>
+
+            </div>
+          </div>
+          <div className="electricity-info-item">
+            <div className="info-label">
+              <Icon path={mdiLightningBolt} size={0.8} />
+              <span>昨日用电量</span>
+            </div>
+            <div className="electricity-value">
+              <span className="value">{electricityEntities.yesterdayUsage.entity.state || '0'}</span>
               <span className="unit">度</span>
 
             </div>
