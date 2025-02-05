@@ -13,7 +13,7 @@ COPY build /app
 RUN mkdir -p /app/config /app/static/media
 
 # 添加默认配置文件
-COPY public/config/userConfig.json /app/config/userConfig.json.example
+COPY public/config/userConfig.json.example /app/config/userConfig.json
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx-ssl.conf /etc/nginx/nginx-ssl.conf
