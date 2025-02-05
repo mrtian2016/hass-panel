@@ -1,20 +1,28 @@
 FROM nginx:alpine
 
-# 添加 envsubst 命令
-RUN apk add --no-cache gettext
+# 安装依赖
+RUN apk add --no-cache  gettext
 
-# 复制文件
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./build /usr/share/nginx/html
-COPY ./public/env.template.js /usr/share/nginx/html/env.template.js
-RUN rm /usr/share/nginx/html/config/userConfig.json
-# 创建启动脚本
-RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo 'envsubst < /usr/share/nginx/html/env.template.js > /usr/share/nginx/html/env.js' >> /docker-entrypoint.sh && \
-    echo 'nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
-    chmod +x /docker-entrypoint.sh
+# 创建工作目录
+WORKDIR /app
 
-EXPOSE 80
+# 只复制构建后的文件
+COPY build /app
 
-# 使用启动脚本
-CMD ["/docker-entrypoint.sh"]
+# 创建配置和media目录
+RUN mkdir -p /app/config /app/static/media
+
+# 添加默认配置文件
+COPY public/config/userConfig.json /app/config/userConfig.json.example
+
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx-ssl.conf /etc/nginx/nginx-ssl.conf
+
+# 复制启动脚本
+COPY run.sh /
+RUN chmod a+x /run.sh
+
+# 暴露端口
+EXPOSE 5123
+
+CMD [ "/run.sh" ]
