@@ -4,7 +4,7 @@
   "slug": "hass_panel",
   "description": "一个基于 React 的智能家居控制面板",
   "url": "https://github.com/mrtian2016/hass-panel",
-  "image": "ghcr.io/mrtian2016/hass-panel:addon-beta",
+  "image": "ghcr.io/mrtian2016/hass-panel",
   "arch": [
     "armhf",
     "armv7",
