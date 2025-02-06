@@ -7,13 +7,13 @@
 SSL=$(bashio::config 'ssl')
 CERTFILE=$(bashio::config 'certfile')
 KEYFILE=$(bashio::config 'keyfile')
-REACT_APP_HASS_URL=$(bashio::config 'hass_token')
+REACT_APP_HASS_TOKEN=$(bashio::config 'hass_token')
 # 设置环境变量
 export REACT_APP_HASS_URL="http://supervisor/core"
-export REACT_APP_HASS_TOKEN=$REACT_APP_HASS_URL
-
-# 创建配置目录
-mkdir -p /app/config
+export REACT_APP_HASS_TOKEN=$REACT_APP_HASS_TOKEN
+ls /app
+ls /app/build/
+ls /app/build/config/
 
 # 如果配置文件存在则复制
 if [ -f "/config/hass-panel/userConfig.json" ]; then

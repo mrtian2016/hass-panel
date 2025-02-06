@@ -1,5 +1,4 @@
-# FROM nginx:alpine
-FROM ghcr.io/home-assistant/aarch64-base:3.21
+FROM nginx:alpine
 
 # 添加 envsubst 命令
 RUN apk add --no-cache gettext nginx
