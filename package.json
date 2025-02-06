@@ -1,6 +1,7 @@
 {
   "name": "smart-home-pwa",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@ant-design/plots": "^2.3.3",
