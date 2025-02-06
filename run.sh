@@ -35,12 +35,5 @@ envsubst < /app/env.template.js > /app/env.js
 # 启动应用
 cd /app
 
-if [ "$SSL" == "true" ]; then
-    # 使用SSL
-    
-    nginx  -g "daemon off; "
-else
-    # 不使用SSL
-    nginx  -g "daemon off; "
-fi
+nginx  -g "daemon off; "
 
