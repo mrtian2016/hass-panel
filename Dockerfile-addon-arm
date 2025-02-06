@@ -10,6 +10,8 @@ WORKDIR /app
 # 只复制构建后的文件
 COPY build /app
 
+RUN rm /app/config/userConfig.json
+RUN rm /app/env.js
 
 
 
