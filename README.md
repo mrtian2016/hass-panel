@@ -7,7 +7,7 @@
 
 
 ## 预览图
-![预览图](./screenshots/iShot_2025-01-22_15.40.25.png)
+![预览图](https://i.imgur.com/ZV71KM8.jpeg)
 
 ## 交流群
 
@@ -146,8 +146,8 @@
 
 ### 启动
 
+#### Docker方式
 ```bash
-
 # 修改docker-compose.yml中的REACT_APP_HASS_URL为你的Home Assistant实例地址, 然后启动
 docker-compose up -d
 
@@ -163,6 +163,22 @@ docker run \
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
+
+#### Home Assistant Addon方式
+
+[![添加到Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fmrtian2016%2Fhass-panel)
+
+或者手动添加：
+
+1. 在Home Assistant的侧边栏中，点击"配置" -> "加载项" -> "加载项商店"
+2. 点击右上角的三个点，选择"存储库"
+3. 添加以下存储库地址：`https://github.com/mrtian2016/hass-panel`
+4. 点击"添加"
+5. 刷新页面后，在加载项商店中找到"Hass Panel"
+6. 点击"安装"
+7. 安装完成后，点击"启动"
+8. 在Home Assistant的侧边栏中，点击"Hass Panel"即可访问
+9. 打开文件管理器，在Home Assistant的config目录下找到`hass-panel`文件夹，编辑`userConfig.json`文件，修改配置，上传灯光图片到`media`文件夹，重启Hass Panel
 
 
 ## 注意事项
