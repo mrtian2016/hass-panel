@@ -11,7 +11,7 @@ REACT_APP_HASS_TOKEN=$(bashio::config 'hass_token')
 # 设置环境变量
 export REACT_APP_HASS_URL="http://supervisor/core"
 export REACT_APP_HASS_TOKEN=$REACT_APP_HASS_TOKEN
-ls /app
+ls /etc/nginx/
 
 # 如果配置文件存在则复制
 if [ -f "/config/hass-panel/userConfig.json" ]; then
