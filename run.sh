@@ -40,11 +40,10 @@ cd /app
 
 if [ "$SSL" == "true" ]; then
     # 使用SSL
-    nginx -c /etc/nginx/nginx-ssl.conf
+    
+    nginx -c /etc/nginx/nginx-ssl.conf -g "daemon off; "
 else
     # 不使用SSL
-    nginx -c /etc/nginx/nginx.conf
+    nginx -c /etc/nginx/nginx.conf -g "daemon off; "
 fi
 
-# 保持运行
-tail -f /dev/null 
