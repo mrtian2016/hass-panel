@@ -30,12 +30,14 @@
     "ssl": false,
     "certfile": "fullchain.pem",
     "keyfile": "privkey.pem",
-    "hass_token": ""
+    "hass_url": "http://homeassistant.local",
+    "hass_token": "your long-lived access token"
   },
   "schema": {
     "ssl": "bool",
     "certfile": "str",
     "keyfile": "str",
+    "hass_url": "str",
     "hass_token": "str"
   }
 } 
