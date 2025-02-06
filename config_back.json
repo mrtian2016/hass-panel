@@ -1,6 +1,6 @@
 {
   "name": "Hass Panel",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "slug": "hass_panel",
   "description": "一个基于 React 的智能家居控制面板",
   "url": "https://github.com/mrtian2016/hass-panel",
@@ -28,9 +28,17 @@
   },
   "webui": "http://[HOST]:[PORT:5123]",
   "options": {
-    "hass_url": "http://homeassistant.local:8123"
+    "ssl": false,
+    "certfile": "fullchain.pem",
+    "keyfile": "privkey.pem",
+    "hass_url": "http://homeassistant.local:8123",
+    "hass_token": ""
   },
   "schema": {
-    "hass_url": "str"
+    "ssl": "bool",
+    "certfile": "str",
+    "keyfile": "str",
+    "hass_url": "str",
+    "hass_token": "str"
   }
 } 

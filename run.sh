@@ -3,13 +3,9 @@
 # 启动Hass Panel
 # ==============================================================================
 
-# 获取配置
-SSL=$(bashio::config 'ssl')
-CERTFILE=$(bashio::config 'certfile')
-KEYFILE=$(bashio::config 'keyfile')
 # 设置环境变量
 export REACT_APP_HASS_URL=$(bashio::config 'hass_url')
-export REACT_APP_HASS_TOKEN=$(bashio::config 'hass_token')
+export REACT_APP_HASS_TOKEN='' #$(bashio::config 'hass_token')
 ls /etc/nginx/
 
 mkdir -p /config/hass-panel/media
