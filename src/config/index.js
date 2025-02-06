@@ -3,7 +3,7 @@ import { defaultConfig } from './defaultConfig';
 // 从外部JSON文件加载用户配置
 async function loadUserConfig() {
   try {
-    const response = await fetch('/config/userConfig.json');
+    const response = await fetch('./config/userConfig.json');
     if (!response.ok) {
       console.log('未找到用户配置文件，使用默认配置');
       return {};
