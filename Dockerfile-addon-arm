@@ -13,7 +13,7 @@ COPY build /app
 
 
 
-COPY nginx.conf /etc/nginx/sites-enabled/default.conf
+COPY nginx.conf /etc/nginx/http.d/default.conf
 
 
 # 复制启动脚本

@@ -13,6 +13,7 @@ export REACT_APP_HASS_URL="http://supervisor/core"
 export REACT_APP_HASS_TOKEN=$REACT_APP_HASS_TOKEN
 ls /etc/nginx/
 
+mkdir -p /config/hass-panel
 # 如果配置文件存在则复制
 if [ -f "/config/hass-panel/userConfig.json" ]; then
   cp /config/hass-panel/userConfig.json /app/config/
