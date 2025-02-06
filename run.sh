@@ -2,15 +2,38 @@
 # ==============================================================================
 # 启动Hass Panel
 # ==============================================================================
+set -e
+# 获取 Home Assistant Core URL
+core_url=$(bashio::core.url)
+
+# 获取 Supervisor URL
+supervisor_url=$(bashio::supervisor.url)
+
+# 获取 Home Assistant API URL
+api_url=$(bashio::core.api_url)
+
+echo "core_url: $core_url"
+echo "supervisor_url: $supervisor_url"
+echo "api_url: $api_url"
+
+# 获取 Supervisor token
+supervisor_token=$(bashio::supervisor.token)
+echo "supervisor_token: $supervisor_token"
+# 获取 Home Assistant Long-Lived Access Token
+ha_token=$(bashio::config.token)
+echo "ha_token: $ha_token"
+# 如果在 addon 配置中定义了 homeassistant_api: true，可以这样获取
+ha_token=$(bashio::homeassistant.token)
+
+echo "ha_token: $ha_token"
 
 # 获取配置
 SSL=$(bashio::config 'ssl')
 CERTFILE=$(bashio::config 'certfile')
 KEYFILE=$(bashio::config 'keyfile')
-REACT_APP_HASS_TOKEN=$(bashio::config 'hass_token')
 # 设置环境变量
-export REACT_APP_HASS_URL="http://supervisor/core"
-export REACT_APP_HASS_TOKEN=$REACT_APP_HASS_TOKEN
+export REACT_APP_HASS_URL=$(bashio::config 'hass_url')
+export REACT_APP_HASS_TOKEN=$(bashio::config 'hass_token')
 ls /etc/nginx/
 
 mkdir -p /config/hass-panel

@@ -14,6 +14,7 @@
   "ingress": true,
   "ingress_port": 5123,
   "panel_icon": "mdi:view-dashboard",
+  "homeassistant_api": true,
   "init": false,
   "map": [
     "config:rw"
