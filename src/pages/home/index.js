@@ -54,19 +54,19 @@ const getColumnLayoutIcon = (columns) => {
 // 修改卡片配置，添加动态卡片的处理
 const CARD_CONFIGS = [
   { key: 'time', label: '时间' },
-  { key: 'weather', label: '天气', showIf: config => config.weather?.length > 0 },
+  { key: 'weather', label: '天气', showIf: config => config.weather},
   { key: 'lights_status', label: '照明状态', showIf: config => config.lights },
   { key: 'lights_overview', label: '房间状态', showIf: config => config.lightsOverview },
-  { key: 'cameras', label: '监控画面', showIf: config => config.cameras?.length > 0 },
-  { key: 'sensors', label: '环境监测', showIf: config => config.sensors?.length > 0 },
+  { key: 'cameras', label: '监控画面', showIf: config => config.cameras},
+  { key: 'sensors', label: '环境监测', showIf: config => config.sensors},
   { key: 'router', label: '路由监控', showIf: config => config.router },
   { key: 'nas', label: 'NAS监控', showIf: config => config.syno_nas },
-  { key: 'media', label: '播放器控制', showIf: config => config.mediaPlayers?.length > 0 },
-  { key: 'curtains', label: '窗帘控制', showIf: config => config.curtains?.length > 0 },
+  { key: 'media', label: '播放器控制', showIf: config => config.mediaPlayers },
+  { key: 'curtains', label: '窗帘控制', showIf: config => config.curtains},
   { key: 'electricity', label: '电量监控', showIf: config => config.electricity },
   { key: 'scripts', label: '快捷指令', showIf: config => config.scripts },
   { key: 'waterpuri', label: '净水器', showIf: config => config.waterpuri },
-  { key: 'illuminance', label: '光照传感器', showIf: config => config.illuminanceSensors?.length > 0 },
+  { key: 'illuminance', label: '光照传感器', showIf: config => config.illuminanceSensors},
 ];
 
 function Home({ sidebarVisible, setSidebarVisible }) {
@@ -189,18 +189,18 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     const baseLayouts = savedLayouts ? JSON.parse(savedLayouts) : layouts;
     
     // 为每个 climate 设备添加布局配置
-    const climateLayouts = entityConfig.climates.map((climate, index) => ({
+    const climateLayouts = entityConfig.climates?.map((climate, index) => ({
       lg: { i: `climate-${index}`, x: 2, y: 11 + (index * 15), w: 1, h: 15 },
       md: { i: `climate-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 15 },
       sm: { i: `climate-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 14 }
-    }));
+    })) || [];
 
     // 为每个 weather 设备添加布局配置
-    const weatherLayouts = entityConfig.weather.map((weather, index) => ({
+    const weatherLayouts = entityConfig.weather?.map((weather, index) => ({
       lg: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 },
       md: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 },
       sm: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 }
-    }));
+    })) || [];
 
     // 合并基础布局和空调布局
     return {
@@ -219,18 +219,17 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
   // 修复重置布局功能
   const handleResetLayout = () => {
-    // 合并基础布局和天气、空调布局
-    const climateLayouts = entityConfig.climates.map((climate, index) => ({
+    const climateLayouts = entityConfig.climates?.map((climate, index) => ({
       lg: { i: `climate-${index}`, x: 2, y: 11 + (index * 15), w: 1, h: 15 },
       md: { i: `climate-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 15 },
       sm: { i: `climate-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 14 }
-    }));
+    })) || [];
 
-    const weatherLayouts = entityConfig.weather.map((weather, index) => ({
+    const weatherLayouts = entityConfig.weather?.map((weather, index) => ({
       lg: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 },
       md: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 },
       sm: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 }
-    }));
+    })) || [];
 
     const resetLayouts = {
       lg: [...layouts.lg, ...climateLayouts.map(layout => layout.lg), ...weatherLayouts.map(layout => layout.lg)],
@@ -513,7 +512,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </div>
             )}
             
-            {entityConfig.weather?.length > 0 && visibleCards.weather && 
+            {entityConfig.weather && visibleCards.weather && 
               entityConfig.weather.map((entityId, index) => (
                 <div key={`weather-${index}`}>
                   <WeatherCard entityId={entityId} />
@@ -532,13 +531,13 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </div>
             )}
             
-            {entityConfig.cameras.length > 0 && visibleCards.cameras && (
+            {entityConfig.cameras&& visibleCards.cameras && (
               <div key="cameras">
                 <CameraSection config={entityConfig.cameras} />
               </div>
             )}
             
-            {entityConfig.sensors.length > 0 && visibleCards.sensors && (
+            {entityConfig.sensors&& visibleCards.sensors && (
               <div key="sensors">
                 <SensorCard config={entityConfig.sensors} />
               </div>
@@ -550,13 +549,13 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </div>
             )}
             
-            {entityConfig.mediaPlayers.length > 0 && visibleCards.media && (
+            {entityConfig.mediaPlayers&& visibleCards.media && (
               <div key="media">
                 <MediaPlayerCard config={entityConfig.mediaPlayers} />
               </div>
             )}
             
-            {entityConfig.curtains.length > 0 && visibleCards.curtains && (
+            {entityConfig.curtains&& visibleCards.curtains && (
               <div key="curtains">
                 <CurtainCard curtains={entityConfig.curtains} />
               </div>
@@ -568,7 +567,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </div>
             )}
             
-            {entityConfig.climates?.length > 0 && 
+            {entityConfig.climates && 
               entityConfig.climates.map((climate, index) => {
                 const cardKey = `climate-${index}`;
                 return visibleCards[cardKey] ? (
