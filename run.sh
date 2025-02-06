@@ -31,6 +31,10 @@ if [ -d "/config/hass-panel/media" ]; then
   ln -sf /config/hass-panel/media/* /app/static/media/
 fi
 
+
+envsubst < /app/build/env.template.js > /app/build/env.js
+
+
 # 启动应用
 cd /app
 
