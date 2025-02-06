@@ -155,11 +155,11 @@ docker-compose up -d
 docker run \
   --name hass-panel \
   --restart unless-stopped \
-  -p 5123:80 \
+  -p 5123:5123 \
   -e REACT_APP_HASS_URL=your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
-  -v "$(pwd)/public/media:/usr/share/nginx/html/static/media" \
-  -v "$(pwd)/public/config/userConfig.json:/usr/share/nginx/html/config/userConfig.json" \
+  -v "$(pwd)/public/media:/app/media" \
+  -v "$(pwd)/public/config/userConfig.json:/app/config/userConfig.json" \
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
