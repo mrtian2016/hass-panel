@@ -7,10 +7,10 @@
 SSL=$(bashio::config 'ssl')
 CERTFILE=$(bashio::config 'certfile')
 KEYFILE=$(bashio::config 'keyfile')
-
+REACT_APP_HASS_URL=$(bashio::config 'hass_token')
 # 设置环境变量
 export REACT_APP_HASS_URL="http://supervisor/core"
-export REACT_APP_HASS_TOKEN=$(bashio::supervisor.token)
+export REACT_APP_HASS_TOKEN=$REACT_APP_HASS_URL
 
 # 创建配置目录
 mkdir -p /app/config
@@ -20,11 +20,13 @@ if [ -f "/config/hass-panel/userConfig.json" ]; then
   cp /config/hass-panel/userConfig.json /app/build/config/
 else
   # 如果不存在则使用示例配置
-  cp /app/config/userConfig.json.example /app/build/config/userConfig.json
+  cp /app/build/config/userConfig.json.example /app/build/config/userConfig.json
 fi
 
-# 创建media目录
-mkdir -p /app/static/media
+
+# if [ ! -d "/config/hass-panel/media" ]; then
+#   cp -r /config/hass-panel/media/* /app/build/static/media 
+# else
 
 # 如果/config/hass-panel/media目录存在,则链接media文件
 if [ -d "/config/hass-panel/media" ]; then

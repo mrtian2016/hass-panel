@@ -1,6 +1,6 @@
 {
   "name": "Hass Panel",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "slug": "hass_panel",
   "description": "一个基于 React 的智能家居控制面板",
   "url": "https://github.com/mrtian2016/hass-panel",
@@ -28,11 +28,13 @@
   "options": {
     "ssl": false,
     "certfile": "fullchain.pem",
-    "keyfile": "privkey.pem"
+    "keyfile": "privkey.pem",
+    "hass_token": ""
   },
   "schema": {
     "ssl": "bool",
     "certfile": "str",
-    "keyfile": "str"
+    "keyfile": "str",
+    "hass_token": "str"
   }
 } 

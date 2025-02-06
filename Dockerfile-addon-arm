@@ -1,5 +1,5 @@
 
-FROM ghcr.io/home-assistant/aarch64-base:3.21
+FROM ghcr.io/hassio-addons/base:17.1.0
 
 # 安装依赖
 RUN apk add --no-cache  gettext nginx
@@ -11,8 +11,7 @@ WORKDIR /app
 COPY build /app
 
 
-# 添加默认配置文件
-COPY public/config/userConfig.json.example /app/config/userConfig.json
+
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
