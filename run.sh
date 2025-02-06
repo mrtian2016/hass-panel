@@ -25,7 +25,7 @@ fi
 
 # 如果/config/hass-panel/media目录存在,则链接media文件
 if [ -d "/config/hass-panel/media" ]; then
-  ln -sf /config/hass-panel/media/* /app/static/media/
+  ln -sf /config/hass-panel/media/* /app/media/
 fi
 
 

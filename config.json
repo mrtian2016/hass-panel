@@ -13,6 +13,7 @@
   "boot": "auto",
   "ingress": true,
   "ingress_port": 5123,
+  "ingress_entry": "/",
   "panel_icon": "mdi:view-dashboard",
   "homeassistant_api": true,
   "init": false,
