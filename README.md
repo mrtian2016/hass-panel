@@ -11,7 +11,7 @@
 
 ## 交流群
 
-![交流群](./screenshots/IMG_4918.JPG)
+<img src="https://i.imgur.com/NUpsXUl.jpeg" width="200" alt="交流群" />
 
 ## 特性
 
@@ -225,6 +225,10 @@ npm test
 
 欢迎提交 Pull Request 和 Issue！
 
-## 许可证
+## 赞助
 
-MIT License
+如果您觉得这个项目对您有帮助，欢迎赞助支持！
+
+<img src="https://i.imgur.com/qYhxNZx.jpeg" width="200" alt="赞助二维码" />
+
+
