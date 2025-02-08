@@ -14,6 +14,7 @@ import {
   mdiEyeOutline,
   mdiCheckboxMarked,
   mdiCheckboxBlankOutline,
+  mdiViewDashboard,
 } from '@mdi/js';
 import { useWeather, useEntity,useHistory} from '@hakit/core';
 import { useTheme } from '../../theme/ThemeContext';
@@ -433,6 +434,14 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 </div>
               ))}
           </Responsive>
+
+          {cards.filter(card => card.visible !== false).length === 0 && (
+            <div className="empty-state">
+              <Icon path={mdiViewDashboard} size={3} color="var(--color-text-secondary)" />
+              <h2>还没有添加任何卡片</h2>
+              <p>点击左侧配置按钮，前往配置页面添加卡片吧</p>
+            </div>
+          )}
 
           {isEditing && isMobile && (
             <button 

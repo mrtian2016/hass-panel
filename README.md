@@ -5,7 +5,6 @@
 ## 视频预览
 [![一个基于 React 的智能家居控制面板](https://img.youtube.com/vi/H6tz_ZBFPSM/0.jpg)](https://youtu.be/H6tz_ZBFPSM)
 
-
 ## 预览图
 ![预览图](https://i.imgur.com/ZV71KM8.jpeg)
 
@@ -27,139 +26,137 @@
 - 🚀 PWA支持，可安装到桌面
 - 🎨 美观的用户界面，支持暗色模式
 
-## 快速开始
+## 功能特点
 
-### 配置
+- 支持多种卡片类型：时间、天气、灯光、传感器、媒体播放器等
+- 支持自定义卡片布局和排序
+- 支持卡片显示/隐藏控制
+- 支持暗色/亮色主题切换
+- 支持响应式布局，自适应不同屏幕尺寸
+- 支持 PWA，可离线访问
+- 支持 Docker 部署
+- 支持 Home Assistant Addon 方式安装
 
-项目使用外部配置文件方式，可以在不重新构建的情况下修改配置。
+## 动态卡片配置
 
-1. 复制示例配置文件：
-   ```bash
-   # 克隆项目
-   git clone https://github.com/mrtian2016/hass-panel.git
+### 卡片类型
 
-   cd hass-panel
-   
-   cp public/config/userConfig.json.example public/config/userConfig.json
-   ```
+目前支持以下类型的卡片：
 
-2. 根据您的 Home Assistant 环境编辑 `userConfig.json`
+1. 时间卡片 (TimeCard)
+   - 显示当前时间和日期
+   - 支持自定义时间和日期格式
 
+2. 天气卡片 (WeatherCard)
+   - 显示当前天气状况
+   - 支持显示天气预报
 
-## 配置文件结构
+3. 灯光状态卡片 (LightStatusCard)
+   - 显示房间内的灯光状态
+   - 支持灯光开关和亮度调节
 
-配置文件包含以下主要部分(参考[CONFIG.md](./CONFIG.md))：
+4. 房间灯光概览卡片 (LightOverviewCard)
+   - 支持自定义房间平面图
+   - 支持灯光位置标记
+   - 支持灯光状态可视化
+   - 支持长按调节灯光
 
-### 天气
-```json
-{
-  "weather": ["weather.your_weather_entity"]
-}
-```
+5. 传感器卡片 (SensorCard)
+   - 支持温度、湿度等多种传感器数据显示
+   - 支持按房间分组显示
 
-### 灯光
-```json
-{
-  "lights": {
-    "living_room": {
-      "entity_id": "light.your_light_entity",
-      "name": "客厅灯",
-      "room": "living_room"
-    }
-  }
-}
-```
+6. 媒体播放器卡片 (MediaPlayerCard)
+   - 支持播放控制
+   - 显示当前播放状态和封面
 
-### 传感器
-```json
-{
-  "sensors": [
-    {
-      "id": "LIVING_ROOM",
-      "name": "客厅",
-      "sensors": {
-        "temperature": {
-          "entity_id": "sensor.temperature_entity",
-          "name": "温度",
-          "icon": "mdiThermometer"
-        },
-        "humidity": {
-          "entity_id": "sensor.humidity_entity",
-          "name": "湿度",
-          "icon": "mdiWaterPercent"
-        }
-      }
-    }
-  ]
-}
-```
+7. 窗帘控制卡片 (CurtainCard)
+   - 支持窗帘开关和位置控制
+   - 支持多个窗帘分组显示
 
-### 空调
-```json
-{
-  "climates": [
-    {
-      "entity_id": "climate.ac_entity",
-      "name": "客厅空调",
-      "room": "living_room",
-      "features": {
-        "eco": {
-          "entity_id": "switch.ac_eco_mode",
-          "name": "节能",
-          "icon": "mdiLeaf",
-          "disableWhen": {
-            "state": "off"
-          }
-        }
-      }
-    }
-  ]
-}
-```
+8. 电量监控卡片 (ElectricityCard)
+   - 显示用电量统计
+   - 支持历史用电趋势图
 
-### 窗帘
-```json
-{
-  "curtains": [
-    {
-      "entity_id": "cover.curtain_entity",
-      "name": "客厅窗帘",
-      "room": "living_room"
-    }
-  ]
-}
-```
+9. 路由器监控卡片 (RouterCard)
+   - 显示路由器状态
+   - 支持网速监控
 
-### 场景
-```json
-{
-  "scripts": [
-    {
-      "name": "离家模式",
-      "entity_id": "script.away_mode",
-      "icon": "log-out"
-    }
-  ]
-}
-```
+10. NAS监控卡片 (NASCard)
+    - 显示 NAS 系统状态
+    - 支持存储空间监控
+    - 支持硬盘健康状态监控
 
+11. 摄像头卡片 (CameraCard)
+    - 支持实时画面预览
+    - 支持多个摄像头切换
+
+12. 空调控制卡片 (ClimateCard)
+    - 支持温度调节
+    - 支持模式切换
+    - 支持风速调节
+
+13. 人体传感器卡片 (MotionCard)
+    - 显示人体感应状态
+    - 支持光照强度显示
+
+14. 净水器卡片 (WaterPurifierCard)
+    - 显示滤芯状态
+    - 支持用水量统计
+
+15. 光照传感器卡片 (IlluminanceCard)
+    - 显示光照强度
+    - 支持多个传感器数据显示
+
+16. 快捷指令面板 (ScriptPanel)
+    - 支持自定义场景触发
+    - 支持多个快捷指令分组
+
+### 卡片配置
+
+每个卡片都支持以下基本配置：
+
+- 显示/隐藏控制
+- 拖拽排序
+- 自定义大小（仅限桌面端）
+- 删除功能
+
+### 添加新卡片
+
+1. 点击配置页面右上角的"添加卡片"按钮
+2. 从可用卡片列表中选择需要添加的卡片类型
+3. 配置卡片所需的参数（如实体 ID、名称等）
+4. 保存配置后即可在主页面看到新添加的卡片
+
+### 编辑卡片
+
+1. 在配置页面中找到需要编辑的卡片
+2. 修改卡片的相关配置
+3. 点击保存按钮使修改生效
+
+### 删除卡片
+
+1. 在配置页面中找到需要删除的卡片
+2. 点击卡片右上角的删除按钮
+3. 确认删除后，卡片将从面板中移除
+
+### 卡片布局
+
+- 支持自定义列数（3-5列）
+- 支持响应式布局，自动适应不同屏幕尺寸
+- 支持拖拽调整卡片位置
+- 支持保存自定义布局
+- 支持重置为默认布局
 
 ### 启动
 
 #### Docker方式
 ```bash
-# 修改docker-compose.yml中的REACT_APP_HASS_URL为你的Home Assistant实例地址, 然后启动
-docker-compose up -d
-
-# 或者
 docker run \
   --name hass-panel \
   --restart unless-stopped \
   -p 5123:5123 \
   -e REACT_APP_HASS_URL=your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
-  -v "$(pwd)/public/media:/app/media" \
-  -v "$(pwd)/public/config/userConfig.json:/app/config/userConfig.json" \
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
@@ -178,21 +175,16 @@ docker run \
 6. 点击"安装"
 7. 安装完成后，点击"启动"
 8. 在Home Assistant的侧边栏中，点击"Hass Panel"即可访问
-9. 打开文件管理器，在Home Assistant的config目录下找到`hass-panel`文件夹，编辑`userConfig.json`文件，修改配置，上传灯光图片到`media`文件夹，重启Hass Panel
-
 
 ## 注意事项
 
-1. 配置文件必须是有效的 JSON 格式
-2. 所有的 `entity_id` 必须与您的 Home Assistant 中的实体 ID 保持一致
-3. 只需要配置您需要使用的部分，未配置的部分将使用默认配置
-4. 修改配置后刷新页面即可生效
-5. 确保您的 Home Assistant 实体可以正常访问
+1. 所有的 `entity_id` 必须与您的 Home Assistant 中的实体 ID 保持一致
+2. 修改配置后刷新页面即可生效
+3. 确保您的 Home Assistant 实体可以正常访问
 
 ## 常见问题
 
 1. 配置不生效
-   - 检查 JSON 格式是否正确
    - 确认实体 ID 是否正确
    - 刷新页面后重试
 

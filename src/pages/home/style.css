@@ -1042,6 +1042,7 @@
 .settings-toggle:active {
   transform: scale(0.95);
 }
+
 /* 添加设置面板样式 */
 .settings-panel {
   position: fixed;
@@ -1112,4 +1113,39 @@
 .card-visibility-item span {
   color: var(--color-text-primary);
   font-size: 14px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  text-align: center;
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  margin: 20px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.empty-state h2 {
+  margin: 24px 0 12px;
+  color: var(--color-text-primary);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .edit-toggle.active {
+    bottom: calc(env(safe-area-inset-bottom) + 64px);
+    right: 16px;
+  }
 } 
