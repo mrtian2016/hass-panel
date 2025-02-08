@@ -117,7 +117,7 @@ function WeatherCard({ entityId }) {
   };
 
   const forecastData = Array.isArray(weather?.forecast?.forecast) ? weather.forecast.forecast : [];
-  console.log(weather.attributes);
+  
   const clothingAdvice = calculateClothingIndex(
     weather.attributes.temperature,
     weather.attributes.humidity || 50,

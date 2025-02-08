@@ -64,18 +64,26 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
 function NASCard({ config }) {
   const { theme } = useTheme();
   const [showDriveModal, setShowDriveModal] = useState(false);
+  let entities = {};
+  try {
 
-  const mainEntities = Object.entries(config.main).map(([key, feature]) => ({
-    key,
-    ...feature,
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    entity: useEntity(feature.entity_id),
-  }));
+    const mainEntities = Object.entries(config.syno_nas?.main).map(([key, feature]) => ({
+      key,
+      ...feature,
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      entity: useEntity(feature.entity_id),
+    }));
 
-  const entities = mainEntities.reduce((acc, curr) => {
-    acc[curr.key] = curr.entity;
-    return acc;
-  }, {});
+    entities = mainEntities.reduce((acc, curr) => {
+      acc[curr.key] = curr.entity;
+      return acc;
+    }, {});
+  } catch (error) {
+    console.error('NASCard 组件错误:', error);
+    return <BaseCard title="NAS监控" icon={mdiNas} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'} >
+      出现错误，请检查配置，{error.message}
+    </BaseCard>
+  }
 
   const cpuUsage = parseFloat(entities.cpuUsage?.state || 0);
   const memoryUsage = parseFloat(entities.memoryUsage?.state || 0);
@@ -115,7 +123,8 @@ function NASCard({ config }) {
               <div className="divider"></div>
               
               <div className="volume-header">存储池状态</div>
-              {config.volumes.map((volume, index) => {
+              {config.syno_nas?.volumes?.map((volume, index) => {
+                
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const volumeStatus = useEntity(volume.status.entity_id);
                 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -192,7 +201,7 @@ function NASCard({ config }) {
       >
         <div className="drive-modal-content">
           <div className="volume-header">硬盘状态</div>
-          {config.drives.map((drive, index) => {  
+          {config.syno_nas?.drives?.map((drive, index) => {  
             // eslint-disable-next-line react-hooks/rules-of-hooks
             const driveStatus = useEntity(drive.status.entity_id);
             // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -216,11 +225,11 @@ function NASCard({ config }) {
             );
           })}
 
-          {config.m2ssd && config.m2ssd.length > 0 && (
+          {config.syno_nas?.m2ssd && config.syno_nas?.m2ssd.length > 0 && (
             <>
               <div className="divider"></div>
               <div className="volume-header">M.2 SSD状态</div>
-              {config.m2ssd.map((drive, index) => {
+              {config.syno_nas?.m2ssd?.map((drive, index) => {
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const driveStatus = useEntity(drive.status.entity_id);
                 // eslint-disable-next-line react-hooks/rules-of-hooks

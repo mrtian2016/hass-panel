@@ -15,16 +15,21 @@ function LightStatusCard({ config }) {
   const [showControl, setShowControl] = useState(false);
   const [selectedLight, setSelectedLight] = useState(null);
   const pressTimer = useRef(null);
+  
+  // 确保 config 是一个对象
+  if (!config || typeof config !== 'object') {
+    return null;
+  }
 
-  const lightEntities = Object.entries(config).reduce((acc, [key, config]) => {
+  const lightEntities = Object.entries(config.lights).reduce((acc, [key, lightConfig]) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const entity = useEntity(config.entity_id);
+    const entity = useEntity(lightConfig.entity_id);
     
     acc[key] = {
-        ...config,
-        entity,
-        // 判断实体类型
-        isLight: config.entity_id.startsWith('light.')
+      ...lightConfig,
+      entity,
+      // 判断实体类型
+      isLight: lightConfig.entity_id.startsWith('light.')
     };
     return acc;
   }, {});

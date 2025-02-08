@@ -5,7 +5,8 @@ import BaseCard from '../BaseCard';
 import './style.css';
 
 function IlluminanceCard({ config }) {
-  const illuminanceSensors = Array.isArray(config) ? config : [config];
+  // 从 config.sensors 获取传感器列表
+  const sensors = Array.isArray(config.sensors) ? config.sensors : [];
 
   return (
     <BaseCard
@@ -14,14 +15,15 @@ function IlluminanceCard({ config }) {
       iconColor="var(--color-warning)"
     >
       <div className="illuminance-sensors">
-        {illuminanceSensors.map((sensorConfig, index) => {
-          const { entity_id, name } = sensorConfig;
+        {sensors.map((sensor) => {
           // eslint-disable-next-line react-hooks/rules-of-hooks
-          const { state } = useEntity(entity_id);
+          const { state, attributes,custom } = useEntity(sensor.entity_id);
+          console.log(custom);
+
           
           return (
-            <div key={entity_id} className="illuminance-sensor">
-              <div className="sensor-name">{name || entity_id}</div>
+            <div key={sensor.entity_id} className="illuminance-sensor">
+              <div className="sensor-name">{sensor.name || attributes?.friendly_name || sensor.entity_id}</div>
               <div className="sensor-value">
                 <span className="value">{state}</span>
                 <span className="unit">lux</span>

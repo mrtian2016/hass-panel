@@ -1,0 +1,71 @@
+.motion-history {
+  padding: 16px;
+}
+
+.today-section h3 {
+  margin: 0 0 16px 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.history-item {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  position: relative;
+}
+
+.history-item::before {
+  content: '';
+  position: absolute;
+  left: 65px;
+  top: 50%;
+  bottom: -40px;
+  width: 1px;
+  background-color: var(--color-border);
+}
+
+.history-item:last-child::before {
+  display: none;
+}
+
+.history-item .time {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  font-weight: normal;
+  min-width: 45px;
+  text-align: right;
+margin: 0;
+}
+
+.history-item::after {
+  content: '';
+  position: absolute;
+  left: 61px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-border);
+}
+
+.history-item .record-content {
+  flex: 1;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-left: 16px;
+}
+
+.history-item .record-content span {
+  color: var(--color-text-primary);
+  font-size: 14px;
+} 

@@ -11,6 +11,9 @@
   --color-text-light: #78909C;
   --color-border: #ECEFF1;
   --color-shadow: rgba(255, 183, 77, 0.1);
+  --color-error: #FF4444;
+  --color-error-light: #FF6666;
+  --color-error-dark: #CC0000;
 
   /* Border Radius */
   --border-radius-small: 8px;

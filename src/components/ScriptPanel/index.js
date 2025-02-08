@@ -28,7 +28,7 @@ function ScriptPanel({ config }) {
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
     >
       <div className="script-buttons">
-        {config.map((script) => (
+        {config.scripts.map((script) => (
           <button
             key={script.entity_id}
             className="script-button"

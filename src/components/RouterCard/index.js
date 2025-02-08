@@ -63,7 +63,7 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
 
 function RouterCard({ config }) {
   const { theme } = useTheme();
-  const routerEntities = Object.entries(config).map(([key, feature]) => ({
+  const routerEntities = Object.entries(config.router).map(([key, feature]) => ({
     key,
     ...feature,
     // eslint-disable-next-line react-hooks/rules-of-hooks

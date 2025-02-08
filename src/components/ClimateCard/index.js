@@ -40,14 +40,16 @@ function ClimateCard({
   const { theme } = useTheme();
   const climate = useEntity(config.entity_id);
   // 提前准备所有特性的实体ID数组
-  const featureEntities = Object.entries(config.features).map(([key, feature]) => ({
-    key,
-    ...feature,
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    entity: useEntity(feature.entity_id),
-  }));
+  let features = {};
+  try {
+    const featureEntities = Object.entries(config.features).map(([key, feature]) => ({
+      key,
+      ...feature,
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      entity: useEntity(feature.entity_id),
+    }));
     // 将特性数组转换为对象
-    const features = featureEntities.reduce((acc, feature) => ({
+    features = featureEntities.reduce((acc, feature) => ({
       ...acc,
       [feature.key]: {
         name: feature.name,
@@ -57,17 +59,20 @@ function ClimateCard({
         entity: feature.entity,
       },
     }), {});
+  } catch (error) {
+    console.error('ClimateCard features 加载失败', error);
+  }
 
-  const { getServices } = useHass();
-  const [services, setServices] = useState(null);
-  useEffect(() => {
-    async function fetchServices() {
-      const services = await getServices();
-      setServices(services);
-    }
-    fetchServices();
-  }, []);
-  console.log(services);
+  // const { getServices } = useHass();
+  // const [services, setServices] = useState(null);
+  // useEffect(() => {
+  //   async function fetchServices() {
+  //     const services = await getServices();
+  //     setServices(services);
+  //   }
+  //   fetchServices();
+  // }, []);
+  // console.log(services);
 
   const [showFanModes, setShowFanModes] = useState(false);
   const [showSwingModes, setShowSwingModes] = useState(false);

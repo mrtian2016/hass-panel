@@ -36,6 +36,7 @@ import NASCard from '../../components/NASCard';
 import ScriptPanel from '../../components/ScriptPanel';
 import WaterPurifierCard from '../../components/WaterPurifierCard';
 import IlluminanceCard from '../../components/IlluminanceCard';
+import MotionCard from '../../components/MotionCard';
 import './style.css';
 import { entityConfig } from '../../config/index';
 
@@ -51,76 +52,54 @@ const getColumnLayoutIcon = (columns) => {
   return mdiViewColumn;
 };
 
-// 修改卡片配置，添加动态卡片的处理
-const CARD_CONFIGS = [
-  { key: 'time', label: '时间' },
-  { key: 'weather', label: '天气', showIf: config => config.weather},
-  { key: 'lights_status', label: '照明状态', showIf: config => config.lights },
-  { key: 'lights_overview', label: '房间状态', showIf: config => config.lightsOverview },
-  { key: 'cameras', label: '监控画面', showIf: config => config.cameras},
-  { key: 'sensors', label: '环境监测', showIf: config => config.sensors},
-  { key: 'router', label: '路由监控', showIf: config => config.router },
-  { key: 'nas', label: 'NAS监控', showIf: config => config.syno_nas },
-  { key: 'media', label: '播放器控制', showIf: config => config.mediaPlayers },
-  { key: 'curtains', label: '窗帘控制', showIf: config => config.curtains},
-  { key: 'electricity', label: '电量监控', showIf: config => config.electricity },
-  { key: 'scripts', label: '快捷指令', showIf: config => config.scripts },
-  { key: 'waterpuri', label: '净水器', showIf: config => config.waterpuri },
-  { key: 'illuminance', label: '光照传感器', showIf: config => config.illuminanceSensors},
-];
 
 function Home({ sidebarVisible, setSidebarVisible }) {
   const { theme, toggleTheme } = useTheme();
+  const [cards, setCards] = useState(() => {
+    // 从 localStorage 读取配置
+    const savedConfig = localStorage.getItem('card-config');
+    if (savedConfig) {
+      try {
+        const config = JSON.parse(savedConfig);
+        return config.map(card => ({
+          ...card,
+          visible: card.visible !== false // 确保所有卡片都有visible属性
+        }));
+      } catch (error) {
+        console.error('解析配置失败:', error);
+        return [];
+      }
+    }
+    return [];
+  });
 
   const handleRefresh = () => {
     console.log('Refresh triggered');
     window.location.reload();
   };
 
-  // 修改布局配置
-  const layouts = {
-    lg: [
-      { i: 'time', x: 0, y: 0, w: 1, h: 5 },
-      { i: 'lights_status', x: 0, y: 11, w: 1, h: 12},
-      { i: 'lights_overview', x: 0, y: 3, w: 1, h: 15 },
-      { i: 'cameras', x: 0, y: 6, w: 1, h: 10 },
-      { i: 'sensors', x: 0, y: 9, w: 1, h: 8 },
-      { i: 'router', x: 1, y: 9, w: 1, h: 13 },
-      { i: 'nas', x: 2, y: 9, w: 1, h: 18 },
-      { i: 'media', x: 2, y: 9, w: 1, h: 14 },
-      { i: 'curtains', x: 0, y: 11, w: 1, h: 14 },
-      { i: 'electricity', x: 1, y: 3, w: 1, h: 12 },
-      { i: 'scripts', x: 0, y: 0, w: 1, h: 7 },
-      { i: 'waterpuri', x: 0, y: 0, w: 1, h: 12 },
-    ],
-    md: [
-      { i: 'time', x: 0, y: 0, w: 1, h: 5 },
-      { i: 'lights_status', x: 0, y: 11, w: 1, h: 12},
-      { i: 'lights_overview', x: 0, y: 3, w: 1, h: 11 },
-      { i: 'cameras', x: 0, y: 6, w: 1, h: 10 },
-      { i: 'sensors', x: 0, y: 9, w: 1, h: 8 },
-      { i: 'router', x: 0, y: 11, w: 1, h: 13 },
-      { i: 'nas', x: 0, y: 11, w: 1, h: 18 },
-      { i: 'media', x: 0, y: 13, w: 1, h: 14 },
-      { i: 'curtains', x: 0, y: 15, w: 1, h: 14 },
-      { i: 'electricity', x: 0, y: 3, w: 1, h: 12 },
-      { i: 'scripts', x: 0, y: 0, w: 1, h: 7 },
-      { i: 'waterpuri', x: 0, y: 0, w: 1, h: 12 },
-    ],
-    sm: [
-      { i: 'time', x: 0, y: 0, w: 1, h: 5 },
-      { i: 'lights_status', x: 0, y: 11, w: 1, h: 12},
-      { i: 'lights_overview', x: 0, y: 1, w: 1, h: 11 },
-      { i: 'sensors', x: 0, y: 9, w: 1, h: 8 },
-      { i: 'cameras', x: 0, y: 11, w: 1, h: 10 },
-      { i: 'router', x: 0, y: 11, w: 1, h: 13 },
-      { i: 'nas', x: 0, y: 11, w: 1, h: 18 },
-      { i: 'media', x: 0, y: 13, w: 1, h: 18 },
-      { i: 'curtains', x: 0, y: 15, w: 1, h: 14 },
-      { i: 'electricity', x: 0, y: 3, w: 1, h: 12 },
-      { i: 'scripts', x: 0, y: 9, w: 1, h: 7 },
-      { i: 'waterpuri', x: 0, y: 10, w: 1, h: 12 },
-    ]
+  // 修改布局状态
+  const [currentLayouts, setCurrentLayouts] = useState(() => {
+    const savedLayouts = localStorage.getItem('dashboard-layouts');
+    const defaultLayouts = localStorage.getItem('default-dashboard-layouts');
+    return savedLayouts ? JSON.parse(savedLayouts) : defaultLayouts ? JSON.parse(defaultLayouts) : {};
+  });
+
+  // 处理布局变化
+  const handleLayoutChange = (layout, layouts) => {
+    setCurrentLayouts(layouts);
+    localStorage.setItem('dashboard-layouts', JSON.stringify(layouts));
+  };
+
+  // 修改重置布局功能
+  const handleResetLayout = () => {
+    const defaultLayouts = localStorage.getItem('default-dashboard-layouts');
+    if (defaultLayouts) {
+      const layouts = JSON.parse(defaultLayouts);
+      setCurrentLayouts(layouts);
+      localStorage.setItem('dashboard-layouts', defaultLayouts);
+    }
+    setIsEditing(false);
   };
 
   // 添加宽度状态
@@ -183,80 +162,6 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  // 添加布局状态
-  const [currentLayouts, setCurrentLayouts] = useState(() => {
-    const savedLayouts = localStorage.getItem('dashboard-layouts');
-    const baseLayouts = savedLayouts ? JSON.parse(savedLayouts) : layouts;
-    
-    // 为每个 climate 设备添加布局配置
-    const climateLayouts = entityConfig.climates?.map((climate, index) => ({
-      lg: { i: `climate-${index}`, x: 2, y: 11 + (index * 15), w: 1, h: 15 },
-      md: { i: `climate-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 15 },
-      sm: { i: `climate-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 14 }
-    })) || [];
-
-    // 为每个 weather 设备添加布局配置
-    const weatherLayouts = entityConfig.weather?.map((weather, index) => ({
-      lg: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 },
-      md: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 },
-      sm: { i: `weather-${index}`, x: 0, y: 1 , w: 1, h: 9 }
-    })) || [];
-
-    // 合并基础布局和空调布局
-    return {
-      lg: [...baseLayouts.lg, ...climateLayouts.map(layout => layout.lg), ...weatherLayouts.map(layout => layout.lg)],
-      md: [...baseLayouts.md, ...climateLayouts.map(layout => layout.md), ...weatherLayouts.map(layout => layout.md)],
-      sm: [...baseLayouts.sm, ...climateLayouts.map(layout => layout.sm), ...weatherLayouts.map(layout => layout.sm)]
-    };
-  });
-
-  // 处理布局变化
-  const handleLayoutChange = (layout, layouts) => {
-    setCurrentLayouts(layouts);
-    // 保存到 localStorage
-    localStorage.setItem('dashboard-layouts', JSON.stringify(layouts));
-  };
-
-  // 修复重置布局功能
-  const handleResetLayout = () => {
-    const climateLayouts = entityConfig.climates?.map((climate, index) => ({
-      lg: { i: `climate-${index}`, x: 2, y: 11 + (index * 15), w: 1, h: 15 },
-      md: { i: `climate-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 15 },
-      sm: { i: `climate-${index}`, x: 0, y: 19 + (index * 15), w: 1, h: 14 }
-    })) || [];
-
-    const weatherLayouts = entityConfig.weather?.map((weather, index) => ({
-      lg: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 },
-      md: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 },
-      sm: { i: `weather-${index}`, x: 0, y: 2, w: 1, h: 9 }
-    })) || [];
-
-    const resetLayouts = {
-      lg: [...layouts.lg, ...climateLayouts.map(layout => layout.lg), ...weatherLayouts.map(layout => layout.lg)],
-      md: [...layouts.md, ...climateLayouts.map(layout => layout.md), ...weatherLayouts.map(layout => layout.md)],
-      sm: [...layouts.sm, ...climateLayouts.map(layout => layout.sm), ...weatherLayouts.map(layout => layout.sm)]
-    };
-
-    setCurrentLayouts(resetLayouts);
-    localStorage.removeItem('dashboard-layouts');
-    setIsEditing(false);
-  };
-
-  // 添加在布局配置附近
-  const minSizes = {
-    time: 5,
-    weather: 7,
-    lights: 11,
-    cameras: 10,
-    sensors: 8,
-    router: 13,
-    nas: 13,
-    media: 14,
-    curtains: 14,
-    electricity: 8,
-    climate: 14
-  };
-
   // 添加列数状态
   const [columnCount, setColumnCount] = useState(() => {
     const savedColumns = localStorage.getItem('dashboard-columns');
@@ -276,8 +181,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     localStorage.setItem('dashboard-columns', JSON.stringify(newColumnCount));
   };
 
-  // 添加设置面板状态
-  const [showSettings, setShowSettings] = useState(false);
+ 
   
   // 获取所有动态卡片配置
   const getDynamicCardConfigs = () => {
@@ -295,45 +199,107 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     return dynamicConfigs;
   };
 
-  // 添加卡片显示状态
-  const [visibleCards, setVisibleCards] = useState(() => {
-    const saved = localStorage.getItem('dashboard-visible-cards');
-    if (saved) {
-      return JSON.parse(saved);
+  
+
+
+  const renderCard = (card) => {
+    switch (card.type) {
+      case 'TimeCard':
+        return <TimeCard {...card.config} />;
+      case 'WeatherCard':
+        return <WeatherCard entityId={card.config.entity_id} />;
+      case 'LightStatusCard':
+        return <LightStatusCard config={card.config} />;
+      case 'SensorCard':
+        return <SensorCard config={card.config} />;
+      case 'MediaPlayerCard':
+        return <MediaPlayerCard config={card.config} />;
+      case 'CurtainCard':
+        return <CurtainCard config={card.config} />;
+      case 'ElectricityCard':
+        return <ElectricityCard config={card.config} />;
+      case 'ScriptPanel':
+        return <ScriptPanel config={card.config} />;
+      case 'WaterPurifierCard':
+        return <WaterPurifierCard config={card.config} />;
+      case 'IlluminanceCard':
+        return <IlluminanceCard config={card.config} />;
+      case 'RouterCard':
+        return <RouterCard config={card.config} />;
+      case 'NASCard':
+        return <NASCard config={card.config} />;
+      case 'CameraCard':
+        return <CameraSection config={card.config} />;
+      case 'ClimateCard':
+        return <ClimateCard config={card.config} />;
+      case 'MotionCard':
+        return <MotionCard config={card.config} />;
+      default:
+        return null;
     }
-    
-    // 生成默认的显示状态，包括静态和动态卡片
-    const defaultState = CARD_CONFIGS.reduce((acc, card) => {
-      if (!card.showIf || card.showIf(entityConfig)) {
-        acc[card.key] = true;
-      }
-      return acc;
-    }, {});
-
-    // 添加动态卡片的默认状态
-    getDynamicCardConfigs().forEach(card => {
-      defaultState[card.key] = true;
-    });
-
-    return defaultState;
-  });
-
-  // 获取所有可显示的卡片配置（静态 + 动态）
-  const getAllVisibleCardConfigs = () => {
-    const staticCards = CARD_CONFIGS.filter(card => !card.showIf || card.showIf(entityConfig));
-    const dynamicCards = getDynamicCardConfigs();
-    return [...staticCards, ...dynamicCards];
   };
 
-  // 处理卡片显示状态变化
-  const handleCardVisibilityChange = (cardKey) => {
-    const newVisibleCards = {
-      ...visibleCards,
-      [cardKey]: !visibleCards[cardKey]
+  // 计算卡片布局
+  const calculateLayouts = (cards) => {
+    const layouts = {
+      lg: [],
+      md: [],
+      sm: []
     };
-    setVisibleCards(newVisibleCards);
-    
-    localStorage.setItem('dashboard-visible-cards', JSON.stringify(newVisibleCards));
+
+    // 基础布局参数
+    const baseParams = {
+      lg: { cols: 3, cardWidth: 1 },
+      md: { cols: 2, cardWidth: 1 },
+      sm: { cols: 1, cardWidth: 1 }
+    };
+
+    // 卡片高度配置
+    const cardHeights = {
+      TimeCard: { lg: 5, md: 5, sm: 5 },
+      WeatherCard: { lg: 9, md: 9, sm: 9 },
+      LightStatusCard: { lg: 12, md: 12, sm: 12 },
+      LightOverviewCard: { lg: 11, md: 11, sm: 11 },
+      SensorCard: { lg: 8, md: 8, sm: 8 },
+      RouterCard: { lg: 13, md: 13, sm: 13 },
+      NASCard: { lg: 18, md: 18, sm: 18 },
+      MediaPlayerCard: { lg: 14, md: 14, sm: 14 },
+      CurtainCard: { lg: 14, md: 14, sm: 14 },
+      ElectricityCard: { lg: 12, md: 12, sm: 12 },
+      ScriptPanel: { lg: 7, md: 7, sm: 7 },
+      WaterPurifierCard: { lg: 12, md: 12, sm: 12 },
+      IlluminanceCard: { lg: 8, md: 8, sm: 8 },
+      CameraCard: { lg: 10, md: 10, sm: 10 },
+      ClimateCard: { lg: 12, md: 12, sm: 12 }
+    };
+
+    // 计算每个卡片的位置
+    Object.keys(layouts).forEach(breakpoint => {
+      const { cols } = baseParams[breakpoint];
+      let positions = new Array(cols).fill(0); // 记录每列的当前高度
+
+      cards.forEach((card) => {
+        const height = cardHeights[card.type]?.[breakpoint] || 10;
+        
+        // 找到高度最小的列
+        let minHeight = Math.min(...positions);
+        let col = positions.indexOf(minHeight);
+        
+        // 添加布局
+        layouts[breakpoint].push({
+          i: card.id.toString(),
+          x: col,
+          y: minHeight,
+          w: baseParams[breakpoint].cardWidth,
+          h: height
+        });
+
+        // 更新该列的高度
+        positions[col] = minHeight + height;
+      });
+    });
+
+    return layouts;
   };
 
   return (
@@ -431,51 +397,10 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             )}
 
             
-              <button 
-                className="settings-toggle"
-                onClick={() => setShowSettings(!showSettings)}
-                title="显示/隐藏卡片"
-              >
-                <Icon
-                  path={mdiCog}
-                  size={1}
-                  color="var(--color-text-primary)"
-                />
-              </button>
             
           </div>
           
-          {showSettings && (
-            <div className="settings-panel">
-              <div className="settings-header">
-                <h3>卡片显示设置</h3>
-                <button onClick={() => setShowSettings(false)}>
-                  <Icon path={mdiCheck} size={1} />
-                </button>
-              </div>
-              <div className="settings-content">
-                {getAllVisibleCardConfigs().map(card => (
-                  <div 
-                    key={card.key}
-                    className="card-visibility-item"
-                    onClick={() => handleCardVisibilityChange(card.key)}
-                  >
-                    <Icon 
-                      path={visibleCards[card.key] ? mdiCheckboxMarked : mdiCheckboxBlankOutline}
-                      size={1}
-                      className="checkbox-icon"
-                    />
-                    <Icon 
-                      path={mdiEyeOutline} 
-                      size={0.9} 
-                      className="eye-icon" 
-                    />
-                    <span>{card.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          
 
           <Responsive
             className={`layout ${isEditing ? 'editing' : ''}`}
@@ -496,111 +421,15 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             compactType="vertical"
             preventCollision={false}
             onLayoutChange={handleLayoutChange}
-            minH={5}
-            maxH={30}
             resizeHandleWrapperClass="resize-handle-wrapper"
-            onResize={(layout, oldItem, newItem) => {
-              const minSize = minSizes[newItem.i];
-              if (minSize && newItem.h < minSize) {
-                newItem.h = minSize;
-              }
-            }}
           >
-            {visibleCards.time && (
-              <div key="time">
-                <TimeCard timeFormat='HH:mm:ss' dateFormat={'YYYY年MM月DD日'} />
-              </div>
-            )}
-            
-            {entityConfig.weather && visibleCards.weather && 
-              entityConfig.weather.map((entityId, index) => (
-                <div key={`weather-${index}`}>
-                  <WeatherCard entityId={entityId} />
+            {cards
+              .filter(card => card.visible !== false)
+              .map(card => (
+                <div key={card.id}>
+                  {renderCard(card)}
                 </div>
-              ))
-            }
-            {entityConfig.lights && visibleCards.lights_status && (
-              <div key="lights_status">
-                <LightStatusCard config={entityConfig.lights} />
-              </div>
-            )}
-            
-            {entityConfig.lightsOverview && visibleCards.lights_overview && (
-              <div key="lights_overview">
-                <LightOverviewCard config={entityConfig.lightsOverview} />
-              </div>
-            )}
-            
-            {entityConfig.cameras&& visibleCards.cameras && (
-              <div key="cameras">
-                <CameraSection config={entityConfig.cameras} />
-              </div>
-            )}
-            
-            {entityConfig.sensors&& visibleCards.sensors && (
-              <div key="sensors">
-                <SensorCard config={entityConfig.sensors} />
-              </div>
-            )}
-            
-            {entityConfig.router && visibleCards.router && (
-              <div key="router">
-                <RouterCard config={entityConfig.router} />
-              </div>
-            )}
-            
-            {entityConfig.mediaPlayers&& visibleCards.media && (
-              <div key="media">
-                <MediaPlayerCard config={entityConfig.mediaPlayers} />
-              </div>
-            )}
-            
-            {entityConfig.curtains&& visibleCards.curtains && (
-              <div key="curtains">
-                <CurtainCard curtains={entityConfig.curtains} />
-              </div>
-            )}
-            
-            { entityConfig.electricity && visibleCards.electricity && (
-              <div key="electricity">
-                <ElectricityCard config={entityConfig.electricity} />
-              </div>
-            )}
-            
-            {entityConfig.climates && 
-              entityConfig.climates.map((climate, index) => {
-                const cardKey = `climate-${index}`;
-                return visibleCards[cardKey] ? (
-                  <div key={cardKey}>
-                    <ClimateCard config={climate} />
-                  </div>
-                ) : null;
-              })
-            }
-            
-            {entityConfig.syno_nas && visibleCards.nas && (
-              <div key="nas">
-                <NASCard config={entityConfig.syno_nas} />
-              </div>
-            )}
-            
-            {entityConfig.scripts && visibleCards.scripts && (
-              <div key="scripts">
-                <ScriptPanel config={entityConfig.scripts} />
-              </div>
-            )}
-            
-            {entityConfig.waterpuri && visibleCards.waterpuri && (
-              <div key="waterpuri">
-                <WaterPurifierCard config={entityConfig.waterpuri} />
-              </div>
-            )}
-
-            {false && entityConfig.illuminanceSensors && visibleCards.illuminance && (
-              <div key="illuminance">
-                <IlluminanceCard config={entityConfig.illuminanceSensors} />
-              </div>
-            )}
+              ))}
           </Responsive>
 
           {isEditing && isMobile && (

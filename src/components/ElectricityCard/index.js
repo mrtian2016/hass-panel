@@ -10,8 +10,8 @@ function ElectricityCard({
 }) {
 
   // 动态加载电力数据实体
-  const electricityEntities = Object.entries(config).reduce((acc, [key, config]) => {
-    // console.log(config);
+  const electricityEntities = Object.entries(config.electricity).reduce((acc, [key, config]) => {
+  
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const entity = useEntity(config.entity_id);
     
@@ -22,6 +22,7 @@ function ElectricityCard({
     return acc;
   }, {});
   const historyData = electricityEntities.dailyHistory.entity.state;
+  
   // 解析历史数据字符串
   const parsedData = historyData.split('\n').map(line => {
     const [date, usage] = line.split(': ');

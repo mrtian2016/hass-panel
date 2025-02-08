@@ -1,0 +1,253 @@
+.config-page {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.config-header h2 {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.header-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.header-buttons button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.header-buttons button:hover {
+  background: var(--color-primary-dark);
+}
+
+.header-buttons .save-button {
+  padding: 8px;
+}
+
+.header-buttons .save-button.has-changes {
+  animation: pulse 2s infinite;
+}
+
+.header-buttons .import-button,
+.header-buttons .export-button {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.header-buttons .import-button:hover,
+.header-buttons .export-button:hover {
+  background: var(--color-card-bg);
+  border-color: var(--color-primary);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.save-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-background);
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-button.has-changes {
+  background: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.save-button.has-changes:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background: var(--color-primary-dark);
+}
+
+.config-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.config-item {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  min-width: 600px;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.item-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-primary);
+}
+
+.item-title svg {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.delete-button {
+  padding: 6px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.delete-button:hover {
+  background: var(--color-error);
+  color: white;
+}
+
+.item-content {
+  padding: 16px;
+}
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.visibility-toggle {
+  padding: 6px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visibility-toggle:hover {
+  background: var(--color-background);
+  color: var(--color-primary);
+}
+
+.visibility-toggle.hidden {
+  color: var(--color-text-light);
+  opacity: 0.5;
+}
+
+.visibility-toggle.hidden:hover {
+  color: var(--color-primary);
+  opacity: 1;
+}
+
+/* 响应式布局 */
+@media (min-width: 1200px) {
+  .config-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .config-page {
+    padding: 12px;
+  }
+  
+  .config-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .header-buttons {
+    flex-direction: column;
+  }
+  
+  .config-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .item-content {
+    padding: 12px;
+  }
+  
+  .save-button {
+    right: 16px;
+    bottom: 16px;
+    width: 48px;
+    height: 48px;
+  }
+} 

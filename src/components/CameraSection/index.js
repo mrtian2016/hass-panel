@@ -8,7 +8,7 @@ import { useEntity } from '@hakit/core';
 function CameraSection({ config }) {
   const { theme } = useTheme();
 
-  const cameraEntities = config.map(camera => {
+  const cameraEntities = config.cameras.map(camera => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const entity = useEntity(camera.entity_id);
     return {

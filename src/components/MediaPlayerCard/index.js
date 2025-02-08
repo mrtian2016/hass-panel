@@ -18,9 +18,8 @@ import { useEntity } from '@hakit/core';
 function MediaPlayerCard({ config }) {
   const { theme } = useTheme();
 
-
   // 动态加载播放器实体
-  const mediaPlayerEntities = config.map(player => {
+  const mediaPlayerEntities = config.mediaPlayers.map(player => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const entity = useEntity(player.entity_id);
     return {
@@ -61,7 +60,7 @@ function MediaPlayerCard({ config }) {
     >
       <div className="media-players">
         {mediaPlayerEntities.map((player, index) => {
-          console.log(player);
+         
           const coverUrl = player.entity?.attributes?.entity_picture 
             ? `${window.env?.REACT_APP_HASS_URL}${player.entity.attributes.entity_picture}`
             : null;

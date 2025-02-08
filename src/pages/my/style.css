@@ -1,0 +1,27 @@
+.my-page {
+  padding: 20px;
+}
+
+.menu-list {
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  color: var(--color-text-primary);
+}
+
+.menu-item:hover {
+  background: var(--color-background);
+}
+
+.menu-item svg {
+  color: var(--color-text-secondary);
+} 

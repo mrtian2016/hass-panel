@@ -5,6 +5,7 @@ import {
   mdiHome,
   mdiMessage,
   mdiAccount,
+  mdiCog,
 } from '@mdi/js';
 import './style.css';
 
@@ -19,15 +20,20 @@ function Sidebar({ visible }) {
       title: '首页',
       icon: mdiHome,
     },
+    // {
+    //   key: '/message',
+    //   title: '消息',
+    //   icon: mdiMessage,
+    // },
+    // {
+    //   key: '/my',
+    //   title: '我的',
+    //   icon: mdiAccount,
+    // },
     {
-      key: '/message',
-      title: '消息',
-      icon: mdiMessage,
-    },
-    {
-      key: '/my',
-      title: '我的',
-      icon: mdiAccount,
+      key: '/config',
+      title: '配置',
+      icon: mdiCog,
     },
   ];
 

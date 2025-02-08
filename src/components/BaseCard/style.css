@@ -18,6 +18,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: var(--color-background-primary);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .base-card .card-header h3 {
@@ -27,6 +29,7 @@
   display: flex;
   align-items: center;
   user-select: none;
+  color: var(--color-text-primary);
 }
 
 .base-card .card-header svg {

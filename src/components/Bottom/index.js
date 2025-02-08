@@ -19,16 +19,16 @@ function Bottom() {
       title: '首页',
       icon: <AppOutline />,
     },
-    {
-      key: '/message',
-      title: '消息',
-      icon: <MessageOutline />,
-    },
-    {
-      key: '/my',
-      title: '我的',
-      icon: <UserOutline />,
-    },
+    // {
+    //   key: '/message',
+    //   title: '消息',
+    //   icon: <MessageOutline />,
+    // },
+    // {
+    //   key: '/my',
+    //   title: '我的',
+    //   icon: <UserOutline />,
+    // },
   ];
 
   return (

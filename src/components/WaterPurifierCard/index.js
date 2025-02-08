@@ -5,13 +5,13 @@ import BaseCard from '../BaseCard';
 import './style.css';
 
 function WaterPurifierCard({ config }) {
-  const temperature = useEntity(config.temperature.entity_id);
-  const tdsIn = useEntity(config.tds_in.entity_id);
-  const tdsOut = useEntity(config.tds_out.entity_id);
-  const ppFilterLife = useEntity(config.pp_filter_life.entity_id);
-  const roFilterLife = useEntity(config.ro_filter_life.entity_id);
-  const status = useEntity(config.status.entity_id);
-  console.log(status);
+  const temperature = useEntity(config.waterpuri.temperature.entity_id);
+  const tdsIn = useEntity(config.waterpuri.tds_in.entity_id);
+  const tdsOut = useEntity(config.waterpuri.tds_out.entity_id);
+  const ppFilterLife = useEntity(config.waterpuri.pp_filter_life.entity_id);
+  const roFilterLife = useEntity(config.waterpuri.ro_filter_life.entity_id);
+  const status = useEntity(config.waterpuri.status.entity_id);
+  
 
  
 
