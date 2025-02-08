@@ -186,6 +186,24 @@
   align-items: center;
 }
 
+.item-actions .preview-button {
+  padding: 6px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-actions .preview-button:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
 .visibility-toggle {
   padding: 6px;
   border: none;
@@ -250,4 +268,62 @@
     width: 48px;
     height: 48px;
   }
-} 
+}
+
+/* 移除旧的预览按钮样式 */
+.header-buttons .preview-button {
+  display: none;
+}
+
+.preview-container {
+  position: fixed;
+  top: 80px;
+  right: 100px;
+  width: 400px;
+  height: 500px;
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 4px 12px var(--color-shadow);
+  z-index: 1000;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.close-preview {
+  position: absolute;
+  top: 20px;
+  right: 12px;
+  padding: 6px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.close-preview:hover {
+  background: var(--color-error);
+  color: white;
+}
+
+.preview-container.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+  .preview-container {
+    top: 20px;
+    right: 20px;
+    left: 20px;
+    width: auto;
+    height: 300px;
+  }
+}

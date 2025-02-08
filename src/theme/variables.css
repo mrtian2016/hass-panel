@@ -14,6 +14,9 @@
   --color-error: #FF4444;
   --color-error-light: #FF6666;
   --color-error-dark: #CC0000;
+  --color-success: #4CAF50;
+  --color-success-light: #81C784;
+  --color-success-dark: #388E3C;
 
   /* Border Radius */
   --border-radius-small: 8px;

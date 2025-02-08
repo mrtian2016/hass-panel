@@ -1,6 +1,8 @@
 import React from 'react';
 import { useHass } from '@hakit/core';
-import { Select,Input } from 'antd';
+import { Select, Input, Button } from 'antd';
+import Icon from '@mdi/react';
+import { mdiDelete, mdiPlus } from '@mdi/js';
 import './style.css';
 
 function ConfigField({ field, value, onChange }) {
@@ -16,6 +18,32 @@ function ConfigField({ field, value, onChange }) {
         name: entity.attributes.friendly_name || entityId
       }));
   };
+
+  // 处理房间灯光配置的变更
+  const handleLightOverviewChange = (index, key, newValue) => {
+    const newRooms = [...value];
+    if (!newRooms[index]) {
+      newRooms[index] = {};
+    }
+    newRooms[index][key] = newValue;
+    onChange(newRooms);
+  };
+
+  // 添加新的房间灯光
+  const handleAddRoom = () => {
+    onChange([...value, {
+      name: '',
+      entity_id: '',
+      position: { top: '50%', left: '50%' },
+      image: ''
+    }]);
+  };
+
+  // 删除房间灯光
+  const handleDeleteRoom = (index) => {
+    const newRooms = value.filter((_, i) => i !== index);
+    onChange(newRooms);
+  };
   
   switch (field.type) {
     case 'text':
@@ -24,8 +52,7 @@ function ConfigField({ field, value, onChange }) {
           <div className="config-field-row">
             <label>{field.label}</label>
             <Input
-              type="text"
-              value={value || null}
+              value={value}
               onChange={(e) => onChange(e.target.value)}
               placeholder={field.placeholder}
             />
@@ -35,26 +62,94 @@ function ConfigField({ field, value, onChange }) {
       
     case 'entity':
       const entities = getFilteredEntities(field.filter);
-        
       return (
         <div className="config-field">
           <div className="config-field-row">
             <label>{field.label}</label>
             <Select
-              value={value || null}
-              onChange={(value) => onChange(value)}
+              value={value}
+              onChange={onChange}
               showSearch
-              placeholder="请选择实体"
+              placeholder="选择实体"
               optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-              }
-              options={entities.map(entity => ({
-                value: entity.id,
-                label: entity.name + ' (' + entity.id + ')'
-              }))}
-            />
+              style={{ width: '100%' }}
+            >
+              {entities.map(entity => (
+                <Select.Option key={entity.id} value={entity.id}>
+                  {entity.name} ({entity.id})
+                </Select.Option>
+              ))}
+            </Select>
           </div>
+        </div>
+      );
+
+    case 'light-overview-config':
+      return (
+        <div className="config-field">
+          <label>{field.label}</label>
+          <div className="light-overview-config">
+            {Array.isArray(value) && value.map((room, index) => (
+              <div key={index} className="light-room-item">
+                <div className="room-field">
+                  <label>房间名称</label>
+                  <Input
+                    value={room.name}
+                    onChange={(e) => handleLightOverviewChange(index, 'name', e.target.value)}
+                    placeholder="输入房间名称"
+                  />
+                </div>
+                
+                <div className="room-field">
+                  <label>灯光实体</label>
+                  <Select
+                    value={room.entity_id}
+                    onChange={(value) => handleLightOverviewChange(index, 'entity_id', value)}
+                    showSearch
+                    placeholder="选择灯光实体"
+                    optionFilterProp="children"
+                    style={{ width: '100%' }}
+                  >
+                    {getFilteredEntities('light.*|switch.*').map(entity => (
+                      <Select.Option key={entity.id} value={entity.id}>
+                        {entity.name} ({entity.id})
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="room-field">
+                  <label>按钮位置 - 左边距</label>
+                  <Input
+                    value={room.position?.left}
+                    onChange={(e) => handleLightOverviewChange(index, 'position', { ...room.position, left: e.target.value })}
+                    placeholder="例如: 50%"
+                  />
+                </div>
+
+                <div className="room-field">
+                  <label>按钮位置 - 上边距</label>
+                  <Input
+                    value={room.position?.top}
+                    onChange={(e) => handleLightOverviewChange(index, 'position', { ...room.position, top: e.target.value })}
+                    placeholder="例如: 50%"
+                  />
+                </div>
+
+                <div className="room-field">
+                  <label>灯光效果图片</label>
+                  <Input
+                    value={room.image}
+                    onChange={(e) => handleLightOverviewChange(index, 'image', e.target.value)}
+                    placeholder="输入图片URL"
+                  />
+                </div>
+
+                <button onClick={() => handleDeleteRoom(index)}>删除</button>
+              </div>
+            ))}
+          </div>
+          <button onClick={handleAddRoom}>添加</button>
         </div>
       );
 
@@ -193,7 +288,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加房间
+              添加
             </button>
           </div>
         </div>
@@ -271,7 +366,7 @@ function ConfigField({ field, value, onChange }) {
                 });
               }}
             >
-              添加灯光
+              添加
             </button>
           </div>
         </div>
@@ -358,7 +453,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加摄像头
+              添加
             </button>
           </div>
         </div>
@@ -430,7 +525,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加播放器
+              添加
             </button>
           </div>
         </div>
@@ -502,7 +597,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加窗帘
+              添加
             </button>
           </div>
         </div>
@@ -721,7 +816,7 @@ function ConfigField({ field, value, onChange }) {
                   });
                 }}
               >
-                添加存储池
+                添加
               </button>
             </div>
 
@@ -810,7 +905,7 @@ function ConfigField({ field, value, onChange }) {
                   });
                 }}
               >
-                添加硬盘
+                添加
               </button>
             </div>
 
@@ -899,7 +994,7 @@ function ConfigField({ field, value, onChange }) {
                   });
                 }}
               >
-                添加SSD
+                添加
               </button>
             </div>
           </div>
@@ -994,7 +1089,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加脚本
+              添加
             </button>
           </div>
         </div>
@@ -1233,7 +1328,7 @@ function ConfigField({ field, value, onChange }) {
                 });
               }}
             >
-              添加功能
+              添加
             </button>
           </div>
         </div>
@@ -1313,7 +1408,7 @@ function ConfigField({ field, value, onChange }) {
               ]);
             }}
           >
-            添加光照传感器
+            添加
           </button>
         </div>
       );

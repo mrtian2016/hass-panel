@@ -7,29 +7,32 @@ import './style.css';
 import { useEntity } from '@hakit/core';
 
 function LightOverviewCard({ config }) {
+  console.log('LightOverviewCard config:', config);
   const { theme } = useTheme();
 
-  // 为每种类型的实体创建单独的 hooks
-  const lightEntities = config.rooms.map(light => {
+  // 确保 config 和 config.rooms 存在
+  if (!config || !config.rooms) {
+    console.warn('LightOverviewCard: Missing config or rooms');
+    return null;
+  }
+
+  // 为每个房间创建实体 hooks
+  const lightEntities = config.rooms.filter(room => room && room.entity_id && room.position).map(room => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const entity = useEntity(light.entity_id);
+    const entity = useEntity(room.entity_id);
     return {
-      ...light,
+      ...room,
       entity,
+      state: entity?.state
     };
   });
 
-  // 修改 lightStates 的构建方式
+  // 构建传递给 FloorPlan 的数据
   const lightStates = {
-    background: config.background,
-    rooms: lightEntities.map(light => ({
-      entity: light.entity,
-      state: light.entity?.state,
-      name: light.name,
-      position: light.position,
-      image: light.image
-    }))
+    background: config.background || '',  // 添加默认空字符串
+    rooms: lightEntities
   };
+
   return (
     <BaseCard
       title="房间状态"

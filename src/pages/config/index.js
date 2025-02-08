@@ -17,14 +17,20 @@ import {
   mdiServerNetwork,
   mdiScriptText,
   mdiCheck,
-  mdiEyeOutline,
+  mdiEye,
+  mdiEyeOff,
   mdiSnowflake,
   mdiExport,
   mdiImport,
-  mdiMotionSensor
+  mdiMotionSensor,
+  mdiHomeFloorG,
+  mdiFileFind,
+  mdiClose
 } from '@mdi/js';
 import ConfigField from '../../components/ConfigField';
 import AddCardModal from '../../components/AddCardModal';
+import Modal from '../../components/Modal';
+import LightOverviewCard from '../../components/LightOverviewCard';
 
 import './style.css';
 
@@ -255,12 +261,32 @@ const CARD_TYPES = {
         filter: 'sensor.*'
       }
     ]
+  },
+  LightOverviewCard: {
+    name: '房间灯光概览',
+    icon: mdiHomeFloorG,
+    fields: [
+      {
+        key: 'background',
+        label: '背景图片',
+        type: 'text',
+        default: ''
+      },
+      {
+        key: 'rooms',
+        label: '房间灯光配置',
+        type: 'light-overview-config',
+        default: []
+      }
+    ]
   }
 };
 
 function ConfigPage() {
   const fileInputRef = useRef(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewConfig, setPreviewConfig] = useState(null);
   const [cards, setCards] = useState(() => {
     const savedConfig = localStorage.getItem('card-config');
     if (savedConfig) {
@@ -423,11 +449,17 @@ function ConfigPage() {
   };
 
   const handleConfigChange = (cardId, key, value) => {
-    setCards(cards.map(card => 
-      card.id === cardId 
-        ? {...card, config: {...card.config, [key]: value}}
-        : card
-    ));
+    setCards(cards.map(card => {
+      if (card.id === cardId) {
+        const newConfig = {...card.config, [key]: value};
+        // 如果是 LightOverviewCard，更新预览配置
+        if (card.type === 'LightOverviewCard') {
+          setPreviewConfig(newConfig);
+        }
+        return {...card, config: newConfig};
+      }
+      return card;
+    }));
     setHasUnsavedChanges(true);
   };
 
@@ -526,12 +558,26 @@ function ConfigPage() {
                 <span>{CARD_TYPES[card.type].name}</span>
               </div>
               <div className="item-actions">
+                {card.type === 'LightOverviewCard' && (
+                  <button 
+                    className="preview-button"
+                    onClick={() => {
+                      setPreviewConfig(card.config);
+                      setShowPreview(true);
+                    }}
+                    title="预览效果"
+                  >
+                    <Icon path={mdiFileFind} size={1} />
+                    
+                  </button>
+                )}
                 <button 
-                  className={`visibility-toggle ${card.visible === false ? 'hidden' : ''}`}
+                  className={`visibility-toggle `}
                   onClick={() => handleVisibilityChange(card.id)}
                   title={card.visible === false ? '显示卡片' : '隐藏卡片'}
                 >
-                  <Icon path={mdiEyeOutline} size={1} />
+                  <Icon path={card.visible === false ? mdiEye : mdiEyeOff} size={1} />
+                  
                 </button>
                 <button 
                   className="delete-button"
@@ -561,6 +607,21 @@ function ConfigPage() {
           onSelect={handleAddCard}
           cardTypes={CARD_TYPES}
         />
+      )}
+
+      {previewConfig && (
+        <div className={`preview-container ${showPreview ? 'visible' : ''}`}>
+          <button 
+            className="close-preview" 
+            onClick={() => setShowPreview(false)}
+          >
+            <Icon path={mdiClose} size={1} />
+          </button>
+          <LightOverviewCard 
+            key={JSON.stringify(previewConfig)} 
+            config={previewConfig} 
+          />
+        </div>
       )}
     </div>
   );

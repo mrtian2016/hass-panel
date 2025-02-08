@@ -9,8 +9,14 @@ function FloorPlan({ lights }) {
   const [selectedLight, setSelectedLight] = useState(null);
   const pressTimer = useRef(null);
 
+  // 确保 lights 和必要的属性存在
+  if (!lights || !lights.background || !lights.rooms) {
+    console.warn('FloorPlan: Missing required props');
+    return null;
+  }
+
   const isLightEntity = (entityId) => {
-    return entityId?.startsWith('light.');
+    return entityId?.startsWith('light.') || entityId?.startsWith('switch.');
   };
 
   const handlePressStart = (light) => {

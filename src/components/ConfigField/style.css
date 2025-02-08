@@ -337,6 +337,7 @@
 .m2ssd-config button,
 .climate-feature button,
 .illuminance-config button,
+.light-overview-config button,
 .script-item button {
   background: var(--color-error);
 }
@@ -353,7 +354,8 @@
 .drive-config button:hover,
 .m2ssd-config button:hover,
 .climate-feature button:hover,
-.illuminance-config button:hover {
+.illuminance-config button:hover,
+.light-overview-config button:hover {
   background: var(--color-error-dark);
 }
 
@@ -414,6 +416,7 @@
 .volume-config button,
 .drive-config button,
 .m2ssd-config button,
+.light-overview-config button,
 .climate-feature button,
 .illuminance-config button {
   padding: 8px 24px;
@@ -624,6 +627,101 @@
   
   .illuminance-item .field-name {
     margin-bottom: 4px;
+  }
+}
+
+/* 房间灯光概览配置样式 */
+.light-overview-config {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+  background: var(--color-background);
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+}
+
+.light-room-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  position: relative;
+}
+
+.room-field {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.room-field label {
+  margin: 0;
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.room-field .ant-select,
+.room-field input {
+  width: 100%;
+}
+
+/* 删除按钮样式 */
+.light-room-item button {
+  padding: 8px 24px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-error);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100px;
+  text-align: center;
+  margin-top: 12px;
+  align-self: flex-start;
+}
+
+.light-room-item button:hover {
+  background: var(--color-error-dark);
+}
+
+/* 添加按钮样式 */
+.config-field > button {
+  padding: 8px 24px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.config-field > button:hover {
+  background: var(--color-primary-dark);
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .room-field {
+    grid-template-columns: 1fr;
+  }
+  
+  .room-field label {
+    margin-bottom: 4px;
+  }
+  
+  .light-room-item button,
+  .config-field > button {
+    width: 100%;
   }
 }
 

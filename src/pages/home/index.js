@@ -234,6 +234,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         return <ClimateCard config={card.config} />;
       case 'MotionCard':
         return <MotionCard config={card.config} />;
+      case 'LightOverviewCard':
+        return <LightOverviewCard config={card.config} />;
       default:
         return null;
     }
