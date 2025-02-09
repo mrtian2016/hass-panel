@@ -1,4 +1,4 @@
-FROM hub.pyer.net/library/nginx:alpine
+FROM nginx:alpine
 
 # 添加必要的工具
 RUN apk add --no-cache gettext curl jq unzip
@@ -16,7 +16,7 @@ RUN chmod +x /update.sh
 
 
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo '/update.sh &' >> /docker-entrypoint.sh && \
+    echo '/update.sh' >> /docker-entrypoint.sh && \
     echo 'envsubst < /app/env.template.js > /app/env.js' >> /docker-entrypoint.sh && \
     echo 'nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh
