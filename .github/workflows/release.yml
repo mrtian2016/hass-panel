@@ -4,6 +4,15 @@ on:
   push:
     tags:
       - 'v*' # 当推送以v开头的标签时触发，例如 v1.0.0
+  workflow_dispatch:    # 添加手动触发支持
+    inputs:
+      version:
+        description: '版本号 (例如: v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write  # 添加写入权限
 
 jobs:
   build:
@@ -36,6 +45,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ github.event.inputs.version }}  # 使用输入的版本号
           files: |
             release.zip
           draft: false
