@@ -39,7 +39,6 @@ import WaterPurifierCard from '../../components/WaterPurifierCard';
 import IlluminanceCard from '../../components/IlluminanceCard';
 import MotionCard from '../../components/MotionCard';
 import './style.css';
-import { entityConfig } from '../../config/index';
 
 // 获取当前断点
 const getCurrentBreakpoint = (width) => {
@@ -182,25 +181,6 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     localStorage.setItem('dashboard-columns', JSON.stringify(newColumnCount));
   };
 
- 
-  
-  // 获取所有动态卡片配置
-  const getDynamicCardConfigs = () => {
-    const dynamicConfigs = [];
-    
-    // 添加空调卡片配置
-    entityConfig.climates?.forEach((climate, index) => {
-      dynamicConfigs.push({
-        key: `climate-${index}`,
-        label: climate.name || `空调 ${index + 1}`,
-        type: 'climate'
-      });
-    });
-
-    return dynamicConfigs;
-  };
-
-  
 
 
   const renderCard = (card) => {

@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM hub.pyer.net/library/nginx:alpine
 
 # 添加 envsubst 命令
 RUN apk add --no-cache gettext nginx

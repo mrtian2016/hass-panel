@@ -5,37 +5,87 @@ import Icon from '@mdi/react';
 import ReactECharts from 'echarts-for-react';
 import './style.css';
 import { useEntity, useHistory } from '@hakit/core';
+import { notification } from 'antd';
+
 function ElectricityCard({ 
   config,
 }) {
+  // 检查配置是否存在
+  if (!config || !config.electricity) {
+    return (
+      <BaseCard 
+        title="电量统计"
+        icon={mdiEye}
+        className="electricity-usage-card"
+      >
+        <div className="electricity-content">
+          配置信息不完整
+        </div>
+      </BaseCard>
+    );
+  }
 
   // 动态加载电力数据实体
   const electricityEntities = Object.entries(config.electricity).reduce((acc, [key, config]) => {
-  
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const entity = useEntity(config.entity_id);
-    
-    acc[key] = {
+    try {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const entity = useEntity(config.entity_id);
+      acc[key] = {
         ...config,
         entity,
-    };
+      };
+    } catch (error) {
+      console.error(`加载实体 ${key} 失败:`, error);
+      notification.error({
+        message: '电量监测卡片加载失败',
+        description: `电量监测实体 ${config.name || config.entity_id} 加载失败: ${error.message}`,
+        placement: 'topRight',
+        duration: 3,
+        key: 'ElectricityCard',
+      });
+      acc[key] = {
+        ...config,
+        entity: { state: null, error: true },
+      };
+    }
     return acc;
   }, {});
-  const historyData = electricityEntities.dailyHistory.entity.state;
+
+  // 安全获取历史数据
+  const historyData = electricityEntities.dailyHistory?.entity?.state;
   
   // 解析历史数据字符串
-  const parsedData = historyData.split('\n').map(line => {
-    const [date, usage] = line.split(': ');
-    return {
-      date: date,
-      usage: parseFloat(usage.replace(' kWh', ''))
-    };
-  });
+  let parsedData = [];
+  let chartData = { dates: [], values: [] };
   
-  const chartData = {
-    dates: parsedData.map(item => item.date),
-    values: parsedData.map(item => item.usage)
-  };
+  try {
+    if (historyData) {
+      parsedData = historyData.split('\n').map(line => {
+        const [date, usage] = line.split(': ');
+        if (!date || !usage) {
+          throw new Error('数据格式无效');
+        }
+        return {
+          date: date,
+          usage: parseFloat(usage.replace(' kWh', ''))
+        };
+      });
+
+      chartData = {
+        dates: parsedData.map(item => item.date),
+        values: parsedData.map(item => item.usage)
+      };
+    }
+  } catch (error) {
+    console.error('解析历史数据失败:', error);
+    notification.error({
+      message: '电量监测卡片解析历史数据失败',
+      description: `电量监测卡片解析历史数据失败: ${error.message}`,
+      placement: 'topRight',
+      duration: 3,
+      key: 'ElectricityCard',
+    });
+  }
 
   // 图表配置
   const chartOption = {
@@ -116,6 +166,15 @@ function ElectricityCard({
     }
   };
 
+  // 在渲染实体状态的地方添加安全检查
+  const getEntityValue = (entityKey) => {
+    const entity = electricityEntities[entityKey]?.entity;
+    if (!entity || entity.error || entity.state === undefined || entity.state === null) {
+      return '- -';
+    }
+    return entity.state;
+  };
+
   return (
     
     <BaseCard 
@@ -147,7 +206,7 @@ function ElectricityCard({
               <span>实时电压</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.voltage.entity.state || '0'}</span>
+              <span className="value">{getEntityValue('voltage')}</span>
               <span className="unit">V</span>
             </div>
           </div>
@@ -157,7 +216,7 @@ function ElectricityCard({
                 <span>实时电流</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.electric_current.entity.state || '0'}</span>
+              <span className="value">{getEntityValue('electric_current')}</span>
                 <span className="unit">A</span>
             </div>
           </div>
@@ -167,7 +226,7 @@ function ElectricityCard({
               <span>实时功率</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.currentPower.entity.state || '0'}</span>
+              <span className="value">{getEntityValue('currentPower')}</span>
               <span className="unit">W</span>
             </div>
           </div>
@@ -182,7 +241,7 @@ function ElectricityCard({
               <span>当月用电量</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.monthUsage.entity.state || '0'}</span>
+              <span className="value">{getEntityValue('monthUsage')}</span>
               <span className="unit">度</span>
             </div>
           </div>
@@ -192,7 +251,7 @@ function ElectricityCard({
               <span>上月用电量</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.lastMonthUsage.entity.state || '0'}</span>
+              <span className="value">{getEntityValue('lastMonthUsage')}</span>
               <span className="unit">度</span>
             </div>
           </div>
@@ -205,7 +264,7 @@ function ElectricityCard({
               <span>今日用电量</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.todayUsage.entity.state || '0'}</span>
+              <span className="value">{getEntityValue('todayUsage')}</span>
               <span className="unit">度</span>
 
             </div>
@@ -216,7 +275,7 @@ function ElectricityCard({
               <span>昨日用电量</span>
             </div>
             <div className="electricity-value">
-              <span className="value">{electricityEntities.yesterdayUsage.entity.state || '0'}</span>
+              <span className="value">{getEntityValue('yesterdayUsage')}</span>
               <span className="unit">度</span>
 
             </div>

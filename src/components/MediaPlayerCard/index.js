@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from '@mdi/react';
+import { notification } from 'antd';
 import { 
   mdiPlay,
   mdiPause,
@@ -18,38 +19,107 @@ import { useEntity } from '@hakit/core';
 function MediaPlayerCard({ config }) {
   const { theme } = useTheme();
 
+  // 检查配置是否存在
+  if (!config || !config.mediaPlayers) {
+    return (
+      <BaseCard
+        title="播放器控制"
+        icon={mdiPlayCircle}
+        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#81C784'}
+      >
+        <div className="media-players">
+          配置信息不完整
+        </div>
+      </BaseCard>
+    );
+  }
+
+  // 确保 mediaPlayers 是数组
+  const mediaPlayers = Array.isArray(config.mediaPlayers) ? config.mediaPlayers : [];
+
   // 动态加载播放器实体
-  const mediaPlayerEntities = config.mediaPlayers.map(player => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const entity = useEntity(player.entity_id);
-    return {
-      ...player,
-      entity,
-    };
+  const mediaPlayerEntities = mediaPlayers.map(player => {
+    try {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const entity = useEntity(player.entity_id);
+      return {
+        ...player,
+        entity,
+      };
+    } catch (error) {
+      console.error(`加载播放器实体 ${player.entity_id} 失败:`, error);
+      notification.error({
+        message: '播放器卡片加载失败',
+        description: `播放器 ${player.name || player.entity_id} 加载失败: ${error.message}`,
+        placement: 'topRight',
+        duration: 3,
+        key: 'MediaPlayerCard',
+      });
+      return {
+        ...player,
+        entity: { state: null, error: true },
+      };
+    }
   });
 
+  // 安全获取实体状态
+  const getEntityState = (entity) => {
+    if (!entity || entity.error || entity.state === undefined || entity.state === null) {
+      return 'off';
+    }
+    return entity.state;
+  };
+
+  // 安全获取媒体标题
+  const getMediaTitle = (entity) => {
+    if (!entity || entity.error || !entity.attributes?.media_title) {
+      return '未在播放';
+    }
+    return entity.attributes.media_title;
+  };
+
+  // 安全获取音量级别
+  const getVolumeLevel = (entity) => {
+    if (!entity || entity.error || entity.attributes?.volume_level === undefined) {
+      return 0;
+    }
+    return entity.attributes.volume_level;
+  };
+
   const handlePlayPause = (player) => {
-    player.service.mediaPlayPause();
+    if (player && !player.error) {
+      player.service?.mediaPlayPause();
+    }
   };
 
   const handlePrevious = (player) => {
-    player.service.mediaPreviousTrack();
+    if (player && !player.error) {
+      player.service?.mediaPreviousTrack();
+    }
   };
 
   const handleNext = (player) => {
-    player.service.mediaNextTrack();
+    if (player && !player.error) {
+      player.service?.mediaNextTrack();
+    }
   };
 
   const handleVolumeUp = (player) => {
-    player.service.volumeUp();
+    if (player && !player.error) {
+      player.service?.volumeUp();
+    }
   };
 
   const handleVolumeDown = (player) => {
-    player.service.volumeDown();
+    if (player && !player.error) {
+      player.service?.volumeDown();
+    }
   };
 
   const handleVolumeSet = (player, volume) => {
-    player.service.volumeSet({ serviceData: { "volume_level": volume } });
+    if (player && !player.error) {
+      player.service?.volumeSet({ serviceData: { "volume_level": volume } });
+    }
   };
 
   return (
@@ -60,7 +130,7 @@ function MediaPlayerCard({ config }) {
     >
       <div className="media-players">
         {mediaPlayerEntities.map((player, index) => {
-         
+          const entityState = getEntityState(player.entity);
           const coverUrl = player.entity?.attributes?.entity_picture 
             ? `${window.env?.REACT_APP_HASS_URL}${player.entity.attributes.entity_picture}`
             : null;
@@ -83,7 +153,7 @@ function MediaPlayerCard({ config }) {
                     )}
                   </div>
                   <div className="player-info">
-                    <span className="player-state">{player.entity?.attributes?.media_title || '未在播放'}</span>
+                    <span className="player-state">{getMediaTitle(player.entity)}</span>
                     {player.entity?.attributes?.media_artist && (
                       <span className="player-artist">{player.entity.attributes.media_artist}</span>
                     )}
@@ -96,23 +166,23 @@ function MediaPlayerCard({ config }) {
                       min="0"
                       max="1"
                       step="0.01"
-                      value={player.entity?.attributes?.volume_level || 0}
+                      value={getVolumeLevel(player.entity)}
                       onChange={(e) => handleVolumeSet(player.entity, parseFloat(e.target.value))}
-                      disabled={player.entity?.state === 'off'}
+                      disabled={entityState === 'off'}
                       className="volume-slider"
                     />
                     <div className="volume-buttons">
                       <button 
                         className="control-button"
                         onClick={() => handleVolumeDown(player.entity)}
-                        disabled={player.entity?.state === 'off'}
+                        disabled={entityState === 'off'}
                       >
                         <Icon path={mdiVolumeLow} size={0.8} />
                       </button>
                       <button 
                         className="control-button"
                         onClick={() => handleVolumeUp(player.entity)}
-                        disabled={player.entity?.state === 'off'}
+                        disabled={entityState === 'off'}
                       >
                         <Icon path={mdiVolumeHigh} size={0.8} />
                       </button>
@@ -122,21 +192,21 @@ function MediaPlayerCard({ config }) {
                     <button 
                       className="control-button"
                       onClick={() => handlePrevious(player.entity)}
-                      disabled={player.entity?.state === 'off'}
+                      disabled={entityState === 'off'}
                     >
                       <Icon path={mdiSkipPrevious} size={1} />
                     </button>
                     <button 
                       className="control-button play-button"
                       onClick={() => handlePlayPause(player.entity)}
-                      disabled={player.entity?.state === 'off'}
+                      disabled={entityState === 'off'}
                     >
-                      <Icon path={player.entity?.state === 'playing' ? mdiPause : mdiPlay} size={1} />
+                      <Icon path={entityState === 'playing' ? mdiPause : mdiPlay} size={1} />
                     </button>
                     <button 
                       className="control-button"
                       onClick={() => handleNext(player.entity)}
-                      disabled={player.entity?.state === 'off'}
+                      disabled={entityState === 'off'}
                     >
                       <Icon path={mdiSkipNext} size={1} />
                     </button>
