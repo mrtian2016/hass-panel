@@ -519,7 +519,7 @@ function ConfigPage() {
 
   // 添加获取版本信息的函数
   React.useEffect(() => {
-    fetch('/version.json')
+    fetch('./version.json')
       .then(response => response.json())
       .then(data => {
         setVersionInfo(data);
