@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM hub.pyer.net/library/nginx:alpine
 
 # 添加必要的工具
 RUN apk add --no-cache gettext curl jq unzip

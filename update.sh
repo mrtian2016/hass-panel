@@ -26,3 +26,5 @@ if [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
     CURRENT_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
     echo "{\"version\": \"$LATEST_VERSION\", \"updateTime\": \"$CURRENT_TIME\"}" > /app/version.json
 fi
+
+envsubst < /app/env.template.js > /app/env.js
