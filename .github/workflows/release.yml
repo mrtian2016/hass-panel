@@ -19,7 +19,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
+        # 或者使用 --force
+        # run: npm install --force
 
       - name: Build
         run: npm run build
