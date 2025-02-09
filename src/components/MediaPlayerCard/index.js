@@ -10,7 +10,7 @@ import {
   mdiVolumeLow,
   mdiPlayCircle,
 } from '@mdi/js';
-import { useService } from '@hakit/core';
+// import { useService } from '@hakit/core';
 import { useTheme } from '../../theme/ThemeContext';
 import BaseCard from '../BaseCard';
 import './style.css';

@@ -10,8 +10,6 @@ import { Popup, List } from 'antd-mobile';
 import { useEntity } from '@hakit/core';
 function LightControl({ lightEntity, onClose }) {
   const entity = useEntity(lightEntity.entity_id);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isDraggingTemp, setIsDraggingTemp] = useState(false);
   const isDraggingRef = useRef(false);
   const isDraggingTempRef = useRef(false);
   const sliderRef = useRef(null);
@@ -20,15 +18,15 @@ function LightControl({ lightEntity, onClose }) {
   
   
 
-  const handleColorTempChange = (e) => {
-    const value = e.target.value;
-    const min = entity.attributes?.min_mireds || 175;
-    const max = entity.attributes?.max_mireds || 333;
-    const percent = ((value - min) / (max - min)) * 100;
-    const container = e.target.parentElement;
-    container.style.setProperty('--value-percent', `${percent}%`);
-    entity.service.turn_on({ serviceData: { color_temp: parseInt(value) } });
-  };
+  // const handleColorTempChange = (e) => {
+  //   const value = e.target.value;
+  //   const min = entity.attributes?.min_mireds || 175;
+  //   const max = entity.attributes?.max_mireds || 333;
+  //   const percent = ((value - min) / (max - min)) * 100;
+  //   const container = e.target.parentElement;
+  //   container.style.setProperty('--value-percent', `${percent}%`);
+  //   entity.service.turn_on({ serviceData: { color_temp: parseInt(value) } });
+  // };
 
   const handleEffectChange = (effect) => {
     entity.service.turn_on({ serviceData: { effect } });
@@ -79,7 +77,6 @@ function LightControl({ lightEntity, onClose }) {
     }
     
     console.log('Starting drag');
-    setIsDragging(true);
     isDraggingRef.current = true;
     sliderRef.current.classList.add('dragging');
 
@@ -115,7 +112,6 @@ function LightControl({ lightEntity, onClose }) {
         updateBrightnessFromY(y, rect.height, true);
       }
       
-      setIsDragging(false);
       isDraggingRef.current = false;
       sliderRef.current?.classList.remove('dragging');
       
@@ -177,7 +173,6 @@ function LightControl({ lightEntity, onClose }) {
       e.preventDefault();
     }
     
-    setIsDraggingTemp(true);
     isDraggingTempRef.current = true;
     tempSliderRef.current.classList.add('dragging');
 
@@ -206,7 +201,6 @@ function LightControl({ lightEntity, onClose }) {
         updateColorTempFromY(y, rect.height, true);
       }
       
-      setIsDraggingTemp(false);
       isDraggingTempRef.current = false;
       tempSliderRef.current?.classList.remove('dragging');
       

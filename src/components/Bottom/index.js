@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { TabBar } from 'antd-mobile';
 import {
   AppOutline,
-  MessageOutline,
-  UserOutline,
+  // MessageOutline,
+  // UserOutline,
 } from 'antd-mobile-icons';
 import './style.css';
 

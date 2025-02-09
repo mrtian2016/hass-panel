@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import Icon from '@mdi/react';
 import { 
   mdiNas,
-  mdiTemperatureCelsius,
-  mdiCpu64Bit,
-  mdiMemory,
   mdiHarddisk,
   mdiDownload,
   mdiUpload,

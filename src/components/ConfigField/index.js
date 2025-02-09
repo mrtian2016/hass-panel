@@ -1,8 +1,8 @@
 import React from 'react';
 import { useHass } from '@hakit/core';
-import { Select, Input, Button } from 'antd';
-import Icon from '@mdi/react';
-import { mdiDelete, mdiPlus } from '@mdi/js';
+import { Select, Input } from 'antd';
+// import Icon from '@mdi/react';
+// import { mdiDelete, mdiPlus } from '@mdi/js';
 import './style.css';
 
 function ConfigField({ field, value, onChange }) {

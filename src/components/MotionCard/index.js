@@ -1,9 +1,9 @@
 import React from 'react';
-import Icon from '@mdi/react';
+// import Icon from '@mdi/react';
 import { mdiMotionSensor } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
 import BaseCard from '../BaseCard';
-import { useEntity, useHistory, useLogs } from '@hakit/core';
+import {  useHistory, useLogs } from '@hakit/core';
 import './style.css';
 
 function MotionCard({ config }) {

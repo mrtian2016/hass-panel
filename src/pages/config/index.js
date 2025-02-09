@@ -29,7 +29,7 @@ import {
 } from '@mdi/js';
 import ConfigField from '../../components/ConfigField';
 import AddCardModal from '../../components/AddCardModal';
-import Modal from '../../components/Modal';
+// import Modal from '../../components/Modal';
 import LightOverviewCard from '../../components/LightOverviewCard';
 
 import './style.css';

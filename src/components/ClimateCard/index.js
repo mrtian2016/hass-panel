@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import BaseCard from '../BaseCard';
 import Icon from '@mdi/react';
-import { useHass } from '@hakit/core';
+// import { useHass } from '@hakit/core';
 import { useTheme } from '../../theme/ThemeContext';
 import { 
   mdiThermometer, 

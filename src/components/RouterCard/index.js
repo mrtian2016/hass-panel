@@ -3,8 +3,8 @@ import Icon from '@mdi/react';
 import { 
   mdiRouterNetwork,
   mdiTemperatureCelsius,
-  mdiCpu64Bit,
-  mdiMemory,
+  // mdiCpu64Bit,
+  // mdiMemory,
   mdiAccountMultiple,
   mdiEthernet,
   mdiIpNetwork,

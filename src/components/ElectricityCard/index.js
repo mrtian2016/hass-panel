@@ -1,10 +1,10 @@
 import React from 'react';
 import BaseCard from '../BaseCard';
-import { mdiLightningBolt, mdiCurrencyUsd, mdiEye } from '@mdi/js';
+import { mdiLightningBolt, mdiEye } from '@mdi/js';
 import Icon from '@mdi/react';
 import ReactECharts from 'echarts-for-react';
 import './style.css';
-import { useEntity, useHistory } from '@hakit/core';
+import { useEntity } from '@hakit/core';
 import { notification } from 'antd';
 
 function ElectricityCard({ 

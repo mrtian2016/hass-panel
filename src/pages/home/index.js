@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PullToRefresh } from 'antd-mobile';
+// import { PullToRefresh } from 'antd-mobile';
 import Icon from '@mdi/react';
 import { 
   mdiWeatherNight,
@@ -7,16 +7,15 @@ import {
   mdiCheck,
   mdiPencil,
   mdiRefresh,
-  mdiViewGrid,
+  // mdiViewGrid,
   mdiViewColumn,
   mdiMenu,
-  mdiCog,
-  mdiEyeOutline,
-  mdiCheckboxMarked,
-  mdiCheckboxBlankOutline,
+  // mdiCog,
+  // mdiEyeOutline,
+  // mdiCheckboxMarked,
+  // mdiCheckboxBlankOutline,
   mdiViewDashboard,
 } from '@mdi/js';
-import { useWeather, useEntity,useHistory} from '@hakit/core';
 import { useTheme } from '../../theme/ThemeContext';
 import { Responsive } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
@@ -55,7 +54,7 @@ const getColumnLayoutIcon = (columns) => {
 
 function Home({ sidebarVisible, setSidebarVisible }) {
   const { theme, toggleTheme } = useTheme();
-  const [cards, setCards] = useState(() => {
+  const [cards] = useState(() => {
     // 从 localStorage 读取配置
     const savedConfig = localStorage.getItem('card-config');
     if (savedConfig) {
@@ -73,10 +72,10 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     return [];
   });
 
-  const handleRefresh = () => {
-    console.log('Refresh triggered');
-    window.location.reload();
-  };
+  // const handleRefresh = () => {
+  //   console.log('Refresh triggered');
+  //   window.location.reload();
+  // };
 
   // 修改布局状态
   const [currentLayouts, setCurrentLayouts] = useState(() => {
@@ -222,68 +221,68 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     }
   };
 
-  // 计算卡片布局
-  const calculateLayouts = (cards) => {
-    const layouts = {
-      lg: [],
-      md: [],
-      sm: []
-    };
+  // // 计算卡片布局
+  // const calculateLayouts = (cards) => {
+  //   const layouts = {
+  //     lg: [],
+  //     md: [],
+  //     sm: []
+  //   };
 
-    // 基础布局参数
-    const baseParams = {
-      lg: { cols: 3, cardWidth: 1 },
-      md: { cols: 2, cardWidth: 1 },
-      sm: { cols: 1, cardWidth: 1 }
-    };
+  //   // 基础布局参数
+  //   const baseParams = {
+  //     lg: { cols: 3, cardWidth: 1 },
+  //     md: { cols: 2, cardWidth: 1 },
+  //     sm: { cols: 1, cardWidth: 1 }
+  //   };
 
-    // 卡片高度配置
-    const cardHeights = {
-      TimeCard: { lg: 5, md: 5, sm: 5 },
-      WeatherCard: { lg: 9, md: 9, sm: 9 },
-      LightStatusCard: { lg: 12, md: 12, sm: 12 },
-      LightOverviewCard: { lg: 11, md: 11, sm: 11 },
-      SensorCard: { lg: 8, md: 8, sm: 8 },
-      RouterCard: { lg: 13, md: 13, sm: 13 },
-      NASCard: { lg: 18, md: 18, sm: 18 },
-      MediaPlayerCard: { lg: 14, md: 14, sm: 14 },
-      CurtainCard: { lg: 14, md: 14, sm: 14 },
-      ElectricityCard: { lg: 12, md: 12, sm: 12 },
-      ScriptPanel: { lg: 7, md: 7, sm: 7 },
-      WaterPurifierCard: { lg: 12, md: 12, sm: 12 },
-      IlluminanceCard: { lg: 8, md: 8, sm: 8 },
-      CameraCard: { lg: 10, md: 10, sm: 10 },
-      ClimateCard: { lg: 12, md: 12, sm: 12 }
-    };
+  //   // 卡片高度配置
+  //   const cardHeights = {
+  //     TimeCard: { lg: 5, md: 5, sm: 5 },
+  //     WeatherCard: { lg: 9, md: 9, sm: 9 },
+  //     LightStatusCard: { lg: 12, md: 12, sm: 12 },
+  //     LightOverviewCard: { lg: 11, md: 11, sm: 11 },
+  //     SensorCard: { lg: 8, md: 8, sm: 8 },
+  //     RouterCard: { lg: 13, md: 13, sm: 13 },
+  //     NASCard: { lg: 18, md: 18, sm: 18 },
+  //     MediaPlayerCard: { lg: 14, md: 14, sm: 14 },
+  //     CurtainCard: { lg: 14, md: 14, sm: 14 },
+  //     ElectricityCard: { lg: 12, md: 12, sm: 12 },
+  //     ScriptPanel: { lg: 7, md: 7, sm: 7 },
+  //     WaterPurifierCard: { lg: 12, md: 12, sm: 12 },
+  //     IlluminanceCard: { lg: 8, md: 8, sm: 8 },
+  //     CameraCard: { lg: 10, md: 10, sm: 10 },
+  //     ClimateCard: { lg: 12, md: 12, sm: 12 }
+  //   };
 
-    // 计算每个卡片的位置
-    Object.keys(layouts).forEach(breakpoint => {
-      const { cols } = baseParams[breakpoint];
-      let positions = new Array(cols).fill(0); // 记录每列的当前高度
+  //   // 计算每个卡片的位置
+  //   Object.keys(layouts).forEach(breakpoint => {
+  //     const { cols } = baseParams[breakpoint];
+  //     let positions = new Array(cols).fill(0); // 记录每列的当前高度
 
-      cards.forEach((card) => {
-        const height = cardHeights[card.type]?.[breakpoint] || 10;
+  //     cards.forEach((card) => {
+  //       const height = cardHeights[card.type]?.[breakpoint] || 10;
         
-        // 找到高度最小的列
-        let minHeight = Math.min(...positions);
-        let col = positions.indexOf(minHeight);
+  //       // 找到高度最小的列
+  //       let minHeight = Math.min(...positions);
+  //       let col = positions.indexOf(minHeight);
         
-        // 添加布局
-        layouts[breakpoint].push({
-          i: card.id.toString(),
-          x: col,
-          y: minHeight,
-          w: baseParams[breakpoint].cardWidth,
-          h: height
-        });
+  //       // 添加布局
+  //       layouts[breakpoint].push({
+  //         i: card.id.toString(),
+  //         x: col,
+  //         y: minHeight,
+  //         w: baseParams[breakpoint].cardWidth,
+  //         h: height
+  //       });
 
-        // 更新该列的高度
-        positions[col] = minHeight + height;
-      });
-    });
+  //       // 更新该列的高度
+  //       positions[col] = minHeight + height;
+  //     });
+  //   });
 
-    return layouts;
-  };
+  //   return layouts;
+  // };
 
   return (
     <div className={`page-container ${!sidebarVisible ? 'sidebar-hidden' : ''}`}>

@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Icon from '@mdi/react';
 import {
   mdiHome,
-  mdiMessage,
-  mdiAccount,
+  // mdiMessage,
+  // mdiAccount,
   mdiCog,
 } from '@mdi/js';
 import './style.css';
