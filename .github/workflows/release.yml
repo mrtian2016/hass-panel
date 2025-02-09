@@ -26,8 +26,8 @@ jobs:
 
       - name: Zip build files
         run: |
-          cd dist
-          zip -r ../dist.zip .
+          cd build
+          zip -r ../release.zip .
           cd ..
 
       - name: Create Release
@@ -35,7 +35,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist.zip
+            release.zip
           draft: false
           prerelease: false
           generate_release_notes: true
