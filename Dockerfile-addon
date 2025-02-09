@@ -2,7 +2,7 @@
 FROM ghcr.io/hassio-addons/base:17.1.0
 
 # 安装依赖
-RUN apk add --no-cache  gettext nginx
+RUN apk add --no-cache nginx gettext curl jq unzip
 
 # 创建工作目录
 WORKDIR /app
@@ -10,17 +10,18 @@ WORKDIR /app
 # 只复制构建后的文件
 COPY build /app
 
-RUN rm /app/config/userConfig.json
-RUN rm /app/env.js
 
-
-
+# 复制nginx配置
 COPY nginx.conf /etc/nginx/http.d/default.conf
 
 
 # 复制启动脚本
 COPY run.sh /
 RUN chmod a+x /run.sh
+
+# 复制更新脚本
+COPY update.sh /
+RUN chmod a+x /update.sh
 
 # 暴露端口
 EXPOSE 5123

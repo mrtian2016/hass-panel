@@ -1,17 +1,22 @@
-FROM nginx:alpine
+FROM hub.pyer.net/library/nginx:alpine
 
-# 添加 envsubst 命令
-RUN apk add --no-cache gettext nginx
+# 添加必要的工具
+RUN apk add --no-cache gettext curl jq unzip
 
 WORKDIR /app
-# 复制文件
+
+# 复制配置文件
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./build /app
-COPY ./public/env.template.js /app/env.template.js
-RUN rm /app/config/userConfig.json
-RUN rm /app/env.js
-# 创建启动脚本
+
+# 复制更新脚本
+COPY update.sh /update.sh
+
+# 设置脚本权限
+RUN chmod +x /update.sh
+
+
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
+    echo '/update.sh' >> /docker-entrypoint.sh && \
     echo 'envsubst < /app/env.template.js > /app/env.js' >> /docker-entrypoint.sh && \
     echo 'nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh

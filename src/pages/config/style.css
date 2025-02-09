@@ -327,3 +327,27 @@
     height: 300px;
   }
 }
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.version-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  background: var(--color-background);
+  padding: 4px 10px;
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border);
+  margin-right: 10px;
+}
+
+/* 移除不需要的更新时间相关样式 */
+.version-info .update-time {
+  display: none;
+}

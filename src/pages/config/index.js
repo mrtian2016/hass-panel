@@ -25,7 +25,8 @@ import {
   mdiMotionSensor,
   mdiHomeFloorG,
   mdiFileFind,
-  mdiClose
+  mdiClose,
+  mdiInformationOutline
 } from '@mdi/js';
 import ConfigField from '../../components/ConfigField';
 import AddCardModal from '../../components/AddCardModal';
@@ -304,6 +305,7 @@ function ConfigPage() {
     return [];
   });
   const [showAddModal, setShowAddModal] = useState(false);
+  const [versionInfo, setVersionInfo] = useState(null);
   
   const handleSave = () => {
     // 保存卡片配置
@@ -515,10 +517,30 @@ function ConfigPage() {
     }
   };
 
+  // 添加获取版本信息的函数
+  React.useEffect(() => {
+    fetch('/version.json')
+      .then(response => response.json())
+      .then(data => {
+        setVersionInfo(data);
+      })
+      .catch(error => {
+        console.error('获取版本信息失败:', error);
+      });
+  }, []);
+
   return (
     <div className="config-page">
       <div className="config-header">
-        <h2>卡片配置</h2>
+        <div className="header-left">
+          <h2>卡片配置</h2>
+          {versionInfo && (
+            <div className="version-info">
+              <Icon path={mdiInformationOutline} size={0.8} />
+              <span>前端版本: {versionInfo.version}</span>
+            </div>
+          )}
+        </div>
         <div className="header-buttons">
           <input
             type="file"
