@@ -20,10 +20,10 @@ if [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
     
     DOWNLOAD_URL="https://ghfast.top/$DOWNLOAD_URL"
     echo "Downloading from $DOWNLOAD_URL"
-    rm -rf /app/*
-    curl -L $DOWNLOAD_URL -o /tmp/release.zip
-    unzip /tmp/release.zip -d /app/
-    rm /tmp/release.zip
+    rm -rf /app/* > /dev/null 2>&1
+    curl -L $DOWNLOAD_URL -o /tmp/release.zip > /dev/null 2>&1
+    unzip -q /tmp/release.zip -d /app/
+    rm /tmp/release.zip > /dev/null 2>&1
     
     # 更新version.json文件，包含版本号和更新时间
     CURRENT_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")

@@ -215,10 +215,11 @@ docker run \
   --restart unless-stopped \
   -p 5123:5123 \
   -p 5124:5124 \
+  -v ./webdav:/config/hass-panel/webdav \ # 持久化webdav文件
   -e REACT_APP_HASS_URL=your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
-  -e WEBDAV_USERNAME=your-webdav-username \ # WebDAV 用户名，可选
-  -e WEBDAV_PASSWORD=your-webdav-password \ # WebDAV 密码，可选
+  -e WEBDAV_USERNAME=your-webdav-username \ # WebDAV 用户名
+  -e WEBDAV_PASSWORD=your-webdav-password \ # WebDAV 密码
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```

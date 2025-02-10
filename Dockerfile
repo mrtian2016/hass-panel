@@ -19,7 +19,8 @@ RUN case $(uname -m) in \
     rm webdav.tar.gz
 
 # 创建WebDAV数据目录
-RUN mkdir -p /data/webdav 
+RUN mkdir -p /config/hass-panel/webdav
+
 COPY webdav_config.yaml /webdav_config.yaml
 
 WORKDIR /app

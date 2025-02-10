@@ -11,7 +11,13 @@ export REACT_APP_HASS_URL=$(bashio::config 'hass_url')
 export WEBDAV_USERNAME=$(bashio::config 'webdav_username')
 export WEBDAV_PASSWORD=$(bashio::config 'webdav_password')
 
-mkdir -p /config/hass-panel/media
+if [ ! -d "/config/hass-panel/media" ]; then
+  mkdir -p /config/hass-panel/media
+fi
+
+if [ ! -d "/config/hass-panel/webdav" ]; then
+  mkdir -p /config/hass-panel/webdav
+fi
 
 # 如果/config/hass-panel/media目录存在,则链接media文件
 if [ -d "/config/hass-panel/media" ]; then
@@ -23,11 +29,6 @@ fi
 
 
 envsubst < /app/env.template.js > /app/env.js
-
-# mkdir -p /data/webdav
-if [ ! -d "/data/webdav" ]; then
-  mkdir -p /data/webdav
-fi
 
 # 启动应用
 cd /app

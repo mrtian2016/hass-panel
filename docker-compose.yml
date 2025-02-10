@@ -13,3 +13,4 @@ services:
       - REACT_APP_HASS_TOKEN=your_hass_token # 请替换为你的Home Assistant实例token
     volumes:  
       - ./public/media:/app/media # 媒体资源，主要是房间图片
+      - ./webdav:/config/hass-panel/webdav # 持久化webdav文件
