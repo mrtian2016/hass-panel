@@ -10,7 +10,7 @@ fi
 CURRENT_VERSION=$(cat /app/version.json | jq -r .version)
 echo "Current version: $CURRENT_VERSION"
 
-LATEST_RELEASE=$(curl -s "https://api.github.com/repos/$GITHUB_REPO/releases/latest")
+LATEST_RELEASE=$(curl -s "https://ghfast.top/https://api.github.com/repos/$GITHUB_REPO/releases/latest")
 LATEST_VERSION=$(echo $LATEST_RELEASE | jq -r .tag_name)
 echo "Latest version: $LATEST_VERSION"
 

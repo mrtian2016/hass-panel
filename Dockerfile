@@ -34,6 +34,9 @@ COPY update.sh /update.sh
 # 设置脚本权限
 RUN chmod +x /update.sh
 
+ENV WEBDAV_USERNAME=admin
+
+ENV WEBDAV_PASSWORD=admin
 
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
     echo '/update.sh' >> /docker-entrypoint.sh && \

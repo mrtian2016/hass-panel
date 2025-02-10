@@ -17,11 +17,45 @@
   background: var(--color-background);
   color: var(--color-text-primary);
   font-size: 14px;
+  transition: all 0.3s;
+}
+
+.config-field input:hover {
+  border-color: var(--color-primary);
 }
 
 .config-field input:focus {
   outline: none;
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.1);
+}
+
+/* antd Input 组件样式覆盖 */
+.config-field .ant-input {
+  background-color: var(--color-background) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+  transition: all 0.3s !important;
+}
+
+.config-field .ant-input:hover {
+  border-color: var(--color-primary) !important;
+}
+
+.config-field .ant-input:focus,
+.config-field .ant-input-focused {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.1) !important;
+}
+
+.config-field .ant-input::placeholder {
+  color: var(--color-text-secondary) !important;
+  opacity: 0.5;
+}
+
+.config-field .ant-input-disabled {
+  background-color: var(--color-background) !important;
+  opacity: 0.5;
 }
 
 .entity-list {
@@ -111,8 +145,8 @@
 }
 
 .light-item {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
   padding: 16px;
   background: var(--color-background);
@@ -120,9 +154,80 @@
   border-radius: var(--border-radius-small);
 }
 
-.light-item > input,
-.light-item > .ant-select {
-  margin-bottom: 8px;
+.light-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.light-item-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.order-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.order-button {
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+  min-width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-button:hover:not(:disabled) {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.order-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.delete-button {
+  padding: 4px 12px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-error);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+
+.delete-button:hover {
+  background: var(--color-error-dark);
+}
+
+.add-button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+  align-self: flex-start;
+}
+
+.add-button:hover {
+  background: var(--color-primary-dark);
 }
 
 /* 摄像头配置样式 */

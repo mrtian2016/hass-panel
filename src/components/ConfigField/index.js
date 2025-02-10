@@ -301,58 +301,94 @@ function ConfigField({ field, value, onChange }) {
         <div className="config-field">
           <label>{field.label}</label>
           <div className="lights-config">
-            {Object.entries(value || {}).map(([key, light]) => (
+            {Object.entries(value || {}).map(([key, light], index, array) => (
               <div key={key} className="light-item">
-                <Input
-                  type="text"
-                  value={light.name || null}
-                  onChange={(e) => {
-                    onChange({
-                      ...value,
-                      [key]: {
-                        ...light,
-                        name: e.target.value
-                      }
-                    });
-                  }}
-                  placeholder="灯光名称"
-                />
-                <Select
-                  value={light.entity_id || null}
-                  onChange={(selectedValue) => {
-                    const currentValue = typeof value === 'object' ? value : {};
-                    onChange({
-                      ...currentValue,
-                      [key]: {
-                        ...light,
-                        entity_id: selectedValue
-                      }
-                    });
-                  }}
-                  showSearch
-                  placeholder="选择灯光实体"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                  }
-                  options={lightEntities.map(entity => ({
-                    value: entity.id,
-                    label: entity.name + ' (' + entity.id + ')'
-                  }))}
-                />
-                <button
-                  onClick={() => {
-                    const currentValue = typeof value === 'object' ? value : {};
-                    const newValue = { ...currentValue };
-                    delete newValue[key];
-                    onChange(newValue);
-                  }}
-                >
-                  删除
-                </button>
+                <div className="light-item-content">
+                  <Input
+                    type="text"
+                    value={light.name || null}
+                    onChange={(e) => {
+                      onChange({
+                        ...value,
+                        [key]: {
+                          ...light,
+                          name: e.target.value
+                        }
+                      });
+                    }}
+                    placeholder="灯光名称"
+                  />
+                  <Select
+                    value={light.entity_id || null}
+                    onChange={(selectedValue) => {
+                      const currentValue = typeof value === 'object' ? value : {};
+                      onChange({
+                        ...currentValue,
+                        [key]: {
+                          ...light,
+                          entity_id: selectedValue
+                        }
+                      });
+                    }}
+                    showSearch
+                    placeholder="选择灯光实体"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={lightEntities.map(entity => ({
+                      value: entity.id,
+                      label: entity.name + ' (' + entity.id + ')'
+                    }))}
+                  />
+                </div>
+                <div className="light-item-actions">
+                  <div className="order-buttons">
+                    <button
+                      className="order-button"
+                      onClick={() => {
+                        const entries = Object.entries(value || {});
+                        if (index > 0) {
+                          const newEntries = [...entries];
+                          [newEntries[index - 1], newEntries[index]] = [newEntries[index], newEntries[index - 1]];
+                          onChange(Object.fromEntries(newEntries));
+                        }
+                      }}
+                      disabled={index === 0}
+                    >
+                      ↑ 上移
+                    </button>
+                    <button
+                      className="order-button"
+                      onClick={() => {
+                        const entries = Object.entries(value || {});
+                        if (index < entries.length - 1) {
+                          const newEntries = [...entries];
+                          [newEntries[index], newEntries[index + 1]] = [newEntries[index + 1], newEntries[index]];
+                          onChange(Object.fromEntries(newEntries));
+                        }
+                      }}
+                      disabled={index === array.length - 1}
+                    >
+                      ↓ 下移
+                    </button>
+                  </div>
+                  <button
+                    className="delete-button"
+                    onClick={() => {
+                      const currentValue = typeof value === 'object' ? value : {};
+                      const newValue = { ...currentValue };
+                      delete newValue[key];
+                      onChange(newValue);
+                    }}
+                  >
+                    删除
+                  </button>
+                </div>
               </div>
             ))}
             <button
+              className="add-button"
               onClick={() => {
                 const newKey = 'light_' + Date.now();
                 const currentValue = typeof value === 'object' ? value : {};
@@ -1227,12 +1263,20 @@ function ConfigField({ field, value, onChange }) {
         },
         unStraightBlowing: {
           name: '防直吹',
-          icon: 'mdiAirFilter',
+          icon: 'mdiAirPurifier',
           disableWhen: {
             state: 'off'
           },
           enableWhen: {
             mode: 'cool'
+          }
+        },
+        // 新风
+        newAir: {
+          name: '新风',
+          icon: 'mdiAirPurifier',
+          disableWhen: {
+            state: 'off'
           }
         }
       };

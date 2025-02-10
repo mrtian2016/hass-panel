@@ -20,7 +20,8 @@ import {
   mdiLeaf,
   mdiPowerSleep,
   mdiHeatingCoil,
-  mdiAirFilter
+  mdiAirFilter,
+  mdiAirPurifier,
 } from '@mdi/js';
 import { Popup, List } from 'antd-mobile';
 import './style.css';
@@ -31,6 +32,7 @@ const ICON_MAP = {
   mdiPowerSleep,
   mdiHeatingCoil,
   mdiAirFilter,
+  mdiAirPurifier,
 };
 
 

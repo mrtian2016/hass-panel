@@ -78,8 +78,8 @@ function RouterCard({ config }) {
 
   const cpuUsage = parseFloat(entities.cpuUsage?.state || 0);
   const memoryUsage = parseFloat(entities.memoryUsage?.state || 0);
-  const wanDownloadSpeed = entities.wanDownloadSpeed?.state || '0';
-  const wanUploadSpeed = entities.wanUploadSpeed?.state || '0';
+  const wanDownloadSpeed = parseFloat(entities.wanDownloadSpeed?.state || '0').toFixed(3);
+  const wanUploadSpeed = parseFloat(entities.wanUploadSpeed?.state || '0').toFixed(3);
   const onlineUsers = entities.onlineUsers?.state || '0';
   const networkConnections = entities.networkConnections?.state || '0';
   const cpuTemp = entities.cpuTemp?.state || '0';
@@ -102,11 +102,11 @@ function RouterCard({ config }) {
             <div className="speed-row">
               <div className="speed-item">
                 <Icon path={mdiUpload} size={0.8} />
-                <span className="speed-value">{wanUploadSpeed}<span> Mbps</span></span>
+                <span className="speed-value">{wanUploadSpeed}<span> MB/s</span></span>
               </div>
               <div className="speed-item">
                 <Icon path={mdiDownload} size={0.8} />
-                <span className="speed-value">{wanDownloadSpeed}<span> Mbps</span></span>
+                <span className="speed-value">{wanDownloadSpeed}<span> MB/s</span></span>
               </div>
             </div>
             <div className="divider"></div>

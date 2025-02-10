@@ -63,6 +63,7 @@ const calculateClothingIndex = (temperature, humidity, windSpeed) => {
 
 function WeatherCard({ entityId }) {
   const weather = useWeather(entityId);
+  console.log(weather);
   const { theme } = useTheme();
   const {
     apparent_temperature,
@@ -70,6 +71,10 @@ function WeatherCard({ entityId }) {
     visibility_unit,
     aqi,
     aqi_description,
+    temperature,
+    pressure,
+    pressure_unit,
+    humidity
   } = weather.attributes;
 
   const getWeatherIcon = (condition) => {
@@ -132,17 +137,25 @@ function WeatherCard({ entityId }) {
     >
       <div className="current-weather">
         <div className="weather-item">
-          <span className="label">体感温度</span>
-          <span className="value">{apparent_temperature}°C</span>
+          <span className="label">{apparent_temperature ? '体感温度' : '温度'}</span>
+          <span className="value">{apparent_temperature || temperature}°C</span>
         </div>
-        <div className="weather-item">
+        {humidity && <div className="weather-item">
+          <span className="label">湿度</span>
+          <span className="value">{humidity}%</span>
+        </div>}
+        {visibility && <div className="weather-item">
           <span className="label">能见度</span>
           <span className="value">{visibility} {visibility_unit}</span>
-        </div>
-        <div className="weather-item">
+        </div>}
+        {aqi &&   <div className="weather-item">
           <span className="label">空气质量</span>
           <span className="value">{aqi} ({aqi_description})</span>
-        </div>
+        </div>}
+        {pressure && !aqi && <div className="weather-item">
+          <span className="label">气压</span>
+          <span className="value">{pressure} {pressure_unit}</span>
+        </div>}
         <div className="weather-item">
           <span className="label">风况</span>
           <span className="value">

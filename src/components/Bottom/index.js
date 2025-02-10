@@ -5,6 +5,7 @@ import {
   AppOutline,
   // MessageOutline,
   // UserOutline,
+  SetOutline,
 } from 'antd-mobile-icons';
 import './style.css';
 
@@ -19,6 +20,11 @@ function Bottom() {
       title: '首页',
       icon: <AppOutline />,
     },
+    {
+      key: '/config',
+      title: '配置',
+      icon: <SetOutline />,
+    }
     // {
     //   key: '/message',
     //   title: '消息',

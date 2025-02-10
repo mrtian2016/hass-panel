@@ -383,13 +383,6 @@
   z-index: 1000;
 }
 
-.modal-content {
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  width: 400px;
-}
-
 .form-group {
   margin-bottom: 16px;
 }
