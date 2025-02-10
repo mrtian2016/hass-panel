@@ -57,6 +57,7 @@
     "use-debounce": "^10.0.4",
     "use-long-press": "^3.2.0",
     "web-vitals": "^2.1.4",
+    "webdav": "^5.7.1",
     "workbox-background-sync": "^6.6.0",
     "workbox-broadcast-update": "^6.6.0",
     "workbox-cacheable-response": "^6.6.0",

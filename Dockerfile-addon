@@ -4,6 +4,26 @@ FROM ghcr.io/hassio-addons/base:17.1.0
 # 安装依赖
 RUN apk add --no-cache nginx gettext curl jq unzip
 
+
+
+# 设置 WebDAV 版本
+ENV WEBDAV_VERSION=5.7.2
+
+# 根据架构下载对应的 WebDAV
+RUN case $(uname -m) in \
+    aarch64) ARCH="arm64" ;; \
+    x86_64) ARCH="amd64" ;; \
+    *) echo "Unsupported architecture" && exit 1 ;; \
+    esac && \
+    curl -L "https://ghfast.top/https://github.com/hacdias/webdav/releases/download/v${WEBDAV_VERSION}/linux-${ARCH}-webdav.tar.gz" -o webdav.tar.gz && \
+    tar xf webdav.tar.gz && \
+    mv webdav /usr/local/bin/ && \
+    rm webdav.tar.gz
+
+# 创建WebDAV数据目录
+RUN mkdir -p /data/webdav 
+COPY webdav_config.yaml /webdav_config.yaml
+
 # 创建工作目录
 WORKDIR /app
 

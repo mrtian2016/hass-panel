@@ -17,6 +17,9 @@ echo "Latest version: $LATEST_VERSION"
 if [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
     echo "Updating to version $LATEST_VERSION"
     DOWNLOAD_URL=$(echo $LATEST_RELEASE | jq -r .assets[0].browser_download_url)
+    
+    DOWNLOAD_URL="https://ghfast.top/$DOWNLOAD_URL"
+    echo "Downloading from $DOWNLOAD_URL"
     rm -rf /app/*
     curl -L $DOWNLOAD_URL -o /tmp/release.zip
     unzip /tmp/release.zip -d /app/

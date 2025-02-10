@@ -4,7 +4,7 @@
 # ==============================================================================
 
 # 检查更新
-# /update.sh
+/update.sh
 
 # 设置环境变量
 
@@ -29,5 +29,6 @@ envsubst < /app/env.template.js > /app/env.js
 # 启动应用
 cd /app
 
-nginx  -g "daemon off; "
+nginx
 
+webdav -c /webdav_config.yaml

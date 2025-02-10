@@ -1,6 +1,6 @@
 {
   "name": "Hass Panel",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "slug": "hass_panel",
   "description": "一个基于 React 的智能家居控制面板",
   "url": "https://github.com/mrtian2016/hass-panel",
@@ -21,10 +21,12 @@
     "config:rw"
   ],
   "ports": {
-    "5123/tcp": 5123
+    "5123/tcp": 5123,
+    "5124/tcp": 5124
   },
   "ports_description": {
-    "5123/tcp": "Web界面"
+    "5123/tcp": "Web界面",
+    "5124/tcp": "WebDAV"
   },
   "webui": "http://[HOST]:[PORT:5123]",
   "options": {

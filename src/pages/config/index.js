@@ -26,12 +26,14 @@ import {
   mdiHomeFloorG,
   mdiFileFind,
   mdiClose,
-  mdiInformationOutline
+  mdiInformationOutline,
 } from '@mdi/js';
 import ConfigField from '../../components/ConfigField';
 import AddCardModal from '../../components/AddCardModal';
 // import Modal from '../../components/Modal';
 import LightOverviewCard from '../../components/LightOverviewCard';
+import { createClient } from 'webdav';
+import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, BackTop } from 'antd';
 
 import './style.css';
 
@@ -283,6 +285,74 @@ const CARD_TYPES = {
   }
 };
 
+// 修改 WebDAV 相关函数
+const saveConfigToWebDAV = async (config) => {
+  try {
+    const webdavConfig = JSON.parse(localStorage.getItem('webdav-config') || '{}');
+    if (!webdavConfig.url) {
+      throw new Error('WebDAV URL未配置');
+    }
+
+    // 创建 WebDAV 客户端
+    const client = createClient(webdavConfig.url, {
+      username: webdavConfig.username, // 可选
+      password: webdavConfig.password  // 可选
+    });
+
+    const configData = {
+      cards: config,
+      layouts: localStorage.getItem('dashboard-layouts'),
+      defaultLayouts: localStorage.getItem('default-dashboard-layouts'),
+      timestamp: new Date().toISOString()
+    };
+
+    // 使用 webdav 库的 putFileContents 方法
+    await client.putFileContents(
+      '/config.json',
+      JSON.stringify(configData),
+      { 
+        overwrite: true,
+        contentLength: true
+      }
+    );
+    message.success('同步到WebDAV成功');
+
+  } catch (error) {
+    console.error('WebDAV保存错误:', error);
+    message.error('保存到WebDAV失败: ' + error.message);
+    throw error;
+  }
+};
+
+const loadConfigFromWebDAV = async () => {
+  try {
+    const webdavConfig = JSON.parse(localStorage.getItem('webdav-config') || '{}');
+    if (!webdavConfig.url) {
+      throw new Error('WebDAV URL未配置');
+    }
+
+    // 创建 WebDAV 客户端
+    const client = createClient(webdavConfig.url, {
+      username: webdavConfig.username, // 可选
+      password: webdavConfig.password  // 可选
+    });
+
+    // 使用 webdav 库的 getFileContents 方法
+    const exists = await client.exists('/config.json');
+    if (!exists) {
+      throw new Error('配置文件不存在');
+    }
+
+    const content = await client.getFileContents('/config.json', { format: 'text' });
+    const configData = JSON.parse(content);
+
+    return configData;
+  } catch (error) {
+    console.error('WebDAV加载错误:', error);
+    throw error;
+  }
+};
+
 function ConfigPage() {
   const fileInputRef = useRef(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -306,11 +376,16 @@ function ConfigPage() {
   });
   const [showAddModal, setShowAddModal] = useState(false);
   const [versionInfo, setVersionInfo] = useState(null);
+  const [webdavConfig, setWebdavConfig] = useState(() => {
+    return JSON.parse(localStorage.getItem('webdav-config') || '{}');
+  });
+  const [showWebDAVModal, setShowWebDAVModal] = useState(false);
+  const [form] = Form.useForm();
   
-  const handleSave = () => {
-    // 保存卡片配置
+  const handleSave = async () => {
+    // 保存到本地存储
     localStorage.setItem('card-config', JSON.stringify(cards));
-
+    
     // 获取当前已有的布局
     const existingLayouts = JSON.parse(localStorage.getItem('dashboard-layouts') || '{}');
     
@@ -343,6 +418,15 @@ function ConfigPage() {
 
       // 保存合并后的布局
       localStorage.setItem('dashboard-layouts', JSON.stringify(mergedLayouts));
+    }
+    
+    // 如果配置了WebDAV，且开启了自动同步，则保存到WebDAV
+    if (webdavConfig.url && webdavConfig.autoSync) {
+      try {
+        await saveConfigToWebDAV(cards);
+      } catch (error) {
+        message.error('保存到WebDAV失败: ' + error.message);
+      }
     }
     
     setHasUnsavedChanges(false);
@@ -510,7 +594,7 @@ function ConfigPage() {
           setHasUnsavedChanges(true);
         } catch (error) {
           console.error('解析配置文件失败:', error);
-          alert('配置文件格式错误，请检查文件内容');
+          message.error('配置文件格式错误，请检查文件内容');
         }
       };
       reader.readAsText(file);
@@ -529,6 +613,95 @@ function ConfigPage() {
       });
   }, []);
 
+  // 添加从WebDAV加载配置的函数
+  const handleLoadFromWebDAV = async () => {
+    try {
+      const configData = await loadConfigFromWebDAV();
+      
+      // 更新卡片配置
+      setCards(configData.cards.map(card => ({
+        ...card,
+        visible: card.visible !== false
+      })));
+      
+      // 更新布局配置
+      if (configData.layouts) {
+        localStorage.setItem('dashboard-layouts', configData.layouts);
+      }
+      if (configData.defaultLayouts) {
+        localStorage.setItem('default-dashboard-layouts', configData.defaultLayouts);
+      }
+      
+      setHasUnsavedChanges(true);
+      handleSave();
+      message.success('从WebDAV加载配置成功');
+    } catch (error) {
+      message.error('从WebDAV加载配置失败: ' + error.message);
+    }
+  };
+
+  // 添加处理WebDAV表单提交的函数
+  const handleWebDAVSubmit = (values) => {
+    setWebdavConfig(values);
+    localStorage.setItem('webdav-config', JSON.stringify(values));
+    setShowWebDAVModal(false);
+  };
+
+  // 当模态框打开时，设置表单初始值
+  React.useEffect(() => {
+    if (showWebDAVModal) {
+      form.setFieldsValue(webdavConfig);
+    }
+  }, [showWebDAVModal, form, webdavConfig]);
+
+  // 配置导入导出菜单项
+  const configMenuItems = [
+    {
+      key: 'import',
+      label: '导入配置',
+      icon: <Icon path={mdiImport} size={0.8} />,
+      onClick: () => fileInputRef.current.click()
+    },
+    {
+      key: 'export',
+      label: '导出配置',
+      icon: <Icon path={mdiExport} size={0.8} />,
+      onClick: handleExport
+    }
+  ];
+
+  // WebDAV同步菜单项
+  const webdavMenuItems = webdavConfig.url ? [
+    {
+      key: 'config',
+      label: 'WebDAV配置',
+      icon: <Icon path={mdiServerNetwork} size={0.8} />,
+      onClick: () => setShowWebDAVModal(true)
+    },
+    {
+      type: 'divider'
+    },
+    {
+      key: 'push',
+      label: '同步到WebDAV',
+      icon: <Icon path={mdiExport} size={0.8} />,
+      onClick: () => saveConfigToWebDAV(cards)
+    },
+    {
+      key: 'pull',
+      label: '从WebDAV同步',
+      icon: <Icon path={mdiImport} size={0.8} />,
+      onClick: handleLoadFromWebDAV
+    }
+  ] : [
+    {
+      key: 'config',
+      label: 'WebDAV配置',
+      icon: <Icon path={mdiServerNetwork} size={0.8} />,
+      onClick: () => setShowWebDAVModal(true)
+    }
+  ];
+
   return (
     <div className="config-page">
       <div className="config-header">
@@ -541,7 +714,7 @@ function ConfigPage() {
             </div>
           )}
         </div>
-        <div className="header-buttons">
+        <Space className="header-buttons">
           <input
             type="file"
             ref={fileInputRef}
@@ -549,26 +722,42 @@ function ConfigPage() {
             accept=".json"
             style={{ display: 'none' }}
           />
-          <button className="import-button" onClick={() => fileInputRef.current.click()}>
-            <Icon path={mdiImport} size={1} />
-            导入配置
-          </button>
-          <button className="export-button" onClick={handleExport}>
-            <Icon path={mdiExport} size={1} />
-            导出配置
-          </button>
-          <button 
-            className={`save-button ${hasUnsavedChanges ? 'has-changes' : ''}`}
+          
+          {/* 配置导入导出下拉菜单 */}
+          <Dropdown menu={{ items: configMenuItems }} placement="bottomLeft">
+            <Button>
+              配置管理
+              <Icon path={mdiImport} size={0.8} style={{ marginLeft: 8 }} />
+            </Button>
+          </Dropdown>
+
+          {/* 保存按钮 */}
+          <Button
+            type="primary"
             onClick={handleSave}
             disabled={!hasUnsavedChanges}
+            icon={<Icon path={mdiCheck} size={0.8} />}
           >
-            <Icon path={mdiCheck} size={1} />
-          </button>
-          <button className="add-button" onClick={() => setShowAddModal(true)}>
-            <Icon path={mdiPlus} size={1} />
+            保存
+          </Button>
+
+          {/* 添加卡片按钮 */}
+          <Button
+            type="primary"
+            onClick={() => setShowAddModal(true)}
+            icon={<Icon path={mdiPlus} size={0.8} />}
+          >
             添加卡片
-          </button>
-        </div>
+          </Button>
+
+          {/* WebDAV相关操作下拉菜单 */}
+          <Dropdown menu={{ items: webdavMenuItems }} placement="bottomLeft">
+            <Button>
+              WebDAV
+              <Icon path={mdiServerNetwork} size={0.8} style={{ marginLeft: 8 }} />
+            </Button>
+          </Dropdown>
+        </Space>
       </div>
       
       <div className="config-list">
@@ -645,6 +834,63 @@ function ConfigPage() {
           />
         </div>
       )}
+
+      {/* 修改 WebDAV 配置模态框 */}
+      <Modal
+        title="WebDAV 配置"
+        open={showWebDAVModal}
+        onCancel={() => setShowWebDAVModal(false)}
+        footer={null}
+        destroyOnClose
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleWebDAVSubmit}
+          initialValues={webdavConfig}
+        >
+          <Form.Item
+            label="WebDAV URL"
+            name="url"
+            rules={[{ required: true, message: '请输入WebDAV URL' }]}
+          >
+            <Input placeholder="请输入WebDAV服务器地址" />
+          </Form.Item>
+
+          <Form.Item
+            label="用户名"
+            name="username"
+          >
+            <Input placeholder="请输入用户名（可选）" />
+          </Form.Item>
+
+          <Form.Item
+            label="密码"
+            name="password"
+          >
+            <Input.Password placeholder="请输入密码（可选）" />
+          </Form.Item>
+
+          <Form.Item
+            name="autoSync"
+            valuePropName="checked"
+          >
+            <Checkbox>自动同步到WebDAV</Checkbox>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
+              保存
+            </Button>
+            <Button onClick={() => setShowWebDAVModal(false)}>
+              取消
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* 添加回到顶部按钮 */}
+      <BackTop type="primary"/>
     </div>
   );
 }

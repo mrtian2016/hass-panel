@@ -36,6 +36,65 @@
 - 支持 PWA，可离线访问
 - 支持 Docker 部署
 - 支持 Home Assistant Addon 方式安装
+- 支持 WebDAV 配置同步
+
+## WebDAV 配置同步
+
+Hass Panel 支持通过 WebDAV 在多个设备间同步配置，让您可以轻松备份和恢复面板配置。
+
+### WebDAV 功能特点
+
+- 支持自动/手动同步配置
+- 支持多设备配置同步
+- 支持配置文件版本控制
+- 安全的配置文件存储
+
+### 配置 WebDAV
+
+1. 准备工作
+   - 使用 Docker 内置的 WebDAV 服务
+     - WebDAV 地址: `http://your-docker-host:5124`
+     - 用户名和密码通过环境变量 `WEBDAV_USERNAME` 和 `WEBDAV_PASSWORD` 设置
+   - 或使用其他 WebDAV 服务（如坚果云、NextCloud 等）
+     - 获取 WebDAV 服务器地址
+     - 准备 WebDAV 账号和密码
+
+2. 设置步骤
+   - 在面板顶部点击"WebDAV配置"按钮
+   - 输入 WebDAV 服务器地址
+     - 如果使用 Docker 内置服务，地址为 `http://your-docker-host:5124`
+     - 如果使用其他服务，填写对应的 WebDAV 地址
+   - 输入用户名和密码
+   - 选择是否启用自动同步
+   - 点击保存完成配置
+
+3. 使用说明
+   - 自动同步：启用后，每次修改配置都会自动同步到 WebDAV
+   - 手动同步：可以随时点击"同步到WebDAV"或"从WebDAV同步"按钮进行手动同步
+   - 配置文件路径：配置文件会保存在 WebDAV 根目录下的 `config.json` 文件中
+
+### 注意事项
+
+1. 确保 WebDAV 服务器地址正确且可访问
+2. 如果使用自动同步，建议确保网络连接稳定
+3. 首次使用时建议先备份本地配置
+4. 从 WebDAV 同步时会覆盖本地配置，请谨慎操作
+
+### 常见问题
+
+1. 同步失败
+   - 检查 WebDAV 服务器地址是否正确
+   - 验证用户名和密码是否正确
+   - 确认网络连接是否正常
+
+2. 配置丢失
+   - 检查 WebDAV 服务器上的配置文件是否存在
+   - 尝试使用本地备份恢复
+
+3. 自动同步不工作
+   - 确认是否启用了自动同步选项
+   - 检查网络连接是否正常
+   - 验证 WebDAV 配置是否正确
 
 ## 动态卡片配置
 
@@ -155,11 +214,20 @@ docker run \
   --name hass-panel \
   --restart unless-stopped \
   -p 5123:5123 \
+  -p 5124:5124 \
   -e REACT_APP_HASS_URL=your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
+  -e WEBDAV_USERNAME=your-webdav-username \ # WebDAV 用户名，可选
+  -e WEBDAV_PASSWORD=your-webdav-password \ # WebDAV 密码，可选
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
+
+环境变量说明:
+- `REACT_APP_HASS_URL`: Home Assistant 实例地址
+- `REACT_APP_HASS_TOKEN`: Home Assistant 长期访问令牌(可选)
+- `WEBDAV_USERNAME`: WebDAV 用户名(可选)
+- `WEBDAV_PASSWORD`: WebDAV 密码(可选)
 
 #### Home Assistant Addon方式
 
