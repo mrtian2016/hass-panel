@@ -30,9 +30,13 @@
   },
   "webui": "http://[HOST]:[PORT:5123]",
   "options": {
-    "hass_url": "http://homeassistant.local:8123"
+    "hass_url": "http://homeassistant.local:8123",
+    "webdav_username": "admin",
+    "webdav_password": "admin"
   },
   "schema": {
-    "hass_url": "str"
+    "hass_url": "str",
+    "webdav_username": "str",
+    "webdav_password": "str"
   }
 } 

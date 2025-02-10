@@ -10,7 +10,8 @@
 
 
 export REACT_APP_HASS_URL=$(bashio::config 'hass_url')
-export REACT_APP_HASS_TOKEN='' #$(bashio::config 'hass_token')
+export WEBDAV_USERNAME=$(bashio::config 'webdav_username')
+export WEBDAV_PASSWORD=$(bashio::config 'webdav_password')
 
 mkdir -p /config/hass-panel/media
 
