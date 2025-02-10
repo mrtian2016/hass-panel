@@ -7,8 +7,6 @@
 /update.sh
 
 # 设置环境变量
-
-
 export REACT_APP_HASS_URL=$(bashio::config 'hass_url')
 export WEBDAV_USERNAME=$(bashio::config 'webdav_username')
 export WEBDAV_PASSWORD=$(bashio::config 'webdav_password')
@@ -26,6 +24,10 @@ fi
 
 envsubst < /app/env.template.js > /app/env.js
 
+# mkdir -p /data/webdav
+if [ ! -d "/data/webdav" ]; then
+  mkdir -p /data/webdav
+fi
 
 # 启动应用
 cd /app
