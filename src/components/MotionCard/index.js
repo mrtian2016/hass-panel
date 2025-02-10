@@ -10,9 +10,6 @@ function MotionCard({ config }) {
   const { theme } = useTheme();
   const motionLogs = useLogs(config.motion_entity_id);
   const luxHistory = useHistory(config.lux_entity_id);
-  console.log(motionLogs);
-  console.log(luxHistory);
-
   // 格式化时间戳
   const formatTime = (timestamp) => {
     const date = new Date(timestamp * 1000); // 转换为毫秒
@@ -46,7 +43,7 @@ function MotionCard({ config }) {
       .slice(0, 5) // 只取前5条记录
     : [];
 
-  console.log(history);
+  
 
   return (
     <BaseCard

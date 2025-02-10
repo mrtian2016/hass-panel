@@ -12,6 +12,7 @@ import BaseCard from '../BaseCard';
 import Modal from '../Modal';
 import './style.css';
 import { useEntity } from '@hakit/core';
+import { notification } from 'antd';
 
 function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
   const viewBoxSize = 200;  // 用于 SVG viewBox
@@ -77,6 +78,13 @@ function NASCard({ config }) {
     }, {});
   } catch (error) {
     console.error('NASCard 组件错误:', error);
+    notification.error({
+      message: 'NAS卡片加载失败',
+      description: `nas 加载失败: ${error.message}`,
+      placement: 'topRight',
+      duration: 3,
+      key: 'NASCard',
+    });
     return <BaseCard title="NAS监控" icon={mdiNas} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'} >
       出现错误，请检查配置，{error.message}
     </BaseCard>
@@ -121,18 +129,33 @@ function NASCard({ config }) {
               
               <div className="volume-header">存储池状态</div>
               {config.syno_nas?.volumes?.map((volume, index) => {
-                
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const volumeStatus = useEntity(volume.status.entity_id);
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const volumeUsage = useEntity(volume.usage.entity_id);
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const volumeUsagePercent = useEntity(volume.usagePercent.entity_id);
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const volumeTemp = useEntity(volume.avgTemperature.entity_id);
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const volumeTotal = useEntity(volume.total.entity_id);
-                
+                let volumeStatus = null;
+                let volumeUsage = null;
+                let volumeUsagePercent = null;
+                let volumeTemp = null;
+                let volumeTotal = null;
+                try { 
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  volumeStatus = useEntity(volume.status.entity_id);
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  volumeUsage = useEntity(volume.usage.entity_id);
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  volumeUsagePercent = useEntity(volume.usagePercent.entity_id);
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  volumeTemp = useEntity(volume.avgTemperature.entity_id);
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  volumeTotal = useEntity(volume.total.entity_id);
+                } catch (error) {
+                  console.error(`加载NAS实体 ${volume.entity_id} 失败:`, error);
+                  notification.error({
+                    message: 'NAS卡片加载失败',
+                    description: `nas ${volume.name || volume.entity_id} 加载失败: ${error.message}`,
+                    placement: 'topRight',
+                    duration: 3,
+                    key: 'NASCard',
+                  });
+                  return <div>加载失败</div>
+                }
                 return (
                   <React.Fragment key={index}>
                     <div className="volume-item">
@@ -199,10 +222,24 @@ function NASCard({ config }) {
         <div className="drive-modal-content">
           <div className="volume-header">硬盘状态</div>
           {config.syno_nas?.drives?.map((drive, index) => {  
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const driveStatus = useEntity(drive.status.entity_id);
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const driveTemp = drive.temperature ? useEntity(drive.temperature.entity_id) : null;
+            let driveStatus = null;
+            let driveTemp = null;
+            try {
+              // eslint-disable-next-line react-hooks/rules-of-hooks
+              driveStatus = useEntity(drive.status.entity_id);
+              // eslint-disable-next-line react-hooks/rules-of-hooks
+              driveTemp = drive.temperature ? useEntity(drive.temperature.entity_id) : null;
+            } catch (error) {
+              console.error(`加载NAS实体 ${drive.entity_id} 失败:`, error);
+              notification.error({
+                message: 'NAS卡片加载失败',
+                description: `nas ${drive.name || drive.entity_id} 加载失败: ${error.message}`,
+                placement: 'topRight',
+                duration: 3,
+                key: 'NASCard',
+              });
+              return <div>加载失败</div>
+            }
             
             return (
               <React.Fragment key={index}>
@@ -227,10 +264,24 @@ function NASCard({ config }) {
               <div className="divider"></div>
               <div className="volume-header">M.2 SSD状态</div>
               {config.syno_nas?.m2ssd?.map((drive, index) => {
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const driveStatus = useEntity(drive.status.entity_id);
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                const driveTemp = useEntity(drive.temperature.entity_id);
+                let driveStatus = null;
+                let driveTemp = null;
+                try {
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  driveStatus = useEntity(drive.status.entity_id);
+                  // eslint-disable-next-line react-hooks/rules-of-hooks
+                  driveTemp = useEntity(drive.temperature.entity_id);
+                } catch (error) {
+                  console.error(`加载NAS实体 ${drive.entity_id} 失败:`, error);
+                  notification.error({
+                    message: 'NAS卡片加载失败',
+                    description: `nas ${drive.name || drive.entity_id} 加载失败: ${error.message}`,
+                    placement: 'topRight',
+                    duration: 3,
+                    key: 'NASCard',
+                  });
+                  return <div>加载失败</div>
+                }
                 
                 return (
                   <React.Fragment key={index}>

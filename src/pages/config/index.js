@@ -383,6 +383,10 @@ function ConfigPage() {
   const [form] = Form.useForm();
   
   const handleSave = async () => {
+
+    // 计算默认布局
+    const defaultLayouts = calculateLayouts(cards);
+    localStorage.setItem('default-dashboard-layouts', JSON.stringify(defaultLayouts));
     // 保存到本地存储
     localStorage.setItem('card-config', JSON.stringify(cards));
     
@@ -464,24 +468,24 @@ function ConfigPage() {
       sm: { cols: 1, cardWidth: 1 }
     };
 
-    // 卡片高度配置
+    // 添加卡片高度配置
     const cardHeights = {
-      TimeCard: { lg: 5, md: 5, sm: 5 },
-      WeatherCard: { lg: 9, md: 9, sm: 9 },
-      LightStatusCard: { lg: 12, md: 12, sm: 12 },
-      LightOverviewCard: { lg: 11, md: 11, sm: 11 },
-      SensorCard: { lg: 8, md: 8, sm: 8 },
-      RouterCard: { lg: 13, md: 13, sm: 13 },
-      NASCard: { lg: 18, md: 18, sm: 18 },
-      MediaPlayerCard: { lg: 14, md: 14, sm: 14 },
-      CurtainCard: { lg: 14, md: 14, sm: 14 },
-      ElectricityCard: { lg: 12, md: 12, sm: 12 },
-      ScriptPanel: { lg: 7, md: 7, sm: 7 },
-      WaterPurifierCard: { lg: 12, md: 12, sm: 12 },
-      IlluminanceCard: { lg: 8, md: 8, sm: 8 },
-      CameraCard: { lg: 10, md: 10, sm: 10 },
-      ClimateCard: { lg: 12, md: 12, sm: 12 },
-      MotionCard: { lg: 8, md: 8, sm: 8 }
+      TimeCard: { lg: 10, md: 10, sm: 10 },
+      WeatherCard: { lg: 20, md: 20, sm: 20 },
+      LightStatusCard: { lg: 24, md: 24, sm: 24 },
+      LightOverviewCard: { lg: 22, md: 22, sm: 22 },
+      SensorCard: { lg: 16, md: 16, sm: 16 },
+      RouterCard: { lg: 26, md: 26, sm: 26 },
+      NASCard: { lg: 36, md: 36, sm: 36 },
+      MediaPlayerCard: { lg: 30, md: 30, sm: 30 },
+      CurtainCard: { lg: 30, md: 30, sm: 30 },
+      ElectricityCard: { lg: 24, md: 24, sm: 24 },
+      ScriptPanel: { lg: 14, md: 14, sm: 14 },
+      WaterPurifierCard: { lg: 24, md: 24, sm: 24 },
+      IlluminanceCard: { lg: 16, md: 16, sm: 16 },
+      CameraCard: { lg: 20, md: 20, sm: 20 },
+      ClimateCard: { lg: 28, md: 28, sm: 28 },
+      MotionCard: { lg: 20, md: 20, sm: 20 }
     };
 
     // 计算每个卡片的位置
@@ -495,6 +499,7 @@ function ConfigPage() {
         const col = index % cols;
         
         layouts[breakpoint].push({
+          'card_type': card.type,
           i: card.id.toString(),
           x: col,
           y: row * height[breakpoint],
@@ -525,6 +530,7 @@ function ConfigPage() {
       config: defaultConfig,
       visible: true // 新添加的卡片默认可见
     }]);
+    
     setHasUnsavedChanges(true);
     setShowAddModal(false);
   };
@@ -633,7 +639,6 @@ function ConfigPage() {
       }
       
       setHasUnsavedChanges(true);
-      handleSave();
       message.success('从WebDAV加载配置成功');
     } catch (error) {
       message.error('从WebDAV加载配置失败: ' + error.message);
