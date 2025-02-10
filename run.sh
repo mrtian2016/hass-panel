@@ -4,7 +4,7 @@
 # ==============================================================================
 
 # 检查更新，即使失败也继续执行
-/update.sh || true
+# /update.sh || true
 
 # 设置环境变量
 export REACT_APP_HASS_URL=$(bashio::config 'hass_url')
