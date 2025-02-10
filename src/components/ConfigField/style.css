@@ -1,5 +1,9 @@
 .config-field {
   margin-bottom: 16px;
+  max-width: 100%;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .config-field label {
@@ -7,10 +11,14 @@
   margin-bottom: 8px;
   color: var(--color-text-secondary);
   font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .config-field input {
   width: 100%;
+  max-width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-small);
@@ -18,6 +26,8 @@
   color: var(--color-text-primary);
   font-size: 14px;
   transition: all 0.3s;
+  box-sizing: border-box;
+  word-break: break-all;
 }
 
 .config-field input:hover {
@@ -32,10 +42,13 @@
 
 /* antd Input 组件样式覆盖 */
 .config-field .ant-input {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  word-break: break-all !important;
   background-color: var(--color-background) !important;
   border-color: var(--color-border) !important;
   color: var(--color-text-primary) !important;
-  transition: all 0.3s !important;
 }
 
 .config-field .ant-input:hover {
@@ -89,16 +102,16 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .sensor-config-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-small);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sensor-config-list {
@@ -108,14 +121,10 @@
 }
 
 .sensor-config-item {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  align-items: center;
-  padding: 12px;
-  background: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-small);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-all;
 }
 
 .sensor-config-type {
@@ -382,12 +391,135 @@
   .nas-field,
   .volume-field,
   .drive-field,
-  .m2ssd-field {
+  .m2ssd-field,
+  .waterpuri-field,
+  .electricity-field,
+  .room-field {
     grid-template-columns: 1fr;
+    gap: 8px;
+    max-width: 100%;
   }
   
   .field-name {
     margin-bottom: 4px;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 传感器配置项样式优化 */
+  .sensor-config-item {
+    flex-direction: column;
+    padding: 8px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sensor-config-type {
+    width: 100%;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 灯光配置样式优化 */
+  .light-item {
+    padding: 12px;
+  }
+
+  .light-item-content {
+    gap: 8px;
+  }
+
+  /* 摄像头配置样式优化 */
+  .camera-item {
+    padding: 12px;
+  }
+
+  /* 媒体播放器配置样式优化 */
+  .media-player-item {
+    padding: 12px;
+  }
+
+  /* 窗帘配置样式优化 */
+  .curtain-item {
+    padding: 12px;
+  }
+
+  /* NAS配置样式优化 */
+  .nas-section {
+    padding: 12px;
+  }
+
+  .nas-section h4 {
+    font-size: 14px;
+  }
+
+  .volume-config,
+  .drive-config,
+  .m2ssd-config {
+    padding: 12px;
+  }
+
+  /* 脚本配置样式优化 */
+  .script-item {
+    padding: 12px;
+  }
+
+  /* 按钮样式优化 */
+  .config-field button,
+  .sensor-config-groups > button,
+  .lights-config > button,
+  .cameras-config > button,
+  .media-players-config > button,
+  .curtains-config > button,
+  .scripts-config > button {
+    padding: 8px 16px;
+    margin-top: 8px;
+  }
+
+  /* 房间灯光概览配置样式优化 */
+  .light-overview-config {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .light-room-item {
+    padding: 12px;
+  }
+
+  .light-room-item button {
+    width: 100%;
+  }
+
+  /* 表单控件样式优化 */
+  .ant-select,
+  .ant-input,
+  input {
+    height: 36px;
+  }
+
+  .ant-select-selection-item {
+    line-height: 34px;
+  }
+
+  /* 优化下拉菜单在移动端的显示 */
+  .ant-select-dropdown {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    box-sizing: border-box !important;
+    left: 16px !important;
+  }
+
+  .ant-select-item {
+    padding: 8px !important;
+  }
+
+  .ant-select-item-option-content {
+    white-space: normal !important;
+    word-break: break-all !important;
+    width: 100% !important;
   }
 }
 
@@ -466,34 +598,32 @@
 
 /* antd Select 组件样式覆盖 */
 .config-field .ant-select {
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 .config-field .ant-select-selector {
   width: 100% !important;
-  background-color: var(--color-background) !important;
-  border-color: var(--color-border) !important;
-  color: var(--color-text-primary) !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
-.config-field .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
-  border-color: var(--color-primary) !important;
+.config-field .ant-select-selection-item {
+  width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
-
-.config-field .ant-select-focused .ant-select-selector,
-.config-field .ant-select-selector:focus,
-.config-field .ant-select-selector:active {
-  border-color: var(--color-primary) !important;
-  box-shadow: none !important;
-}
-
 
 /* 配置项标题和输入框布局 */
 .config-field-row {
   display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 12px;
+  grid-template-columns: minmax(60px, 120px) minmax(0, 1fr);
+  gap: 8px;
   align-items: center;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .config-field-row label {
@@ -501,12 +631,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .config-field-row .ant-select,
 .config-field-row input {
   width: 100%;
   min-width: 0;
+  max-width: 100%;
 }
 
 /* 通用删除按钮样式 */
@@ -605,17 +737,6 @@
   text-overflow: ellipsis;
 }
 
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .waterpuri-field {
-    grid-template-columns: 1fr;
-  }
-  
-  .waterpuri-field .field-name {
-    margin-bottom: 4px;
-  }
-}
-
 /* 电量监控配置样式 */
 .electricity-config {
   display: flex;
@@ -640,17 +761,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .electricity-field {
-    grid-template-columns: 1fr;
-  }
-  
-  .electricity-field .field-name {
-    margin-bottom: 4px;
-  }
 }
 
 .climate-features {
@@ -679,8 +789,6 @@
   gap: 12px;
 }
 
-
-
 .feature-content {
   display: flex;
   flex-direction: column;
@@ -691,7 +799,6 @@
   display: flex;
   gap: 12px;
 }
-
 
 .feature-content button {
   align-self: flex-end;
@@ -722,17 +829,6 @@
 .illuminance-item > input,
 .illuminance-item > .ant-select {
   margin-bottom: 8px;
-}
-
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .illuminance-item {
-    grid-template-columns: 1fr;
-  }
-  
-  .illuminance-item .field-name {
-    margin-bottom: 4px;
-  }
 }
 
 /* 房间灯光概览配置样式 */
@@ -812,21 +908,5 @@
 
 .config-field > button:hover {
   background: var(--color-primary-dark);
-}
-
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .room-field {
-    grid-template-columns: 1fr;
-  }
-  
-  .room-field label {
-    margin-bottom: 4px;
-  }
-  
-  .light-room-item button,
-  .config-field > button {
-    width: 100%;
-  }
 }
 

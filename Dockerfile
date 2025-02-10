@@ -25,6 +25,8 @@ COPY webdav_config.yaml /webdav_config.yaml
 
 WORKDIR /app
 
+COPY build /app
+
 # 复制配置文件
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
@@ -39,7 +41,6 @@ ENV WEBDAV_USERNAME=admin
 ENV WEBDAV_PASSWORD=admin
 
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    # echo '/update.sh || true' >> /docker-entrypoint.sh && \
     echo 'envsubst < /app/env.template.js > /app/env.js' >> /docker-entrypoint.sh && \
     echo 'nginx' >> /docker-entrypoint.sh && \
     echo 'webdav -c /webdav_config.yaml' >> /docker-entrypoint.sh && \

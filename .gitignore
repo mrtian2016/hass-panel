@@ -31,3 +31,4 @@ yarn-error.log*
 public/config/userConfig.json
 public/env.js
 docker-compose-dev.yml
+webdav

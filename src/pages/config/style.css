@@ -2,13 +2,19 @@
   padding: 16px;
   max-width: 1200px;
   margin: 0 auto;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 20px));
 }
 
 .config-header {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .config-header h2 {
@@ -17,17 +23,19 @@
 }
 
 .header-buttons {
+  width: 100%;
   display: flex;
-  gap: 12px;
+  justify-content: flex-end;
   align-items: center;
+  gap: 8px;
 }
 
 .header-buttons button {
   display: flex;
   align-items: center;
-  gap: 8px;
   padding: 8px 16px;
   border: none;
+ 
   border-radius: var(--border-radius-small);
   background: var(--color-primary);
   color: white;
@@ -35,6 +43,7 @@
   font-size: 14px;
   transition: background-color 0.2s;
 }
+
 
 .header-buttons button:hover {
   background: var(--color-primary-dark);
@@ -75,17 +84,36 @@
 
 .save-button {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 100px;
-  height: 100px;
+  right: 32px;
+  bottom: 32px;
+  width: 56px;
+  height: 56px;
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: var(--color-background);
-  color: var(--color-text-secondary);
+  background: var(--color-primary);
+  color: white;
   cursor: not-allowed;
   opacity: 0.6;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-card-button {
+  position: fixed;
+  right: 32px;
+  bottom: 110px;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
   transition: all 0.3s;
   box-shadow: 0 2px 8px var(--color-shadow);
   z-index: 100;
@@ -129,6 +157,8 @@
   flex-direction: column;
   gap: 16px;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .config-item {
@@ -136,7 +166,10 @@
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-medium);
   overflow: hidden;
-  min-width: 600px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-all;
 }
 
 .item-header {
@@ -146,6 +179,9 @@
   padding: 12px 16px;
   background: var(--color-background);
   border-bottom: 1px solid var(--color-border);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .item-title {
@@ -153,6 +189,17 @@
   align-items: center;
   gap: 8px;
   color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.item-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .item-title svg {
@@ -178,6 +225,10 @@
 
 .item-content {
   padding: 16px;
+  max-width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .item-actions {
@@ -241,32 +292,184 @@
 
 @media (max-width: 768px) {
   .config-page {
-    padding: 12px;
+    padding: 16px;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 20px));
+    overflow-x: hidden;
+    width: 100%;
   }
   
   .config-header {
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     align-items: stretch;
+    margin-bottom: 24px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .header-left {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .version-info {
+    margin-top: 12px;
+    display: inline-flex;
+    justify-content: center;
+    margin: 0;
+    padding: 6px 12px;
+    max-width: fit-content;
   }
   
   .header-buttons {
-    flex-direction: column;
+    gap: 12px;
+    max-width: 100%;
+    width: 100%;
+    padding: 0;
+  }
+
+  .header-buttons button {
+    width: 100%;
+    height: 44px;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+    padding: 0 16px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+
+  WebDAV按钮单独占一行
+  .header-buttons button:last-child {
+    grid-column: 1 / -1;
+  }
+
+  /* 保存按钮样式优化 */
+  .save-button {
+    position: fixed;
+    bottom: calc(70px + env(safe-area-inset-bottom, 20px) + 16px);
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .add-card-button {
+    position: fixed;
+    bottom: calc(70px + env(safe-area-inset-bottom, 20px) + 86px);
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
+
+  .save-button.has-changes:hover {
+    transform: none;
+  }
+
   .config-list {
     grid-template-columns: 1fr;
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: env(safe-area-inset-bottom, 20px);
   }
   
   .item-content {
-    padding: 12px;
+    padding: 8px;
+    max-width: 100%;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .item-header {
+    padding: 8px 12px;
+    width: 100%;
+  }
+
+  .item-title {
+    font-size: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-actions {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .item-actions button {
+    padding: 4px;
   }
   
-  .save-button {
-    right: 16px;
-    bottom: 16px;
-    width: 48px;
-    height: 48px;
+  .preview-container {
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .close-preview {
+    top: env(safe-area-inset-top, 20px);
+    right: 12px;
+  }
+
+  /* 优化表单字段在移动端的显示 */
+  .config-field {
+    margin-bottom: 12px;
+    width: 100%;
+  }
+
+  .config-field label {
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .config-field input,
+  .config-field .ant-input,
+  .config-field .ant-select {
+    font-size: 14px;
+    padding: 6px 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* 优化按钮组在移动端的显示 */
+  .modal-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+  }
+
+  /* 优化 WebDAV 配置表单在移动端的显示 */
+  .ant-modal {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    margin: 16px !important;
+  }
+
+  .ant-modal-content {
+    padding: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .ant-form-item {
+    margin-bottom: 12px;
+    width: 100%;
   }
 }
 
@@ -335,6 +538,7 @@
 }
 
 .version-info {
+  float: right;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -344,7 +548,12 @@
   padding: 4px 10px;
   border-radius: var(--border-radius-small);
   border: 1px solid var(--color-border);
-  margin-right: 10px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  margin-top: 12px;
 }
 
 /* 移除不需要的更新时间相关样式 */

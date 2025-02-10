@@ -33,7 +33,7 @@ import AddCardModal from '../../components/AddCardModal';
 // import Modal from '../../components/Modal';
 import LightOverviewCard from '../../components/LightOverviewCard';
 import { createClient } from 'webdav';
-import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, BackTop } from 'antd';
+import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown } from 'antd';
 
 import './style.css';
 
@@ -705,15 +705,6 @@ function ConfigPage() {
   return (
     <div className="config-page">
       <div className="config-header">
-        <div className="header-left">
-          <h2>卡片配置</h2>
-          {versionInfo && (
-            <div className="version-info">
-              <Icon path={mdiInformationOutline} size={0.8} />
-              <span>前端版本: {versionInfo.version}</span>
-            </div>
-          )}
-        </div>
         <Space className="header-buttons">
           <input
             type="file"
@@ -731,24 +722,7 @@ function ConfigPage() {
             </Button>
           </Dropdown>
 
-          {/* 保存按钮 */}
-          <Button
-            type="primary"
-            onClick={handleSave}
-            disabled={!hasUnsavedChanges}
-            icon={<Icon path={mdiCheck} size={0.8} />}
-          >
-            保存
-          </Button>
-
-          {/* 添加卡片按钮 */}
-          <Button
-            type="primary"
-            onClick={() => setShowAddModal(true)}
-            icon={<Icon path={mdiPlus} size={0.8} />}
-          >
-            添加卡片
-          </Button>
+         
 
           {/* WebDAV相关操作下拉菜单 */}
           <Dropdown menu={{ items: webdavMenuItems }} placement="bottomLeft">
@@ -889,8 +863,28 @@ function ConfigPage() {
         </Form>
       </Modal>
 
-      {/* 添加回到顶部按钮 */}
-      <BackTop type="primary"/>
+      {/* 保存按钮 */}
+      <button
+      className={`save-button ${hasUnsavedChanges ? 'has-changes' : ''}`}
+          onClick={handleSave}
+          
+        >
+          <Icon path={mdiCheck} size={2} />
+        </button>
+
+        {/* 添加卡片按钮 */}
+        <button
+        className="add-card-button"
+          onClick={() => setShowAddModal(true)}
+        >
+          <Icon path={mdiPlus} size={3} />
+        </button>
+        {versionInfo && (
+            <div className="version-info">
+              <Icon path={mdiInformationOutline} size={0.8} />
+              <span>前端版本: {versionInfo.version}</span>
+            </div>
+          )}
     </div>
   );
 }
