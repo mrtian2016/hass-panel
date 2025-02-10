@@ -39,7 +39,7 @@ ENV WEBDAV_USERNAME=admin
 ENV WEBDAV_PASSWORD=admin
 
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo '/update.sh' >> /docker-entrypoint.sh && \
+    echo '/update.sh || true' >> /docker-entrypoint.sh && \
     echo 'envsubst < /app/env.template.js > /app/env.js' >> /docker-entrypoint.sh && \
     echo 'nginx' >> /docker-entrypoint.sh && \
     echo 'webdav -c /webdav_config.yaml' >> /docker-entrypoint.sh && \
