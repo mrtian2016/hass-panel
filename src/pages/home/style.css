@@ -1145,7 +1145,7 @@
 /* 响应式布局 */
 @media (max-width: 768px) {
   .edit-toggle.active {
-    bottom: calc(env(safe-area-inset-bottom) + 64px);
+    bottom: calc(env(safe-area-inset-bottom) + 124px);
     right: 16px;
   }
 } 
