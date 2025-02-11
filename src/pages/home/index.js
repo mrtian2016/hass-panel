@@ -15,7 +15,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { Responsive } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-
+import { message } from 'antd';
 import WeatherCard from '../../components/WeatherCard';
 import SensorCard from '../../components/SensorCard';
 import TimeCard from '../../components/TimeCard';
@@ -74,26 +74,82 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
   // 修改布局状态
   const [currentLayouts, setCurrentLayouts] = useState(() => {
-    const savedLayouts = localStorage.getItem('dashboard-layouts');
-    const defaultLayouts = localStorage.getItem('default-dashboard-layouts');
-    return savedLayouts ? JSON.parse(savedLayouts) : defaultLayouts ? JSON.parse(defaultLayouts) : {};
+    try {
+      const savedLayouts = localStorage.getItem('dashboard-layouts');
+      const defaultLayouts = localStorage.getItem('default-dashboard-layouts');
+      
+      // 处理已保存的布局
+      if (savedLayouts) {
+        // 如果是字符串格式
+        if (typeof savedLayouts === 'string') {
+          // 如果是JSON字符串，则解析
+          if (savedLayouts.startsWith('{')) {
+            return JSON.parse(savedLayouts);
+          }
+          // 如果是旧版本的字符串格式，直接返回
+          return savedLayouts;
+        }
+        // 如果已经是对象格式，直接返回
+        return savedLayouts;
+      }
+      
+      // 处理默认布局
+      if (defaultLayouts) {
+        // 如果是字符串格式
+        if (typeof defaultLayouts === 'string') {
+          // 如果是JSON字符串，则解析
+          if (defaultLayouts.startsWith('{')) {
+            return JSON.parse(defaultLayouts);
+          }
+          // 如果是旧版本的字符串格式，直接返回
+          return defaultLayouts;
+        }
+        // 如果已经是对象格式，直接返回
+        return defaultLayouts;
+      }
+      
+      return {};
+    } catch (error) {
+      console.error('解析布局配置失败:', error);
+      return {};
+    }
   });
 
   // 处理布局变化
   const handleLayoutChange = (layout, layouts) => {
     setCurrentLayouts(layouts);
+    // 保存布局数据
     localStorage.setItem('dashboard-layouts', JSON.stringify(layouts));
   };
 
   // 修改重置布局功能
   const handleResetLayout = () => {
-    const defaultLayouts = localStorage.getItem('default-dashboard-layouts');
-    if (defaultLayouts) {
-      const layouts = JSON.parse(defaultLayouts);
-      setCurrentLayouts(layouts);
-      localStorage.setItem('dashboard-layouts', defaultLayouts);
+    try {
+      const defaultLayouts = localStorage.getItem('default-dashboard-layouts');
+      if (defaultLayouts) {
+        // 处理默认布局数据
+        let layouts;
+        if (typeof defaultLayouts === 'string') {
+          // 如果是JSON字符串，则解析
+          if (defaultLayouts.startsWith('{')) {
+            layouts = JSON.parse(defaultLayouts);
+          } else {
+            // 如果是旧版本的字符串格式，直接使用
+            layouts = defaultLayouts;
+          }
+        } else {
+          // 如果已经是对象格式，直接使用
+          layouts = defaultLayouts;
+        }
+        
+        setCurrentLayouts(layouts);
+        localStorage.setItem('dashboard-layouts', JSON.stringify(layouts));
+      }
+      setIsEditing(false);
+    } catch (error) {
+      console.error('重置布局失败:', error);
+      message.error('重置布局失败');
     }
-    setIsEditing(false);
   };
 
   // 添加宽度状态

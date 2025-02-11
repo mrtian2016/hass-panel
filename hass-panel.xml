@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>hass-panel</Name>
+  <Repository>您的Docker Hub用户名/hass-panel</Repository>
+  <Registry>https://hub.docker.com/r/您的用户名/hass-panel/</Registry>
+  <Network>bridge</Network>
+  <MyIP></MyIP>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  
+  <Support>https://github.com/您的用户名/hass-panel</Support>
+  <Project>https://github.com/您的用户名/hass-panel</Project>
+  <Overview>Home Assistant Panel - 一个用于Home Assistant的自定义面板</Overview>
+  <Category>HomeAutomation:</Category>
+  <WebUI>http://[IP]:[PORT:5123]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/您的用户名/hass-panel/master/hass-panel.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/您的用户名/hass-panel/master/icon.png</Icon>
+  
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>5123</HostPort>
+        <ContainerPort>5123</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>5124</HostPort>
+        <ContainerPort>5124</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/hass-panel</HostDir>
+      <ContainerDir>/config/hass-panel</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  
+  <Environment>
+    <Variable>
+      <Name>WEBDAV_USERNAME</Name>
+      <Value>admin</Value>
+    </Variable>
+    <Variable>
+      <Name>WEBDAV_PASSWORD</Name>
+      <Value>admin</Value>
+    </Variable>
+  </Environment>
+  
+  <Labels/>
+  
+  <Config Name="WebUI" Target="5123" Default="5123" Mode="tcp" Description="Web界面端口" Type="Port" Display="always" Required="true" Mask="false"/>
+  <Config Name="WebDAV" Target="5124" Default="5124" Mode="tcp" Description="WebDAV端口" Type="Port" Display="always" Required="true" Mask="false"/>
+  <Config Name="配置目录" Target="/config/hass-panel" Default="/mnt/user/appdata/hass-panel" Mode="rw" Description="配置文件存储位置" Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="WebDAV用户名" Target="WEBDAV_USERNAME" Default="admin" Description="WebDAV登录用户名" Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="WebDAV密码" Target="WEBDAV_PASSWORD" Default="admin" Description="WebDAV登录密码" Type="Variable" Display="always" Required="true" Mask="false"/>
+</Container> 

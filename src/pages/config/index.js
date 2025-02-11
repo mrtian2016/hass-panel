@@ -33,7 +33,7 @@ import AddCardModal from '../../components/AddCardModal';
 // import Modal from '../../components/Modal';
 import LightOverviewCard from '../../components/LightOverviewCard';
 import { createClient } from 'webdav';
-import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown } from 'antd';
+import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, List } from 'antd';
 
 import './style.css';
 
@@ -285,7 +285,25 @@ const CARD_TYPES = {
   }
 };
 
-// 修改 WebDAV 相关函数
+// 清理旧版本，只保留最新的5个版本
+const cleanOldVersions = async (client, currentFiles) => {
+  try {
+    // 按最后修改时间降序排序
+    const sortedFiles = currentFiles
+      .filter(file => file.basename.startsWith('config-')) // 只处理备份文件，不处理config.json
+      .sort((a, b) => new Date(b.lastmod) - new Date(a.lastmod));
+
+    // 如果备份文件超过4个（加上当前要保存的就是5个），删除多余的
+    if (sortedFiles.length > 4) {
+      for (let i = 4; i < sortedFiles.length; i++) {
+        await client.deleteFile('/' + sortedFiles[i].basename);
+      }
+    }
+  } catch (error) {
+    console.error('清理旧版本失败:', error);
+  }
+};
+
 const saveConfigToWebDAV = async (config) => {
   try {
     const webdavConfig = JSON.parse(localStorage.getItem('webdav-config') || '{}');
@@ -299,17 +317,69 @@ const saveConfigToWebDAV = async (config) => {
       password: webdavConfig.password  // 可选
     });
 
+    // 获取并解析布局数据
+    const rawLayouts = localStorage.getItem('dashboard-layouts');
+    const rawDefaultLayouts = localStorage.getItem('default-dashboard-layouts');
+    
+    // 处理布局数据，兼容字符串格式
+    const layouts = rawLayouts ? (typeof rawLayouts === 'string' ? 
+      (rawLayouts.startsWith('{') ? JSON.parse(rawLayouts) : rawLayouts) : 
+      rawLayouts) : {};
+      
+    const defaultLayouts = rawDefaultLayouts ? (typeof rawDefaultLayouts === 'string' ? 
+      (rawDefaultLayouts.startsWith('{') ? JSON.parse(rawDefaultLayouts) : rawDefaultLayouts) : 
+      rawDefaultLayouts) : {};
+
     const configData = {
       cards: config,
-      layouts: localStorage.getItem('dashboard-layouts'),
-      defaultLayouts: localStorage.getItem('default-dashboard-layouts'),
+      layouts,
+      defaultLayouts,
       timestamp: new Date().toISOString()
     };
 
-    // 使用 webdav 库的 putFileContents 方法
+    // 获取当前所有文件
+    const files = await client.getDirectoryContents('/');
+
+    // 检查原配置文件是否存在
+    const exists = await client.exists('/config.json');
+    if (exists) {
+      // 生成备份文件名
+      const now = new Date();
+      const backupFileName = `config-${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}${now.getHours().toString().padStart(2,'0')}${now.getMinutes().toString().padStart(2,'0')}${now.getSeconds().toString().padStart(2,'0')}.json`;
+      
+      // 读取原配置并保存为备份
+      const oldContent = await client.getFileContents('/config.json', { format: 'text' });
+      // 尝试格式化已有的配置
+      try {
+        const oldConfig = JSON.parse(oldContent);
+        await client.putFileContents(
+          `/${backupFileName}`,
+          JSON.stringify(oldConfig, null, 2),
+          { 
+            overwrite: true,
+            contentLength: true
+          }
+        );
+      } catch {
+        // 如果解析失败，保存原始内容
+        await client.putFileContents(
+          `/${backupFileName}`,
+          oldContent,
+          { 
+            overwrite: true,
+            contentLength: true
+          }
+        );
+      }
+
+      // 清理旧版本
+      await cleanOldVersions(client, files);
+    }
+
+    // 保存新配置（使用2空格缩进格式化）
     await client.putFileContents(
       '/config.json',
-      JSON.stringify(configData),
+      JSON.stringify(configData, null, 2),
       { 
         overwrite: true,
         contentLength: true
@@ -380,60 +450,70 @@ function ConfigPage() {
     return JSON.parse(localStorage.getItem('webdav-config') || '{}');
   });
   const [showWebDAVModal, setShowWebDAVModal] = useState(false);
+  const [showVersionModal, setShowVersionModal] = useState(false);
+  const [versionList, setVersionList] = useState([]);
+  const [loadingVersions, setLoadingVersions] = useState(false);
   const [form] = Form.useForm();
   
   const handleSave = async () => {
-
-    // 计算默认布局
-    const defaultLayouts = calculateLayouts(cards);
-    localStorage.setItem('default-dashboard-layouts', JSON.stringify(defaultLayouts));
-    // 保存到本地存储
-    localStorage.setItem('card-config', JSON.stringify(cards));
-    
-    // 获取当前已有的布局
-    const existingLayouts = JSON.parse(localStorage.getItem('dashboard-layouts') || '{}');
-    
-    // 只为新添加的卡片计算布局
-    const newCards = cards.filter(card => {
-      // 检查所有布局中是否存在该卡片的布局
-      return !Object.values(existingLayouts).some(layout => 
-        layout.some(item => item.i === card.id.toString())
-      );
-    });
-
-    if (newCards.length > 0) {
-      // 只为新卡片计算布局
-      const newLayouts = calculateLayouts(newCards);
+    try {
+      // 计算默认布局
+      const defaultLayouts = calculateLayouts(cards);
+      localStorage.setItem('default-dashboard-layouts', JSON.stringify(defaultLayouts));
+      // 保存到本地存储
+      localStorage.setItem('card-config', JSON.stringify(cards));
       
-      // 合并布局，保留已有卡片的布局
-      const mergedLayouts = {
-        lg: [...(existingLayouts.lg || []), ...(newLayouts.lg || [])],
-        md: [...(existingLayouts.md || []), ...(newLayouts.md || [])],
-        sm: [...(existingLayouts.sm || []), ...(newLayouts.sm || [])]
-      };
-
-      // 移除已删除卡片的布局
-      const currentCardIds = cards.map(card => card.id.toString());
-      Object.keys(mergedLayouts).forEach(breakpoint => {
-        mergedLayouts[breakpoint] = mergedLayouts[breakpoint].filter(
-          item => currentCardIds.includes(item.i)
+      // 获取当前已有的布局
+      const existingLayouts = JSON.parse(localStorage.getItem('dashboard-layouts') || '{}');
+      
+      // 只为新添加的卡片计算布局
+      const newCards = cards.filter(card => {
+        // 检查所有布局中是否存在该卡片的布局
+        return !Object.values(existingLayouts).some(layout => 
+          Array.isArray(layout) && layout.some(item => item.i === card.id.toString())
         );
       });
 
-      // 保存合并后的布局
-      localStorage.setItem('dashboard-layouts', JSON.stringify(mergedLayouts));
-    }
-    
-    // 如果配置了WebDAV，且开启了自动同步，则保存到WebDAV
-    if (webdavConfig.url && webdavConfig.autoSync) {
-      try {
-        await saveConfigToWebDAV(cards);
-      } catch (error) {
-        message.error('保存到WebDAV失败: ' + error.message);
+      if (newCards.length > 0) {
+        // 只为新卡片计算布局
+        const newLayouts = calculateLayouts(newCards);
+        
+        // 合并布局，保留已有卡片的布局
+        const mergedLayouts = {
+          lg: [...(Array.isArray(existingLayouts.lg) ? existingLayouts.lg : []), ...(newLayouts.lg || [])],
+          md: [...(Array.isArray(existingLayouts.md) ? existingLayouts.md : []), ...(newLayouts.md || [])],
+          sm: [...(Array.isArray(existingLayouts.sm) ? existingLayouts.sm : []), ...(newLayouts.sm || [])]
+        };
+
+        // 移除已删除卡片的布局
+        const currentCardIds = cards.map(card => card.id.toString());
+        Object.keys(mergedLayouts).forEach(breakpoint => {
+          if (Array.isArray(mergedLayouts[breakpoint])) {
+            mergedLayouts[breakpoint] = mergedLayouts[breakpoint].filter(
+              item => currentCardIds.includes(item.i)
+            );
+          }
+        });
+
+        // 保存合并后的布局
+        localStorage.setItem('dashboard-layouts', JSON.stringify(mergedLayouts));
       }
+      
+      // 如果配置了WebDAV，且开启了自动同步，则保存到WebDAV
+      if (webdavConfig.url && webdavConfig.autoSync) {
+        try {
+          await saveConfigToWebDAV(cards);
+        } catch (error) {
+          message.error('保存到WebDAV失败: ' + error.message);
+        }
+      }
+      
+      setHasUnsavedChanges(false);
+      message.success('保存成功');
+    } catch (error) {
+      console.error('保存配置失败:', error);
+      message.error('保存配置失败: ' + error.message);
     }
-    
-    setHasUnsavedChanges(false);
   };
 
   // 处理卡片显示状态变化
@@ -655,9 +735,137 @@ function ConfigPage() {
   // 当模态框打开时，设置表单初始值
   React.useEffect(() => {
     if (showWebDAVModal) {
-      form.setFieldsValue(webdavConfig);
+      // 获取当前浏览器地址
+      const currentUrl = window.location.origin;
+      const defaultWebdavUrl = currentUrl.replace(/:\d+$/, ':5124');  // 替换端口为5124
+      
+      // 如果没有配置过WebDAV URL和用户名，则使用默认值
+      const initialValues = {
+        ...webdavConfig,
+        url: webdavConfig.url || defaultWebdavUrl,
+        username: webdavConfig.username || 'admin'
+      };
+      
+      form.setFieldsValue(initialValues);
     }
   }, [showWebDAVModal, form, webdavConfig]);
+
+  // 获取版本列表
+  const fetchVersionList = async () => {
+    try {
+      setLoadingVersions(true);
+      const webdavConfig = JSON.parse(localStorage.getItem('webdav-config') || '{}');
+      if (!webdavConfig.url) {
+        throw new Error('WebDAV URL未配置');
+      }
+
+      const client = createClient(webdavConfig.url, {
+        username: webdavConfig.username,
+        password: webdavConfig.password
+      });
+
+      // 获取目录下所有文件
+      const files = await client.getDirectoryContents('/');
+      
+      // 过滤出配置文件并处理数据
+      const configFiles = files
+        .filter(file => file.basename.startsWith('config'))
+        .sort((a, b) => new Date(b.lastmod) - new Date(a.lastmod))
+        .slice(0, 5) // 只显示最新的5个版本
+        .map(file => {
+          // 解析时间
+          const lastmod = new Date(file.lastmod);
+          return {
+            filename: file.basename,  // 使用basename作为文件名
+            lastmod: lastmod.toLocaleString('zh-CN', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false
+            }),
+            basename: file.basename,
+            size: (file.size / 1024).toFixed(2) + ' KB'  // 转换为KB并保留2位小数
+          };
+        });
+
+      setVersionList(configFiles);
+    } catch (error) {
+      console.error('获取版本列表失败:', error);
+      message.error('获取版本列表失败: ' + error.message);
+    } finally {
+      setLoadingVersions(false);
+    }
+  };
+
+  // 恢复指定版本
+  const restoreVersion = async (filename) => {
+    try {
+      const webdavConfig = JSON.parse(localStorage.getItem('webdav-config') || '{}');
+      if (!webdavConfig.url) {
+        throw new Error('WebDAV URL未配置');
+      }
+
+      const client = createClient(webdavConfig.url, {
+        username: webdavConfig.username,
+        password: webdavConfig.password
+      });
+
+      const content = await client.getFileContents('/' + filename, { format: 'text' });
+      const configData = JSON.parse(content);
+
+      // 更新卡片配置
+      setCards(configData.cards.map(card => ({
+        ...card,
+        visible: card.visible !== false
+      })));
+      
+      // 更新布局配置
+      if (configData.layouts) {
+        localStorage.setItem('dashboard-layouts', JSON.stringify(configData.layouts));
+      }
+      if (configData.defaultLayouts) {
+        localStorage.setItem('default-dashboard-layouts', JSON.stringify(configData.defaultLayouts));
+      }
+      
+      setHasUnsavedChanges(true);
+      message.success('恢复配置成功');
+      setShowVersionModal(false);
+    } catch (error) {
+      console.error('恢复配置失败:', error);
+      message.error('恢复配置失败: ' + error.message);
+    }
+  };
+
+  // 删除指定版本
+  const deleteVersion = async (filename) => {
+    try {
+      const webdavConfig = JSON.parse(localStorage.getItem('webdav-config') || '{}');
+      if (!webdavConfig.url) {
+        throw new Error('WebDAV URL未配置');
+      }
+
+      const client = createClient(webdavConfig.url, {
+        username: webdavConfig.username,
+        password: webdavConfig.password
+      });
+
+      // 不允许删除当前使用的配置文件
+      if (filename === 'config.json') {
+        throw new Error('不能删除当前使用的配置文件');
+      }
+
+      await client.deleteFile('/' + filename);
+      message.success('删除版本成功');
+      // 刷新版本列表
+      fetchVersionList();
+    } catch (error) {
+      console.error('删除版本失败:', error);
+      message.error('删除版本失败: ' + error.message);
+    }
+  };
 
   // 配置导入导出菜单项
   const configMenuItems = [
@@ -696,7 +904,16 @@ function ConfigPage() {
       key: 'pull',
       label: '从WebDAV同步',
       icon: <Icon path={mdiImport} size={0.8} />,
-      onClick: handleLoadFromWebDAV
+      onClick: () => handleLoadFromWebDAV()
+    },
+    {
+      key: 'versions',
+      label: '版本列表',
+      icon: <Icon path={mdiFileFind} size={0.8} />,
+      onClick: () => {
+        fetchVersionList();
+        setShowVersionModal(true);
+      }
     }
   ] : [
     {
@@ -890,6 +1107,68 @@ function ConfigPage() {
               <span>前端版本: {versionInfo.version}</span>
             </div>
           )}
+
+      {/* 版本列表模态框 */}
+      <Modal
+        title="配置版本列表"
+        open={showVersionModal}
+        onCancel={() => setShowVersionModal(false)}
+        footer={null}
+        width={600}
+      >
+        <div className="version-list">
+          {loadingVersions ? (
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              加载中...
+            </div>
+          ) : (
+            <List
+              dataSource={versionList}
+              renderItem={item => (
+                <List.Item
+                  actions={[
+                    <Space>
+                      <Button 
+                        type="link" 
+                        onClick={() => restoreVersion(item.filename)}
+                      >
+                        恢复此版本
+                      </Button>
+                      {item.filename !== 'config.json' && (
+                        <Button 
+                          type="link" 
+                          danger
+                          onClick={() => {
+                            Modal.confirm({
+                              title: '确认删除',
+                              content: `确定要删除版本 ${item.basename} 吗？此操作不可恢复。`,
+                              okText: '确认',
+                              cancelText: '取消',
+                              onOk: () => deleteVersion(item.filename)
+                            });
+                          }}
+                        >
+                          删除
+                        </Button>
+                      )}
+                    </Space>
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={
+                      <Space>
+                        <span>{item.basename}</span>
+                        <span style={{ color: '#999', fontSize: '12px' }}>({item.size})</span>
+                      </Space>
+                    }
+                    description={`最后修改时间: ${item.lastmod}`}
+                  />
+                </List.Item>
+              )}
+            />
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }
