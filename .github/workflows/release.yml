@@ -3,8 +3,8 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*' # 当推送以v开头的标签时触发，例如 v1.0.0
-  workflow_dispatch:    # 添加手动触发支持
+      - 'v*'
+  workflow_dispatch:
     inputs:
       version:
         description: '版本号 (例如: v1.0.0)'
@@ -12,8 +12,9 @@ on:
         default: 'v1.0.0'
 
 permissions:
-  contents: write  # 添加写入权限
-  packages: write  # 添加包写入权限
+  contents: write
+  packages: write
+  id-token: write  # 添加OIDC令牌支持
 
 jobs:
   build:
@@ -30,8 +31,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
-        # 或者使用 --force
-        # run: npm install --force
 
       - name: Build
         run: npm run build
@@ -46,7 +45,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.event.inputs.version }}  # 使用输入的版本号
+          tag_name: ${{ github.event.inputs.version }}
           files: |
             release.zip
           draft: false
@@ -55,15 +54,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 设置 QEMU 用于多架构构建
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
-      # 设置 Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 登录到 GitHub Container Registry
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -71,7 +67,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 构建并推送 Docker 镜像
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -81,4 +76,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/hass-panel:latest
-            ghcr.io/${{ github.repository_owner }}/hass-panel:${{ github.event.inputs.version || github.ref_name }} 
+            ghcr.io/${{ github.repository_owner }}/hass-panel:${{ github.event.inputs.version || github.ref_name }}
