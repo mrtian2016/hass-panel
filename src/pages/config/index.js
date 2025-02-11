@@ -1037,17 +1037,42 @@ function ConfigPage() {
     }
   };
 
-  // 修改检查更新的函数
-  const checkUpdate = async () => {
+  // 添加版本号比较函数
+  const compareVersions = (v1, v2) => {
+    // 移除版本号中的 'v' 前缀
+    const version1 = v1.replace('v', '').split('.');
+    const version2 = v2.replace('v', '').split('.');
+    
+    // 比较每个版本号部分
+    for (let i = 0; i < Math.max(version1.length, version2.length); i++) {
+      const num1 = parseInt(version1[i] || 0);
+      const num2 = parseInt(version2[i] || 0);
+      
+      if (num1 > num2) return 1;
+      if (num1 < num2) return -1;
+    }
+    
+    return 0;
+  };
+
+  // 修改检查更新的函数，使用 useCallback 包装
+  const checkUpdate = React.useCallback(async () => {
     try {
       setIsChecking(true);
       const response = await fetch('https://api.github.com/repos/mrtian2016/hass-panel/releases/latest');
       const data = await response.json();
       if (data && data.tag_name) {
-        setLatestVersion({
-          version: data.tag_name,
-          updateTime: new Date().toISOString()
-        });
+        // 只有当新版本号大于当前版本时才设置新版本
+        if (compareVersions(data.tag_name, versionInfo?.version) > 0) {
+          setLatestVersion({
+            version: data.tag_name,
+            updateTime: new Date().toISOString()
+          });
+          message.info(`发现新版本：${data.tag_name}`);
+        } else {
+          message.success('当前已是最新版本');
+          setLatestVersion(null);
+        }
       }
     } catch (error) {
       console.error('检查更新失败:', error);
@@ -1055,15 +1080,8 @@ function ConfigPage() {
     } finally {
       setIsChecking(false);
     }
-  };
+  }, [versionInfo]);
 
-  // 添加自动检查更新
-  React.useEffect(() => {
-    checkUpdate();
-    // 每5分钟检查一次更新
-    const timer = setInterval(checkUpdate, 5 * 60 * 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   return (
     <div className="config-page">
@@ -1247,18 +1265,27 @@ function ConfigPage() {
             <Icon path={mdiInformationOutline} size={0.8} />
             <span>
               当前版本: {versionInfo.version}
-              {latestVersion && latestVersion.version !== versionInfo.version && (
+              {latestVersion && compareVersions(latestVersion.version, versionInfo.version) > 0 ? (
                 <Tooltip title={`发现新版本，点击更新到 ${latestVersion.version}`}>
                   <Button 
                     type="link" 
                     size="small" 
-                    loading={isChecking}
                     onClick={handleUpdate}
                     style={{ marginLeft: 8, padding: '0 4px' }}
                   >
-                    检查更新
+                    更新到新版本
                   </Button>
                 </Tooltip>
+              ) : (
+                <Button 
+                  type="link" 
+                  size="small" 
+                  loading={isChecking}
+                  onClick={checkUpdate}
+                  style={{ marginLeft: 8, padding: '0 4px' }}
+                >
+                  检查更新
+                </Button>
               )}
             </span>
           </div>

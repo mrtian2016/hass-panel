@@ -8,8 +8,8 @@ import './style.css';
 
 function MotionCard({ config }) {
   const { theme } = useTheme();
-  const motionLogs = useLogs(config.motion_entity_id);
-  const luxHistory = useHistory(config.lux_entity_id);
+  const motionLogs = useLogs(config.motion_entity_id || '', {returnNullIfNotFound: true});
+  const luxHistory = useHistory(config.lux_entity_id || '', {returnNullIfNotFound: true});
   // 格式化时间戳
   const formatTime = (timestamp) => {
     const date = new Date(timestamp * 1000); // 转换为毫秒

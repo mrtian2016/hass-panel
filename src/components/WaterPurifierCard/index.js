@@ -3,17 +3,24 @@ import { useEntity } from '@hakit/core';
 import { mdiWaterPump } from '@mdi/js';
 import BaseCard from '../BaseCard';
 import './style.css';
-
+import { notification } from 'antd';
 function WaterPurifierCard({ config }) {
-  const temperature = useEntity(config.waterpuri.temperature.entity_id);
-  const tdsIn = useEntity(config.waterpuri.tds_in.entity_id);
-  const tdsOut = useEntity(config.waterpuri.tds_out.entity_id);
-  const ppFilterLife = useEntity(config.waterpuri.pp_filter_life.entity_id);
-  const roFilterLife = useEntity(config.waterpuri.ro_filter_life.entity_id);
-  const status = useEntity(config.waterpuri.status.entity_id);
   
-
- 
+  const temperature = useEntity(config.waterpuri?.temperature?.entity_id || '', {returnNullIfNotFound: true});
+  const tdsIn = useEntity(config.waterpuri?.tds_in?.entity_id || '', {returnNullIfNotFound: true});
+  const tdsOut = useEntity(config.waterpuri?.tds_out?.entity_id || '', {returnNullIfNotFound: true});
+  const ppFilterLife = useEntity(config.waterpuri?.pp_filter_life?.entity_id || '', {returnNullIfNotFound: true});
+  const roFilterLife = useEntity(config.waterpuri?.ro_filter_life?.entity_id || '', {returnNullIfNotFound: true});
+  const status = useEntity(config.waterpuri?.status?.entity_id || '', {returnNullIfNotFound: true});
+  if (!temperature || !tdsIn || !tdsOut || !ppFilterLife || !roFilterLife || !status) {
+    notification.error({
+      message: '净水器加载失败',
+      description: `净水器加载失败,实体ID: ${config.waterpuri?.temperature?.entity_id || config.waterpuri?.tds_in?.entity_id || config.waterpuri?.tds_out?.entity_id || config.waterpuri?.pp_filter_life?.entity_id || config.waterpuri?.ro_filter_life?.entity_id || config.waterpuri?.status?.entity_id} 未找到`,
+      placement: 'topRight',
+      duration: 3,
+      key: 'WaterPurifierCard',
+    });
+  }
 
   return (
     <BaseCard

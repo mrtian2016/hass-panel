@@ -26,6 +26,7 @@ import {
 import { Popup, List } from 'antd-mobile';
 import './style.css';
 import { useEntity } from '@hakit/core';
+import { notification } from 'antd';
 // 图标映射
 const ICON_MAP = {
   mdiLeaf,
@@ -40,29 +41,48 @@ function ClimateCard({
   config,
 }) {
   const { theme } = useTheme();
-  const climate = useEntity(config.entity_id);
-  // 提前准备所有特性的实体ID数组
-  let features = {};
-  try {
-    const featureEntities = Object.entries(config.features).map(([key, feature]) => ({
-      key,
-      ...feature,
+  const climate = useEntity(config?.entity_id || '', {returnNullIfNotFound: true});
+  const [showFanModes, setShowFanModes] = useState(false);
+  const [showSwingModes, setShowSwingModes] = useState(false);
+  const [showHvacModes, setShowHvacModes] = useState(false);
+  
+  // 处理空调实体未找到的情况
+  if (!climate) {
+    notification.error({
+      message: '空调加载失败',
+      description: `空调加载失败,实体ID: ${config.entity_id} 未找到`,
+      placement: 'topRight',
+      duration: 3,
+      key: 'ClimateCard',
+    });
+    
+    return <BaseCard title={config.name || "空调"} icon={mdiAirConditioner} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#64B5F6'} > 加载失败</BaseCard>;
+  }
+
+  // 处理特性实体
+  const features = {};
+  if (config.features) {
+    Object.entries(config.features).forEach(([key, feature]) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      entity: useEntity(feature.entity_id),
-    }));
-    // 将特性数组转换为对象
-    features = featureEntities.reduce((acc, feature) => ({
-      ...acc,
-      [feature.key]: {
-        name: feature.name,
-        icon: feature.icon,
-        disableWhen: feature.disableWhen,
-        enableWhen: feature.enableWhen,
-        entity: feature.entity,
-      },
-    }), {});
-  } catch (error) {
-    console.error('ClimateCard features 加载失败', error);
+      const entity = useEntity(feature.entity_id, {returnNullIfNotFound: true});
+      if (entity) {
+        features[key] = {
+          name: feature.name,
+          icon: feature.icon,
+          disableWhen: feature.disableWhen,
+          enableWhen: feature.enableWhen,
+          entity: entity,
+        };
+      } else {
+        notification.error({
+          message: '空调功能加载失败',
+          description: `空调功能加载失败,实体ID: ${feature.entity_id} 未找到`,
+          placement: 'topRight',
+          duration: 3,
+          key: 'ClimateCard',
+        });
+      }
+    });
   }
 
   // const { getServices } = useHass();
@@ -76,9 +96,6 @@ function ClimateCard({
   // }, []);
   // console.log(services);
 
-  const [showFanModes, setShowFanModes] = useState(false);
-  const [showSwingModes, setShowSwingModes] = useState(false);
-  const [showHvacModes, setShowHvacModes] = useState(false);
   const isOn = climate?.state !== 'off';
   const currentTemp = climate?.attributes?.current_temperature;
   const currentHumidity = climate?.attributes?.current_humidity;

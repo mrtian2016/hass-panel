@@ -19,7 +19,7 @@ function CameraSection({ config }) {
       };
     } catch (error) {
       notification.error({
-        message: '播放器卡片加载失败',
+        message: '监控画面加载失败',
         description: `监控画面加载失败: ${error.message}`,
         placement: 'topRight',
         duration: 3,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useIcon } from '@hakit/core';
 import { useEntity } from '@hakit/core';
+import { notification } from 'antd';
 function MdiArrowCollapseHorizontal() {
   const icon = useIcon('mdi:arrow-collapse-horizontal');
   return <div>{icon}</div>
@@ -17,7 +18,17 @@ function MdiStop() {
 }
 
 function CurtainItem({ entity_id, name }) {
-  const curtain = useEntity(entity_id);
+  const curtain = useEntity(entity_id, {returnNullIfNotFound: true});
+  if (!curtain) {
+    notification.error({
+      message: '窗帘加载失败',
+      description: `窗帘加载失败,实体ID: ${entity_id} 未找到`,
+      placement: 'topRight',
+      duration: 3,
+      key: 'CurtainItem',
+    });
+    return <div>加载失败</div>
+  }
   const position = curtain?.attributes?.current_position || 0; // 0-100
   const currentPosition = 50 - (position / 2); // 将0-100的范围映射到50-0的范围
 

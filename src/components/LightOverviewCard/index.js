@@ -5,7 +5,7 @@ import BaseCard from '../BaseCard';
 import FloorPlan from './FloorPlan';
 import './style.css';
 import { useEntity } from '@hakit/core';
-
+import { notification } from 'antd';
 function LightOverviewCard({ config }) {
   console.log('LightOverviewCard config:', config);
   const { theme } = useTheme();
@@ -18,13 +18,28 @@ function LightOverviewCard({ config }) {
 
   // 为每个房间创建实体 hooks
   const lightEntities = config.rooms.filter(room => room && room.entity_id && room.position).map(room => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const entity = useEntity(room.entity_id);
-    return {
-      ...room,
-      entity,
-      state: entity?.state
-    };
+    
+    try {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const entity = useEntity(room.entity_id);
+      return {
+        ...room,
+        entity,
+        state: entity?.state
+      };
+    } catch (error) {
+      notification.error({
+        message: '房间概览灯光加载失败',
+        description: `房间概览灯光加载失败,实体ID: ${room.entity_id} 未找到`,
+        placement: 'topRight',
+        duration: 3,
+        key: 'LightOverviewCard',
+      });
+      return {
+        ...room,
+        entity: { state: null, error: true },
+      };
+    }
   });
 
   // 构建传递给 FloorPlan 的数据

@@ -17,7 +17,10 @@ function IlluminanceCard({ config }) {
       <div className="illuminance-sensors">
         {sensors.map((sensor) => {
           // eslint-disable-next-line react-hooks/rules-of-hooks
-          const { state, attributes,custom } = useEntity(sensor.entity_id);
+          const { state, attributes,custom } = useEntity(sensor.entity_id, {returnNullIfNotFound: true});
+          if (!state) {
+            return <div key={sensor.entity_id} className="illuminance-sensor">{sensor.name || attributes?.friendly_name || sensor.entity_id}加载失败</div>;
+          }
           console.log(custom);
 
           
