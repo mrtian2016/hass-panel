@@ -50,8 +50,8 @@ docker run \
 环境变量说明:
 - `REACT_APP_HASS_URL`: Home Assistant 实例地址
 - `REACT_APP_HASS_TOKEN`: Home Assistant 长期访问令牌(可选)
-- `WEBDAV_USERNAME`: WebDAV 用户名(可选)
-- `WEBDAV_PASSWORD`: WebDAV 密码(可选)
+- `WEBDAV_USERNAME`: WebDAV 用户名
+- `WEBDAV_PASSWORD`: WebDAV 密码
 
 ### Home Assistant Addon方式
 
@@ -89,11 +89,11 @@ docker run \
 
 ### WebDAV 配置同步
 
-支持通过 WebDAV 在多个设备间同步配置:
+支持通过内置 WebDAV 服务在多个设备间同步配置:
 
 1. 准备工作
-   - 使用 Docker 内置 WebDAV 服务 (`http://your-docker-host:5124`)
-   - 或使用其他 WebDAV 服务(坚果云、NextCloud等)
+   - 使用容器内置的 WebDAV 服务 (`http://your-docker-host:5124`)
+   - 默认用户名和密码可通过环境变量设置
 
 2. 设置步骤
    - 点击面板顶部"WebDAV配置"按钮
