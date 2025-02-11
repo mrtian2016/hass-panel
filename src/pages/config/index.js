@@ -65,7 +65,7 @@ const CARD_TYPES = {
         label: '天气实体',
         type: 'entity',
         filter: 'weather.*',
-        default: 'weather.wo_de_jia'
+        default: ''
       }
     ]
   },

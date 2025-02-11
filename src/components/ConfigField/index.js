@@ -67,6 +67,7 @@ function ConfigField({ field, value, onChange }) {
           <div className="config-field-row">
             <label>{field.label}</label>
             <Select
+              allowClear
               value={value}
               onChange={onChange}
               showSearch
@@ -103,6 +104,7 @@ function ConfigField({ field, value, onChange }) {
                 <div className="room-field">
                   <label>灯光实体</label>
                   <Select
+                    allowClear
                     value={room.entity_id}
                     onChange={(value) => handleLightOverviewChange(index, 'entity_id', value)}
                     showSearch
@@ -176,6 +178,7 @@ function ConfigField({ field, value, onChange }) {
               </div>
             ))}
             <Select
+              allowClear
               value=""
               onChange={(value) => {
                 if (value) {
@@ -225,6 +228,7 @@ function ConfigField({ field, value, onChange }) {
                     <div key={type} className="sensor-config-item">
                       <span className="sensor-config-type">{sensor.name}</span>
                       <Select
+                        allowClear
                         value={sensor.entity_id || null}
                         onChange={(selectedValue) => {
                           const newGroups = [...(value || [])];
@@ -319,6 +323,7 @@ function ConfigField({ field, value, onChange }) {
                     placeholder="灯光名称"
                   />
                   <Select
+                    allowClear
                     value={light.entity_id || null}
                     onChange={(selectedValue) => {
                       const currentValue = typeof value === 'object' ? value : {};
@@ -431,6 +436,7 @@ function ConfigField({ field, value, onChange }) {
                   placeholder="摄像头名称"
                 />
                 <Select
+                  allowClear
                   value={camera.entity_id || null}
                   onChange={(selectedValue) => {
                     const newCameras = [...value];
@@ -518,6 +524,7 @@ function ConfigField({ field, value, onChange }) {
                   placeholder="播放器名称"
                 />
                 <Select
+                  allowClear
                   value={player.entity_id || null}
                   onChange={(selectedValue) => {
                     const newPlayers = [...value];
@@ -590,6 +597,7 @@ function ConfigField({ field, value, onChange }) {
                   placeholder="窗帘名称"
                 />
                 <Select
+                  allowClear
                   value={curtain.entity_id || null}
                   onChange={(selectedValue) => {
                     const newCurtains = [...value];
@@ -666,6 +674,7 @@ function ConfigField({ field, value, onChange }) {
                 <div key={routerField.key} className="router-field">
                   <span className="field-name">{routerField.name}</span>
                   <Select
+                    allowClear
                     value={currentValue.entity_id || null}
                     onChange={(selectedValue) => {
                       onChange({
@@ -735,6 +744,7 @@ function ConfigField({ field, value, onChange }) {
                   <div key={nasField.key} className="nas-field">
                     <span className="field-name">{nasField.name}</span>
                     <Select
+                      allowClear
                       value={currentValue.entity_id || null}
                       onChange={(selectedValue) => {
                         onChange({
@@ -791,6 +801,7 @@ function ConfigField({ field, value, onChange }) {
                       <div key={field.key} className="volume-field">
                         <span className="field-name">{field.name}</span>
                         <Select
+                          allowClear
                           value={currentValue.entity_id || null}
                           onChange={(selectedValue) => {
                             const newVolumes = [...(value.volumes || [])];
@@ -883,6 +894,7 @@ function ConfigField({ field, value, onChange }) {
                       <div key={field.key} className="drive-field">
                         <span className="field-name">{field.name}</span>
                         <Select
+                          allowClear
                           value={currentValue.entity_id || null}
                           onChange={(selectedValue) => {
                             const newDrives = [...(value.drives || [])];
@@ -972,6 +984,7 @@ function ConfigField({ field, value, onChange }) {
                       <div key={field.key} className="m2ssd-field">
                         <span className="field-name">{field.name}</span>
                         <Select
+                          allowClear
                           value={currentValue.entity_id || null}
                           onChange={(selectedValue) => {
                             const newSsds = [...(value.m2ssd || [])];
@@ -1061,6 +1074,7 @@ function ConfigField({ field, value, onChange }) {
                   placeholder="脚本名称"
                 />
                 <Select
+                  allowClear
                   value={script.entity_id || null}
                   onChange={(selectedValue) => {
                     const newScripts = [...value];
@@ -1082,6 +1096,7 @@ function ConfigField({ field, value, onChange }) {
                   }))}
                 />
                 <Select
+                  allowClear
                   value={script.icon || null}
                   onChange={(selectedValue) => {
                     const newScripts = [...value];
@@ -1153,6 +1168,7 @@ function ConfigField({ field, value, onChange }) {
                 <div key={waterPuriField.key} className="waterpuri-field">
                   <span className="field-name">{waterPuriField.name}</span>
                   <Select
+                    allowClear
                     value={currentValue.entity_id || null}
                     onChange={(selectedValue) => {
                       onChange({
@@ -1206,6 +1222,7 @@ function ConfigField({ field, value, onChange }) {
                 <div key={electricityField.key} className="electricity-field">
                   <span className="field-name">{electricityField.name}</span>
                   <Select
+                    allowClear
                     value={currentValue.entity_id || null}
                     onChange={(selectedValue) => {
                       onChange({
@@ -1289,6 +1306,7 @@ function ConfigField({ field, value, onChange }) {
               <div key={type} className="climate-feature">
                 <div className="feature-header">
                   <Select
+                    allowClear
                     value={feature.name || null}
                     onChange={(selectedName) => {
                       // 根据选择的名称找到对应的预定义功能
@@ -1321,6 +1339,7 @@ function ConfigField({ field, value, onChange }) {
                 
               
                     <Select
+                      allowClear
                       value={feature.entity_id || null}
                       onChange={(selectedValue) => {
                         onChange({
@@ -1406,6 +1425,7 @@ function ConfigField({ field, value, onChange }) {
                 <div className="config-field-row">
                   <span className="field-name">传感器实体</span>
                   <Select
+                    allowClear
                     value={sensor.entity_id || null}
                     onChange={(selectedValue) => {
                       const newSensors = [...value];
