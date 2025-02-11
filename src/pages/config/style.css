@@ -548,17 +548,23 @@
   padding: 4px 10px;
   border-radius: var(--border-radius-small);
   border: 1px solid var(--color-border);
-  max-width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  max-width: 250px;
+  overflow: visible;
   white-space: nowrap;
   box-sizing: border-box;
   margin-top: 12px;
 }
 
-/* 移除不需要的更新时间相关样式 */
-.version-info .update-time {
-  display: none;
+.version-info .ant-btn-link {
+  color: var(--color-primary);
+  font-size: 12px;
+  height: auto;
+  line-height: 1;
+}
+
+.version-info .ant-btn-link:hover {
+  color: var(--color-primary-hover);
+  background: var(--color-background-hover);
 }
 
 .webdav-button,

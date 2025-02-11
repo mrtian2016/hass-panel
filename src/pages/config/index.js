@@ -33,7 +33,7 @@ import AddCardModal from '../../components/AddCardModal';
 // import Modal from '../../components/Modal';
 import LightOverviewCard from '../../components/LightOverviewCard';
 import { createClient } from 'webdav';
-import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, List } from 'antd';
+import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, List, Tooltip } from 'antd';
 
 import './style.css';
 
@@ -313,22 +313,34 @@ const saveConfigToWebDAV = async (config) => {
 
     // 创建 WebDAV 客户端
     const client = createClient(webdavConfig.url, {
-      username: webdavConfig.username, // 可选
-      password: webdavConfig.password  // 可选
+      username: webdavConfig.username,
+      password: webdavConfig.password
     });
 
     // 获取并解析布局数据
-    const rawLayouts = localStorage.getItem('dashboard-layouts');
-    const rawDefaultLayouts = localStorage.getItem('default-dashboard-layouts');
+    const mobileLayouts = localStorage.getItem('mobile-dashboard-layouts');
+    const desktopLayouts = localStorage.getItem('desktop-dashboard-layouts');
+    const mobileDefaultLayouts = localStorage.getItem('mobile-default-dashboard-layouts');
+    const desktopDefaultLayouts = localStorage.getItem('desktop-default-dashboard-layouts');
     
     // 处理布局数据，兼容字符串格式
-    const layouts = rawLayouts ? (typeof rawLayouts === 'string' ? 
-      (rawLayouts.startsWith('{') ? JSON.parse(rawLayouts) : rawLayouts) : 
-      rawLayouts) : {};
+    const layouts = {
+      mobile: mobileLayouts ? (typeof mobileLayouts === 'string' ? 
+        (mobileLayouts.startsWith('{') ? JSON.parse(mobileLayouts) : mobileLayouts) : 
+        mobileLayouts) : {},
+      desktop: desktopLayouts ? (typeof desktopLayouts === 'string' ? 
+        (desktopLayouts.startsWith('{') ? JSON.parse(desktopLayouts) : desktopLayouts) : 
+        desktopLayouts) : {}
+    };
       
-    const defaultLayouts = rawDefaultLayouts ? (typeof rawDefaultLayouts === 'string' ? 
-      (rawDefaultLayouts.startsWith('{') ? JSON.parse(rawDefaultLayouts) : rawDefaultLayouts) : 
-      rawDefaultLayouts) : {};
+    const defaultLayouts = {
+      mobile: mobileDefaultLayouts ? (typeof mobileDefaultLayouts === 'string' ? 
+        (mobileDefaultLayouts.startsWith('{') ? JSON.parse(mobileDefaultLayouts) : mobileDefaultLayouts) : 
+        mobileDefaultLayouts) : {},
+      desktop: desktopDefaultLayouts ? (typeof desktopDefaultLayouts === 'string' ? 
+        (desktopDefaultLayouts.startsWith('{') ? JSON.parse(desktopDefaultLayouts) : desktopDefaultLayouts) : 
+        desktopDefaultLayouts) : {}
+    };
 
     const configData = {
       cards: config,
@@ -403,8 +415,8 @@ const loadConfigFromWebDAV = async () => {
 
     // 创建 WebDAV 客户端
     const client = createClient(webdavConfig.url, {
-      username: webdavConfig.username, // 可选
-      password: webdavConfig.password  // 可选
+      username: webdavConfig.username,
+      password: webdavConfig.password
     });
 
     // 使用 webdav 库的 getFileContents 方法
@@ -415,6 +427,34 @@ const loadConfigFromWebDAV = async () => {
 
     const content = await client.getFileContents('/config.json', { format: 'text' });
     const configData = JSON.parse(content);
+
+    // 如果配置中包含新的布局格式（移动端和桌面端分离）
+    if (configData.layouts && typeof configData.layouts === 'object') {
+      if (configData.layouts.mobile) {
+        localStorage.setItem('mobile-dashboard-layouts', JSON.stringify(configData.layouts.mobile));
+      }
+      if (configData.layouts.desktop) {
+        localStorage.setItem('desktop-dashboard-layouts', JSON.stringify(configData.layouts.desktop));
+      }
+    } else if (configData.layouts) {
+      // 兼容旧版本：如果是旧版本的布局，则同时设置给移动端和桌面端
+      localStorage.setItem('mobile-dashboard-layouts', configData.layouts);
+      localStorage.setItem('desktop-dashboard-layouts', configData.layouts);
+    }
+
+    // 处理默认布局
+    if (configData.defaultLayouts && typeof configData.defaultLayouts === 'object') {
+      if (configData.defaultLayouts.mobile) {
+        localStorage.setItem('mobile-default-dashboard-layouts', JSON.stringify(configData.defaultLayouts.mobile));
+      }
+      if (configData.defaultLayouts.desktop) {
+        localStorage.setItem('desktop-default-dashboard-layouts', JSON.stringify(configData.defaultLayouts.desktop));
+      }
+    } else if (configData.defaultLayouts) {
+      // 兼容旧版本
+      localStorage.setItem('mobile-default-dashboard-layouts', configData.defaultLayouts);
+      localStorage.setItem('desktop-default-dashboard-layouts', configData.defaultLayouts);
+    }
 
     return configData;
   } catch (error) {
@@ -446,6 +486,8 @@ function ConfigPage() {
   });
   const [showAddModal, setShowAddModal] = useState(false);
   const [versionInfo, setVersionInfo] = useState(null);
+  const [latestVersion, setLatestVersion] = useState(null);
+  const [isChecking, setIsChecking] = useState(false);
   const [webdavConfig, setWebdavConfig] = useState(() => {
     return JSON.parse(localStorage.getItem('webdav-config') || '{}');
   });
@@ -459,44 +501,66 @@ function ConfigPage() {
     try {
       // 计算默认布局
       const defaultLayouts = calculateLayouts(cards);
-      localStorage.setItem('default-dashboard-layouts', JSON.stringify(defaultLayouts));
+      
+      // 分别保存移动端和桌面端的默认布局
+      localStorage.setItem('mobile-default-dashboard-layouts', JSON.stringify(defaultLayouts));
+      localStorage.setItem('desktop-default-dashboard-layouts', JSON.stringify(defaultLayouts));
+      
       // 保存到本地存储
       localStorage.setItem('card-config', JSON.stringify(cards));
       
-      // 获取当前已有的布局
-      const existingLayouts = JSON.parse(localStorage.getItem('dashboard-layouts') || '{}');
+      // 获取当前已有的移动端和桌面端布局
+      const existingMobileLayouts = JSON.parse(localStorage.getItem('mobile-dashboard-layouts') || '{}');
+      const existingDesktopLayouts = JSON.parse(localStorage.getItem('desktop-dashboard-layouts') || '{}');
       
       // 只为新添加的卡片计算布局
       const newCards = cards.filter(card => {
         // 检查所有布局中是否存在该卡片的布局
-        return !Object.values(existingLayouts).some(layout => 
+        const inMobileLayouts = !Object.values(existingMobileLayouts).some(layout => 
           Array.isArray(layout) && layout.some(item => item.i === card.id.toString())
         );
+        const inDesktopLayouts = !Object.values(existingDesktopLayouts).some(layout => 
+          Array.isArray(layout) && layout.some(item => item.i === card.id.toString())
+        );
+        return inMobileLayouts || inDesktopLayouts;
       });
 
       if (newCards.length > 0) {
         // 只为新卡片计算布局
         const newLayouts = calculateLayouts(newCards);
         
-        // 合并布局，保留已有卡片的布局
-        const mergedLayouts = {
-          lg: [...(Array.isArray(existingLayouts.lg) ? existingLayouts.lg : []), ...(newLayouts.lg || [])],
-          md: [...(Array.isArray(existingLayouts.md) ? existingLayouts.md : []), ...(newLayouts.md || [])],
-          sm: [...(Array.isArray(existingLayouts.sm) ? existingLayouts.sm : []), ...(newLayouts.sm || [])]
+        // 合并移动端布局
+        const mergedMobileLayouts = {
+          lg: [...(Array.isArray(existingMobileLayouts.lg) ? existingMobileLayouts.lg : []), ...(newLayouts.lg || [])],
+          md: [...(Array.isArray(existingMobileLayouts.md) ? existingMobileLayouts.md : []), ...(newLayouts.md || [])],
+          sm: [...(Array.isArray(existingMobileLayouts.sm) ? existingMobileLayouts.sm : []), ...(newLayouts.sm || [])]
+        };
+
+        // 合并桌面端布局
+        const mergedDesktopLayouts = {
+          lg: [...(Array.isArray(existingDesktopLayouts.lg) ? existingDesktopLayouts.lg : []), ...(newLayouts.lg || [])],
+          md: [...(Array.isArray(existingDesktopLayouts.md) ? existingDesktopLayouts.md : []), ...(newLayouts.md || [])],
+          sm: [...(Array.isArray(existingDesktopLayouts.sm) ? existingDesktopLayouts.sm : []), ...(newLayouts.sm || [])]
         };
 
         // 移除已删除卡片的布局
         const currentCardIds = cards.map(card => card.id.toString());
-        Object.keys(mergedLayouts).forEach(breakpoint => {
-          if (Array.isArray(mergedLayouts[breakpoint])) {
-            mergedLayouts[breakpoint] = mergedLayouts[breakpoint].filter(
+        ['lg', 'md', 'sm'].forEach(breakpoint => {
+          if (Array.isArray(mergedMobileLayouts[breakpoint])) {
+            mergedMobileLayouts[breakpoint] = mergedMobileLayouts[breakpoint].filter(
+              item => currentCardIds.includes(item.i)
+            );
+          }
+          if (Array.isArray(mergedDesktopLayouts[breakpoint])) {
+            mergedDesktopLayouts[breakpoint] = mergedDesktopLayouts[breakpoint].filter(
               item => currentCardIds.includes(item.i)
             );
           }
         });
 
         // 保存合并后的布局
-        localStorage.setItem('dashboard-layouts', JSON.stringify(mergedLayouts));
+        localStorage.setItem('mobile-dashboard-layouts', JSON.stringify(mergedMobileLayouts));
+        localStorage.setItem('desktop-dashboard-layouts', JSON.stringify(mergedDesktopLayouts));
       }
       
       // 如果配置了WebDAV，且开启了自动同步，则保存到WebDAV
@@ -639,8 +703,14 @@ function ConfigPage() {
   const handleExport = () => {
     const config = {
       cards,
-      layouts: localStorage.getItem('dashboard-layouts'),
-      defaultLayouts: localStorage.getItem('default-dashboard-layouts')
+      layouts: {
+        mobile: JSON.parse(localStorage.getItem('mobile-dashboard-layouts') || '{}'),
+        desktop: JSON.parse(localStorage.getItem('desktop-dashboard-layouts') || '{}')
+      },
+      defaultLayouts: {
+        mobile: JSON.parse(localStorage.getItem('mobile-default-dashboard-layouts') || '{}'),
+        desktop: JSON.parse(localStorage.getItem('desktop-default-dashboard-layouts') || '{}')
+      }
     };
     
     const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
@@ -654,7 +724,7 @@ function ConfigPage() {
     URL.revokeObjectURL(url);
   };
 
-  // 导入配置
+  // 修改导入配置的处理函数
   const handleImport = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -671,10 +741,14 @@ function ConfigPage() {
           
           // 更新布局配置
           if (config.layouts) {
-            localStorage.setItem('dashboard-layouts', config.layouts);
+            // 分别保存移动端和桌面端布局
+            localStorage.setItem('mobile-dashboard-layouts', config.layouts);
+            localStorage.setItem('desktop-dashboard-layouts', config.layouts);
           }
           if (config.defaultLayouts) {
-            localStorage.setItem('default-dashboard-layouts', config.defaultLayouts);
+            // 分别保存移动端和桌面端默认布局
+            localStorage.setItem('mobile-default-dashboard-layouts', config.defaultLayouts);
+            localStorage.setItem('desktop-default-dashboard-layouts', config.defaultLayouts);
           }
           
           setHasUnsavedChanges(true);
@@ -924,6 +998,73 @@ function ConfigPage() {
     }
   ];
 
+  // 添加执行更新的函数
+  const handleUpdate = async () => {
+    try {
+      message.loading({ content: '正在检查更新...', key: 'update' });
+      const response = await fetch('./api/update');
+      const result = await response.json();
+      
+      if (result.status === 'success') {
+        message.success({ 
+          content: result.message, 
+          key: 'update',
+          duration: 5 
+        });
+        // 如果更新成功，3秒后刷新页面
+        if (result.message.includes('更新成功')) {
+          setTimeout(() => {
+            message.loading({ 
+              content: '更新完成，正在刷新页面...', 
+              key: 'update' 
+            });
+            window.location.reload();
+          }, 3000);
+        }
+      } else {
+        message.error({ 
+          content: `更新失败：${result.message}`, 
+          key: 'update',
+          duration: 5 
+        });
+      }
+    } catch (error) {
+      message.error({ 
+        content: `更新失败：${error.message}`, 
+        key: 'update',
+        duration: 5 
+      });
+    }
+  };
+
+  // 修改检查更新的函数
+  const checkUpdate = async () => {
+    try {
+      setIsChecking(true);
+      const response = await fetch('https://api.github.com/repos/mrtian2016/hass-panel/releases/latest');
+      const data = await response.json();
+      if (data && data.tag_name) {
+        setLatestVersion({
+          version: data.tag_name,
+          updateTime: new Date().toISOString()
+        });
+      }
+    } catch (error) {
+      console.error('检查更新失败:', error);
+      message.error('检查更新失败');
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  // 添加自动检查更新
+  React.useEffect(() => {
+    checkUpdate();
+    // 每5分钟检查一次更新
+    const timer = setInterval(checkUpdate, 5 * 60 * 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="config-page">
       <div className="config-header">
@@ -1102,11 +1243,26 @@ function ConfigPage() {
           <Icon path={mdiPlus} size={3} />
         </button>
         {versionInfo && (
-            <div className="version-info">
-              <Icon path={mdiInformationOutline} size={0.8} />
-              <span>前端版本: {versionInfo.version}</span>
-            </div>
-          )}
+          <div className="version-info">
+            <Icon path={mdiInformationOutline} size={0.8} />
+            <span>
+              当前版本: {versionInfo.version}
+              {latestVersion && latestVersion.version !== versionInfo.version && (
+                <Tooltip title={`发现新版本，点击更新到 ${latestVersion.version}`}>
+                  <Button 
+                    type="link" 
+                    size="small" 
+                    loading={isChecking}
+                    onClick={handleUpdate}
+                    style={{ marginLeft: 8, padding: '0 4px' }}
+                  >
+                    检查更新
+                  </Button>
+                </Tooltip>
+              )}
+            </span>
+          </div>
+        )}
 
       {/* 版本列表模态框 */}
       <Modal

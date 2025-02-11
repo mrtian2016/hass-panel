@@ -32,3 +32,5 @@ public/config/userConfig.json
 public/env.js
 docker-compose-dev.yml
 webdav
+hass-panel.xml
+data

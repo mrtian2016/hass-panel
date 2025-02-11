@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>hass-panel</Name>
-  <Repository>您的Docker Hub用户名/hass-panel</Repository>
-  <Registry>https://hub.docker.com/r/您的用户名/hass-panel/</Registry>
+  <Repository>ghcr.io/mrtian2016/hass-panel</Repository>
+  <Registry>https://github.com/mrtian2016/hass-panel/pkgs/container/hass-panel</Registry>
   <Network>bridge</Network>
   <MyIP></MyIP>
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
   
-  <Support>https://github.com/您的用户名/hass-panel</Support>
-  <Project>https://github.com/您的用户名/hass-panel</Project>
+  <Support>https://github.com/mrtian2016/hass-panel</Support>
+  <Project>https://github.com/mrtian2016/hass-panel</Project>
   <Overview>Home Assistant Panel - 一个用于Home Assistant的自定义面板</Overview>
   <Category>HomeAutomation:</Category>
   <WebUI>http://[IP]:[PORT:5123]</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/您的用户名/hass-panel/master/hass-panel.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/您的用户名/hass-panel/master/icon.png</Icon>
+  <TemplateURL>https://raw.githubusercontent.com/mrtian2016/hass-panel/master/hass-panel.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/mrtian2016/hass-panel/master/icon.png</Icon>
   
   <Networking>
     <Mode>bridge</Mode>

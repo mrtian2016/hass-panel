@@ -1,10 +1,10 @@
 {
   "name": "Hass Panel",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "slug": "hass_panel",
   "description": "一个基于 React 的智能家居控制面板",
   "url": "https://github.com/mrtian2016/hass-panel",
-  "image": "ghcr.io/mrtian2016/hass-panel-addon",
+  "image": "ghcr.io/mrtian2016/hass-panel",
   "arch": [
     "aarch64",
     "amd64"

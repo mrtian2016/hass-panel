@@ -75,8 +75,13 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   // 修改布局状态
   const [currentLayouts, setCurrentLayouts] = useState(() => {
     try {
-      const savedLayouts = localStorage.getItem('dashboard-layouts');
-      const defaultLayouts = localStorage.getItem('default-dashboard-layouts');
+      // 判断是否为移动设备
+      const isMobileDevice = window.innerWidth < 768;
+      const layoutKey = isMobileDevice ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+      const defaultLayoutKey = isMobileDevice ? 'mobile-default-dashboard-layouts' : 'desktop-default-dashboard-layouts';
+      
+      const savedLayouts = localStorage.getItem(layoutKey);
+      const defaultLayouts = localStorage.getItem(defaultLayoutKey);
       
       // 处理已保存的布局
       if (savedLayouts) {
@@ -118,14 +123,19 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   // 处理布局变化
   const handleLayoutChange = (layout, layouts) => {
     setCurrentLayouts(layouts);
+    // 根据设备类型选择存储键名
+    const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
     // 保存布局数据
-    localStorage.setItem('dashboard-layouts', JSON.stringify(layouts));
+    localStorage.setItem(layoutKey, JSON.stringify(layouts));
   };
 
   // 修改重置布局功能
   const handleResetLayout = () => {
     try {
-      const defaultLayouts = localStorage.getItem('default-dashboard-layouts');
+      // 根据设备类型选择默认布局键名
+      const defaultLayoutKey = isMobile ? 'mobile-default-dashboard-layouts' : 'desktop-default-dashboard-layouts';
+      const defaultLayouts = localStorage.getItem(defaultLayoutKey);
+      
       if (defaultLayouts) {
         // 处理默认布局数据
         let layouts;
@@ -143,7 +153,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         }
         
         setCurrentLayouts(layouts);
-        localStorage.setItem('dashboard-layouts', JSON.stringify(layouts));
+        // 根据设备类型选择存储键名
+        const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+        localStorage.setItem(layoutKey, JSON.stringify(layouts));
       }
       setIsEditing(false);
     } catch (error) {

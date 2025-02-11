@@ -9,7 +9,7 @@ import './style.css';
 import {useEntity} from '@hakit/core';
 import Modal from '../Modal';
 import LightControl from '../LightOverviewCard/LightControl';
-
+import { notification } from 'antd';
 function LightStatusCard({ config }) {
   const { theme } = useTheme();
   const [showControl, setShowControl] = useState(false);
@@ -22,16 +22,27 @@ function LightStatusCard({ config }) {
   }
 
   const lightEntities = Object.entries(config.lights).reduce((acc, [key, lightConfig]) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const entity = useEntity(lightConfig.entity_id);
-    
+    try {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const entity = useEntity(lightConfig.entity_id);
+      
     acc[key] = {
-      ...lightConfig,
-      entity,
-      // 判断实体类型
-      isLight: lightConfig.entity_id.startsWith('light.')
-    };
-    return acc;
+        ...lightConfig,
+        entity,
+        // 判断实体类型
+        isLight: lightConfig.entity_id.startsWith('light.')
+      };
+      return acc;
+    } catch (error) {
+      notification.error({
+        message: '灯光卡片加载失败',
+        description: `灯光 ${lightConfig.name || lightConfig.entity_id} 加载失败: ${error.message}`,
+        placement: 'topRight',
+        duration: 3,
+        key: 'LightStatusCard',
+      });
+      return acc;
+    }
   }, {});
 
   const activeLights = Object.values(lightEntities).filter(light => light.entity.state === 'on').length;
@@ -99,21 +110,6 @@ function LightStatusCard({ config }) {
             onTouchStart={(e) => handleTouchStart(light, e)}
             onTouchEnd={handlePressEnd}
             title={`${light.name}${!light.isLight ? ' (开关)' : ''}`}
-            style={{ 
-              width: '100%',
-              aspectRatio: '1',
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '12px',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--border-radius-small)',
-              background: 'var(--color-background)',
-              cursor: 'pointer',
-              transition: 'all 0.3s',
-              opacity: light.isLight ? 1 : 0.8
-            }}
           >
             <Icon
               path={mdiCeilingLight}
@@ -125,8 +121,8 @@ function LightStatusCard({ config }) {
                   : 'var(--color-text-light)'
               }
             />
-            <span className="light-name" style={{ marginTop: '5px' }}>
-              {light.name.replace('灯', '')}
+            <span className={`light-name ${light.name.length > 4 ? 'long-text' : ''}`}>
+              {light.name}
             </span>
           </button>
         ))}

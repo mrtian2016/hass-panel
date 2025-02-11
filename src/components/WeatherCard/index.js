@@ -16,7 +16,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import BaseCard from '../BaseCard';
 import './style.css';
 import { useWeather } from '@hakit/core';
-
+import { notification } from 'antd';
 // 添加穿衣指数计算函数
 const calculateClothingIndex = (temperature, humidity, windSpeed) => {
   // 基础分值基于温度
@@ -62,9 +62,24 @@ const calculateClothingIndex = (temperature, humidity, windSpeed) => {
 };
 
 function WeatherCard({ entityId }) {
-  const weather = useWeather(entityId);
-  console.log(weather);
   const { theme } = useTheme();
+  let weather = null;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    weather = useWeather(entityId);
+  } catch (error) {
+    notification.error({
+      message: '天气卡片加载失败',
+      description: `天气 ${entityId} 加载失败: ${error.message}`,
+      placement: 'topRight',
+      duration: 3,
+    });
+    return <BaseCard title="天气卡片加载失败" icon={mdiMapMarker} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#87CEEB'} >
+      <div>天气卡片加载失败</div>
+    </BaseCard> ;
+  }
+  console.log(weather);
+  
   const {
     apparent_temperature,
     visibility,
