@@ -13,6 +13,7 @@ import Modal from '../Modal';
 import './style.css';
 import { useEntity } from '@hakit/core';
 import { notification } from 'antd';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
   const viewBoxSize = 200;  // 用于 SVG viewBox
@@ -61,6 +62,7 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
 
 function NASCard({ config }) {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const [showDriveModal, setShowDriveModal] = useState(false);
   let entities = {};
   try {
@@ -77,17 +79,22 @@ function NASCard({ config }) {
       return acc;
     }, {});
   } catch (error) {
-    console.error('NASCard 组件错误:', error);
     notification.error({
-      message: 'NAS卡片加载失败',
-      description: `nas 加载失败: ${error.message}`,
+      message: t('nas.loadError'),
+      description: t('nas.loadErrorDesc') + error.message,
       placement: 'topRight',
       duration: 3,
       key: 'NASCard',
     });
-    return <BaseCard title="NAS监控" icon={mdiNas} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'} >
-      出现错误，请检查配置，{error.message}
-    </BaseCard>
+    return (
+      <BaseCard 
+        title={t('cardTitles.nas')} 
+        icon={mdiNas} 
+        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
+      >
+        {t('nas.checkConfig')}, {error.message}
+      </BaseCard>
+    );
   }
 
   const cpuUsage = parseFloat(entities.cpuUsage?.state || 0);
@@ -98,7 +105,7 @@ function NASCard({ config }) {
   return (
     <>
       <BaseCard
-        title="NAS监控"
+        title={config.title || t('cardTitles.nas')}
         icon={mdiNas}
         iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
         headerRight={
@@ -110,7 +117,7 @@ function NASCard({ config }) {
         <div className="nas-data">
           <div className="usage-section">
             <CircularProgress value={cpuUsage} label="CPU" />
-            <CircularProgress value={memoryUsage} label="内存" />
+            <CircularProgress value={memoryUsage} label={t('nas.labels.memory')} />
           </div>
           
           <div className="metrics-section">
@@ -118,16 +125,20 @@ function NASCard({ config }) {
               <div className="speed-row">
                 <div className="speed-item">
                   <Icon path={mdiUpload} size={0.8} />
-                  <span className="speed-value">{uploadSpeed}<span> MB/s</span></span>
+                  <span className="speed-value">
+                    {uploadSpeed}<span> {t('nas.labels.unit.speed')}</span>
+                  </span>
                 </div>
                 <div className="speed-item">
                   <Icon path={mdiDownload} size={0.8} />
-                  <span className="speed-value">{downloadSpeed}<span> MB/s</span></span>
+                  <span className="speed-value">
+                    {downloadSpeed}<span> {t('nas.labels.unit.speed')}</span>
+                  </span>
                 </div>
               </div>
               <div className="divider"></div>
               
-              <div className="volume-header">存储池状态</div>
+              <div className="volume-header">{t('nas.storage.poolStatus')}</div>
               {config.syno_nas?.volumes?.map((volume, index) => {
                 let volumeStatus = null;
                 let volumeUsage = null;
@@ -146,15 +157,14 @@ function NASCard({ config }) {
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   volumeTotal = useEntity(volume.total.entity_id);
                 } catch (error) {
-                  console.error(`加载NAS实体 ${volume.entity_id} 失败:`, error);
                   notification.error({
-                    message: 'NAS卡片加载失败',
-                    description: `nas ${volume.name || volume.entity_id} 加载失败: ${error.message}`,
+                    message: t('nas.loadError'),
+                    description: t('nas.loadErrorDesc') + (volume.name || volume.entity_id) + ' - ' + error.message,
                     placement: 'topRight',
                     duration: 3,
                     key: 'NASCard',
                   });
-                  return <div>加载失败</div>
+                  return <div>{t('nas.loadFailed')}</div>;
                 }
                 return (
                   <React.Fragment key={index}>
@@ -166,10 +176,14 @@ function NASCard({ config }) {
                         </div>
                         <div className="volume-status-group">
                           <span className="volume-status">
-                            {volumeStatus?.state === "normal" ? "正常" : volumeStatus?.state || '未知'}
+                            {volumeStatus?.state === "normal" 
+                              ? t('nas.status.normal') 
+                              : volumeStatus?.state || t('nas.status.unknown')}
                           </span>
                           <span className="status-divider">|</span>
-                          <span className="volume-temp">{volumeTemp?.state || '0'}°C</span>
+                          <span className="volume-temp">
+                            {volumeTemp?.state || '0'}{t('nas.labels.unit.temp')}
+                          </span>
                         </div>
                       </div>
                       <div className="volume-info">
@@ -216,11 +230,11 @@ function NASCard({ config }) {
       <Modal 
         visible={showDriveModal} 
         onClose={() => setShowDriveModal(false)}
-        title="存储设备状态"
+        title={t('nas.storage.deviceStatus')}
         width="600px"
       >
         <div className="drive-modal-content">
-          <div className="volume-header">硬盘状态</div>
+          <div className="volume-header">{t('nas.storage.diskStatus')}</div>
           {config.syno_nas?.drives?.map((drive, index) => {  
             let driveStatus = null;
             let driveTemp = null;
@@ -232,13 +246,13 @@ function NASCard({ config }) {
             } catch (error) {
               console.error(`加载NAS实体 ${drive.entity_id} 失败:`, error);
               notification.error({
-                message: 'NAS卡片加载失败',
-                description: `nas ${drive.name || drive.entity_id} 加载失败: ${error.message}`,
+                message: t('nas.loadError'),
+                description: t('nas.loadErrorDesc') + (drive.name || drive.entity_id) + ' - ' + error.message,
                 placement: 'topRight',
                 duration: 3,
                 key: 'NASCard',
               });
-              return <div>加载失败</div>
+              return <div>{t('nas.loadFailed')}</div>
             }
             
             return (
@@ -249,9 +263,9 @@ function NASCard({ config }) {
                     <span className="label">{drive.name}</span>
                   </div>
                   <div className="drive-status">
-                    <span>{driveStatus?.state === "normal" ? "正常" : "异常" || '未知'}</span>
+                    <span>{driveStatus?.state === "normal" ? t('nas.status.normal') : t('nas.status.abnormal') || t('nas.status.unknown')}</span>
                     {driveTemp && (
-                      <span className="drive-temp">{driveTemp.state || '0'}°C</span>
+                      <span className="drive-temp">{driveTemp.state || '0'}{t('nas.labels.unit.temp')}</span>
                     )}
                   </div>
                 </div>
@@ -262,7 +276,7 @@ function NASCard({ config }) {
           {config.syno_nas?.m2ssd && config.syno_nas?.m2ssd.length > 0 && (
             <>
               <div className="divider"></div>
-              <div className="volume-header">M.2 SSD状态</div>
+              <div className="volume-header">{t('nas.storage.m2Status')}</div>
               {config.syno_nas?.m2ssd?.map((drive, index) => {
                 let driveStatus = null;
                 let driveTemp = null;
@@ -274,13 +288,13 @@ function NASCard({ config }) {
                 } catch (error) {
                   console.error(`加载NAS实体 ${drive.entity_id} 失败:`, error);
                   notification.error({
-                    message: 'NAS卡片加载失败',
-                    description: `nas ${drive.name || drive.entity_id} 加载失败: ${error.message}`,
+                    message: t('nas.loadError'),
+                    description: t('nas.loadErrorDesc') + (drive.name || drive.entity_id) + ' - ' + error.message,
                     placement: 'topRight',
                     duration: 3,
                     key: 'NASCard',
                   });
-                  return <div>加载失败</div>
+                  return <div>{t('nas.loadFailed')}</div>
                 }
                 
                 return (
@@ -291,8 +305,8 @@ function NASCard({ config }) {
                         <span className="label">{drive.name}</span>
                       </div>
                       <div className="drive-status">
-                        <span>{driveStatus?.state === "normal" ? "正常" : "异常" || '未知'}</span>
-                        <span className="drive-temp">{driveTemp?.state || '0'}°C</span>
+                        <span>{driveStatus?.state === "normal" ? t('nas.status.normal') : t('nas.status.abnormal') || t('nas.status.unknown')}</span>
+                        <span className="drive-temp">{driveTemp?.state || '0'}{t('nas.labels.unit.temp')}</span>
                       </div>
                     </div>
                   </React.Fragment>

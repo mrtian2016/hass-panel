@@ -8,7 +8,10 @@ import {
 } from '@mdi/js';
 import { Popup, List } from 'antd-mobile';
 import { useEntity } from '@hakit/core';
+import { useLanguage } from '../../i18n/LanguageContext';
+
 function LightControl({ lightEntity, onClose }) {
+  const { t } = useLanguage();
   const entity = useEntity(lightEntity.entity_id);
   const isDraggingRef = useRef(false);
   const isDraggingTempRef = useRef(false);
@@ -254,7 +257,7 @@ function LightControl({ lightEntity, onClose }) {
           </div>
           <div className="control-label">
             <Icon path={mdiBrightness6} size={0.8} />
-            <span>亮度</span>
+            <span>{t('lightOverview.lightControl.brightness')}</span>
           </div>
         </div>
 
@@ -273,7 +276,7 @@ function LightControl({ lightEntity, onClose }) {
           </div>
           <div className="control-label">
             <Icon path={mdiThermometer} size={0.8} />
-            <span>色温</span>
+            <span>{t('lightOverview.lightControl.colorTemp')}</span>
           </div>
         </div>
       </div>
@@ -286,11 +289,11 @@ function LightControl({ lightEntity, onClose }) {
                 onClick={() => setShowEffectPopup(true)}
               >
                 <span className="effect-value">
-                  {entity.attributes?.effect || '灯光效果'}
+                  {entity.attributes?.effect || t('lightOverview.lightControl.effect')}
                 </span>
                 <div className="control-label">
                   <Icon path={mdiCreationOutline} size={0.8} />
-                  <span>灯光效果</span>
+                  <span>{t('lightOverview.lightControl.effect')}</span>
                 </div>
               </div>
             </div>
@@ -317,13 +320,13 @@ function LightControl({ lightEntity, onClose }) {
           maxHeight: '80vh',
         }}
       >
-        <List header='选择灯光效果'>
+        <List header={t('lightOverview.lightControl.selectEffect')}>
           <List.Item
             key="default"
             onClick={() => handleEffectChange('')}
             className={!entity.attributes?.effect ? 'active' : ''}
           >
-            默认效果
+            {t('lightOverview.lightControl.defaultEffect')}
           </List.Item>
           {entity.attributes?.effect_list?.map(effect => (
             <List.Item

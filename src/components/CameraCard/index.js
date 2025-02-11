@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SpinLoading } from 'antd-mobile';
 import Modal from '../Modal';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
 
 function CameraCard({ camera, streamUrl, name }) {
@@ -8,6 +9,7 @@ function CameraCard({ camera, streamUrl, name }) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { t } = useLanguage();
 
   if (!camera) return null;
   // console.log(camera);
@@ -70,12 +72,12 @@ function CameraCard({ camera, streamUrl, name }) {
           {isLoading && (
             <div className="loading-container">
               <SpinLoading color='white' />
-              <span className="loading-text">加载中...</span>
+              <span className="loading-text">{t('camera.loading')}</span>
             </div>
           )}
           {hasError && (
             <div className="error-container">
-              <span className="error-text">视频加载失败</span>
+              <span className="error-text">{t('camera.loadError')}</span>
             </div>
           )}
           <iframe

@@ -4,11 +4,12 @@ import { Select, Input } from 'antd';
 // import Icon from '@mdi/react';
 // import { mdiDelete, mdiPlus } from '@mdi/js';
 import './style.css';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 function ConfigField({ field, value, onChange }) {
   const { getAllEntities } = useHass();
   const allEntities = getAllEntities();
-  
+  const { t } = useLanguage();
   // 过滤并格式化实体列表
   const getFilteredEntities = (filter) => {
     return Object.entries(allEntities)
@@ -29,7 +30,7 @@ function ConfigField({ field, value, onChange }) {
     onChange(newRooms);
   };
 
-  // 添加新的房间灯光
+  // {t('configField.addButton')}新的房间灯光
   const handleAddRoom = () => {
     onChange([...value, {
       name: '',
@@ -39,7 +40,7 @@ function ConfigField({ field, value, onChange }) {
     }]);
   };
 
-  // 删除房间灯光
+  // {t('configField.deleteButton')}房间灯光
   const handleDeleteRoom = (index) => {
     const newRooms = value.filter((_, i) => i !== index);
     onChange(newRooms);
@@ -71,7 +72,7 @@ function ConfigField({ field, value, onChange }) {
               value={value}
               onChange={onChange}
               showSearch
-              placeholder="选择实体"
+              placeholder={t('configField.selectEntity')}
               optionFilterProp="children"
               style={{ width: '100%' }}
             >
@@ -93,22 +94,22 @@ function ConfigField({ field, value, onChange }) {
             {Array.isArray(value) && value.map((room, index) => (
               <div key={index} className="light-room-item">
                 <div className="room-field">
-                  <label>房间名称</label>
+                  <label>{t('configField.roomName')}</label>
                   <Input
                     value={room.name}
                     onChange={(e) => handleLightOverviewChange(index, 'name', e.target.value)}
-                    placeholder="输入房间名称"
+                    placeholder={t('configField.placeholderRoomName')}
                   />
                 </div>
                 
                 <div className="room-field">
-                  <label>灯光实体</label>
+                  <label>{t('configField.selectEntity')}</label>
                   <Select
                     allowClear
                     value={room.entity_id}
                     onChange={(value) => handleLightOverviewChange(index, 'entity_id', value)}
                     showSearch
-                    placeholder="选择灯光实体"
+                    placeholder={t('configField.selectEntityPlaceholder')}
                     optionFilterProp="children"
                     style={{ width: '100%' }}
                   >
@@ -121,37 +122,37 @@ function ConfigField({ field, value, onChange }) {
                 </div>
 
                 <div className="room-field">
-                  <label>按钮位置 - 左边距</label>
+                  <label>{t('configField.buttonPositionLeft')}</label>
                   <Input
                     value={room.position?.left}
                     onChange={(e) => handleLightOverviewChange(index, 'position', { ...room.position, left: e.target.value })}
-                    placeholder="例如: 50%"
+                    placeholder={t('configField.placeholderPositionLeft')}
                   />
                 </div>
 
                 <div className="room-field">
-                  <label>按钮位置 - 上边距</label>
+                  <label>{t('configField.buttonPositionTop')}</label>
                   <Input
                     value={room.position?.top}
                     onChange={(e) => handleLightOverviewChange(index, 'position', { ...room.position, top: e.target.value })}
-                    placeholder="例如: 50%"
+                    placeholder={t('configField.placeholderPositionTop')}
                   />
                 </div>
 
                 <div className="room-field">
-                  <label>灯光效果图片</label>
+                  <label>{t('configField.lightEffectImage')}</label>
                   <Input
                     value={room.image}
                     onChange={(e) => handleLightOverviewChange(index, 'image', e.target.value)}
-                    placeholder="输入图片URL"
+                    placeholder={t('configField.placeholderLightEffectImage')}
                   />
                 </div>
 
-                <button onClick={() => handleDeleteRoom(index)}>删除</button>
+                <button onClick={() => handleDeleteRoom(index)}>{t('configField.deleteButton')}</button>
               </div>
             ))}
           </div>
-          <button onClick={handleAddRoom}>添加</button>
+          <button onClick={handleAddRoom}>{t('configField.addButton')}</button>
         </div>
       );
 
@@ -173,7 +174,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newEntities);
                   }}
                 >
-                  删除
+                  {t('configField.deleteButton')}
                 </button>
               </div>
             ))}
@@ -186,7 +187,7 @@ function ConfigField({ field, value, onChange }) {
                 }
               }}
               showSearch
-              placeholder="添加实体"
+              placeholder={t('configField.selectEntity')}
               optionFilterProp="children"
               filterOption={(input, option) =>
                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -221,7 +222,7 @@ function ConfigField({ field, value, onChange }) {
                     };
                     onChange(newGroups);
                   }}
-                  placeholder="房间名称"
+                  placeholder={t('configField.placeholderRoomName')}
                 />
                 <div className="sensor-config-list">
                   {Object.entries(group.sensors || {}).map(([type, sensor]) => (
@@ -245,7 +246,7 @@ function ConfigField({ field, value, onChange }) {
                           onChange(newGroups);
                         }}
                         showSearch
-                        placeholder={`选择${type === 'temperature' ? '温度' : '湿度'}传感器`}
+                        placeholder={`${t('configField.selectEntityPlaceholder')}`}
                         optionFilterProp="children"
                         filterOption={(input, option) =>
                           (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -265,7 +266,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newGroups);
                   }}
                 >
-                  删除
+                  {t('configField.deleteButton')}
                 </button>
               </div>
             ))}
@@ -279,12 +280,12 @@ function ConfigField({ field, value, onChange }) {
                     sensors: {
                       temperature: {
                         entity_id: '',
-                        name: '温度',
+                        name: t('configField.temperature'),
                         icon: 'mdiThermometer'
                       },
                       humidity: {
                         entity_id: '',
-                        name: '湿度',
+                        name: t('configField.humidity'),
                         icon: 'mdiWaterPercent'
                       }
                     }
@@ -292,7 +293,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加
+              {t('configField.addButton')}
             </button>
           </div>
         </div>
@@ -320,7 +321,7 @@ function ConfigField({ field, value, onChange }) {
                         }
                       });
                     }}
-                    placeholder="灯光名称"
+                    placeholder={t('configField.lightName')}
                   />
                   <Select
                     allowClear
@@ -336,7 +337,7 @@ function ConfigField({ field, value, onChange }) {
                       });
                     }}
                     showSearch
-                    placeholder="选择灯光实体"
+                    placeholder={t('configField.selectEntity')}
                     optionFilterProp="children"
                     filterOption={(input, option) =>
                       (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -387,7 +388,7 @@ function ConfigField({ field, value, onChange }) {
                       onChange(newValue);
                     }}
                   >
-                    删除
+                    {t('configField.deleteButton')}
                   </button>
                 </div>
               </div>
@@ -407,7 +408,7 @@ function ConfigField({ field, value, onChange }) {
                 });
               }}
             >
-              添加
+              {t('configField.addButton')}
             </button>
           </div>
         </div>
@@ -433,7 +434,7 @@ function ConfigField({ field, value, onChange }) {
                     };
                     onChange(newCameras);
                   }}
-                  placeholder="摄像头名称"
+                  placeholder={t('configField.cameraName')}
                 />
                 <Select
                   allowClear
@@ -447,7 +448,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newCameras);
                   }}
                   showSearch
-                  placeholder="选择摄像头实体"
+                  placeholder={t('configField.selectEntity')}
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -468,7 +469,7 @@ function ConfigField({ field, value, onChange }) {
                     };
                     onChange(newCameras);
                   }}
-                  placeholder="流地址"
+                  placeholder={t('configField.streamUrl')}
                 />
                 
                 <button
@@ -478,7 +479,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newCameras);
                   }}
                 >
-                  删除
+                  {t('configField.deleteButton')}
                 </button>
               </div>
             ))}
@@ -495,7 +496,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加
+              {t('configField.addButton')}
             </button>
           </div>
         </div>
@@ -521,7 +522,7 @@ function ConfigField({ field, value, onChange }) {
                     };
                     onChange(newPlayers);
                   }}
-                  placeholder="播放器名称"
+                  placeholder={t('configField.playerName')}
                 />
                 <Select
                   allowClear
@@ -535,7 +536,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newPlayers);
                   }}
                   showSearch
-                  placeholder="选择播放器实体"
+                  placeholder={t('configField.selectEntity')}
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -552,7 +553,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newPlayers);
                   }}
                 >
-                  删除
+                  {t('configField.deleteButton')}
                 </button>
               </div>
             ))}
@@ -568,7 +569,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加
+              {t('configField.addButton')}
             </button>
           </div>
         </div>
@@ -594,7 +595,7 @@ function ConfigField({ field, value, onChange }) {
                     };
                     onChange(newCurtains);
                   }}
-                  placeholder="窗帘名称"
+                  placeholder={t('configField.curtainName')}
                 />
                 <Select
                   allowClear
@@ -608,7 +609,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newCurtains);
                   }}
                   showSearch
-                  placeholder="选择窗帘实体"
+                  placeholder={t('configField.selectEntity')}
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -625,7 +626,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newCurtains);
                   }}
                 >
-                  删除
+                  {t('configField.deleteButton')}
                 </button>
               </div>
             ))}
@@ -641,7 +642,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加
+              {t('configField.addButton')}
             </button>
           </div>
         </div>
@@ -650,17 +651,15 @@ function ConfigField({ field, value, onChange }) {
     case 'router-config':
       const routerEntities = getFilteredEntities('sensor.*');
       const routerFields = [
-        { key: 'sysName', name: '系统名称' },
-        { key: 'sysDesc', name: '系统描述' },
-        { key: 'cpuTemp', name: 'CPU温度' },
-        { key: 'uptime', name: '运行时间' },
-        { key: 'cpuUsage', name: 'CPU使用率' },
-        { key: 'memoryUsage', name: '内存占用' },
-        { key: 'onlineUsers', name: '在线用户' },
-        { key: 'networkConnections', name: '网络连接数' },
-        { key: 'wanIp', name: 'WAN IP' },
-        { key: 'wanDownloadSpeed', name: 'WAN 下载' },
-        { key: 'wanUploadSpeed', name: 'WAN 上传' }
+        { key: 'cpuTemp', name: t('configField.cpuTemp') },
+        { key: 'uptime', name: t('configField.uptime') },
+        { key: 'cpuUsage', name: t('configField.cpuUsage') },
+        { key: 'memoryUsage', name: t('configField.memoryUsage') },
+        { key: 'onlineUsers', name: t('configField.onlineUsers') },
+        { key: 'networkConnections', name: t('configField.networkConnections') },
+        { key: 'wanIp', name: t('configField.wanIp') },
+        { key: 'wanDownloadSpeed', name: t('configField.downloadSpeed') },
+        { key: 'wanUploadSpeed', name: t('configField.uploadSpeed') }
       ];
       
       return (
@@ -686,7 +685,7 @@ function ConfigField({ field, value, onChange }) {
                       });
                     }}
                     showSearch
-                    placeholder="选择实体"
+                    placeholder={t('configField.selectEntity')}
                     optionFilterProp="children"
                     filterOption={(input, option) =>
                       (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -706,29 +705,29 @@ function ConfigField({ field, value, onChange }) {
     case 'nas-config':
       const nasEntities = getFilteredEntities('sensor.*');
       const nasMainFields = [
-        { key: 'cpuTemp', name: 'CPU温度' },
-        { key: 'cpuUsage', name: 'CPU使用率' },
-        { key: 'memoryUsage', name: '内存占用' },
-        { key: 'uploadSpeed', name: '上传速度' },
-        { key: 'downloadSpeed', name: '下载速度' }
+        { key: 'cpuTemp', name: t('configField.cpuTemp') },
+        { key: 'cpuUsage', name: t('configField.cpuUsage') },
+        { key: 'memoryUsage', name: t('configField.memoryUsage') },
+        { key: 'uploadSpeed', name: t('configField.uploadSpeed') },
+        { key: 'downloadSpeed', name: t('configField.downloadSpeed') }
       ];
 
       const volumeFields = [
-        { key: 'status', name: '状态' },
-        { key: 'usage', name: '使用空间' },
-        { key: 'total', name: '总空间' },
-        { key: 'usagePercent', name: '使用率' },
-        { key: 'avgTemperature', name: '平均温度' }
+        { key: 'status', name: t('configField.status') },
+        { key: 'usage', name: t('configField.volumeUsage') },
+        { key: 'total', name: t('configField.volumeTotal') },
+        { key: 'usagePercent', name: t('configField.volumeUsedPercent') },
+        { key: 'avgTemperature', name: t('configField.volumeAvgTemp') }
       ];
 
       const driveFields = [
-        { key: 'status', name: '状态' },
-        { key: 'temperature', name: '温度' }
+        { key: 'status', name: t('configField.status') },
+        { key: 'temperature', name: t('configField.temperature') }
       ];
 
       const m2ssdFields = [
-        { key: 'status', name: '状态' },
-        { key: 'temperature', name: '温度' }
+        { key: 'status', name: t('configField.status') },
+        { key: 'temperature', name: t('configField.temperature') }
       ];
       
       return (
@@ -736,7 +735,7 @@ function ConfigField({ field, value, onChange }) {
           <label>{field.label}</label>
           <div className="nas-config">
             <div className="nas-section">
-              <h4>主要信息</h4>
+              <h4>{t('configField.mainInfo')}</h4>
               {nasMainFields.map(nasField => {
                 const currentValue = value.main?.[nasField.key] || {};
                 
@@ -759,7 +758,7 @@ function ConfigField({ field, value, onChange }) {
                         });
                       }}
                       showSearch
-                      placeholder="选择实体"
+                      placeholder={`${t('configField.selectEntity')}`}
                       optionFilterProp="children"
                       filterOption={(input, option) =>
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -775,7 +774,7 @@ function ConfigField({ field, value, onChange }) {
             </div>
 
             <div className="nas-section">
-              <h4>存储池</h4>
+              <h4>{t('configField.volumes')}</h4>
               {(value.volumes || []).map((volume, volumeIndex) => (
                 <div key={volumeIndex} className="volume-config">
                   <Input
@@ -792,7 +791,7 @@ function ConfigField({ field, value, onChange }) {
                         volumes: newVolumes
                       });
                     }}
-                    placeholder="存储池名称"
+                    placeholder={`${t('configField.storagePoolName')}`}
                   />
                   {volumeFields.map(field => {
                     const currentValue = volume[field.key] || {};
@@ -818,7 +817,7 @@ function ConfigField({ field, value, onChange }) {
                             });
                           }}
                           showSearch
-                          placeholder={`选择${field.name}`}
+                          placeholder={`${t('configField.selectEntity')}`}
                           optionFilterProp="children"
                           filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -841,7 +840,7 @@ function ConfigField({ field, value, onChange }) {
                       });
                     }}
                   >
-                    删除
+                    {t('configField.deleteButton')}
                   </button>
                 </div>
               ))}
@@ -863,12 +862,12 @@ function ConfigField({ field, value, onChange }) {
                   });
                 }}
               >
-                添加
+                {t('configField.addButton')}
               </button>
             </div>
 
             <div className="nas-section">
-              <h4>硬盘</h4>
+              <h4>{t('configField.drives')}</h4>
               {(value.drives || []).map((drive, driveIndex) => (
                 <div key={driveIndex} className="drive-config">
                   <Input
@@ -885,7 +884,7 @@ function ConfigField({ field, value, onChange }) {
                         drives: newDrives
                       });
                     }}
-                    placeholder="硬盘名称"
+                    placeholder={`${t('configField.driveName')}`}
                   />
                   {driveFields.map(field => {
                     const currentValue = drive[field.key] || {};
@@ -911,7 +910,7 @@ function ConfigField({ field, value, onChange }) {
                             });
                           }}
                           showSearch
-                          placeholder={`选择${field.name}`}
+                          placeholder={t('configField.selectEntity')}
                           optionFilterProp="children"
                           filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -934,7 +933,7 @@ function ConfigField({ field, value, onChange }) {
                       });
                     }}
                   >
-                    删除
+                    {t('configField.deleteButton')}
                   </button>
                 </div>
               ))}
@@ -953,12 +952,12 @@ function ConfigField({ field, value, onChange }) {
                   });
                 }}
               >
-                添加
+                {t('configField.addButton')}
               </button>
             </div>
 
             <div className="nas-section">
-              <h4>M.2 SSD</h4>
+              <h4>{t('configField.m2ssd')}</h4>
               {(value.m2ssd || []).map((ssd, ssdIndex) => (
                 <div key={ssdIndex} className="m2ssd-config">
                   <Input
@@ -975,7 +974,7 @@ function ConfigField({ field, value, onChange }) {
                         m2ssd: newSsds
                       });
                     }}
-                    placeholder="SSD名称"
+                    placeholder={`${t('configField.ssdName')}`}
                   />
                   {m2ssdFields.map(field => {
                     const currentValue = ssd[field.key] || {};
@@ -1001,7 +1000,7 @@ function ConfigField({ field, value, onChange }) {
                             });
                           }}
                           showSearch
-                          placeholder={`选择${field.name}`}
+                          placeholder={t('configField.selectEntity')}
                           optionFilterProp="children"
                           filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -1024,7 +1023,7 @@ function ConfigField({ field, value, onChange }) {
                       });
                     }}
                   >
-                    删除
+                    {t('configField.deleteButton')}
                   </button>
                 </div>
               ))}
@@ -1043,7 +1042,7 @@ function ConfigField({ field, value, onChange }) {
                   });
                 }}
               >
-                添加
+                {t('configField.addButton')}
               </button>
             </div>
           </div>
@@ -1071,7 +1070,7 @@ function ConfigField({ field, value, onChange }) {
                     };
                     onChange(newScripts);
                   }}
-                  placeholder="脚本名称"
+                  placeholder={`${t('configField.scriptName')}`}
                 />
                 <Select
                   allowClear
@@ -1085,7 +1084,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newScripts);
                   }}
                   showSearch
-                  placeholder="选择脚本实体"
+                  placeholder={t('configField.selectEntity')}
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -1107,7 +1106,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newScripts);
                   }}
                   showSearch
-                  placeholder="选择图标"
+                  placeholder={t('configField.selectIcon')}
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -1124,7 +1123,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newScripts);
                   }}
                 >
-                  删除
+                  {t('configField.deleteButton')}
                 </button>
               </div>
             ))}
@@ -1140,7 +1139,7 @@ function ConfigField({ field, value, onChange }) {
                 ]);
               }}
             >
-              添加
+              {t('configField.addButton')}
             </button>
           </div>
         </div>
@@ -1149,12 +1148,12 @@ function ConfigField({ field, value, onChange }) {
     case 'waterpuri-config':
       const waterPuriEntities = getFilteredEntities('sensor.*');
       const waterPuriFields = [
-        { key: 'temperature', name: '温度' },
-        { key: 'tds_in', name: '进水TDS' },
-        { key: 'tds_out', name: '出水TDS' },
-        { key: 'pp_filter_life', name: 'PP棉剩余寿命' },
-        { key: 'ro_filter_life', name: 'RO反渗透滤芯剩余寿命' },
-        { key: 'status', name: '状态' }
+        { key: 'temperature', name: t('configField.temperature') },
+        { key: 'tds_in', name: t('configField.tdsIn') },
+        { key: 'tds_out', name: t('configField.tdsOut') },
+        { key: 'pp_filter_life', name: t('configField.ppFilterLife') },
+        { key: 'ro_filter_life', name: t('configField.roFilterLife') },
+        { key: 'status', name: t('configField.status') }
       ];
       
       return (
@@ -1180,7 +1179,7 @@ function ConfigField({ field, value, onChange }) {
                       });
                     }}
                     showSearch
-                    placeholder="选择实体"
+                    placeholder={t('configField.selectEntity')}
                     optionFilterProp="children"
                     filterOption={(input, option) =>
                       (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -1200,15 +1199,15 @@ function ConfigField({ field, value, onChange }) {
     case 'electricity-config':
       const electricityEntities = getFilteredEntities('sensor.*');
       const electricityFields = [
-        { key: 'currentPower', name: '当前总功率' },
-        { key: 'voltage', name: '实时电压' },
-        { key: 'electric_current', name: '实时电流' },
-        { key: 'todayUsage', name: '今日用电量' },
-        { key: 'yesterdayUsage', name: '昨日用电量' },
-        { key: 'monthUsage', name: '月度用电量' },
-        { key: 'lastMonthUsage', name: '上月用电量' },
-        { key: 'yearlyUsage', name: '年度用电量' },
-        { key: 'dailyHistory', name: '每日用电量' }
+        { key: 'currentPower', name: t('configField.currentPower') },
+        { key: 'voltage', name: t('configField.voltage') },
+        { key: 'electric_current', name: t('configField.electricCurrent') },
+        { key: 'todayUsage', name: t('configField.todayUsage') },
+        { key: 'yesterdayUsage', name: t('configField.yesterdayUsage') },
+        { key: 'monthUsage', name: t('configField.monthUsage') },
+        { key: 'lastMonthUsage', name: t('configField.lastMonthUsage') },
+        { key: 'yearlyUsage', name: t('configField.yearlyUsage') },
+        { key: 'dailyHistory', name: t('configField.dailyHistory') }
       ];
       
       return (
@@ -1234,7 +1233,7 @@ function ConfigField({ field, value, onChange }) {
                       });
                     }}
                     showSearch
-                    placeholder="选择实体"
+                    placeholder={t('configField.selectEntity')}
                     optionFilterProp="children"
                     filterOption={(input, option) =>
                       (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -1255,21 +1254,21 @@ function ConfigField({ field, value, onChange }) {
       const featureEntities = getFilteredEntities('switch.*');
       const predefinedFeatures = {
         eco: {
-          name: '节能',
+          name: t('configField.eco'),
           icon: 'mdiLeaf',
           disableWhen: {
             state: 'off'
           }
         },
         sleep: {
-          name: '睡眠',
+          name: t('configField.sleep'),
           icon: 'mdiPowerSleep',
           disableWhen: {
             state: 'off'
           }
         },
         heater: {
-          name: '辅热',
+          name: t('configField.heater'),
           icon: 'mdiHeatingCoil',
           disableWhen: {
             state: 'off'
@@ -1279,7 +1278,7 @@ function ConfigField({ field, value, onChange }) {
           }
         },
         unStraightBlowing: {
-          name: '防直吹',
+          name: t('configField.unStraightBlowing'),
           icon: 'mdiAirPurifier',
           disableWhen: {
             state: 'off'
@@ -1290,7 +1289,7 @@ function ConfigField({ field, value, onChange }) {
         },
         // 新风
         newAir: {
-          name: '新风',
+          name: t('configField.newAir'),
           icon: 'mdiAirPurifier',
           disableWhen: {
             state: 'off'
@@ -1329,7 +1328,7 @@ function ConfigField({ field, value, onChange }) {
                       }
                     }}
                     showSearch
-                    placeholder="选择功能"
+                    placeholder={t('configField.selectFeature')}
                     optionFilterProp="children"
                     options={Object.values(predefinedFeatures).map(f => ({
                       value: f.name,
@@ -1351,7 +1350,7 @@ function ConfigField({ field, value, onChange }) {
                         });
                       }}
                       showSearch
-                      placeholder="选择开关实体"
+                      placeholder={t('configField.selectEntity')}
                       optionFilterProp="children"
                       filterOption={(input, option) =>
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -1370,7 +1369,7 @@ function ConfigField({ field, value, onChange }) {
                       onChange(newValue);
                     }}
                   >
-                    删除
+                    {t('configField.deleteButton')}
                   </button>
               </div>
             ))}
@@ -1391,7 +1390,7 @@ function ConfigField({ field, value, onChange }) {
                 });
               }}
             >
-              添加
+              {t('configField.addButton')}
             </button>
           </div>
         </div>
@@ -1407,7 +1406,7 @@ function ConfigField({ field, value, onChange }) {
             {(value || []).map((sensor, index) => (
               <div key={index} className="illuminance-item">
                 <div className="config-field-row">
-                  <span className="field-name">传感器名称</span>
+                  <span className="field-name">{t('configField.sensorName')}</span>
                   <Input
                     type="text"
                     value={sensor.name || null}
@@ -1419,11 +1418,11 @@ function ConfigField({ field, value, onChange }) {
                       };
                       onChange(newSensors);
                     }}
-                    placeholder="传感器名称"
+                    placeholder={t('configField.sensorName')}
                   />
                 </div>
                 <div className="config-field-row">
-                  <span className="field-name">传感器实体</span>
+                  <span className="field-name">{t('configField.sensorEntity')}</span>
                   <Select
                     allowClear
                     value={sensor.entity_id || null}
@@ -1436,7 +1435,7 @@ function ConfigField({ field, value, onChange }) {
                       onChange(newSensors);
                     }}
                     showSearch
-                    placeholder="选择光照传感器实体"
+                    placeholder={t('configField.selectEntity')}
                     optionFilterProp="children"
                     filterOption={(input, option) =>
                       (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -1455,7 +1454,7 @@ function ConfigField({ field, value, onChange }) {
                     onChange(newSensors);
                   }}
                 >
-                  删除
+                  {t('configField.deleteButton')}
                 </button>
               </div>
             ))}
@@ -1472,7 +1471,7 @@ function ConfigField({ field, value, onChange }) {
               ]);
             }}
           >
-            添加
+            {t('configField.addButton')}
           </button>
         </div>
       );

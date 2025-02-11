@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { HassConnect } from '@hakit/core';
 import { ThemeProvider } from './theme/ThemeContext';
+import { LanguageProvider } from './i18n/LanguageContext';
 import Bottom from './components/Bottom';
 import Sidebar from './components/Sidebar';
 import Home from './pages/home';
@@ -24,21 +25,23 @@ function App() {
 
   return (
     <ThemeProvider>
-      <HassConnect 
-        hassUrl={window.env?.REACT_APP_HASS_URL} 
-        hassToken={window.env?.REACT_APP_HASS_TOKEN}
-      >
-        <Router>
-          <div className="App">
-            {isDesktop && <Sidebar visible={sidebarVisible} />}
-            <Routes>
-              <Route path="/" element={<Home sidebarVisible={sidebarVisible} setSidebarVisible={setSidebarVisible} />} />
-              {AppRoutes()}
-            </Routes>
-            {!isDesktop && <Bottom />}
-          </div>
-        </Router>
-      </HassConnect>
+      <LanguageProvider>
+        <HassConnect 
+          hassUrl={window.env?.REACT_APP_HASS_URL} 
+          hassToken={window.env?.REACT_APP_HASS_TOKEN}
+        >
+          <Router>
+            <div className="App">
+              {isDesktop && <Sidebar visible={sidebarVisible} />}
+              <Routes>
+                <Route path="/" element={<Home sidebarVisible={sidebarVisible} setSidebarVisible={setSidebarVisible} />} />
+                {AppRoutes()}
+              </Routes>
+              {!isDesktop && <Bottom />}
+            </div>
+          </Router>
+        </HassConnect>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

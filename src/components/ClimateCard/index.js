@@ -3,6 +3,7 @@ import BaseCard from '../BaseCard';
 import Icon from '@mdi/react';
 // import { useHass } from '@hakit/core';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { 
   mdiThermometer, 
   mdiWaterPercent, 
@@ -41,6 +42,7 @@ function ClimateCard({
   config,
 }) {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const climate = useEntity(config?.entity_id || '', {returnNullIfNotFound: true});
   const [showFanModes, setShowFanModes] = useState(false);
   const [showSwingModes, setShowSwingModes] = useState(false);
@@ -49,14 +51,20 @@ function ClimateCard({
   // 处理空调实体未找到的情况
   if (!climate) {
     notification.error({
-      message: '空调加载失败',
-      description: `空调加载失败,实体ID: ${config.entity_id} 未找到`,
+      message: t('climate.loadError'),
+      description: `${t('climate.loadErrorDesc')} ${config.entity_id}`,
       placement: 'topRight',
       duration: 3,
       key: 'ClimateCard',
     });
     
-    return <BaseCard title={config.name || "空调"} icon={mdiAirConditioner} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#64B5F6'} > 加载失败</BaseCard>;
+    return <BaseCard 
+      title={config.name || t('cardTitles.climate')} 
+      icon={mdiAirConditioner} 
+      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#64B5F6'} 
+    >
+      {t('climate.loadFailed')}
+    </BaseCard>;
   }
 
   // 处理特性实体
@@ -75,8 +83,8 @@ function ClimateCard({
         };
       } else {
         notification.error({
-          message: '空调功能加载失败',
-          description: `空调功能加载失败,实体ID: ${feature.entity_id} 未找到`,
+          message: t('climate.featureLoadError'),
+          description: `${t('climate.featureLoadErrorDesc')} ${feature.entity_id}`,
           placement: 'topRight',
           duration: 3,
           key: 'ClimateCard',
@@ -141,31 +149,11 @@ function ClimateCard({
   };
 
   const getSwingModeLabel = (mode) => {
-    switch (mode) {
-      case 'off':
-        return '关闭';
-      case 'vertical':
-        return '垂直摆动';
-      default:
-        return '关闭';
-    }
+    return t(`climate.swingModes.${mode}`);
   };
 
   const getHvacModeLabel = (mode) => {
-    switch (mode) {
-      case 'cool':
-        return '制冷';
-      case 'dry':
-        return '除湿';
-      case 'fan_only':
-        return '送风';
-      case 'heat':
-        return '制热';
-      case 'off':
-        return '关闭';
-      default:
-        return mode;
-    }
+    return t(`climate.hvacModes.${mode}`);
   };
 
   const getHvacModeIcon = (mode) => {
@@ -202,13 +190,14 @@ function ClimateCard({
 
   return (
     <BaseCard
-      title={config.name || "空调"}
+      title={config.name || t('cardTitles.climate')}
       icon={mdiAirConditioner}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#64B5F6'}
       headerRight={
         <button 
           className={`power-button ${!isOn ? 'off' : ''}`} 
           onClick={handlePowerClick}
+          title={t('climate.power')}
         >
           <Icon path={mdiPower} size={1} />
         </button>
@@ -220,7 +209,7 @@ function ClimateCard({
             <div className="reading">
               <div className="reading-label">
                 <Icon path={mdiThermometer} size={0.8} />
-                <span>当前温度</span>
+                <span>{t('climate.currentTemp')}</span>
               </div>
               <div className="reading-value">
                 <span className="value">{currentTemp || '--'}</span>
@@ -230,7 +219,7 @@ function ClimateCard({
             <div className="reading">
               <div className="reading-label">
                 <Icon path={mdiWaterPercent} size={0.8} />
-                <span>当前湿度</span>
+                <span>{t('climate.currentHumidity')}</span>
               </div>
               <div className="reading-value">
                 <span className="value">{currentHumidity || '--'}</span>
@@ -265,29 +254,29 @@ function ClimateCard({
 
         <div className="climate-controls">
           <button 
-            className={`mode-button `}
+            className="mode-button"
             onClick={() => setShowHvacModes(true)}
           >
             <Icon path={getHvacModeIcon(climate?.state)} size={1} />
-            <span>运行模式</span>
+            <span>{t('climate.operationMode')}</span>
             <span className="mode-value">{getHvacModeLabel(climate?.state)}</span>
           </button>
           <button 
-            className={`mode-button `}
+            className="mode-button"
             onClick={() => setShowFanModes(true)}
             disabled={!isOn}
           >
             <Icon path={mdiFan} size={1} />
-            <span>风扇模式</span>
+            <span>{t('climate.fanMode')}</span>
             <span className="mode-value">{fanMode}</span>
           </button>
           <button 
-            className={`mode-button`}
+            className="mode-button"
             onClick={() => setShowSwingModes(true)}
             disabled={!isOn}
           >
             <Icon path={mdiArrowOscillating} size={1} />
-            <span>摆动模式</span>
+            <span>{t('climate.swingMode')}</span>
             <span className="mode-value">{getSwingModeLabel(swingMode)}</span>
           </button>
         </div>
@@ -327,7 +316,7 @@ function ClimateCard({
       >
         <div className="fan-mode-popup">
           <div className="popup-header">
-            <h3>风扇模式</h3>
+            <h3>{t('climate.fanMode')}</h3>
             <Icon path={mdiFan} size={1} />
           </div>
           <List>
@@ -337,7 +326,7 @@ function ClimateCard({
                 onClick={() => handleFanModeChange(mode)}
                 className={fanMode === mode ? 'active-mode' : ''}
               >
-                {mode}
+                {t(`climate.fanModes.${mode}`)}
               </List.Item>
             ))}
           </List>
@@ -356,7 +345,7 @@ function ClimateCard({
       >
         <div className="fan-mode-popup">
           <div className="popup-header">
-            <h3>摆动模式</h3>
+            <h3>{t('climate.swingMode')}</h3>
             <Icon path={mdiFan} size={1} className="rotate-90" />
           </div>
           <List>
@@ -385,7 +374,7 @@ function ClimateCard({
       >
         <div className="fan-mode-popup">
           <div className="popup-header">
-            <h3>运行模式</h3>
+            <h3>{t('climate.operationMode')}</h3>
             <Icon path={mdiPower} size={1} />
           </div>
           <List>

@@ -3,8 +3,10 @@ import Icon from '@mdi/react';
 import { mdiCeilingLight } from '@mdi/js';
 import Modal from '../Modal';
 import LightControl from './LightControl';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 function FloorPlan({ lights }) {
+  const { t } = useLanguage();
   const [showControl, setShowControl] = useState(false);
   const [selectedLight, setSelectedLight] = useState(null);
   const pressTimer = useRef(null);
@@ -47,7 +49,7 @@ function FloorPlan({ lights }) {
     <div className="floor-plan">
       <img 
         src={lights.background}
-        alt="房间布局" 
+        alt={t('lightOverview.floorPlan.roomLayout')}
         className="base-layer"
       />
       

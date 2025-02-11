@@ -12,23 +12,25 @@ import {
 } from '@mdi/js';
 // import { useService } from '@hakit/core';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import './style.css';
 import { useEntity } from '@hakit/core';
 
 function MediaPlayerCard({ config }) {
   const { theme } = useTheme();
+  const { t } = useLanguage();
 
   // 检查配置是否存在
   if (!config || !config.mediaPlayers) {
     return (
       <BaseCard
-        title="播放器控制"
+        title={config.title || t('cardTitles.mediaplayer')}
         icon={mdiPlayCircle}
         iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#81C784'}
       >
         <div className="media-players">
-          配置信息不完整
+          {t('mediaPlayer.configIncomplete')}
         </div>
       </BaseCard>
     );
@@ -47,10 +49,9 @@ function MediaPlayerCard({ config }) {
         entity,
       };
     } catch (error) {
-      console.error(`加载播放器实体 ${player.entity_id} 失败:`, error);
       notification.error({
-        message: '播放器卡片加载失败',
-        description: `播放器 ${player.name || player.entity_id} 加载失败: ${error.message}`,
+        message: t('mediaPlayer.loadError'),
+        description: t('mediaPlayer.loadErrorDesc') + (player.name || player.entity_id) + ' - ' + error.message,
         placement: 'topRight',
         duration: 3,
         key: 'MediaPlayerCard',
@@ -73,7 +74,7 @@ function MediaPlayerCard({ config }) {
   // 安全获取媒体标题
   const getMediaTitle = (entity) => {
     if (!entity || entity.error || !entity.attributes?.media_title) {
-      return '未在播放';
+      return t('mediaPlayer.notPlaying');
     }
     return entity.attributes.media_title;
   };
@@ -124,7 +125,7 @@ function MediaPlayerCard({ config }) {
 
   return (
     <BaseCard
-      title="播放器控制"
+      title={config.title || t('cardTitles.mediaplayer')}
       icon={mdiPlayCircle}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#81C784'}
     >
@@ -147,7 +148,7 @@ function MediaPlayerCard({ config }) {
                 <div className="player-info-row">
                   <div className="player-cover">
                     {coverUrl ? (
-                      <img src={coverUrl} alt="封面" />
+                      <img src={coverUrl} alt={t('mediaPlayer.cover')} />
                     ) : (
                       <div className="cover-placeholder" />
                     )}
@@ -170,12 +171,14 @@ function MediaPlayerCard({ config }) {
                       onChange={(e) => handleVolumeSet(player.entity, parseFloat(e.target.value))}
                       disabled={entityState === 'off'}
                       className="volume-slider"
+                      title={t('mediaPlayer.volume.set')}
                     />
                     <div className="volume-buttons">
                       <button 
                         className="control-button"
                         onClick={() => handleVolumeDown(player.entity)}
                         disabled={entityState === 'off'}
+                        title={t('mediaPlayer.volume.down')}
                       >
                         <Icon path={mdiVolumeLow} size={0.8} />
                       </button>
@@ -183,6 +186,7 @@ function MediaPlayerCard({ config }) {
                         className="control-button"
                         onClick={() => handleVolumeUp(player.entity)}
                         disabled={entityState === 'off'}
+                        title={t('mediaPlayer.volume.up')}
                       >
                         <Icon path={mdiVolumeHigh} size={0.8} />
                       </button>
@@ -193,6 +197,7 @@ function MediaPlayerCard({ config }) {
                       className="control-button"
                       onClick={() => handlePrevious(player.entity)}
                       disabled={entityState === 'off'}
+                      title={t('mediaPlayer.controls.previous')}
                     >
                       <Icon path={mdiSkipPrevious} size={1} />
                     </button>
@@ -200,6 +205,7 @@ function MediaPlayerCard({ config }) {
                       className="control-button play-button"
                       onClick={() => handlePlayPause(player.entity)}
                       disabled={entityState === 'off'}
+                      title={t('mediaPlayer.controls.playPause')}
                     >
                       <Icon path={entityState === 'playing' ? mdiPause : mdiPlay} size={1} />
                     </button>
@@ -207,6 +213,7 @@ function MediaPlayerCard({ config }) {
                       className="control-button"
                       onClick={() => handleNext(player.entity)}
                       disabled={entityState === 'off'}
+                      title={t('mediaPlayer.controls.next')}
                     >
                       <Icon path={mdiSkipNext} size={1} />
                     </button>

@@ -3,6 +3,7 @@ import BaseCard from '../BaseCard';
 import { mdiLightningBolt, mdiEye } from '@mdi/js';
 import Icon from '@mdi/react';
 import ReactECharts from 'echarts-for-react';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
 import { useEntity } from '@hakit/core';
 import { notification } from 'antd';
@@ -10,16 +11,18 @@ import { notification } from 'antd';
 function ElectricityCard({ 
   config,
 }) {
+  const { t } = useLanguage();
+
   // 检查配置是否存在
   if (!config || !config.electricity) {
     return (
       <BaseCard 
-        title="电量统计"
+        title={config.title || t('cardTitles.electricity')}
         icon={mdiEye}
         className="electricity-usage-card"
       >
         <div className="electricity-content">
-          配置信息不完整
+          {t('electricity.configIncomplete')}
         </div>
       </BaseCard>
     );
@@ -37,8 +40,8 @@ function ElectricityCard({
     } catch (error) {
       console.error(`加载实体 ${key} 失败:`, error);
       notification.error({
-        message: '电量监测卡片加载失败',
-        description: `电量监测实体 ${config.name || config.entity_id} 加载失败: ${error.message}`,
+        message: t('electricity.loadError'),
+        description: `${t('electricity.loadErrorDesc')} ${config.name || config.entity_id} - ${error.message}`,
         placement: 'topRight',
         duration: 3,
         key: 'ElectricityCard',
@@ -79,8 +82,8 @@ function ElectricityCard({
   } catch (error) {
     console.error('解析历史数据失败:', error);
     notification.error({
-      message: '电量监测卡片解析历史数据失败',
-      description: `电量监测卡片解析历史数据失败: ${error.message}`,
+      message: t('electricity.parseError'),
+      description: t('electricity.parseErrorDesc') + error.message,
       placement: 'topRight',
       duration: 3,
       key: 'ElectricityCard',
@@ -151,7 +154,7 @@ function ElectricityCard({
       trigger: 'axis',
       formatter: function(params) {
         const data = params[0];
-        return `${data.name}<br/>用电量：${data.value} kWh`;
+        return `${data.name}<br/>${t('electricity.usage')}: ${data.value} ${t('electricity.unit.kwh')}`;
       },
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
       borderColor: 'rgba(255, 255, 255, 0.2)',
@@ -178,7 +181,7 @@ function ElectricityCard({
   return (
     
     <BaseCard 
-      title="电量统计"
+      title={config.title || t('cardTitles.electricity')}
       icon={mdiEye}
       className="electricity-usage-card"
     >
@@ -203,31 +206,31 @@ function ElectricityCard({
           <div className="yearly-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>实时电压</span>
+              <span>{t('electricity.voltage')}</span>
             </div>
             <div className="electricity-value">
               <span className="value">{getEntityValue('voltage')}</span>
-              <span className="unit">V</span>
+              <span className="unit">{t('electricity.unit.volt')}</span>
             </div>
           </div>
           <div className="yearly-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-                <span>实时电流</span>
+                <span>{t('electricity.current')}</span>
             </div>
             <div className="electricity-value">
               <span className="value">{getEntityValue('electric_current')}</span>
-                <span className="unit">A</span>
+                <span className="unit">{t('electricity.unit.ampere')}</span>
             </div>
           </div>
           <div className="yearly-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>实时功率</span>
+              <span>{t('electricity.power')}</span>
             </div>
             <div className="electricity-value">
               <span className="value">{getEntityValue('currentPower')}</span>
-              <span className="unit">W</span>
+              <span className="unit">{t('electricity.unit.watt')}</span>
             </div>
           </div>
         </div>
@@ -238,21 +241,21 @@ function ElectricityCard({
           <div className="electricity-info-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>当月用电量</span>
+              <span>{t('electricity.monthUsage')}</span>
             </div>
             <div className="electricity-value">
               <span className="value">{getEntityValue('monthUsage')}</span>
-              <span className="unit">度</span>
+              <span className="unit">{t('electricity.unit.degree')}</span>
             </div>
           </div>
           <div className="electricity-info-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>上月用电量</span>
+              <span>{t('electricity.lastMonthUsage')}</span>
             </div>
             <div className="electricity-value">
               <span className="value">{getEntityValue('lastMonthUsage')}</span>
-              <span className="unit">度</span>
+              <span className="unit">{t('electricity.unit.degree')}</span>
             </div>
           </div>
 
@@ -261,22 +264,22 @@ function ElectricityCard({
           <div className="electricity-info-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>今日用电量</span>
+              <span>{t('electricity.todayUsage')}</span>
             </div>
             <div className="electricity-value">
               <span className="value">{getEntityValue('todayUsage')}</span>
-              <span className="unit">度</span>
+              <span className="unit">{t('electricity.unit.degree')}</span>
 
             </div>
           </div>
           <div className="electricity-info-item">
             <div className="info-label">
               <Icon path={mdiLightningBolt} size={0.8} />
-              <span>昨日用电量</span>
+              <span>{t('electricity.yesterdayUsage')}</span>
             </div>
             <div className="electricity-value">
               <span className="value">{getEntityValue('yesterdayUsage')}</span>
-              <span className="unit">度</span>
+              <span className="unit">{t('electricity.unit.degree')}</span>
 
             </div>
           </div>

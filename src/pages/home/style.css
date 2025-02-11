@@ -1148,4 +1148,26 @@
     bottom: calc(env(safe-area-inset-bottom) + 124px);
     right: 16px;
   }
-} 
+}
+
+.language-toggle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.language-toggle:hover {
+  background: var(--color-background);
+}
+
+.language-toggle:active {
+  transform: scale(0.95);
+}

@@ -2,14 +2,16 @@ import React from 'react';
 // import Icon from '@mdi/react';
 import { mdiMotionSensor } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
-import {  useHistory, useLogs } from '@hakit/core';
+import { useHistory, useLogs } from '@hakit/core';
 import './style.css';
 
 function MotionCard({ config }) {
   const { theme } = useTheme();
-  const motionLogs = useLogs(config.motion_entity_id || '', {returnNullIfNotFound: true});
-  const luxHistory = useHistory(config.lux_entity_id || '', {returnNullIfNotFound: true});
+  const { t } = useLanguage();
+  const motionLogs = useLogs(config.motion_entity_id || '');
+  const luxHistory = useHistory(config.lux_entity_id || '');
   // 格式化时间戳
   const formatTime = (timestamp) => {
     const date = new Date(timestamp * 1000); // 转换为毫秒
@@ -33,7 +35,7 @@ function MotionCard({ config }) {
         if (luxRecord) {
           return {
             time: formatTime(record.when),
-            motion: '有人',
+            motion: t('motion.presence'),
             lux: luxRecord.s
           };
         }
@@ -47,22 +49,24 @@ function MotionCard({ config }) {
 
   return (
     <BaseCard
-      title={config.title || "人体传感器"}
+      title={config.title || t('cardTitles.motion')}
       icon={mdiMotionSensor}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4CAF50'}
     >
       <div className="motion-history">
         <div className="today-section">
-          <h3>今天</h3>
+          <h3>{t('motion.today')}</h3>
           <div className="history-list">
             {(motionLogs.loading || luxHistory.loading) ? (
-              <div className="loading">加载中...</div>
+              <div className="loading">{t('motion.loading')}</div>
             ) : (
               history?.map((record, index) => (
                 <div key={index} className="history-item">
                   <div className="time">{record.time}</div>
                   <div className="record-content">
-                    <span>有人移动，照度为：{record.lux} Lux</span>
+                    <span>
+                      {t('motion.record').replace('%1', record.lux)}
+                    </span>
                   </div>
                 </div>
               ))

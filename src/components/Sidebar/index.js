@@ -7,17 +7,19 @@ import {
   // mdiAccount,
   mdiCog,
 } from '@mdi/js';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
 
 function Sidebar({ visible }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
+  const { t } = useLanguage();
 
   const menuItems = [
     {
       key: '/',
-      title: '首页',
+      title: t('nav.home'),
       icon: mdiHome,
     },
     // {
@@ -32,7 +34,7 @@ function Sidebar({ visible }) {
     // },
     {
       key: '/config',
-      title: '配置',
+      title: t('nav.config'),
       icon: mdiCog,
     },
   ];
@@ -45,6 +47,7 @@ function Sidebar({ visible }) {
             key={item.key}
             className={`menu-item ${pathname === item.key ? 'active' : ''}`}
             onClick={() => navigate(item.key)}
+            title={item.title}
           >
             <Icon path={item.icon} size={1} />
             <span className="menu-title">{item.title}</span>

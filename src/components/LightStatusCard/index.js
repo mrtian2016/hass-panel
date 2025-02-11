@@ -5,6 +5,7 @@ import {
   mdiLightbulbGroup,
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
 import {useEntity} from '@hakit/core';
 import Modal from '../Modal';
@@ -12,6 +13,7 @@ import LightControl from '../LightOverviewCard/LightControl';
 import { notification } from 'antd';
 function LightStatusCard({ config }) {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const [showControl, setShowControl] = useState(false);
   const [selectedLight, setSelectedLight] = useState(null);
   const pressTimer = useRef(null);
@@ -26,17 +28,16 @@ function LightStatusCard({ config }) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const entity = useEntity(lightConfig.entity_id);
       
-    acc[key] = {
+      acc[key] = {
         ...lightConfig,
         entity,
-        // 判断实体类型
         isLight: lightConfig.entity_id.startsWith('light.')
       };
       return acc;
     } catch (error) {
       notification.error({
-        message: '灯光卡片加载失败',
-        description: `灯光 ${lightConfig.name || lightConfig.entity_id} 加载失败: ${error.message}`,
+        message: t('lightStatus.loadError'),
+        description: t('lightStatus.loadErrorDesc') + (lightConfig.name || lightConfig.entity_id) + ' - ' + error.message,
         placement: 'topRight',
         duration: 3,
         key: 'LightStatusCard',
@@ -86,10 +87,10 @@ function LightStatusCard({ config }) {
             color={theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D'}
             style={{ marginRight: '8px', verticalAlign: 'bottom' }} 
           />
-          照明状态
+          {config.title || t('cardTitles.lightStatus')}
         </h3>
         <span className="light-summary">
-          {activeLights} / {totalLights} 个灯开启
+          {t('lightStatus.activeLights').replace('%1', activeLights).replace('%2', totalLights)}
         </span>
       </div>
       <div className="light-buttons" style={{
@@ -109,7 +110,7 @@ function LightStatusCard({ config }) {
             onMouseLeave={handlePressEnd}
             onTouchStart={(e) => handleTouchStart(light, e)}
             onTouchEnd={handlePressEnd}
-            title={`${light.name}${!light.isLight ? ' (开关)' : ''}`}
+            title={`${light.name}${!light.isLight ? t('lightStatus.switchEntity') : ''}`}
           >
             <Icon
               path={mdiCeilingLight}

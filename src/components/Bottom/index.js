@@ -7,22 +7,24 @@ import {
   // UserOutline,
   SetOutline,
 } from 'antd-mobile-icons';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
 
 function Bottom() {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
+  const { t } = useLanguage();
 
   const tabs = [
     {
       key: '/',
-      title: '首页',
+      title: t('nav.home'),
       icon: <AppOutline />,
     },
     {
       key: '/config',
-      title: '配置',
+      title: t('nav.config'),
       icon: <SetOutline />,
     }
     // {

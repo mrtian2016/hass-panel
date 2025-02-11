@@ -17,6 +17,8 @@ import BaseCard from '../BaseCard';
 import './style.css';
 import { useWeather } from '@hakit/core';
 import { notification } from 'antd';
+import { useLanguage } from '../../i18n/LanguageContext';
+
 // 添加穿衣指数计算函数
 const calculateClothingIndex = (temperature, humidity, windSpeed) => {
   // 基础分值基于温度
@@ -45,37 +47,72 @@ const calculateClothingIndex = (temperature, humidity, windSpeed) => {
   let finalScore = Math.max(1, Math.min(10, baseScore + humidityFactor + windFactor));
   
   // 建议对照表
-  const suggestions = {
-    10: { index: "极热", suggestion: "建议穿着轻薄、透气的衣物，注意防晒。" },
-    9: { index: "炎热", suggestion: "建议穿着凉爽、透气的夏季服装。" },
-    8: { index: "热", suggestion: "建议穿着短袖衫、短裙等夏季服装。" },
-    7: { index: "温暖", suggestion: "建议穿着长袖T恤、轻薄外套等春秋装。" },
-    6: { index: "舒适", suggestion: "建议穿着长袖衬衫、薄毛衣等春秋装。" },
-    5: { index: "微凉", suggestion: "建议穿着薄外套、夹克衫等春秋装。" },
-    4: { index: "凉", suggestion: "建议穿着厚外套、毛衣等秋冬装。" },
-    3: { index: "冷", suggestion: "建议穿着棉服、羽绒服等冬季服装。" },
-    2: { index: "寒冷", suggestion: "建议穿着厚羽绒服、棉服，注意保暖。" },
-    1: { index: "极寒", suggestion: "建议穿着厚羽绒服、棉服，做好全面保暖。" }
-  };
+  const getClothingSuggestions = (t) => ({
+    10: { 
+      index: t('weather.clothing.levels.extremeHot'), 
+      suggestion: t('weather.clothing.suggestions.extremeHot')
+    },
+    9: { 
+      index: t('weather.clothing.levels.veryHot'), 
+      suggestion: t('weather.clothing.suggestions.veryHot')
+    },
+    8: { 
+      index: t('weather.clothing.levels.hot'), 
+      suggestion: t('weather.clothing.suggestions.hot')
+    },
+    7: { 
+      index: t('weather.clothing.levels.warm'), 
+      suggestion: t('weather.clothing.suggestions.warm')
+    },
+    6: { 
+      index: t('weather.clothing.levels.comfortable'), 
+      suggestion: t('weather.clothing.suggestions.comfortable')
+    },
+    5: { 
+      index: t('weather.clothing.levels.cool'), 
+      suggestion: t('weather.clothing.suggestions.cool')
+    },
+    4: { 
+      index: t('weather.clothing.levels.cold'), 
+      suggestion: t('weather.clothing.suggestions.cold')
+    },
+    3: { 
+      index: t('weather.clothing.levels.veryCold'), 
+      suggestion: t('weather.clothing.suggestions.veryCold')
+    },
+    2: { 
+      index: t('weather.clothing.levels.extremeCold'), 
+      suggestion: t('weather.clothing.suggestions.extremeCold')
+    },
+    1: { 
+      index: t('weather.clothing.levels.freezing'), 
+      suggestion: t('weather.clothing.suggestions.freezing')
+    }
+  });
 
-  return suggestions[Math.round(finalScore)];
+  return (t) => {
+    const suggestions = getClothingSuggestions(t);
+    return suggestions[Math.round(finalScore)];
+  };
 };
 
-function WeatherCard({ entityId }) {
+function WeatherCard({config}) {
+  console.log(config.entity_id);
   const { theme } = useTheme();
+  const { t } = useLanguage();
   let weather = null;
   try {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    weather = useWeather(entityId);
+    weather = useWeather(config.entity_id);
   } catch (error) {
     notification.error({
-      message: '天气卡片加载失败',
-      description: `天气 ${entityId} 加载失败: ${error.message}`,
+      message: t('weather.loadError'),
+      description: t('weather.loadErrorDesc') + error.message,
       placement: 'topRight',
       duration: 3,
     });
-    return <BaseCard title="天气卡片加载失败" icon={mdiMapMarker} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#87CEEB'} >
-      <div>天气卡片加载失败</div>
+    return <BaseCard title={t('weather.loadError')} icon={mdiMapMarker} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#87CEEB'} >
+      <div>{t('weather.loadError')}</div>
     </BaseCard> ;
   }
   console.log(weather);
@@ -113,27 +150,27 @@ function WeatherCard({ entityId }) {
   };
 
   const getWindDirection = (bearing) => {
-    if (bearing >= 337.5 || bearing < 22.5) return '北风';
-    if (bearing >= 22.5 && bearing < 67.5) return '东北风';
-    if (bearing >= 67.5 && bearing < 112.5) return '东风';
-    if (bearing >= 112.5 && bearing < 157.5) return '东南风';
-    if (bearing >= 157.5 && bearing < 202.5) return '南风';
-    if (bearing >= 202.5 && bearing < 247.5) return '西南风';
-    if (bearing >= 247.5 && bearing < 292.5) return '西风';
-    if (bearing >= 292.5 && bearing < 337.5) return '西北风';
-    return '未知';
+    if (bearing >= 337.5 || bearing < 22.5) return t('weather.wind.north');
+    if (bearing >= 22.5 && bearing < 67.5) return t('weather.wind.northEast');
+    if (bearing >= 67.5 && bearing < 112.5) return t('weather.wind.east');
+    if (bearing >= 112.5 && bearing < 157.5) return t('weather.wind.southEast');
+    if (bearing >= 157.5 && bearing < 202.5) return t('weather.wind.south');
+    if (bearing >= 202.5 && bearing < 247.5) return t('weather.wind.southWest');
+    if (bearing >= 247.5 && bearing < 292.5) return t('weather.wind.west');
+    if (bearing >= 292.5 && bearing < 337.5) return t('weather.wind.northWest');
+    return t('weather.wind.unknown');
   };
 
   const getWindLevel = (speed) => {
-    if (speed < 2) return '0级';
-    if (speed < 6) return '1-2级';
-    if (speed < 12) return '3级';
-    if (speed < 19) return '4级';
-    if (speed < 28) return '5级';
-    if (speed < 38) return '6级';
-    if (speed < 49) return '7级';
-    if (speed < 61) return '8级';
-    return '9级以上';
+    if (speed < 2) return t('weather.wind.level.calm');
+    if (speed < 6) return t('weather.wind.level.light');
+    if (speed < 12) return t('weather.wind.level.moderate');
+    if (speed < 19) return t('weather.wind.level.fresh');
+    if (speed < 28) return t('weather.wind.level.strong');
+    if (speed < 38) return t('weather.wind.level.gale');
+    if (speed < 49) return t('weather.wind.level.storm');
+    if (speed < 61) return t('weather.wind.level.violent');
+    return t('weather.wind.level.hurricane');
   };
 
   const forecastData = Array.isArray(weather?.forecast?.forecast) ? weather.forecast.forecast : [];
@@ -142,37 +179,41 @@ function WeatherCard({ entityId }) {
     weather.attributes.temperature,
     weather.attributes.humidity || 50,
     weather.attributes.wind_speed || 0
-  );
+  )(t);
 
   return (
     <BaseCard
-      title="我的家"
+      title={config.title || t('cardTitles.weather')}
       icon={mdiMapMarker}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#87CEEB'}
     >
       <div className="current-weather">
         <div className="weather-item">
-          <span className="label">{apparent_temperature ? '体感温度' : '温度'}</span>
+          <span className="label">
+            {apparent_temperature 
+              ? t('weather.metrics.feelTemp') 
+              : t('weather.metrics.temperature')}
+          </span>
           <span className="value">{apparent_temperature || temperature}°C</span>
         </div>
         {humidity && <div className="weather-item">
-          <span className="label">湿度</span>
+          <span className="label">{t('weather.metrics.humidity')}</span>
           <span className="value">{humidity}%</span>
         </div>}
         {visibility && <div className="weather-item">
-          <span className="label">能见度</span>
+          <span className="label">{t('weather.metrics.visibility')}</span>
           <span className="value">{visibility} {visibility_unit}</span>
         </div>}
-        {aqi &&   <div className="weather-item">
-          <span className="label">空气质量</span>
+        {aqi && <div className="weather-item">
+          <span className="label">{t('weather.metrics.airQuality')}</span>
           <span className="value">{aqi} ({aqi_description})</span>
         </div>}
         {pressure && !aqi && <div className="weather-item">
-          <span className="label">气压</span>
+          <span className="label">{t('weather.metrics.pressure')}</span>
           <span className="value">{pressure} {pressure_unit}</span>
         </div>}
         <div className="weather-item">
-          <span className="label">风况</span>
+          <span className="label">{t('weather.metrics.wind')}</span>
           <span className="value">
             {getWindDirection(weather.attributes.wind_bearing)} {getWindLevel(weather.attributes.wind_speed)}
           </span>
@@ -180,7 +221,7 @@ function WeatherCard({ entityId }) {
       </div>
       <div className="clothing-index">
         <div className="clothing-header">
-          <span className="label">穿衣指数</span>
+          <span className="label">{t('weather.clothing.index')}</span>
           <span className="value">{clothingAdvice.index}</span>
         </div>
         <div className="clothing-suggestion">

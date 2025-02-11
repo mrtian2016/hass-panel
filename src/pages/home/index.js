@@ -10,6 +10,7 @@ import {
   mdiViewColumn,
   mdiMenu,
   mdiViewDashboard,
+  mdiTranslate,
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
 import { Responsive } from 'react-grid-layout';
@@ -33,6 +34,7 @@ import WaterPurifierCard from '../../components/WaterPurifierCard';
 import IlluminanceCard from '../../components/IlluminanceCard';
 import MotionCard from '../../components/MotionCard';
 import './style.css';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 // 获取当前断点
 const getCurrentBreakpoint = (width) => {
@@ -49,6 +51,7 @@ const getColumnLayoutIcon = (columns) => {
 
 function Home({ sidebarVisible, setSidebarVisible }) {
   const { theme, toggleTheme } = useTheme();
+  const { t, toggleLanguage } = useLanguage();
   const [cards] = useState(() => {
     // 从 localStorage 读取配置
     const savedConfig = localStorage.getItem('card-config');
@@ -248,7 +251,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       case 'TimeCard':
         return <TimeCard {...card.config} />;
       case 'WeatherCard':
-        return <WeatherCard entityId={card.config.entity_id} />;
+        return <WeatherCard config={card.config} />;
       case 'LightStatusCard':
         return <LightStatusCard config={card.config} />;
       case 'SensorCard':
@@ -297,10 +300,22 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             <button 
               className="theme-toggle"
               onClick={toggleTheme}
-              title={theme === 'light' ? '切换到暗色模式' : '切换到亮色模式'}
+              title={t('theme.' + (theme === 'light' ? 'light' : 'dark'))}
             >
               <Icon
                 path={theme === 'light' ? mdiWeatherNight : mdiWhiteBalanceSunny}
+                size={1}
+                color="var(--color-text-primary)"
+              />
+            </button>
+
+            <button 
+              className="language-toggle"
+              onClick={toggleLanguage}
+              title={t('language.toggle')}
+            >
+              <Icon
+                path={mdiTranslate}
                 size={1}
                 color="var(--color-text-primary)"
               />
@@ -310,7 +325,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               <button 
                 className="edit-toggle"
                 onClick={() => setIsEditing(true)}
-                title="编辑布局"
+                title={t('edit')}
               >
                 <Icon
                   path={mdiPencil}
@@ -323,7 +338,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               <button 
                 className="reset-layout"
                 onClick={() => handleResetLayout()}
-                title="重置布局"
+                title={t('reset')}
               >
                 <Icon
                   path={mdiRefresh}
@@ -336,8 +351,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               <button 
                 className={`pc-edit-toggle ${isEditing ? 'active' : ''}`}
                 onClick={() => setIsEditing(false)}
-                
-                title="完成编辑"
+                title={t('done')}
               >
                 <Icon
                   path={mdiCheck}
@@ -350,7 +364,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             <button 
               className="column-adjust"
               onClick={() => handleColumnsChange(getCurrentBreakpoint(width))}
-              title={`当前 ${columnCount[getCurrentBreakpoint(width)]} 列，点击切换`}
+              title={`${t('columns')}: ${columnCount[getCurrentBreakpoint(width)]}`}
             >
               <Icon
                 path={getColumnLayoutIcon(columnCount[getCurrentBreakpoint(width)])}
@@ -367,7 +381,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               <button 
                 className="sidebar-toggle"
                 onClick={() => setSidebarVisible(!sidebarVisible)}
-                title={sidebarVisible ? '隐藏侧边栏' : '显示侧边栏'}
+                title={t(`sidebar.${sidebarVisible ? 'hide' : 'show'}`)}
             >
               <Icon
                 path={mdiMenu}
@@ -416,8 +430,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
           {cards.filter(card => card.visible !== false).length === 0 && (
             <div className="empty-state">
               <Icon path={mdiViewDashboard} size={3} color="var(--color-text-secondary)" />
-              <h2>还没有添加任何卡片</h2>
-              <p>点击左侧配置按钮，前往配置页面添加卡片吧</p>
+              <h2>{t('empty.title')}</h2>
+              <p>{t('empty.desc')}</p>
             </div>
           )}
 

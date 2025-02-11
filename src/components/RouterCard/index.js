@@ -12,9 +12,11 @@ import {
   mdiUpload,
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import './style.css';
 import { useEntity } from '@hakit/core';
+
 function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
   // 使用相对单位定义尺寸
   const viewBoxSize = 200;  // 用于 SVG viewBox
@@ -63,6 +65,7 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
 
 function RouterCard({ config }) {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const routerEntities = Object.entries(config.router).map(([key, feature]) => ({
     key,
     ...feature,
@@ -87,14 +90,14 @@ function RouterCard({ config }) {
 
   return (
     <BaseCard
-      title="路由监控"
+      title={config.title || t('cardTitles.router')}
       icon={mdiRouterNetwork}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
     >
       <div className="router-data">
         <div className="usage-section">
           <CircularProgress value={cpuUsage} label="CPU" />
-          <CircularProgress value={memoryUsage} label="内存" />
+          <CircularProgress value={memoryUsage} label={t('router.memory')} />
         </div>
         
         <div className="metrics-section">
@@ -102,39 +105,43 @@ function RouterCard({ config }) {
             <div className="speed-row">
               <div className="speed-item">
                 <Icon path={mdiUpload} size={0.8} />
-                <span className="speed-value">{wanUploadSpeed}<span> MB/s</span></span>
+                <span className="speed-value">
+                  {wanUploadSpeed}<span> {t('router.unit.speed')}</span>
+                </span>
               </div>
               <div className="speed-item">
                 <Icon path={mdiDownload} size={0.8} />
-                <span className="speed-value">{wanDownloadSpeed}<span> MB/s</span></span>
+                <span className="speed-value">
+                  {wanDownloadSpeed}<span> {t('router.unit.speed')}</span>
+                </span>
               </div>
             </div>
             <div className="divider"></div>
             <div className="speed-item">
               <div className="metric-label">
                 <Icon path={mdiAccountMultiple} size={0.8} />
-                <span className="label">在线设备</span>
+                <span className="label">{t('router.metrics.onlineDevices')}</span>
               </div>
               <span>{onlineUsers}</span>
             </div>
             <div className="speed-item">
               <div className="metric-label">
                 <Icon path={mdiEthernet} size={0.8} />
-                <span className="label">连接数</span>
+                <span className="label">{t('router.metrics.connections')}</span>
               </div>
               <span>{networkConnections}</span>
             </div>
             <div className="speed-item">
               <div className="metric-label">
                 <Icon path={mdiTemperatureCelsius} size={0.8} />
-                <span className="label">CPU温度</span>
+                <span className="label">{t('router.metrics.cpuTemp')}</span>
               </div>
-              <span>{cpuTemp}°C</span>
+              <span>{cpuTemp}{t('router.unit.temp')}</span>
             </div>
             <div className="speed-item">
               <div className="metric-label">
                 <Icon path={mdiIpNetwork} size={0.8} />
-                <span className="label">公网IP</span>
+                <span className="label">{t('router.metrics.publicIp')}</span>
               </div>
               <span>{wanIp}</span>
             </div>

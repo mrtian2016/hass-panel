@@ -34,35 +34,48 @@ import AddCardModal from '../../components/AddCardModal';
 import LightOverviewCard from '../../components/LightOverviewCard';
 import { createClient } from 'webdav';
 import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, List, Tooltip } from 'antd';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 import './style.css';
 
-const CARD_TYPES = {
+const getCardTypes = (t) => ({
   TimeCard: {
-    name: '时间卡片',
+    name: t('cards.time'),
     icon: mdiClockOutline,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.time')
+      },
+      {
         key: 'timeFormat',
-        label: '时间格式',
+        label: t('fields.timeFormat'),
         type: 'text',
         default: 'HH:mm:ss'
       },
       {
         key: 'dateFormat',
-        label: '日期格式',
+        label: t('fields.dateFormat'),
         type: 'text',
-        default: 'YYYY年MM月DD日'
+        default: 'YYYY-MM-DD'
       }
     ]
   },
   WeatherCard: {
-    name: '天气卡片',
+    name: t('cards.weather'),
     icon: mdiWeatherPartlyCloudy,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.weather')
+      },
+      {
         key: 'entity_id',
-        label: '天气实体',
+        label: t('fields.weatherEntity'),
         type: 'entity',
         filter: 'weather.*',
         default: ''
@@ -70,24 +83,36 @@ const CARD_TYPES = {
     ]
   },
   LightStatusCard: {
-    name: '灯光状态',
+    name: t('cards.light'),
     icon: mdiLightbulbGroup,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.lightStatus')
+      },
+      {
         key: 'lights',
-        label: '灯光配置',
+        label: t('fields.lightsConfig'),
         type: 'lights-config',
         default: {}
       }
     ]
   },
   SensorCard: {
-    name: '传感器卡片',
+    name: t('cards.sensor'),
     icon: mdiThermometer,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.sensor')
+      },
+      {
         key: 'sensors',
-        label: '传感器配置',
+        label: t('fields.sensorsConfig'),
         type: 'sensor-group',
         default: [
           {
@@ -96,12 +121,12 @@ const CARD_TYPES = {
             sensors: {
               temperature: {
                 entity_id: '',
-                name: '温度',
+                name: t('sensor.types.temperature'),
                 icon: 'mdiThermometer'
               },
               humidity: {
                 entity_id: '',
-                name: '湿度',
+                name: t('sensor.types.humidity'),
                 icon: 'mdiWaterPercent'
               }
             }
@@ -111,179 +136,245 @@ const CARD_TYPES = {
     ]
   },
   MediaPlayerCard: {
-    name: '媒体播放器',
+    name: t('cards.media'),
     icon: mdiPlayCircle,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.mediaplayer')
+      },
+      {
         key: 'mediaPlayers',
-        label: '播放器配置',
+        label: t('fields.mediaPlayersConfig'),
         type: 'media-players',
         default: []
       }
     ]
   },
   RouterCard: {
-    name: '路由监控',
+    name: t('cards.router'),
     icon: mdiRouterNetwork,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.router')
+      },
+      {
         key: 'router',
-        label: '路由器配置',
+        label: t('fields.routerConfig'),
         type: 'router-config',
         default: {}
       }
     ]
   },
   NASCard: {
-    name: 'NAS监控',
+    name: t('cards.nas'),
     icon: mdiServerNetwork,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.nas')
+      },
+      {
         key: 'syno_nas',
-        label: 'NAS配置',
+        label: t('fields.nasConfig'),
         type: 'nas-config',
         default: {}
       }
     ]
   },
   CameraCard: {
-    name: '监控画面',
+    name: t('cards.camera'),
     icon: mdiCctv,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.camera')
+      },
+      {
         key: 'cameras',
-        label: '摄像头配置',
+        label: t('fields.camerasConfig'),
         type: 'cameras-config',
         default: []
       }
     ]
   },
   CurtainCard: {
-    name: '窗帘控制',
+    name: t('cards.curtain'),
     icon: mdiCurtains,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.curtain')
+      },
+      {
         key: 'curtains',
-        label: '窗帘配置',
+        label: t('fields.curtainsConfig'),
         type: 'curtains-config',
         default: []
       }
     ]
   },
   ElectricityCard: {
-    name: '电量监控',
+    name: t('cards.electricity'),
     icon: mdiLightningBolt,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.electricity')
+      },
+      {
         key: 'electricity',
-        label: '电量配置',
+        label: t('fields.electricityConfig'),
         type: 'electricity-config',
         default: {}
       }
     ]
   },
   ScriptPanel: {
-    name: '快捷指令',
+    name: t('cards.script'),
     icon: mdiScriptText,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.script')
+      },
+      {
         key: 'scripts',
-        label: '指令配置',
+        label: t('fields.scriptsConfig'),
         type: 'scripts-config',
         default: []
       }
     ]
   },
   WaterPurifierCard: {
-    name: '净水器',
+    name: t('cards.water'),
     icon: mdiWaterPump,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.water')
+      },
+      {
         key: 'waterpuri',
-        label: '净水器配置',
+        label: t('fields.waterConfig'),
         type: 'waterpuri-config',
         default: {}
       }
     ]
   },
   IlluminanceCard: {
-    name: '光照传感器',
+    name: t('cards.illuminance'),
     icon: mdiWhiteBalanceSunny,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.illuminance')
+      },
+      {
         key: 'sensors',
-        label: '光照传感器配置',
+        label: t('fields.illuminanceConfig'),
         type: 'illuminance-config',
         default: []
       }
     ]
   },
   ClimateCard: {
-    name: '空调控制',
+    name: t('cards.climate'),
     icon: mdiSnowflake,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.climate')
+      },
+      {
         key: 'entity_id',
-        label: '空调实体',
+        label: t('fields.climateEntity'),
         type: 'entity',
         filter: 'climate.*'
       },
       {
         key: 'name',
-        label: '名称',
+        label: t('fields.name'),
         type: 'text'
       },
       {
         key: 'features',
-        label: '功能配置',
+        label: t('fields.featuresConfig'),
         type: 'climate-features',
         default: {}
       }
     ]
   },
   MotionCard: {
-    name: '人体传感器',
+    name: t('cards.motion'),
     icon: mdiMotionSensor,
     fields: [
       {
         key: 'title',
-        label: '标题',
+        label: t('fields.title'),
         type: 'text',
-        default: '人体传感器'
+        default: t('cardTitles.motion')
       },
       {
         key: 'motion_entity_id',
-        label: '人体传感器实体',
+        label: t('fields.motionEntity'),
         type: 'entity',
         filter: 'event.*'
       },
       {
         key: 'lux_entity_id',
-        label: '光照传感器实体',
+        label: t('fields.luxEntity'),
         type: 'entity',
         filter: 'sensor.*'
       }
     ]
   },
   LightOverviewCard: {
-    name: '房间灯光概览',
+    name: t('cards.lightOverview'),
     icon: mdiHomeFloorG,
     fields: [
       {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.lightOverview')
+      },
+      {
         key: 'background',
-        label: '背景图片',
+        label: t('fields.background'),
         type: 'text',
         default: ''
       },
       {
         key: 'rooms',
-        label: '房间灯光配置',
+        label: t('fields.roomsConfig'),
         type: 'light-overview-config',
         default: []
       }
     ]
   }
-};
+});
 
 // 清理旧版本，只保留最新的5个版本
 const cleanOldVersions = async (client, currentFiles) => {
@@ -496,6 +587,8 @@ function ConfigPage() {
   const [versionList, setVersionList] = useState([]);
   const [loadingVersions, setLoadingVersions] = useState(false);
   const [form] = Form.useForm();
+  const { t } = useLanguage();
+  const cardTypes = getCardTypes(t);
   
   const handleSave = async () => {
     try {
@@ -568,15 +661,15 @@ function ConfigPage() {
         try {
           await saveConfigToWebDAV(cards);
         } catch (error) {
-          message.error('保存到WebDAV失败: ' + error.message);
+          message.error(t('config.saveFailed') + ': ' + error.message);
         }
       }
       
       setHasUnsavedChanges(false);
-      message.success('保存成功');
+      message.success(t('config.saveSuccess'));
     } catch (error) {
       console.error('保存配置失败:', error);
-      message.error('保存配置失败: ' + error.message);
+      message.error(t('config.saveFailed') + ': ' + error.message);
     }
   };
 
@@ -657,7 +750,7 @@ function ConfigPage() {
   };
 
   const handleAddCard = (type) => {
-    const defaultConfig = CARD_TYPES[type].fields.reduce((acc, field) => {
+    const defaultConfig = cardTypes[type].fields.reduce((acc, field) => {
       if (field.type === 'sensor-group') {
         acc[field.key] = field.default || [];
       } else if (field.type.endsWith('-config')) {
@@ -945,13 +1038,13 @@ function ConfigPage() {
   const configMenuItems = [
     {
       key: 'import',
-      label: '导入配置',
+      label: t('import'),
       icon: <Icon path={mdiImport} size={0.8} />,
       onClick: () => fileInputRef.current.click()
     },
     {
       key: 'export',
-      label: '导出配置',
+      label: t('export'),
       icon: <Icon path={mdiExport} size={0.8} />,
       onClick: handleExport
     }
@@ -961,7 +1054,7 @@ function ConfigPage() {
   const webdavMenuItems = webdavConfig.url ? [
     {
       key: 'config',
-      label: 'WebDAV配置',
+      label: t('webdavConfig'),
       icon: <Icon path={mdiServerNetwork} size={0.8} />,
       onClick: () => setShowWebDAVModal(true)
     },
@@ -970,19 +1063,19 @@ function ConfigPage() {
     },
     {
       key: 'push',
-      label: '同步到WebDAV',
+      label: t('syncToWebDAV'),
       icon: <Icon path={mdiExport} size={0.8} />,
       onClick: () => saveConfigToWebDAV(cards)
     },
     {
       key: 'pull',
-      label: '从WebDAV同步',
+      label: t('syncFromWebDAV'),
       icon: <Icon path={mdiImport} size={0.8} />,
       onClick: () => handleLoadFromWebDAV()
     },
     {
       key: 'versions',
-      label: '版本列表',
+      label: t('versionList'),
       icon: <Icon path={mdiFileFind} size={0.8} />,
       onClick: () => {
         fetchVersionList();
@@ -992,7 +1085,7 @@ function ConfigPage() {
   ] : [
     {
       key: 'config',
-      label: 'WebDAV配置',
+      label: t('webdavConfig'),
       icon: <Icon path={mdiServerNetwork} size={0.8} />,
       onClick: () => setShowWebDAVModal(true)
     }
@@ -1001,7 +1094,7 @@ function ConfigPage() {
   // 添加执行更新的函数
   const handleUpdate = async () => {
     try {
-      message.loading({ content: '正在检查更新...', key: 'update' });
+      message.loading({ content: t('update.checking'), key: 'update' });
       const response = await fetch('./api/update');
       const result = await response.json();
       
@@ -1012,10 +1105,10 @@ function ConfigPage() {
           duration: 5 
         });
         // 如果更新成功，3秒后刷新页面
-        if (result.message.includes('更新成功')) {
+        if (result.message.includes(t('updateSuccess'))) {
           setTimeout(() => {
             message.loading({ 
-              content: '更新完成，正在刷新页面...', 
+              content: t('update.complete'), 
               key: 'update' 
             });
             window.location.reload();
@@ -1023,14 +1116,14 @@ function ConfigPage() {
         }
       } else {
         message.error({ 
-          content: `更新失败：${result.message}`, 
+          content: `${t('update.failed')}: ${result.message}`, 
           key: 'update',
           duration: 5 
         });
       }
     } catch (error) {
       message.error({ 
-        content: `更新失败：${error.message}`, 
+        content: `${t('update.failed')}: ${error.message}`, 
         key: 'update',
         duration: 5 
       });
@@ -1056,7 +1149,7 @@ function ConfigPage() {
   };
 
   // 修改检查更新的函数，使用 useCallback 包装
-  const checkUpdate = React.useCallback(async () => {
+  const checkUpdate = async () => {
     try {
       setIsChecking(true);
       const response = await fetch('https://api.github.com/repos/mrtian2016/hass-panel/releases/latest');
@@ -1068,19 +1161,19 @@ function ConfigPage() {
             version: data.tag_name,
             updateTime: new Date().toISOString()
           });
-          message.info(`发现新版本：${data.tag_name}`);
+          message.info(`${t('update.newVersion')}: ${data.tag_name}`);
         } else {
-          message.success('当前已是最新版本');
+          message.success(t('update.latestVersion'));
           setLatestVersion(null);
         }
       }
     } catch (error) {
       console.error('检查更新失败:', error);
-      message.error('检查更新失败');
+      message.error(t('update.checkFailed'));
     } finally {
       setIsChecking(false);
     }
-  }, [versionInfo]);
+  };
 
 
   return (
@@ -1098,12 +1191,10 @@ function ConfigPage() {
           {/* 配置导入导出下拉菜单 */}
           <Dropdown menu={{ items: configMenuItems }} placement="bottomLeft">
             <Button>
-              配置管理
+              {t('config.title')}
               <Icon path={mdiImport} size={0.8} style={{ marginLeft: 8 }} />
             </Button>
           </Dropdown>
-
-         
 
           {/* WebDAV相关操作下拉菜单 */}
           <Dropdown menu={{ items: webdavMenuItems }} placement="bottomLeft">
@@ -1120,8 +1211,8 @@ function ConfigPage() {
           <div key={card.id} className="config-item">
             <div className="item-header">
               <div className="item-title">
-                <Icon path={CARD_TYPES[card.type].icon} size={1} />
-                <span>{CARD_TYPES[card.type].name}</span>
+                <Icon path={cardTypes[card.type].icon} size={1} />
+                <span>{cardTypes[card.type].name}</span>
               </div>
               <div className="item-actions">
                 {card.type === 'LightOverviewCard' && (
@@ -1131,7 +1222,7 @@ function ConfigPage() {
                       setPreviewConfig(card.config);
                       setShowPreview(true);
                     }}
-                    title="预览效果"
+                    title={t('config.preview')}
                   >
                     <Icon path={mdiFileFind} size={1} />
                     
@@ -1140,7 +1231,7 @@ function ConfigPage() {
                 <button 
                   className={`visibility-toggle `}
                   onClick={() => handleVisibilityChange(card.id)}
-                  title={card.visible === false ? '显示卡片' : '隐藏卡片'}
+                  title={card.visible === false ? t('showCard') : t('hideCard')}
                 >
                   <Icon path={card.visible === false ? mdiEye : mdiEyeOff} size={1} />
                   
@@ -1154,7 +1245,7 @@ function ConfigPage() {
               </div>
             </div>
             <div className="item-content">
-              {CARD_TYPES[card.type].fields.map(field => (
+              {cardTypes[card.type].fields.map(field => (
                 <ConfigField
                   key={field.key}
                   field={field}
@@ -1171,7 +1262,7 @@ function ConfigPage() {
         <AddCardModal
           onClose={() => setShowAddModal(false)}
           onSelect={handleAddCard}
-          cardTypes={CARD_TYPES}
+          cardTypes={getCardTypes(t)}
         />
       )}
 
@@ -1192,7 +1283,7 @@ function ConfigPage() {
 
       {/* 修改 WebDAV 配置模态框 */}
       <Modal
-        title="WebDAV 配置"
+        title={t('webdavConfig')}
         open={showWebDAVModal}
         onCancel={() => setShowWebDAVModal(false)}
         footer={null}
@@ -1205,40 +1296,40 @@ function ConfigPage() {
           initialValues={webdavConfig}
         >
           <Form.Item
-            label="WebDAV URL"
+            label={t('webdavUrl')}
             name="url"
-            rules={[{ required: true, message: '请输入WebDAV URL' }]}
+            rules={[{ required: true, message: t('enterWebdavUrl') }]}
           >
-            <Input placeholder="请输入WebDAV服务器地址" />
+            <Input placeholder={t('enterWebdavUrl')} />
           </Form.Item>
 
           <Form.Item
-            label="用户名"
+            label={t('username')}
             name="username"
           >
-            <Input placeholder="请输入用户名（可选）" />
+            <Input placeholder={t('enterUsername')} />
           </Form.Item>
 
           <Form.Item
-            label="密码"
+            label={t('password')}
             name="password"
           >
-            <Input.Password placeholder="请输入密码（可选）" />
+            <Input.Password placeholder={t('enterPassword')} />
           </Form.Item>
 
           <Form.Item
             name="autoSync"
             valuePropName="checked"
           >
-            <Checkbox>自动同步到WebDAV</Checkbox>
+            <Checkbox>{t('autoSyncToWebdav')}</Checkbox>
           </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
-              保存
+              {t('save')}
             </Button>
             <Button onClick={() => setShowWebDAVModal(false)}>
-              取消
+              {t('cancel')}
             </Button>
           </Form.Item>
         </Form>
@@ -1264,16 +1355,16 @@ function ConfigPage() {
           <div className="version-info">
             <Icon path={mdiInformationOutline} size={0.8} />
             <span>
-              当前版本: {versionInfo.version}
+              {t('currentVersion')}: {versionInfo.version}
               {latestVersion && compareVersions(latestVersion.version, versionInfo.version) > 0 ? (
-                <Tooltip title={`发现新版本，点击更新到 ${latestVersion.version}`}>
+                <Tooltip title={`${t('update.newVersion')}: ${latestVersion.version}`}>
                   <Button 
                     type="link" 
                     size="small" 
                     onClick={handleUpdate}
                     style={{ marginLeft: 8, padding: '0 4px' }}
                   >
-                    更新到新版本
+                    {t('update.ToNewVersion')}
                   </Button>
                 </Tooltip>
               ) : (
@@ -1284,7 +1375,7 @@ function ConfigPage() {
                   onClick={checkUpdate}
                   style={{ marginLeft: 8, padding: '0 4px' }}
                 >
-                  检查更新
+                  {t('update.checkUpdate')}
                 </Button>
               )}
             </span>
@@ -1293,7 +1384,7 @@ function ConfigPage() {
 
       {/* 版本列表模态框 */}
       <Modal
-        title="配置版本列表"
+        title={t('configVersionList')}
         open={showVersionModal}
         onCancel={() => setShowVersionModal(false)}
         footer={null}
@@ -1302,7 +1393,7 @@ function ConfigPage() {
         <div className="version-list">
           {loadingVersions ? (
             <div style={{ textAlign: 'center', padding: '20px' }}>
-              加载中...
+              {t('loading')}...
             </div>
           ) : (
             <List
@@ -1315,7 +1406,7 @@ function ConfigPage() {
                         type="link" 
                         onClick={() => restoreVersion(item.filename)}
                       >
-                        恢复此版本
+                        {t('restoreVersion')}
                       </Button>
                       {item.filename !== 'config.json' && (
                         <Button 
@@ -1323,15 +1414,15 @@ function ConfigPage() {
                           danger
                           onClick={() => {
                             Modal.confirm({
-                              title: '确认删除',
-                              content: `确定要删除版本 ${item.basename} 吗？此操作不可恢复。`,
-                              okText: '确认',
-                              cancelText: '取消',
+                              title: t('confirmDelete'),
+                              content: `${t('confirmDeleteVersion')} ${item.basename}?`,
+                              okText: t('confirm'),
+                              cancelText: t('cancel'),
                               onOk: () => deleteVersion(item.filename)
                             });
                           }}
                         >
-                          删除
+                          {t('delete')}
                         </Button>
                       )}
                     </Space>
@@ -1344,7 +1435,7 @@ function ConfigPage() {
                         <span style={{ color: '#999', fontSize: '12px' }}>({item.size})</span>
                       </Space>
                     }
-                    description={`最后修改时间: ${item.lastmod}`}
+                    description={`${t('lastModified')}: ${item.lastmod}`}
                   />
                 </List.Item>
               )}

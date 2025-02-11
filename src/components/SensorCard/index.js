@@ -5,6 +5,7 @@ import {
   mdiWaterPercent,
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import './style.css';
 import { useEntity } from '@hakit/core';
@@ -18,17 +19,18 @@ const ICON_MAP = {
 
 function SensorCard({ config }) {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   
   // 检查配置是否存在
   if (!config || !config.sensors) {
     return (
       <BaseCard
-        title="温湿度传感器"
+        title={config.title}
         icon={mdiThermometer}
         iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
       >
         <div className="sensor-data">
-          配置信息不完整
+          {t('sensor.configIncomplete')}
         </div>
       </BaseCard>
     );
@@ -48,10 +50,9 @@ function SensorCard({ config }) {
           entity,
         };
       } catch (error) {
-        console.error(`加载传感器实体 ${sensor.entity_id} 失败:`, error);
         notification.error({
-          message: '温湿度传感器卡片加载失败',
-          description: `传感器 ${sensor.name || sensor.entity_id} 加载失败: ${error.message}`,
+          message: t('sensor.loadError'),
+          description: t('sensor.loadErrorDesc') + (sensor.name || sensor.entity_id) + ' - ' + error.message,
           placement: 'topRight',
           duration: 3,
           key: 'SensorCard',
@@ -74,7 +75,7 @@ function SensorCard({ config }) {
   const getSensorValue = (sensor) => {
     if (!sensor.entity || sensor.entity.error || 
         sensor.entity.state === undefined || sensor.entity.state === null) {
-      return '- -';
+      return t('sensor.noValue');
     }
     const unit = sensor.entity.attributes?.unit_of_measurement || '';
     return `${sensor.entity.state} ${unit}`;
@@ -82,7 +83,7 @@ function SensorCard({ config }) {
 
   return (
     <BaseCard
-      title="温湿度传感器"
+      title={config.title || t('cardTitles.sensor')}
       icon={mdiThermometer}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
     >
@@ -100,7 +101,9 @@ function SensorCard({ config }) {
                     color="var(--color-text-primary)" 
                   />
                   <div className="sensor-info">
-                    <span className="label">{sensor.name}</span>
+                    <span className="label">
+                      {sensor.name || t(`sensor.types.${type}`)}
+                    </span>
                     <span className="value">
                       {getSensorValue(sensor)}
                     </span>
