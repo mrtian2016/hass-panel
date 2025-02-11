@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  hass-panel:
+    image: ghcr.io/mrtian2016/hass-panel:v1.2.0
+    ports:
+      - "51230:5123"
+      - "51240:5124"
+      - "51250:5125"
+    volumes:
+      - ./data/webdav:/data/webdav
+      - ./data/media:/config/hass-panel/media
+    environment:
+      - REACT_APP_HASS_URL=http://10.0.0.70:8123
+      - WEBDAV_USERNAME=admin
+      - WEBDAV_PASSWORD=admin
+    restart: unless-stopped 

@@ -9,12 +9,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone
 
 # 安装 Python 依赖
-RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple \
-    fastapi \
-    uvicorn \
-    requests \
-    supervisor \
-    loguru
+RUN pip install fastapi uvicorn requests supervisor loguru
 
 # 设置 WebDAV 版本
 ENV WEBDAV_VERSION=5.7.2

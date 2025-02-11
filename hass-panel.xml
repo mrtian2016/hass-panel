@@ -34,8 +34,13 @@
   
   <Data>
     <Volume>
-      <HostDir>/mnt/user/appdata/hass-panel</HostDir>
-      <ContainerDir>/config/hass-panel</ContainerDir>
+      <HostDir>/mnt/user/appdata/hass-panel/webdav</HostDir>
+      <ContainerDir>/data/webdav</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/hass-panel/media</HostDir>
+      <ContainerDir>/config/hass-panel/media</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
   </Data>
@@ -55,7 +60,8 @@
   
   <Config Name="WebUI" Target="5123" Default="5123" Mode="tcp" Description="Web界面端口" Type="Port" Display="always" Required="true" Mask="false"/>
   <Config Name="WebDAV" Target="5124" Default="5124" Mode="tcp" Description="WebDAV端口" Type="Port" Display="always" Required="true" Mask="false"/>
-  <Config Name="配置目录" Target="/config/hass-panel" Default="/mnt/user/appdata/hass-panel" Mode="rw" Description="配置文件存储位置" Type="Path" Display="always" Required="true" Mask="false"/>
   <Config Name="WebDAV用户名" Target="WEBDAV_USERNAME" Default="admin" Description="WebDAV登录用户名" Type="Variable" Display="always" Required="true" Mask="false"/>
   <Config Name="WebDAV密码" Target="WEBDAV_PASSWORD" Default="admin" Description="WebDAV登录密码" Type="Variable" Display="always" Required="true" Mask="false"/>
+  <Config Name="WebDAV目录" Target="/data/webdav" Default="/mnt/user/appdata/hass-panel/webdav" Mode="rw" Description="WebDAV文件存储位置" Type="Path" Display="always" Required="true" Mask="false"/>
+  <Config Name="媒体目录" Target="/config/hass-panel/media" Default="/mnt/user/appdata/hass-panel/media" Mode="rw" Description="媒体文件存储位置" Type="Path" Display="always" Required="true" Mask="false"/>
 </Container> 
