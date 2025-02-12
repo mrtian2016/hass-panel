@@ -148,6 +148,11 @@ npm run build
 
 Pull Requests and Issues are welcome!
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=mrtian2016/hass-panel&type=Date)](https://star-history.com/#mrtian2016/hass-panel&Date)
+
+
 ## Sponsorship
 
 If you find this project helpful, feel free to sponsor!

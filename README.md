@@ -144,6 +144,11 @@ npm run build
    - 检查图标名称是否正确
    - 确认使用了支持的图标
 
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=mrtian2016/hass-panel&type=Date)](https://star-history.com/#mrtian2016/hass-panel&Date)
+
 ## 贡献
 
 欢迎提交 Pull Request 和 Issue！
