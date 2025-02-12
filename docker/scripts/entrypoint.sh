@@ -10,7 +10,7 @@ if [ -f "/data/options.json" ]; then
     export REACT_APP_HASS_URL=$(jq -r '.hass_url // empty' /data/options.json)
     export WEBDAV_USERNAME=$(jq -r '.webdav_username // empty' /data/options.json)
     export WEBDAV_PASSWORD=$(jq -r '.webdav_password // empty' /data/options.json)
-    
+    export REACT_APP_HASS_TOKEN=$(jq -r '.hass_token // empty' /data/options.json)
     CONFIG_DIR="/config/hass-panel"
     WEBDAV_DIR="$CONFIG_DIR/webdav"
 else
