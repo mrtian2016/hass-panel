@@ -712,31 +712,31 @@ function ConfigPage() {
       });
   }, []);
 
-  const fetchWithTimeout = async (url, options = {}) => {
-    const timeout = options.timeout || 30000; // 默认30秒超时
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
+  // const fetchWithTimeout = async (url, options = {}) => {
+  //   const timeout = options.timeout || 30000; // 默认30秒超时
+  //   const controller = new AbortController();
+  //   const id = setTimeout(() => controller.abort(), timeout);
 
-    try {
-      const response = await fetch(url, {
-        ...options,
-        signal: controller.signal
-      });
-      clearTimeout(id);
+  //   try {
+  //     const response = await fetch(url, {
+  //       ...options,
+  //       signal: controller.signal
+  //     });
+  //     clearTimeout(id);
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
       
-      return response;
-    } catch (error) {
-      clearTimeout(id);
-      if (error.name === 'AbortError') {
-        throw new Error('请求超时');
-      }
-      throw error;
-    }
-  };
+  //     return response;
+  //   } catch (error) {
+  //     clearTimeout(id);
+  //     if (error.name === 'AbortError') {
+  //       throw new Error('请求超时');
+  //     }
+  //     throw error;
+  //   }
+  // };
 
   // 修改检查更新的函数
   const checkUpdate = async () => {
