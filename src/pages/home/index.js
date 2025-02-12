@@ -10,7 +10,7 @@ import {
   mdiViewColumn,
   mdiMenu,
   mdiViewDashboard,
-  mdiTranslate,
+  mdiGoogleTranslate,
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
 import { Responsive } from 'react-grid-layout';
@@ -315,7 +315,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               title={t('language.toggle')}
             >
               <Icon
-                path={mdiTranslate}
+                path={mdiGoogleTranslate}
                 size={1}
                 color="var(--color-text-primary)"
               />

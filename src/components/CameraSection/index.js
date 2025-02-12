@@ -11,6 +11,7 @@ import { notification } from 'antd';
 function CameraSection({ config }) {
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const debugMode = localStorage.getItem('debugMode') === 'true';
 
   const cameraEntities = config.cameras.map(camera => {
     try {
@@ -21,13 +22,15 @@ function CameraSection({ config }) {
         entity,
       };
     } catch (error) {
-      notification.error({
-        message: t('camera.loadError'),
-        description: `${t('camera.loadErrorDesc')} ${error.message}`,
-        placement: 'topRight',
-        duration: 3,
-        key: 'CameraSection',
-      });
+      if (debugMode) {
+        notification.error({
+          message: t('camera.loadError'),
+          description: `${t('camera.loadErrorDesc')} ${error.message}`,
+          placement: 'topRight',
+          duration: 3,
+          key: 'CameraSection',
+        });
+      }
       return {
         ...camera,
         entity: { state: null, error: true },

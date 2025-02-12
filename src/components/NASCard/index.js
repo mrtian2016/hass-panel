@@ -64,6 +64,7 @@ function NASCard({ config }) {
   const { theme } = useTheme();
   const { t } = useLanguage();
   const [showDriveModal, setShowDriveModal] = useState(false);
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   let entities = {};
   try {
 
@@ -79,13 +80,15 @@ function NASCard({ config }) {
       return acc;
     }, {});
   } catch (error) {
-    notification.error({
-      message: t('nas.loadError'),
-      description: t('nas.loadErrorDesc') + error.message,
-      placement: 'topRight',
-      duration: 3,
-      key: 'NASCard',
-    });
+    if (debugMode) {
+      notification.error({
+        message: t('nas.loadError'),
+        description: t('nas.loadErrorDesc') + error.message,
+        placement: 'topRight',
+        duration: 3,
+        key: 'NASCard',
+      });
+    }
     return (
       <BaseCard 
         title={t('cardTitles.nas')} 
@@ -157,13 +160,15 @@ function NASCard({ config }) {
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   volumeTotal = useEntity(volume.total.entity_id);
                 } catch (error) {
-                  notification.error({
-                    message: t('nas.loadError'),
-                    description: t('nas.loadErrorDesc') + (volume.name || volume.entity_id) + ' - ' + error.message,
-                    placement: 'topRight',
-                    duration: 3,
-                    key: 'NASCard',
-                  });
+                  if (debugMode) {
+                    notification.error({
+                      message: t('nas.loadError'),
+                      description: t('nas.loadErrorDesc') + (volume.name || volume.entity_id) + ' - ' + error.message,
+                      placement: 'topRight',
+                      duration: 3,
+                      key: 'NASCard',
+                    });
+                  }
                   return <div>{t('nas.loadFailed')}</div>;
                 }
                 return (
@@ -245,13 +250,15 @@ function NASCard({ config }) {
               driveTemp = drive.temperature ? useEntity(drive.temperature.entity_id) : null;
             } catch (error) {
               console.error(`加载NAS实体 ${drive.entity_id} 失败:`, error);
-              notification.error({
-                message: t('nas.loadError'),
-                description: t('nas.loadErrorDesc') + (drive.name || drive.entity_id) + ' - ' + error.message,
-                placement: 'topRight',
-                duration: 3,
-                key: 'NASCard',
-              });
+              if (debugMode) {
+                notification.error({
+                  message: t('nas.loadError'),
+                  description: t('nas.loadErrorDesc') + (drive.name || drive.entity_id) + ' - ' + error.message,
+                  placement: 'topRight',
+                  duration: 3,
+                  key: 'NASCard',
+                });
+              }
               return <div>{t('nas.loadFailed')}</div>
             }
             
@@ -287,13 +294,15 @@ function NASCard({ config }) {
                   driveTemp = useEntity(drive.temperature.entity_id);
                 } catch (error) {
                   console.error(`加载NAS实体 ${drive.entity_id} 失败:`, error);
-                  notification.error({
-                    message: t('nas.loadError'),
-                    description: t('nas.loadErrorDesc') + (drive.name || drive.entity_id) + ' - ' + error.message,
-                    placement: 'topRight',
-                    duration: 3,
-                    key: 'NASCard',
-                  });
+                  if (debugMode) {
+                    notification.error({
+                      message: t('nas.loadError'),
+                      description: t('nas.loadErrorDesc') + (drive.name || drive.entity_id) + ' - ' + error.message,
+                      placement: 'topRight',
+                      duration: 3,
+                      key: 'NASCard',
+                    });
+                  }
                   return <div>{t('nas.loadFailed')}</div>
                 }
                 

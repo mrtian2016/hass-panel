@@ -20,7 +20,7 @@ import { useEntity } from '@hakit/core';
 function MediaPlayerCard({ config }) {
   const { theme } = useTheme();
   const { t } = useLanguage();
-
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   // 检查配置是否存在
   if (!config || !config.mediaPlayers) {
     return (
@@ -49,13 +49,15 @@ function MediaPlayerCard({ config }) {
         entity,
       };
     } catch (error) {
-      notification.error({
-        message: t('mediaPlayer.loadError'),
-        description: t('mediaPlayer.loadErrorDesc') + (player.name || player.entity_id) + ' - ' + error.message,
-        placement: 'topRight',
-        duration: 3,
-        key: 'MediaPlayerCard',
-      });
+      if (debugMode) {
+        notification.error({
+          message: t('mediaPlayer.loadError'),
+          description: t('mediaPlayer.loadErrorDesc') + (player.name || player.entity_id) + ' - ' + error.message,
+          placement: 'topRight',
+          duration: 3,
+          key: 'MediaPlayerCard',
+        });
+      }
       return {
         ...player,
         entity: { state: null, error: true },

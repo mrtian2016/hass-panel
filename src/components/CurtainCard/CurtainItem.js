@@ -22,15 +22,17 @@ function MdiStop() {
 function CurtainItem({ entity_id, name }) {
   const { t } = useLanguage();
   const curtain = useEntity(entity_id || '', {returnNullIfNotFound: true});
-  
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   if (!curtain) {
-    notification.error({
-      message: t('curtain.loadError'),
-      description: `${t('curtain.loadErrorDesc')} ${entity_id}`,
-      placement: 'topRight',
-      duration: 3,
-      key: 'CurtainItem',
-    });
+    if (debugMode) {
+      notification.error({
+        message: t('curtain.loadError'),
+        description: `${t('curtain.loadErrorDesc')} ${entity_id}`,
+        placement: 'topRight',
+        duration: 3,
+        key: 'CurtainItem',
+      });
+    }
     return <div>{t('curtain.loadFailed')}</div>
   }
   

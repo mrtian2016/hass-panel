@@ -47,17 +47,18 @@ function ClimateCard({
   const [showFanModes, setShowFanModes] = useState(false);
   const [showSwingModes, setShowSwingModes] = useState(false);
   const [showHvacModes, setShowHvacModes] = useState(false);
-  
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   // 处理空调实体未找到的情况
   if (!climate) {
-    notification.error({
-      message: t('climate.loadError'),
-      description: `${t('climate.loadErrorDesc')} ${config.entity_id}`,
-      placement: 'topRight',
-      duration: 3,
-      key: 'ClimateCard',
-    });
-    
+    if (debugMode) {
+      notification.error({
+        message: t('climate.loadError'),
+        description: `${t('climate.loadErrorDesc')} ${config.entity_id}`,
+        placement: 'topRight',
+        duration: 3,
+        key: 'ClimateCard',
+      });
+    }
     return <BaseCard 
       title={config.name || t('cardTitles.climate')} 
       icon={mdiAirConditioner} 
@@ -82,13 +83,15 @@ function ClimateCard({
           entity: entity,
         };
       } else {
-        notification.error({
-          message: t('climate.featureLoadError'),
-          description: `${t('climate.featureLoadErrorDesc')} ${feature.entity_id}`,
-          placement: 'topRight',
-          duration: 3,
-          key: 'ClimateCard',
-        });
+        if (debugMode) {
+          notification.error({
+            message: t('climate.featureLoadError'),
+            description: `${t('climate.featureLoadErrorDesc')} ${feature.entity_id}`,
+            placement: 'topRight',
+            duration: 3,
+            key: 'ClimateCard',
+          });
+        }
       }
     });
   }

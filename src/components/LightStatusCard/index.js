@@ -17,7 +17,7 @@ function LightStatusCard({ config }) {
   const [showControl, setShowControl] = useState(false);
   const [selectedLight, setSelectedLight] = useState(null);
   const pressTimer = useRef(null);
-  
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   // 确保 config 是一个对象
   if (!config || typeof config !== 'object') {
     return null;
@@ -35,13 +35,15 @@ function LightStatusCard({ config }) {
       };
       return acc;
     } catch (error) {
-      notification.error({
-        message: t('lightStatus.loadError'),
-        description: t('lightStatus.loadErrorDesc') + (lightConfig.name || lightConfig.entity_id) + ' - ' + error.message,
-        placement: 'topRight',
-        duration: 3,
-        key: 'LightStatusCard',
-      });
+      if (debugMode) {
+        notification.error({
+          message: t('lightStatus.loadError'),
+          description: t('lightStatus.loadErrorDesc') + (lightConfig.name || lightConfig.entity_id) + ' - ' + error.message,
+          placement: 'topRight',
+          duration: 3,
+          key: 'LightStatusCard',
+        });
+      }
       return acc;
     }
   }, {});

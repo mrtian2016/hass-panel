@@ -10,7 +10,8 @@ export const translations = {
     showCard: '显示卡片',
     hideCard: '隐藏卡片',
     language: {
-      toggle: '切换语言'
+      toggle: '切换语言',
+      current: 'Zh'
     },
     sidebar: {
       show: '显示侧边栏',
@@ -69,7 +70,10 @@ export const translations = {
       delete: '删除',
       add: '添加',
       moveUp: '上移',
-      moveDown: '下移'
+      moveDown: '下移',
+      debug: '调试模式',
+      debugOn: '开启',
+      debugOff: '关闭'
     },
     
     // 卡片类型
@@ -88,7 +92,13 @@ export const translations = {
       nas: 'NAS',
       camera: '摄像头',
       climate: '空调',
-      motion: '人体传感器'
+      motion: '人体传感器',
+      lightOverview: '房间概览',
+      lightStatus: '灯光状态',
+      mediaPlayer: '媒体播放器',
+      mediaplayer: '媒体播放器',
+      scriptpanel: '快捷指令',
+      waterpurifier: '净水器',
     },
 
     // 卡片操作
@@ -166,7 +176,14 @@ export const translations = {
       confirmDeleteVersion: '确定要删除此版本吗',
       deleteSuccess: '删除成功',
       syncSuccess: '同步成功',
-      syncFailed: '同步失败'
+      syncFailed: '同步失败',
+      save: '保存',
+      cancel: '取消',
+      lastModified: '最后修改时间',
+      delete: '删除',
+      restore: '恢复',
+      versions: '版本',
+      
     },
 
     // 更新相关
@@ -179,7 +196,11 @@ export const translations = {
       currentVersion: '当前版本',
       latestVersion: '已是最新版本',
       checkFailed: '检查更新失败',
-      updateToNew: '更新到新版本'
+      updateToNew: '更新到新版本',
+      updateFailed: '更新失败',
+      updateSuccess: '更新成功',
+      updateComplete: '更新完成,即将刷新页面',
+      checkUpdate: '检查更新'
     },
 
     // 模态框相关
@@ -547,6 +568,8 @@ export const translations = {
       nameRequired: '请输入名称',
       urlRequired: '请输入URL',
       invalidUrl: '无效的URL',
+      mainInfo: '主要信息',
+      // light
       features: {
         temperature: '温度控制',
         fanSpeed: '风速控制',
@@ -575,7 +598,8 @@ export const translations = {
     showCard: 'Show Card',
     hideCard: 'Hide Card',
     language: {
-      toggle: 'Switch Language'
+      toggle: 'Switch Language',
+      current: 'En'
     },
    
     sidebar: {
@@ -635,7 +659,10 @@ export const translations = {
       delete: 'Delete',
       add: 'Add',
       moveUp: 'Move Up',
-      moveDown: 'Move Down'
+      moveDown: 'Move Down',
+      debug: 'Debug Mode',
+      debugOn: 'On',
+      debugOff: 'Off'
     },
     
     // Card Types
@@ -733,7 +760,13 @@ export const translations = {
       confirmDeleteVersion: 'Are you sure to delete this version?',
       deleteSuccess: 'Delete Success',
       syncSuccess: 'Sync Success',
-      syncFailed: 'Sync Failed'
+      syncFailed: 'Sync Failed',
+      save: 'Save',
+      cancel: 'Cancel',
+      lastModified: 'Last Modified',
+      delete: 'Delete',
+      restore: 'Restore',
+      versions: 'Versions'
     },
 
     // Update Related

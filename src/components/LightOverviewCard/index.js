@@ -11,6 +11,7 @@ import { notification } from 'antd';
 function LightOverviewCard({ config }) {
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const debugMode = localStorage.getItem('debugMode') === 'true';
 
   if (!config || !config.rooms) {
     console.warn('LightOverviewCard: Missing config or rooms');
@@ -27,13 +28,15 @@ function LightOverviewCard({ config }) {
         state: entity?.state
       };
     } catch (error) {
-      notification.error({
-        message: t('lightOverview.loadError'),
-        description: `${t('lightOverview.loadErrorDesc')} ${room.entity_id}`,
-        placement: 'topRight',
-        duration: 3,
-        key: 'LightOverviewCard',
-      });
+      if (debugMode) {
+        notification.error({
+          message: t('lightOverview.loadError'),
+          description: `${t('lightOverview.loadErrorDesc')} ${room.entity_id}`,
+          placement: 'topRight',
+          duration: 3,
+          key: 'LightOverviewCard',
+        });
+      }
       return {
         ...room,
         entity: { state: null, error: true },

@@ -27,6 +27,7 @@ import {
   mdiFileFind,
   mdiClose,
   mdiInformationOutline,
+  
 } from '@mdi/js';
 import ConfigField from '../../components/ConfigField';
 import AddCardModal from '../../components/AddCardModal';
@@ -575,6 +576,11 @@ function ConfigPage() {
     }
     return [];
   });
+  const [debugMode, setDebugMode] = useState(() => {
+    const localDebugMode = localStorage.getItem('debugMode');
+    
+    return localDebugMode === 'true';
+  });
   const [showAddModal, setShowAddModal] = useState(false);
   const [versionInfo, setVersionInfo] = useState(null);
   const [latestVersion, setLatestVersion] = useState(null);
@@ -1054,7 +1060,7 @@ function ConfigPage() {
   const webdavMenuItems = webdavConfig.url ? [
     {
       key: 'config',
-      label: t('webdavConfig'),
+      label: t('webdav.config'),
       icon: <Icon path={mdiServerNetwork} size={0.8} />,
       onClick: () => setShowWebDAVModal(true)
     },
@@ -1063,19 +1069,19 @@ function ConfigPage() {
     },
     {
       key: 'push',
-      label: t('syncToWebDAV'),
+      label: t('webdav.syncTo'),
       icon: <Icon path={mdiExport} size={0.8} />,
       onClick: () => saveConfigToWebDAV(cards)
     },
     {
       key: 'pull',
-      label: t('syncFromWebDAV'),
+      label: t('webdav.syncFrom'),
       icon: <Icon path={mdiImport} size={0.8} />,
       onClick: () => handleLoadFromWebDAV()
     },
     {
       key: 'versions',
-      label: t('versionList'),
+      label: t('webdav.versionList'),
       icon: <Icon path={mdiFileFind} size={0.8} />,
       onClick: () => {
         fetchVersionList();
@@ -1085,7 +1091,7 @@ function ConfigPage() {
   ] : [
     {
       key: 'config',
-      label: t('webdavConfig'),
+      label: t('webdav.config'),
       icon: <Icon path={mdiServerNetwork} size={0.8} />,
       onClick: () => setShowWebDAVModal(true)
     }
@@ -1203,6 +1209,15 @@ function ConfigPage() {
               <Icon path={mdiServerNetwork} size={0.8} style={{ marginLeft: 8 }} />
             </Button>
           </Dropdown>
+          <button 
+            onClick={() => {
+              localStorage.setItem('debugMode', !debugMode);
+              setDebugMode(!debugMode);
+            }}
+            title={t('config.debug')}
+          >
+            {t('config.debug')}: {debugMode ? t('config.debugOn') : t('config.debugOff')}
+          </button>
         </Space>
       </div>
       
@@ -1283,7 +1298,7 @@ function ConfigPage() {
 
       {/* 修改 WebDAV 配置模态框 */}
       <Modal
-        title={t('webdavConfig')}
+        title={t('webdav.config')}
         open={showWebDAVModal}
         onCancel={() => setShowWebDAVModal(false)}
         footer={null}
@@ -1296,40 +1311,40 @@ function ConfigPage() {
           initialValues={webdavConfig}
         >
           <Form.Item
-            label={t('webdavUrl')}
+            label={t('webdav.url')}
             name="url"
             rules={[{ required: true, message: t('enterWebdavUrl') }]}
           >
-            <Input placeholder={t('enterWebdavUrl')} />
+            <Input placeholder={t('webdav.url')} />
           </Form.Item>
 
           <Form.Item
-            label={t('username')}
+            label={t('webdav.username')}
             name="username"
           >
-            <Input placeholder={t('enterUsername')} />
+            <Input placeholder={t('webdav.username')} />
           </Form.Item>
 
           <Form.Item
-            label={t('password')}
+            label={t('webdav.password')}
             name="password"
           >
-            <Input.Password placeholder={t('enterPassword')} />
+            <Input.Password placeholder={t('webdav.password')} />
           </Form.Item>
 
           <Form.Item
             name="autoSync"
             valuePropName="checked"
           >
-            <Checkbox>{t('autoSyncToWebdav')}</Checkbox>
+            <Checkbox>{t('webdav.autoSync')}</Checkbox>
           </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
-              {t('save')}
+              {t('webdav.save')}
             </Button>
             <Button onClick={() => setShowWebDAVModal(false)}>
-              {t('cancel')}
+              {t('webdav.cancel')}
             </Button>
           </Form.Item>
         </Form>
@@ -1384,7 +1399,7 @@ function ConfigPage() {
 
       {/* 版本列表模态框 */}
       <Modal
-        title={t('configVersionList')}
+        title={t('webdav.versionList')}
         open={showVersionModal}
         onCancel={() => setShowVersionModal(false)}
         footer={null}
@@ -1406,7 +1421,7 @@ function ConfigPage() {
                         type="link" 
                         onClick={() => restoreVersion(item.filename)}
                       >
-                        {t('restoreVersion')}
+                        {t('webdav.restoreVersion')}
                       </Button>
                       {item.filename !== 'config.json' && (
                         <Button 
@@ -1414,15 +1429,15 @@ function ConfigPage() {
                           danger
                           onClick={() => {
                             Modal.confirm({
-                              title: t('confirmDelete'),
-                              content: `${t('confirmDeleteVersion')} ${item.basename}?`,
+                              title: t('webdav.confirmDelete'),
+                              content: `${t('webdav.confirmDeleteVersion')} ${item.basename}?`,
                               okText: t('confirm'),
                               cancelText: t('cancel'),
                               onOk: () => deleteVersion(item.filename)
                             });
                           }}
                         >
-                          {t('delete')}
+                          {t('webdav.delete')}
                         </Button>
                       )}
                     </Space>
@@ -1435,7 +1450,7 @@ function ConfigPage() {
                         <span style={{ color: '#999', fontSize: '12px' }}>({item.size})</span>
                       </Space>
                     }
-                    description={`${t('lastModified')}: ${item.lastmod}`}
+                    description={`${t('webdav.lastModified')}: ${item.lastmod}`}
                   />
                 </List.Item>
               )}

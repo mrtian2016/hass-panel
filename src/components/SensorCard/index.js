@@ -20,7 +20,7 @@ const ICON_MAP = {
 function SensorCard({ config }) {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   // 检查配置是否存在
   if (!config || !config.sensors) {
     return (
@@ -50,13 +50,15 @@ function SensorCard({ config }) {
           entity,
         };
       } catch (error) {
-        notification.error({
-          message: t('sensor.loadError'),
-          description: t('sensor.loadErrorDesc') + (sensor.name || sensor.entity_id) + ' - ' + error.message,
-          placement: 'topRight',
-          duration: 3,
-          key: 'SensorCard',
-        });
+        if (debugMode) {
+          notification.error({
+            message: t('sensor.loadError'),
+            description: t('sensor.loadErrorDesc') + (sensor.name || sensor.entity_id) + ' - ' + error.message,
+            placement: 'topRight',
+            duration: 3,
+            key: 'SensorCard',
+          });
+        }
         acc[type] = {
           ...sensor,
           entity: { state: null, error: true },

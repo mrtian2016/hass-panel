@@ -100,17 +100,20 @@ function WeatherCard({config}) {
   console.log(config.entity_id);
   const { theme } = useTheme();
   const { t } = useLanguage();
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   let weather = null;
   try {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     weather = useWeather(config.entity_id);
   } catch (error) {
-    notification.error({
-      message: t('weather.loadError'),
-      description: t('weather.loadErrorDesc') + error.message,
-      placement: 'topRight',
-      duration: 3,
-    });
+    if (debugMode) {
+      notification.error({
+        message: t('weather.loadError'),
+        description: t('weather.loadErrorDesc') + error.message,
+        placement: 'topRight',
+        duration: 3,
+      });
+    }
     return <BaseCard title={t('weather.loadError')} icon={mdiMapMarker} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#87CEEB'} >
       <div>{t('weather.loadError')}</div>
     </BaseCard> ;

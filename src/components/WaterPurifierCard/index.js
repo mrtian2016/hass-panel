@@ -8,7 +8,7 @@ import { notification } from 'antd';
 
 function WaterPurifierCard({ config }) {
   const { t } = useLanguage();
-  
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   const temperature = useEntity(config.waterpuri?.temperature?.entity_id || '', {returnNullIfNotFound: true});
   const tdsIn = useEntity(config.waterpuri?.tds_in?.entity_id || '', {returnNullIfNotFound: true});
   const tdsOut = useEntity(config.waterpuri?.tds_out?.entity_id || '', {returnNullIfNotFound: true});
@@ -17,19 +17,15 @@ function WaterPurifierCard({ config }) {
   const status = useEntity(config.waterpuri?.status?.entity_id || '', {returnNullIfNotFound: true});
 
   if (!temperature || !tdsIn || !tdsOut || !ppFilterLife || !roFilterLife || !status) {
-    notification.error({
-      message: t('waterPurifier.loadError'),
-      description: t('waterPurifier.loadErrorDesc') + 
-        (config.waterpuri?.temperature?.entity_id || 
-         config.waterpuri?.tds_in?.entity_id || 
-         config.waterpuri?.tds_out?.entity_id || 
-         config.waterpuri?.pp_filter_life?.entity_id || 
-         config.waterpuri?.ro_filter_life?.entity_id || 
-         config.waterpuri?.status?.entity_id),
-      placement: 'topRight',
-      duration: 3,
-      key: 'WaterPurifierCard',
-    });
+    if (debugMode) {
+      notification.error({
+        message: t('waterPurifier.loadError'),
+        description: t('waterPurifier.loadErrorDesc'),
+        placement: 'topRight',
+        duration: 3,
+        key: 'WaterPurifierCard',
+      });
+    }
   }
 
   return (

@@ -12,7 +12,7 @@ function ElectricityCard({
   config,
 }) {
   const { t } = useLanguage();
-
+  const debugMode = localStorage.getItem('debugMode') === 'true';
   // 检查配置是否存在
   if (!config || !config.electricity) {
     return (
@@ -39,13 +39,15 @@ function ElectricityCard({
       };
     } catch (error) {
       console.error(`加载实体 ${key} 失败:`, error);
-      notification.error({
-        message: t('electricity.loadError'),
-        description: `${t('electricity.loadErrorDesc')} ${config.name || config.entity_id} - ${error.message}`,
-        placement: 'topRight',
-        duration: 3,
-        key: 'ElectricityCard',
-      });
+      if (debugMode) {
+        notification.error({
+          message: t('electricity.loadError'),
+          description: `${t('electricity.loadErrorDesc')} ${config.name || config.entity_id} - ${error.message}`,
+          placement: 'topRight',
+          duration: 3,
+          key: 'ElectricityCard',
+        });
+      }
       acc[key] = {
         ...config,
         entity: { state: null, error: true },
@@ -81,13 +83,15 @@ function ElectricityCard({
     }
   } catch (error) {
     console.error('解析历史数据失败:', error);
-    notification.error({
-      message: t('electricity.parseError'),
-      description: t('electricity.parseErrorDesc') + error.message,
-      placement: 'topRight',
-      duration: 3,
-      key: 'ElectricityCard',
-    });
+    if (debugMode) {
+      notification.error({
+        message: t('electricity.parseError'),
+        description: t('electricity.parseErrorDesc') + error.message,
+        placement: 'topRight',
+        duration: 3,
+        key: 'ElectricityCard',
+      });
+    }
   }
 
   // 图表配置
@@ -195,12 +199,12 @@ function ElectricityCard({
 
      
         
-        <div className="electricity-chart">
+        {chartData.dates.length > 0 && <div className="electricity-chart">
           <ReactECharts 
             option={chartOption} 
             style={{ height: '100%', width: '100%' }}
           />
-        </div>
+        </div>}
 
         <div className="electricity-yearly-info">
           <div className="yearly-item">
