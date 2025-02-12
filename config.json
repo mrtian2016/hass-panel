@@ -1,6 +1,6 @@
 {
   "name": "Hass Panel",
-  "version": "v1.2.6-beta.3",
+  "version": "v1.2.7",
   "slug": "hass_panel",
   "description": "一个基于 React 的智能家居控制面板",
   "url": "https://github.com/mrtian2016/hass-panel",
