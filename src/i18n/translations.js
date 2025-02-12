@@ -200,7 +200,7 @@ export const translations = {
       updateFailed: '更新失败',
       updateSuccess: '更新成功',
       updateComplete: '更新完成,即将刷新页面',
-      checkUpdate: '检查更新'
+      checkUpdate: '检查更新',
     },
 
     // 模态框相关
