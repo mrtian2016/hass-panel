@@ -237,13 +237,15 @@ export const translations = {
       },
       swingModes: {
         off: '关闭',
-        vertical: '垂直摆动'
+        vertical: '垂直摆动',
+        null: '关闭'
       },
       fanModes: {
         auto: '自动',
         low: '低速',
         medium: '中速',
-        high: '高速'
+        high: '高速',
+        none: '关闭'
       }
     },
 
@@ -817,13 +819,15 @@ export const translations = {
       },
       swingModes: {
         off: 'Off',
-        vertical: 'Vertical'
+        vertical: 'Vertical',
+        null: 'Off'
       },
       fanModes: {
         auto: 'Auto',
         low: 'Low',
         medium: 'Medium',
-        high: 'High'
+        high: 'High',
+        none: 'Off'
       }
     },
 
