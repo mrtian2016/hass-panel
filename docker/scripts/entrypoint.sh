@@ -11,6 +11,27 @@ if [ -f "/data/options.json" ]; then
     export WEBDAV_USERNAME=$(jq -r '.webdav_username // empty' /data/options.json)
     export WEBDAV_PASSWORD=$(jq -r '.webdav_password // empty' /data/options.json)
     export REACT_APP_HASS_TOKEN=$(jq -r '.hass_token // empty' /data/options.json)
+   
+    # 如果没有设置hass_token，和hass_url，则退出容器
+    if [ -z "$REACT_APP_HASS_URL" ] || [ -z "$REACT_APP_HASS_TOKEN" ]; then
+        echo "Error: hass_url and hass_token must be set"
+        echo "错误：hass_url 和 hass_token 必须设置"
+        echo "hass_url: $REACT_APP_HASS_URL"
+        echo "hass_token: $REACT_APP_HASS_TOKEN"
+        exit 1
+    fi
+    # curl 测试hass_url和hass_token
+    api_result=$(curl -H "Authorization: Bearer $REACT_APP_HASS_TOKEN" -H "Content-Type: application/json" $REACT_APP_HASS_URL/api/)
+    echo "api_result: $api_result"
+   
+    if ! echo "$api_result" | jq -e '.message == "API running."' > /dev/null; then
+        echo "Error: hass_url and hass_token are invalid"
+        echo "错误：hass_url 和 hass_token 无效"
+        echo "hass_url: $REACT_APP_HASS_URL"
+        echo "hass_token: $REACT_APP_HASS_TOKEN"
+        exit 1
+    fi
+
     CONFIG_DIR="/config/hass-panel"
     WEBDAV_DIR="$CONFIG_DIR/webdav"
 else
