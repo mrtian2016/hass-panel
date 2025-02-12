@@ -1,155 +1,157 @@
 # Hass-Panel
 
-English | [简体中文](README.zh.md)
+[English](README.en.md) | 简体中文
 
-A React-based smart home control panel that uses the Home Assistant WebSocket API.
+一个基于React的智能家居控制面板，它使用Home Assistant的Websocket API，并支持作为Home Assistant操作系统(HAOS)的插件部署。
 
-## Video Preview
-[![A React-based Smart Home Control Panel]( https://i.imgur.com/PpbbnAS.png )](https://www.bilibili.com/video/BV1yxfaYHE5A/?share_source=copy_web&vd_source=3ef738469d1538347bdba19ea015dbd7)
+## 视频预览
+[![一个基于 React 的智能家居控制面板]( https://i.imgur.com/PpbbnAS.png )](https://www.bilibili.com/video/BV1yxfaYHE5A/?share_source=copy_web&vd_source=3ef738469d1538347bdba19ea015dbd7)
 
-## Preview Image
-![Preview](https://i.imgur.com/ZV71KM8.jpeg)
+## 预览图
+![预览图](https://i.imgur.com/ZV71KM8.jpeg)
 
-## Discussion Group
+## 交流群
 
-<img src="https://i.imgur.com/M6wEC8M.jpeg" width="300" alt="Discussion Group" />
+<img src="https://i.imgur.com/M6wEC8M.jpeg" width="300" alt="交流群" />
 
-## Key Features
+## 主要特性
 
-- 📱 Responsive design, supports both mobile and desktop
-- 🔧 Highly configurable with drag-and-drop layout
-- 🚀 PWA support, can be installed on desktop
-- 🎨 Beautiful user interface with dark mode support
-- 💾 WebDAV configuration sync support
-- 🔌 Rich device support:
-  - Light control
-  - AC control
-  - Curtain control
-  - Sensor monitoring
-  - Camera viewing
-  - Scene control
-  - More devices coming soon...
+- 📱 响应式设计，支持移动端和桌面端
+- 🔧 高度可配置，自由拖拽布局
+- 🚀 PWA支持，可安装到桌面
+- 🎨 美观的用户界面，支持暗色模式
+- 💾 支持 WebDAV 配置同步
+- 🔌 丰富的设备支持:
+  - 灯光控制
+  - 空调控制
+  - 窗帘控制
+  - 传感器监控
+  - 摄像头查看
+  - 场景控制
+  - 更多设备支持中...
 
-## Installation
+## 安装部署
 
-### Docker Method
+### Docker方式
 ```bash
 docker run \
   --name hass-panel \
   --restart unless-stopped \
   -p 5123:5123 \
   -p 5124:5124 \
-  -v ./webdav:/config/hass-panel/webdav \ # Persist WebDAV files
-  -v ./media:/app/media \ # Media resources, mainly room images
+  -v ./webdav:/config/hass-panel/webdav \ # 持久化webdav文件
+  -v ./media:/app/media \ # 媒体资源，主要是房间图片
   -e REACT_APP_HASS_URL=your-hass-instance:8123 \
-  -e REACT_APP_HASS_TOKEN=your-hass-token \ # Optional, if token authentication is needed
-  -e WEBDAV_USERNAME=your-webdav-username \ # WebDAV username
-  -e WEBDAV_PASSWORD=your-webdav-password \ # WebDAV password
+  -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
+  -e WEBDAV_USERNAME=your-webdav-username \ # WebDAV 用户名
+  -e WEBDAV_PASSWORD=your-webdav-password \ # WebDAV 密码
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
 
-Environment Variables:
-- `REACT_APP_HASS_URL`: Home Assistant instance address
-- `REACT_APP_HASS_TOKEN`: Home Assistant long-lived access token (optional)
-- `WEBDAV_USERNAME`: WebDAV username
-- `WEBDAV_PASSWORD`: WebDAV password
+环境变量说明:
+- `REACT_APP_HASS_URL`: Home Assistant 实例地址
+- `REACT_APP_HASS_TOKEN`: Home Assistant 长期访问令牌(可选)
+- `WEBDAV_USERNAME`: WebDAV 用户名
+- `WEBDAV_PASSWORD`: WebDAV 密码
 
-### Home Assistant Addon Method
+### Home Assistant Addon方式
 
-[![Add to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fmrtian2016%2Fhass-panel)
+[![添加到Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fmrtian2016%2Fhass-panel)
 
-Or manually add:
+或者手动添加：
 
-1. In Home Assistant's sidebar, click "Configuration" -> "Add-ons" -> "Add-on Store"
-2. Click the three dots in the top right corner, select "Repositories"
-3. Add repository URL: `https://github.com/mrtian2016/hass-panel`
-4. Click "Add" and refresh the page
-5. Find and install "Hass Panel" in the add-on store
-6. After starting, it can be accessed from the sidebar
+1. 在Home Assistant的侧边栏中，点击"配置" -> "加载项" -> "加载项商店"
+2. 点击右上角的三个点，选择"存储库"
+3. 添加存储库地址：`https://github.com/mrtian2016/hass-panel`
+4. 点击"添加"并刷新页面
+5. 在加载项商店中找到并安装"Hass Panel"
+6. 启动后即可在侧边栏访问
 
-## Feature Configuration
+## 功能配置
 
-### Supported Card Types
+### 支持的卡片类型
 
-1. Time Card
-2. Weather Card
-3. Light Status Card
-4. Light Overview Card
-5. Sensor Card
-6. Media Player Card
-7. Curtain Card
-8. Electricity Card
-9. Router Card
-10. NAS Card
-11. Camera Card
-12. Climate Card
-13. Motion Card
-14. Water Purifier Card
-15. Illuminance Card
-16. Script Panel
+1. 时间卡片 (TimeCard)
+2. 天气卡片 (WeatherCard) 
+3. 灯光状态卡片 (LightStatusCard)
+4. 房间灯光概览卡片 (LightOverviewCard)
+5. 传感器卡片 (SensorCard)
+6. 媒体播放器卡片 (MediaPlayerCard)
+7. 窗帘控制卡片 (CurtainCard)
+8. 电量监控卡片 (ElectricityCard)
+9. 路由器监控卡片 (RouterCard)
+10. NAS监控卡片 (NASCard)
+11. 摄像头卡片 (CameraCard)
+12. 空调控制卡片 (ClimateCard)
+13. 人体传感器卡片 (MotionCard)
+14. 净水器卡片 (WaterPurifierCard)
+15. 光照传感器卡片 (IlluminanceCard)
+16. 快捷指令面板 (ScriptPanel)
 
-### WebDAV Configuration Sync
+### WebDAV 配置同步
 
-Supports configuration sync between multiple devices via built-in WebDAV service:
+支持通过内置 WebDAV 服务在多个设备间同步配置:
 
-1. Prerequisites
-   - Use the container's built-in WebDAV service (`http://your-docker-host:5124`)
-   - Default username and password can be set via environment variables
+1. 准备工作
+   - 使用容器内置的 WebDAV 服务 (`http://your-docker-host:5124`)
+   - 默认用户名和密码可通过环境变量设置
 
-2. Setup Steps
-   - Click "WebDAV Config" button at the top of the panel
-   - Enter server address, username, and password
-   - Choose whether to enable auto-sync
-   - Save configuration
+2. 设置步骤
+   - 点击面板顶部"WebDAV配置"按钮
+   - 输入服务器地址、用户名和密码
+   - 选择是否启用自动同步
+   - 保存配置
 
-3. Usage Instructions
-   - Supports automatic/manual sync
-   - Config file is stored as `config.json` in WebDAV root directory
+3. 使用说明
+   - 支持自动/手动同步
+   - 配置文件保存在 WebDAV 根目录的 `config.json`
 
-### Card Management
+### 卡片管理
 
-- Support show/hide control
-- Support drag-and-drop sorting
-- Support custom size (desktop)
-- Support add/edit/delete cards
-- Support custom layout (3-5 columns)
-- Support responsive layout
+- 支持显示/隐藏控制
+- 支持拖拽排序
+- 支持自定义大小(桌面端)
+- 支持添加/编辑/删除卡片
+- 支持自定义布局(3-5列)
+- 支持响应式布局
 
-## Development
+## 开发
 
 ```bash
-# Install dependencies
+# 安装依赖
 npm install
 
-# Start development server
+# 启动开发服务器
 npm start
 
-# Build production version
+# 构建生产版本
 npm run build
 ```
 
-## FAQ
+## 常见问题
 
-1. Configuration not taking effect
-   - Verify entity ID is correct
-   - Try refreshing the page
+1. 配置不生效
+   - 确认实体 ID 是否正确
+   - 刷新页面后重试
 
-2. Device shows offline
-   - Check Home Assistant connection
-   - Verify entity ID exists
-   - Confirm device is online
+2. 设备显示离线
+   - 检查 Home Assistant 连接
+   - 验证实体 ID 是否存在
+   - 确认设备是否在线
 
-3. Icons not showing
-   - Check if icon name is correct
-   - Confirm using supported icons
+3. 图标不显示
+   - 检查图标名称是否正确
+   - 确认使用了支持的图标
 
-## Contributing
+## 贡献
 
-Pull Requests and Issues are welcome!
+欢迎提交 Pull Request 和 Issue！
 
-## Sponsorship
+## 赞助
 
-If you find this project helpful, feel free to sponsor!
+如果您觉得这个项目对您有帮助，欢迎赞助支持！
 
-<img src="https://i.imgur.com/qYhxNZx.jpeg" width="300" alt="Sponsor QR Code" /> 
+<img src="https://i.imgur.com/qYhxNZx.jpeg" width="300" alt="赞助二维码" />
+
+
