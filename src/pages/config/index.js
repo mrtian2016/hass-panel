@@ -742,7 +742,7 @@ function ConfigPage() {
   const checkUpdate = async () => {
     try {
       setIsChecking(true);
-      const response = await fetchWithTimeout('./api/check-update', {
+      const response = await fetchWithTimeout('./api/update', {
         timeout: 10000 // 10秒超时
       });
       const data = await response.json();
