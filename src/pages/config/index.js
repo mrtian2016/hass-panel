@@ -764,23 +764,11 @@ function ConfigPage() {
       setIsChecking(false);
     }
   };
-
-  // 修改执行更新的函数
+  // 添加执行更新的函数
   const handleUpdate = async () => {
     try {
       message.loading({ content: t('update.checking'), key: 'update' });
-      const response = await fetchWithTimeout('./api/update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        timeout: 30000 // 30秒超时
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
+      const response = await fetch('./api/update');
       const result = await response.json();
       
       if (result.status === 'success') {
@@ -789,15 +777,22 @@ function ConfigPage() {
           key: 'update',
           duration: 5 
         });
-        setTimeout(() => {
-          message.loading({ 
-            content: t('update.complete'), 
-            key: 'update' 
-          });
-          window.location.reload();
-        }, 3000);
+        // 如果更新成功，3秒后刷新页面
+        if (result.message.includes(t('updateSuccess'))) {
+          setTimeout(() => {
+            message.loading({ 
+              content: t('update.complete'), 
+              key: 'update' 
+            });
+            window.location.reload();
+          }, 3000);
+        }
       } else {
-        throw new Error(result.message);
+        message.error({ 
+          content: `${t('update.failed')}: ${result.message}`, 
+          key: 'update',
+          duration: 5 
+        });
       }
     } catch (error) {
       message.error({ 
