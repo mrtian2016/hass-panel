@@ -12,6 +12,7 @@ import Modal from '../Modal';
 import LightControl from '../LightOverviewCard/LightControl';
 import { notification } from 'antd';
 function LightStatusCard({ config }) {
+  
   const { theme } = useTheme();
   const { t } = useLanguage();
   const [showControl, setShowControl] = useState(false);
@@ -81,7 +82,7 @@ function LightStatusCard({ config }) {
 
   return (
     <div className="light-status-card">
-      <div className="card-header">
+      {config.titleVisible !== false && <div className="card-header">
         <h3>
           <Icon 
             path={mdiLightbulbGroup} 
@@ -94,7 +95,7 @@ function LightStatusCard({ config }) {
         <span className="light-summary">
           {t('lightStatus.activeLights').replace('%1', activeLights).replace('%2', totalLights)}
         </span>
-      </div>
+      </div>}
       <div className="light-buttons" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',

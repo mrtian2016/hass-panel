@@ -7,7 +7,8 @@ import dayjs from 'dayjs';
 import Lunar from 'lunar-javascript';
 import './style.css';
 
-function TimeCard({ timeFormat, dateFormat,title }) {
+function TimeCard({config}) {
+  const { timeFormat, dateFormat, title, titleVisible } = config;
   const { theme } = useTheme();
   const { t } = useLanguage();
   const [currentTime, setCurrentTime] = useState(dayjs());
@@ -32,6 +33,7 @@ function TimeCard({ timeFormat, dateFormat,title }) {
   return (
     <BaseCard
       title={title || t('cardTitles.time')}
+      titleVisible={titleVisible}
       icon={mdiClockOutline}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D'}
     >

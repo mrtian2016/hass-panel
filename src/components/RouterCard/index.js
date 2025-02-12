@@ -64,6 +64,7 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
 }
 
 function RouterCard({ config }) {
+  const titleVisible = config.titleVisible;
   const { theme } = useTheme();
   const { t } = useLanguage();
   const routerEntities = Object.entries(config.router).map(([key, feature]) => ({
@@ -93,6 +94,7 @@ function RouterCard({ config }) {
       title={config.title || t('cardTitles.router')}
       icon={mdiRouterNetwork}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
+      titleVisible={titleVisible}
     >
       <div className="router-data">
         <div className="usage-section">

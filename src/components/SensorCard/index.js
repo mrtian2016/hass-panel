@@ -18,6 +18,7 @@ const ICON_MAP = {
 };
 
 function SensorCard({ config }) {
+  const titleVisible = config.titleVisible;
   const { theme } = useTheme();
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
@@ -88,6 +89,7 @@ function SensorCard({ config }) {
       title={config.title || t('cardTitles.sensor')}
       icon={mdiThermometer}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
+      titleVisible={titleVisible}
     >
       <div className="sensor-data">
         {sensorEntities.map(group => (

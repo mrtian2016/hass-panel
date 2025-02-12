@@ -249,37 +249,37 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   const renderCard = (card) => {
     switch (card.type) {
       case 'TimeCard':
-        return <TimeCard {...card.config} />;
+        return <TimeCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'WeatherCard':
-        return <WeatherCard config={card.config} />;
+        return <WeatherCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'LightStatusCard':
-        return <LightStatusCard config={card.config} />;
+        return <LightStatusCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'SensorCard':
-        return <SensorCard config={card.config} />;
+        return <SensorCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'MediaPlayerCard':
-        return <MediaPlayerCard config={card.config} />;
+        return <MediaPlayerCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'CurtainCard':
-        return <CurtainCard config={card.config} />;
+        return <CurtainCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'ElectricityCard':
-        return <ElectricityCard config={card.config} />;
+        return <ElectricityCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'ScriptPanel':
-        return <ScriptPanel config={card.config} />;
+        return <ScriptPanel config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'WaterPurifierCard':
-        return <WaterPurifierCard config={card.config} />;
+        return <WaterPurifierCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'IlluminanceCard':
-        return <IlluminanceCard config={card.config} />;
+        return <IlluminanceCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'RouterCard':
-        return <RouterCard config={card.config} />;
+        return <RouterCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'NASCard':
-        return <NASCard config={card.config} />;
+        return <NASCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'CameraCard':
-        return <CameraSection config={card.config} />;
+        return <CameraSection config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'ClimateCard':
-        return <ClimateCard config={card.config} />;
+        return <ClimateCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'MotionCard':
-        return <MotionCard config={card.config} />;
+        return <MotionCard config={{...card.config, titleVisible: card.titleVisible}} />;
       case 'LightOverviewCard':
-        return <LightOverviewCard config={card.config} />;
+        return <LightOverviewCard config={{...card.config, titleVisible: card.titleVisible}} />;
       default:
         return null;
     }

@@ -97,7 +97,7 @@ const calculateClothingIndex = (temperature, humidity, windSpeed) => {
 };
 
 function WeatherCard({config}) {
-  console.log(config.entity_id);
+  const titleVisible = config.titleVisible;
   const { theme } = useTheme();
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
@@ -189,6 +189,7 @@ function WeatherCard({config}) {
       title={config.title || t('cardTitles.weather')}
       icon={mdiMapMarker}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#87CEEB'}
+      titleVisible={titleVisible}
     >
       <div className="current-weather">
         <div className="weather-item">

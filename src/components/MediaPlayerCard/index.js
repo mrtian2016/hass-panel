@@ -18,6 +18,8 @@ import './style.css';
 import { useEntity } from '@hakit/core';
 
 function MediaPlayerCard({ config }) {
+  
+  const titleVisible = config.titleVisible;
   const { theme } = useTheme();
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
@@ -130,6 +132,7 @@ function MediaPlayerCard({ config }) {
       title={config.title || t('cardTitles.mediaplayer')}
       icon={mdiPlayCircle}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#81C784'}
+      titleVisible={titleVisible}
     >
       <div className="media-players">
         {mediaPlayerEntities.map((player, index) => {

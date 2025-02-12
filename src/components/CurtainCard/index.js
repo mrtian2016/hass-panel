@@ -7,9 +7,9 @@ import './style.css';
 
 function CurtainCard({ config }) {
   const { t } = useLanguage();
-  
+  const titleVisible = config.titleVisible;
   return (
-    <BaseCard title={config.title || t('cardTitles.curtain')} icon={mdiCurtains}>
+    <BaseCard title={config.title || t('cardTitles.curtain')} titleVisible={titleVisible} icon={mdiCurtains}>
       <div className="curtains-grid">
         {config.curtains.map(curtain => (
           <CurtainItem 

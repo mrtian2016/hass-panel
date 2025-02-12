@@ -8,7 +8,7 @@ import './style.css';
 import { useEntity } from '@hakit/core';
 import { notification } from 'antd';
 
-function CameraSection({ config }) {
+function CameraSection({ config, titleVisible }) {
   const { theme } = useTheme();
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
@@ -42,6 +42,7 @@ function CameraSection({ config }) {
   return (
     <BaseCard
       title={config.title || t('cardTitles.camera')}
+      titleVisible={titleVisible}
       icon={mdiCctv}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#E57373'}
     >

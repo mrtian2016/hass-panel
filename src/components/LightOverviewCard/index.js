@@ -54,6 +54,7 @@ function LightOverviewCard({ config }) {
       title={config.title || t('cardTitles.lightOverview')}
       icon={mdiHomeFloorG}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D'}
+      titleVisible={config.titleVisible}
     >
       <div className="light-overview">
         <FloorPlan lights={lightStates} />

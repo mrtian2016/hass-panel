@@ -7,6 +7,7 @@ import './style.css';
 import { notification } from 'antd';
 
 function WaterPurifierCard({ config }) {
+  const titleVisible = config.titleVisible;
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
   const temperature = useEntity(config.waterpuri?.temperature?.entity_id || '', {returnNullIfNotFound: true});
@@ -33,6 +34,7 @@ function WaterPurifierCard({ config }) {
       title={config.title || t('cardTitles.waterpurifier')}
       icon={mdiWaterPump}
       iconColor="var(--color-primary)"
+      titleVisible={titleVisible}
       headerRight={
         <div className="device-status">
           {status?.state}

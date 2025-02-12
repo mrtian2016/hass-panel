@@ -18,7 +18,7 @@ import {
   mdiScriptText,
   mdiCheck,
   mdiEye,
-  mdiEyeOff,
+  // mdiEyeOff,
   mdiSnowflake,
   mdiExport,
   mdiImport,
@@ -34,9 +34,9 @@ import AddCardModal from '../../components/AddCardModal';
 // import Modal from '../../components/Modal';
 import LightOverviewCard from '../../components/LightOverviewCard';
 
-import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, List, Tooltip } from 'antd';
+import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, List, Tooltip,Switch } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
-import { loadConfigFromWebDAV, saveConfigToWebDAV, fetchVersionList, restoreVersion, deleteVersion, cleanOldVersions } from '../../utils/webdav.js';
+import { loadConfigFromWebDAV, saveConfigToWebDAV, fetchVersionList, restoreVersion, deleteVersion } from '../../utils/webdav.js';
 import './style.css';
 
 const getCardTypes = (t) => ({
@@ -518,7 +518,22 @@ function ConfigPage() {
       return newCards;
     });
   };
-
+  // 处理卡片标题显示状态变化
+  const handleTitleVisibilityChange = (cardId) => {
+    setCards(prevCards => {
+      const newCards = prevCards.map(card => {
+        if (card.id === cardId) {
+          return {
+            ...card,
+            titleVisible: card.titleVisible === false ? true : false
+          };
+        }
+        return card;
+      });
+      setHasUnsavedChanges(true);
+      return newCards;
+    });
+  };
   // 计算卡片布局
   const calculateLayouts = (cards) => {
     const layouts = {
@@ -594,7 +609,8 @@ function ConfigPage() {
       id: Date.now(),
       type,
       config: defaultConfig,
-      visible: true // 新添加的卡片默认可见
+      visible: true, // 新添加的卡片默认可见
+      titleVisible: true // 新添加的卡片默认显示标题
     }]);
     
     setHasUnsavedChanges(true);
@@ -658,7 +674,8 @@ function ConfigPage() {
           // 更新卡片配置
           setCards(config.cards.map(card => ({
             ...card,
-            visible: card.visible !== false // 确保所有卡片都有visible属性
+            visible: card.visible !== false, // 确保所有卡片都有visible属性
+            titleVisible: card.titleVisible !== false // 确保所有卡片都有titleVisible属性
           })));
           
           // 更新布局配置
@@ -695,42 +712,159 @@ function ConfigPage() {
       });
   }, []);
 
-  // 添加处理WebDAV表单提交的函数
-  const handleWebDAVSubmit = (values) => {
-    setWebdavConfig(values);
-    localStorage.setItem('webdav-config', JSON.stringify(values));
-    setShowWebDAVModal(false);
+  const fetchWithTimeout = async (url, options = {}) => {
+    const timeout = options.timeout || 30000; // 默认30秒超时
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal
+      });
+      clearTimeout(id);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      return response;
+    } catch (error) {
+      clearTimeout(id);
+      if (error.name === 'AbortError') {
+        throw new Error('请求超时');
+      }
+      throw error;
+    }
   };
 
-  // 当模态框打开时，设置表单初始值
-  React.useEffect(() => {
-    if (showWebDAVModal) {
-      // 获取当前浏览器地址
-      const currentUrl = window.location.origin;
-      const defaultWebdavUrl = currentUrl.replace(/:\d+$/, ':5124');  // 替换端口为5124
+  // 修改检查更新的函数
+  const checkUpdate = async () => {
+    try {
+      setIsChecking(true);
+      const response = await fetchWithTimeout('./api/check-update', {
+        timeout: 10000 // 10秒超时
+      });
+      const data = await response.json();
       
-      // 如果没有配置过WebDAV URL和用户名，则使用默认值
-      const initialValues = {
-        ...webdavConfig,
-        url: webdavConfig.url || defaultWebdavUrl,
-        username: webdavConfig.username || 'admin'
-      };
-      
-      form.setFieldsValue(initialValues);
+      if (data && data.latest_version) {
+        if (compareVersions(data.latest_version, versionInfo?.version) > 0) {
+          setLatestVersion({
+            version: data.latest_version,
+            updateTime: new Date().toISOString()
+          });
+          message.info(`${t('update.newVersion')}: ${data.latest_version}`);
+        } else {
+          message.success(t('update.latestVersion'));
+          setLatestVersion(null);
+        }
+      }
+    } catch (error) {
+      console.error('检查更新失败:', error);
+      message.error(t('update.checkFailed') + ': ' + error.message);
+    } finally {
+      setIsChecking(false);
     }
-  }, [showWebDAVModal, form, webdavConfig]);
+  };
+
+  // 修改执行更新的函数
+  const handleUpdate = async () => {
+    try {
+      message.loading({ content: t('update.checking'), key: 'update' });
+      const response = await fetchWithTimeout('./api/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        timeout: 30000 // 30秒超时
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.status === 'success') {
+        message.success({ 
+          content: result.message, 
+          key: 'update',
+          duration: 5 
+        });
+        setTimeout(() => {
+          message.loading({ 
+            content: t('update.complete'), 
+            key: 'update' 
+          });
+          window.location.reload();
+        }, 3000);
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      message.error({ 
+        content: `${t('update.failed')}: ${error.message}`, 
+        key: 'update',
+        duration: 5 
+      });
+    }
+  };
+
+  // 添加版本号比较函数
+  const compareVersions = (v1, v2) => {
+    // 移除版本号中的 'v' 前缀
+    const version1 = v1.replace('v', '').split('.');
+    const version2 = v2.replace('v', '').split('.');
+    
+    // 比较每个版本号部分
+    for (let i = 0; i < Math.max(version1.length, version2.length); i++) {
+      const num1 = parseInt(version1[i] || 0);
+      const num2 = parseInt(version2[i] || 0);
+      
+      if (num1 > num2) return 1;
+      if (num1 < num2) return -1;
+    }
+    
+    return 0;
+  };
+
+  // 修改 WebDAV 相关函数
+  const handleWebDAVSubmit = async (values) => {
+    try {
+      const testResponse = await fetch('./api/webdav/test', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
+      });
+      
+      const testResult = await testResponse.json();
+      
+      if (testResult.status === 'success') {
+        setWebdavConfig(values);
+        localStorage.setItem('webdav-config', JSON.stringify(values));
+        setShowWebDAVModal(false);
+        message.success(t('webdav.configSuccess'));
+      } else {
+        throw new Error(testResult.message);
+      }
+    } catch (error) {
+      message.error(`${t('webdav.configFailed')}: ${error.message}`);
+    }
+  };
 
   // 配置导入导出菜单项
   const configMenuItems = [
     {
       key: 'import',
-      label: t('import'),
+      label: t('config.import'),
       icon: <Icon path={mdiImport} size={0.8} />,
       onClick: () => fileInputRef.current.click()
     },
     {
       key: 'export',
-      label: t('export'),
+      label: t('config.export'),
       icon: <Icon path={mdiExport} size={0.8} />,
       onClick: handleExport
     }
@@ -762,7 +896,8 @@ function ConfigPage() {
           const configData = await loadConfigFromWebDAV();
           setCards(configData.cards.map(card => ({
             ...card,
-            visible: card.visible !== false
+            visible: card.visible !== false,
+            titleVisible: card.titleVisible !== false
           })));
           setHasUnsavedChanges(true);
           message.success('从WebDAV加载配置成功');
@@ -797,89 +932,6 @@ function ConfigPage() {
     }
   ];
 
-  // 添加执行更新的函数
-  const handleUpdate = async () => {
-    try {
-      message.loading({ content: t('update.checking'), key: 'update' });
-      const response = await fetch('./api/update');
-      const result = await response.json();
-      
-      if (result.status === 'success') {
-        message.success({ 
-          content: result.message, 
-          key: 'update',
-          duration: 5 
-        });
-        // 如果更新成功，3秒后刷新页面
-        setTimeout(() => {
-          message.loading({ 
-            content: t('update.complete'), 
-            key: 'update' 
-          });
-          window.location.reload();
-        }, 3000);
-      } else {
-        message.error({ 
-          content: `${t('update.failed')}: ${result.message}`, 
-          key: 'update',
-          duration: 5 
-        });
-      }
-    } catch (error) {
-      message.error({ 
-        content: `${t('update.failed')}: ${error.message}`, 
-        key: 'update',
-        duration: 5 
-      });
-    }
-  };
-
-  // 添加版本号比较函数
-  const compareVersions = (v1, v2) => {
-    // 移除版本号中的 'v' 前缀
-    const version1 = v1.replace('v', '').split('.');
-    const version2 = v2.replace('v', '').split('.');
-    
-    // 比较每个版本号部分
-    for (let i = 0; i < Math.max(version1.length, version2.length); i++) {
-      const num1 = parseInt(version1[i] || 0);
-      const num2 = parseInt(version2[i] || 0);
-      
-      if (num1 > num2) return 1;
-      if (num1 < num2) return -1;
-    }
-    
-    return 0;
-  };
-
-  // 修改检查更新的函数，使用 useCallback 包装
-  const checkUpdate = async () => {
-    try {
-      setIsChecking(true);
-      const response = await fetch('https://api.github.com/repos/mrtian2016/hass-panel/releases/latest');
-      const data = await response.json();
-      if (data && data.tag_name) {
-        // 只有当新版本号大于当前版本时才设置新版本
-        if (compareVersions(data.tag_name, versionInfo?.version) > 0) {
-          setLatestVersion({
-            version: data.tag_name,
-            updateTime: new Date().toISOString()
-          });
-          message.info(`${t('update.newVersion')}: ${data.tag_name}`);
-        } else {
-          message.success(t('update.latestVersion'));
-          setLatestVersion(null);
-        }
-      }
-    } catch (error) {
-      console.error('检查更新失败:', error);
-      message.error(t('update.checkFailed'));
-    } finally {
-      setIsChecking(false);
-    }
-  };
-
-
   return (
     <div className="config-page">
       <div className="config-header">
@@ -907,15 +959,7 @@ function ConfigPage() {
               <Icon path={mdiServerNetwork} size={0.8} style={{ marginLeft: 8 }} />
             </Button>
           </Dropdown>
-          <button 
-            onClick={() => {
-              localStorage.setItem('debugMode', !debugMode);
-              setDebugMode(!debugMode);
-            }}
-            title={t('config.debug')}
-          >
-            {t('config.debug')}: {debugMode ? t('config.debugOn') : t('config.debugOff')}
-          </button>
+         
         </Space>
       </div>
       
@@ -928,6 +972,27 @@ function ConfigPage() {
                 <span>{cardTypes[card.type].name}</span>
               </div>
               <div className="item-actions">
+              <Switch 
+                  type="link"
+                  style={{color: 'var(--color-primary)',backgroundColor: card.titleVisible ? 'var(--color-primary)' : ''}}
+                  defaultChecked={card.titleVisible}
+                  onChange={() => handleTitleVisibilityChange(card.id)}
+                  checkedChildren={t('config.showTitle')}
+                  unCheckedChildren={t('config.hideTitle')}
+                >
+                  
+                </Switch>
+               
+                <Switch 
+                  type="link"
+                  style={{color: 'var(--color-primary)',backgroundColor: card.visible ? 'var(--color-primary)' : ''}}
+                  defaultChecked={card.visible}
+                  onChange={() => handleVisibilityChange(card.id)}
+                  checkedChildren={t('config.showCard')}
+                  unCheckedChildren={t('config.hideCard')}
+                >
+                  
+                </Switch>
                 {card.type === 'LightOverviewCard' && (
                   <button 
                     className="preview-button"
@@ -937,18 +1002,10 @@ function ConfigPage() {
                     }}
                     title={t('config.preview')}
                   >
-                    <Icon path={mdiFileFind} size={1} />
+                    <Icon path={mdiEye} size={1} />
                     
                   </button>
                 )}
-                <button 
-                  className={`visibility-toggle `}
-                  onClick={() => handleVisibilityChange(card.id)}
-                  title={card.visible === false ? t('showCard') : t('hideCard')}
-                >
-                  <Icon path={card.visible === false ? mdiEye : mdiEyeOff} size={1} />
-                  
-                </button>
                 <button 
                   className="delete-button"
                   onClick={() => handleDeleteCard(card.id)}
@@ -1064,6 +1121,7 @@ function ConfigPage() {
         >
           <Icon path={mdiPlus} size={3} />
         </button>
+        <div className='bottom-buttons'>
         {versionInfo && (
           <div className="version-info">
             <Icon path={mdiInformationOutline} size={0.8} />
@@ -1092,9 +1150,24 @@ function ConfigPage() {
                 </Button>
               )}
             </span>
+            
           </div>
+          
         )}
-
+<span>
+            <Button 
+            type="link"
+            size="small"
+            onClick={() => {
+              localStorage.setItem('debugMode', !debugMode);
+              setDebugMode(!debugMode);
+            }}
+            title={t('config.debug')}
+          >
+            {t('config.debug')}: {debugMode ? t('config.debugOn') : t('config.debugOff')}
+          </Button>
+          </span>
+          </div>
       {/* 版本列表模态框 */}
       <Modal
         title={t('webdav.versionList')}

@@ -187,6 +187,7 @@ function ElectricityCard({
     <BaseCard 
       title={config.title || t('cardTitles.electricity')}
       icon={mdiEye}
+      titleVisible={config.titleVisible}
       className="electricity-usage-card"
     >
       <div className="electricity-content">

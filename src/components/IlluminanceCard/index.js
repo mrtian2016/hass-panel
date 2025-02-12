@@ -5,7 +5,7 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import './style.css';
 
-function IlluminanceCard({ config }) {
+function IlluminanceCard({ config, titleVisible }) {
   const { t } = useLanguage();
   // 从 config.sensors 获取传感器列表
   const sensors = Array.isArray(config.sensors) ? config.sensors : [];
@@ -15,6 +15,7 @@ function IlluminanceCard({ config }) {
       title={config.title || t('cardTitles.illuminance')}
       icon={mdiWhiteBalanceSunny}
       iconColor="var(--color-warning)"
+      titleVisible={titleVisible}
     >
       <div className="illuminance-sensors">
         {sensors.map((sensor) => {

@@ -46,6 +46,10 @@ export const translations = {
 
     // 配置页面
     config: {
+      showTitle: '显示标题',
+      hideTitle: '隐藏标题',
+      showCard: '显示卡片',
+      hideCard: '隐藏卡片',
       title: '配置管理',
       addCard: '添加卡片',
       cardTypes: '卡片类型',
@@ -73,7 +77,13 @@ export const translations = {
       moveDown: '下移',
       debug: '调试模式',
       debugOn: '开启',
-      debugOff: '关闭'
+      debugOff: '关闭',
+      import: '导入',
+      export: '导出',
+      importSuccess: '导入成功',
+      exportSuccess: '导出成功',
+      importFailed: '导入失败',
+      exportFailed: '导出失败',
     },
     
     // 卡片类型
@@ -592,7 +602,7 @@ export const translations = {
   },
   en: {
     // Common
-    currentVersion:'currentVersion',
+    currentVersion:'Current Version',
     edit: 'Edit Layout',
     done: 'Done',
     reset: 'Reset Layout', 
@@ -637,6 +647,10 @@ export const translations = {
 
     // Config Page
     config: {
+      showTitle: 'Show Title',
+      hideTitle: 'Hide Title',
+      showCard: 'Show Card',
+      hideCard: 'Hide Card',
       title: 'Configuration Manager',
       addCard: 'Add Card',
       cardTypes: 'Card Types',

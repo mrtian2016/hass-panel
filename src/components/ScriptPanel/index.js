@@ -9,6 +9,7 @@ import './style.css';
 import { useTheme } from '../../theme/ThemeContext';
 
 function ScriptPanel({ config }) {
+  const titleVisible = config.titleVisible;
   const { theme } = useTheme();
   const { t } = useLanguage();
   const { callService } = useHass();
@@ -39,6 +40,7 @@ function ScriptPanel({ config }) {
       icon={<Command size={24} />} 
       className="script-panel" 
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
+      titleVisible={titleVisible}
     >
       <div className="script-buttons">
         {config.scripts.map((script) => (

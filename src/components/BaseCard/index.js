@@ -4,6 +4,7 @@ import './style.css';
 
 function BaseCard({ 
   title, 
+  titleVisible,
   icon, 
   iconColor, 
   children, 
@@ -13,8 +14,9 @@ function BaseCard({
 }) {
   return (
     <div className={`base-card ${className}`} style={style}>
-      <div className="card-header">
-        <h3>
+      {titleVisible !== false && (
+        <div className="card-header">
+          <h3>
           {icon && (
             React.isValidElement(icon) ? 
               React.cloneElement(icon, { 
@@ -34,7 +36,8 @@ function BaseCard({
           {title}
         </h3>
         {headerRight}
-      </div>
+        </div>
+      )}
       {children}
     </div>
   );

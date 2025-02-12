@@ -61,6 +61,7 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
 }
 
 function NASCard({ config }) {
+  const titleVisible = config.titleVisible;
   const { theme } = useTheme();
   const { t } = useLanguage();
   const [showDriveModal, setShowDriveModal] = useState(false);
@@ -111,6 +112,7 @@ function NASCard({ config }) {
         title={config.title || t('cardTitles.nas')}
         icon={mdiNas}
         iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
+        titleVisible={titleVisible}
         headerRight={
           <div className="header-right" onClick={() => setShowDriveModal(true)} style={{ cursor: 'pointer' }}>
             <Icon path={mdiDotsHorizontal} size={0.8} />

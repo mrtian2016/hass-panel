@@ -40,6 +40,7 @@ const ICON_MAP = {
 
 function ClimateCard({ 
   config,
+  titleVisible
 }) {
   const { theme } = useTheme();
   const { t } = useLanguage();
@@ -160,7 +161,7 @@ function ClimateCard({
   };
 
   const getHvacModeIcon = (mode) => {
-    switch (mode) {
+    switch (mode) { 
       case 'cool':
         return mdiSnowflake;
       case 'dry':
@@ -194,6 +195,7 @@ function ClimateCard({
   return (
     <BaseCard
       title={config.name || t('cardTitles.climate')}
+      titleVisible={titleVisible}
       icon={mdiAirConditioner}
       iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#64B5F6'}
       headerRight={
