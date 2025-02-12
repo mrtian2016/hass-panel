@@ -742,18 +742,16 @@ function ConfigPage() {
   const checkUpdate = async () => {
     try {
       setIsChecking(true);
-      const response = await fetchWithTimeout('./api/update', {
-        timeout: 10000 // 10秒超时
-      });
+      const response = await fetch('https://api.github.com/repos/mrtian2016/hass-panel/releases/latest');
       const data = await response.json();
-      
-      if (data && data.latest_version) {
-        if (compareVersions(data.latest_version, versionInfo?.version) > 0) {
+      if (data && data.tag_name) {
+        // 只有当新版本号大于当前版本时才设置新版本
+        if (compareVersions(data.tag_name, versionInfo?.version) > 0) {
           setLatestVersion({
-            version: data.latest_version,
+            version: data.tag_name,
             updateTime: new Date().toISOString()
           });
-          message.info(`${t('update.newVersion')}: ${data.latest_version}`);
+          message.info(`${t('update.newVersion')}: ${data.tag_name}`);
         } else {
           message.success(t('update.latestVersion'));
           setLatestVersion(null);
@@ -761,7 +759,7 @@ function ConfigPage() {
       }
     } catch (error) {
       console.error('检查更新失败:', error);
-      message.error(t('update.checkFailed') + ': ' + error.message);
+      message.error(t('update.checkFailed'));
     } finally {
       setIsChecking(false);
     }
