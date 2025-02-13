@@ -3,9 +3,12 @@ import { debounce, throttle } from './throttleDebounce';
 
 // 通用请求函数
 const request = async (endpoint, options = {}) => {
-  const localToken = localStorage.getItem('hassTokens');
-  const token = JSON.parse(localToken);
-  const accessToken = token.access_token;
+  let accessToken = window.env?.REACT_APP_HASS_TOKEN;
+  if (!accessToken) {
+    const localToken = localStorage.getItem('hassTokens');
+    const token = JSON.parse(localToken);
+    accessToken = token.access_token;
+  }
   if (!accessToken) {
     throw new Error('未找到认证token');
   }
