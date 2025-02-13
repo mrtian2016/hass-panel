@@ -1,0 +1,17 @@
+[base]
+name = 'Hass Panel'
+web_port = 5124
+debug = true
+user_config_dir = "../data/user_configs"
+hass_url = "http://10.0.0.70:8123"
+
+[update_cfg]
+github_repo = "mrtian2016/hass-panel"
+app_dir = "../frontend/build"
+version_file = "../frontend/build/version.json"
+tmp_dir = "/tmp/hass-panel-update"
+exclude_path = ["media", "env.js", "env.template.js"]
+
+[log]
+log_output_dir = "logs"
+

@@ -1,6 +1,9 @@
-name: Build Docker Image
+name: Build and Release
 
 on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+' # 只匹配标准版本号，如 v1.0.0，不包含 beta
   workflow_dispatch:
     inputs:
       version:
@@ -27,10 +30,14 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: |
+          cd frontend
+          npm install --legacy-peer-deps
 
       - name: Build
-        run: npm run build
+        run: |
+          cd frontend
+          npm run build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -50,7 +57,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64,linux/armv7
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest

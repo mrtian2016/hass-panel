@@ -20,7 +20,6 @@ A React-based smart home control panel that uses the Home Assistant Websocket AP
 - 🔧 Highly configurable with drag-and-drop layout
 - 🚀 PWA support, can be installed on desktop
 - 🎨 Beautiful user interface with dark mode support
-- 💾 WebDAV configuration sync support
 - 🔌 Rich device support:
   - Light control
   - AC control
@@ -38,13 +37,9 @@ docker run \
   --name hass-panel \
   --restart unless-stopped \
   -p 5123:5123 \
-  -p 5124:5124 \
-  -v ./webdav:/config/hass-panel/webdav \ # Persist WebDAV files
-  -v ./media:/app/media \ # Media resources, mainly room images
+  -v ./data/:/config/hass-panel \
   -e REACT_APP_HASS_URL=your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # Optional, if token authentication is needed
-  -e WEBDAV_USERNAME=your-webdav-username \ # WebDAV username
-  -e WEBDAV_PASSWORD=your-webdav-password \ # WebDAV password
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
@@ -52,8 +47,6 @@ docker run \
 Environment Variables:
 - `REACT_APP_HASS_URL`: Home Assistant instance address
 - `REACT_APP_HASS_TOKEN`: Home Assistant long-lived access token (optional)
-- `WEBDAV_USERNAME`: WebDAV username
-- `WEBDAV_PASSWORD`: WebDAV password
 
 ### Home Assistant Addon Method
 
@@ -88,24 +81,6 @@ Or manually add:
 14. Water Purifier Card
 15. Illuminance Card
 16. Script Panel
-
-### WebDAV Configuration Sync
-
-Supports configuration sync between multiple devices via built-in WebDAV service:
-
-1. Prerequisites
-   - Use the container's built-in WebDAV service (`http://your-docker-host:5124`)
-   - Default username and password can be set via environment variables
-
-2. Setup Steps
-   - Click "WebDAV Config" button at the top of the panel
-   - Enter server address, username, and password
-   - Choose whether to enable auto-sync
-   - Save configuration
-
-3. Usage Instructions
-   - Supports automatic/manual sync
-   - Config file is stored as `config.json` in WebDAV root directory
 
 ### Card Management
 

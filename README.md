@@ -20,7 +20,6 @@
 - 🔧 高度可配置，自由拖拽布局
 - 🚀 PWA支持，可安装到桌面
 - 🎨 美观的用户界面，支持暗色模式
-- 💾 支持 WebDAV 配置同步
 - 🔌 丰富的设备支持:
   - 灯光控制
   - 空调控制
@@ -38,13 +37,9 @@ docker run \
   --name hass-panel \
   --restart unless-stopped \
   -p 5123:5123 \
-  -p 5124:5124 \
-  -v ./webdav:/config/hass-panel/webdav \ # 持久化webdav文件
-  -v ./media:/app/media \ # 媒体资源，主要是房间图片
+  -v ./data/:/config/hass-panel \
   -e REACT_APP_HASS_URL=your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
-  -e WEBDAV_USERNAME=your-webdav-username \ # WebDAV 用户名
-  -e WEBDAV_PASSWORD=your-webdav-password \ # WebDAV 密码
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
@@ -52,8 +47,6 @@ docker run \
 环境变量说明:
 - `REACT_APP_HASS_URL`: Home Assistant 实例地址
 - `REACT_APP_HASS_TOKEN`: Home Assistant 长期访问令牌(可选)
-- `WEBDAV_USERNAME`: WebDAV 用户名
-- `WEBDAV_PASSWORD`: WebDAV 密码
 
 ### Home Assistant Addon方式
 
@@ -88,24 +81,6 @@ docker run \
 14. 净水器卡片 (WaterPurifierCard)
 15. 光照传感器卡片 (IlluminanceCard)
 16. 快捷指令面板 (ScriptPanel)
-
-### WebDAV 配置同步
-
-支持通过内置 WebDAV 服务在多个设备间同步配置:
-
-1. 准备工作
-   - 使用容器内置的 WebDAV 服务 (`http://your-docker-host:5124`)
-   - 默认用户名和密码可通过环境变量设置
-
-2. 设置步骤
-   - 点击面板顶部"WebDAV配置"按钮
-   - 输入服务器地址、用户名和密码
-   - 选择是否启用自动同步
-   - 保存配置
-
-3. 使用说明
-   - 支持自动/手动同步
-   - 配置文件保存在 WebDAV 根目录的 `config.json`
 
 ### 卡片管理
 

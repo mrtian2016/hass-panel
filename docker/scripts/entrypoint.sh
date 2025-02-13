@@ -33,40 +33,54 @@ if [ -f "/data/options.json" ]; then
     fi
 
     CONFIG_DIR="/config/hass-panel"
-    WEBDAV_DIR="$CONFIG_DIR/webdav"
 else
     # Docker 模式
     export IS_ADDON=false
     CONFIG_DIR="/config/hass-panel"
-    WEBDAV_DIR="/data/webdav"
 fi
 
 echo "Running mode: $([ "$IS_ADDON" = "true" ] && echo "Addon" || echo "Docker")"
 echo "REACT_APP_HASS_URL: $REACT_APP_HASS_URL"
 echo "WEBDAV_USERNAME: $WEBDAV_USERNAME"
 echo "CONFIG_DIR: $CONFIG_DIR"
-echo "WEBDAV_DIR: $WEBDAV_DIR"
 
 # 创建必要的目录
 mkdir -p "$CONFIG_DIR/media"
-mkdir -p "$WEBDAV_DIR"
 
-# 如果 media 目录存在，则链接 media 文件
+
 if [ -d "$CONFIG_DIR/media" ]; then
-    ln -sf "$CONFIG_DIR/media/"* /app/media/
+    # 如果 media 目录存在，覆盖/app/media
+    rm -rf /app/media
+    ln -sf "$CONFIG_DIR/media" /app/media
 else
     # 如果不存在则使用示例配置
     cp -r /app/media/* "$CONFIG_DIR/media/"
 fi
 
-# 生成环境配置
-envsubst < /app/env.template.js > /app/env.js
-
-# 根据环境修改 WebDAV 配置
-if [ "$IS_ADDON" = "true" ]; then
-    # Addon 模式下修改 WebDAV 配置路径
-    sed -i "s|/data/webdav|$WEBDAV_DIR|g" /webdav_config.yaml
+# 如果 user_configs 目录不存在，则创建
+if [ ! -d "$CONFIG_DIR/user_configs" ]; then
+    mkdir -p "$CONFIG_DIR/user_configs"
 fi
 
-# 使用 supervisor 启动所有服务
-supervisord -c /backend/supervisord.conf
+# 如果webdav目录存在，则复制文件到user_configs
+if [ -d "$CONFIG_DIR/webdav" ]; then
+    # 如果有文件，则复制文件到user_configs
+    if [ "$(ls -A "$CONFIG_DIR/webdav")" ]; then
+        cp -r "$CONFIG_DIR/webdav/*" "$CONFIG_DIR/user_configs/"
+    fi
+fi
+
+
+# 生成环境配置
+envsubst < /app/env.template.js > /app/env.js
+# HASS_BACKEND_URL
+
+# 替换 HASS_BACKEND_URL
+escaped_url=$(echo "$REACT_APP_HASS_URL" | sed 's/[\/&]/\\&/g')
+sed -i "s|HASS_BACKEND_URL|$escaped_url|g" /backend/config/prod.toml
+
+# 启动 nginx
+nginx
+
+# 启动 fastapi
+python hass_panel/main.py
