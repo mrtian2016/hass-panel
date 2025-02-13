@@ -46,6 +46,8 @@ export const translations = {
 
     // 配置页面
     config: {
+      loadFailed: '加载失败',
+      loadFailedDesc: '加载失败,请检查配置',
       versionList: '版本列表',
       showTitle: '显示标题',
       hideTitle: '隐藏标题',
@@ -656,6 +658,8 @@ export const translations = {
 
     // Config Page
     config: {
+      loadFailed: 'Load Failed',
+      loadFailedDesc: 'Load Failed, Please Check Configuration',
       versionList: 'Version List',
       showTitle: 'Show Title',
       hideTitle: 'Hide Title',
