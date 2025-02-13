@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import Icon from '@mdi/react';
-import { 
-  mdiPlus, 
+import {
+  mdiPlus,
   mdiDelete,
   mdiClockOutline,
   mdiWeatherPartlyCloudy,
@@ -26,19 +26,20 @@ import {
   mdiHomeFloorG,
   mdiFileFind,
   mdiClose,
-  mdiInformationOutline,
-  
+
 } from '@mdi/js';
 import ConfigField from '../../components/ConfigField';
 import AddCardModal from '../../components/AddCardModal';
 // import Modal from '../../components/Modal';
 import LightOverviewCard from '../../components/LightOverviewCard';
-
-import { message, Modal, Form, Input, Checkbox, Button, Space, Dropdown, List, Tooltip,Switch } from 'antd';
+import WebdavConfig from '../../components/WebdavConfig';
+import { message, Button, Space, Dropdown, Switch } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
-import { loadConfigFromWebDAV, saveConfigToWebDAV, fetchVersionList, restoreVersion, deleteVersion } from '../../utils/webdav.js';
-import './style.css';
+import { loadConfigFromWebDAV, saveConfigToWebDAV } from '../../utils/webdav.js';
 
+import './style.css';
+import VersionListModal from '../../components/VersionList';
+import BottomInfo from '../../components/BottomInfo';
 const getCardTypes = (t) => ({
   TimeCard: {
     name: t('cards.time'),
@@ -399,49 +400,40 @@ function ConfigPage() {
     }
     return [];
   });
-  const [debugMode, setDebugMode] = useState(() => {
-    const localDebugMode = localStorage.getItem('debugMode');
-    
-    return localDebugMode === 'true';
-  });
+ 
   const [showAddModal, setShowAddModal] = useState(false);
-  const [versionInfo, setVersionInfo] = useState(null);
-  const [latestVersion, setLatestVersion] = useState(null);
-  const [isChecking, setIsChecking] = useState(false);
   const [webdavConfig, setWebdavConfig] = useState(() => {
     return JSON.parse(localStorage.getItem('webdav-config') || '{}');
   });
   const [showWebDAVModal, setShowWebDAVModal] = useState(false);
   const [showVersionModal, setShowVersionModal] = useState(false);
-  const [versionList, setVersionList] = useState([]);
-  const [loadingVersions, setLoadingVersions] = useState(false);
-  const [form] = Form.useForm();
+
   const { t } = useLanguage();
   const cardTypes = getCardTypes(t);
-  
+
   const handleSave = async () => {
     try {
       // 计算默认布局
       const defaultLayouts = calculateLayouts(cards);
-      
+
       // 分别保存移动端和桌面端的默认布局
       localStorage.setItem('mobile-default-dashboard-layouts', JSON.stringify(defaultLayouts));
       localStorage.setItem('desktop-default-dashboard-layouts', JSON.stringify(defaultLayouts));
-      
+
       // 保存到本地存储
       localStorage.setItem('card-config', JSON.stringify(cards));
-      
+
       // 获取当前已有的移动端和桌面端布局
       const existingMobileLayouts = JSON.parse(localStorage.getItem('mobile-dashboard-layouts') || '{}');
       const existingDesktopLayouts = JSON.parse(localStorage.getItem('desktop-dashboard-layouts') || '{}');
-      
+
       // 只为新添加的卡片计算布局
       const newCards = cards.filter(card => {
         // 检查所有布局中是否存在该卡片的布局
-        const inMobileLayouts = !Object.values(existingMobileLayouts).some(layout => 
+        const inMobileLayouts = !Object.values(existingMobileLayouts).some(layout =>
           Array.isArray(layout) && layout.some(item => item.i === card.id.toString())
         );
-        const inDesktopLayouts = !Object.values(existingDesktopLayouts).some(layout => 
+        const inDesktopLayouts = !Object.values(existingDesktopLayouts).some(layout =>
           Array.isArray(layout) && layout.some(item => item.i === card.id.toString())
         );
         return inMobileLayouts || inDesktopLayouts;
@@ -450,7 +442,7 @@ function ConfigPage() {
       if (newCards.length > 0) {
         // 只为新卡片计算布局
         const newLayouts = calculateLayouts(newCards);
-        
+
         // 合并移动端布局
         const mergedMobileLayouts = {
           lg: [...(Array.isArray(existingMobileLayouts.lg) ? existingMobileLayouts.lg : []), ...(newLayouts.lg || [])],
@@ -484,7 +476,7 @@ function ConfigPage() {
         localStorage.setItem('mobile-dashboard-layouts', JSON.stringify(mergedMobileLayouts));
         localStorage.setItem('desktop-dashboard-layouts', JSON.stringify(mergedDesktopLayouts));
       }
-      
+
       // 如果配置了WebDAV，且开启了自动同步，则保存到WebDAV
       if (webdavConfig.url && webdavConfig.autoSync) {
         try {
@@ -493,7 +485,7 @@ function ConfigPage() {
           message.error(t('config.saveFailed') + ': ' + error.message);
         }
       }
-      
+
       setHasUnsavedChanges(false);
       message.success(t('config.saveSuccess'));
     } catch (error) {
@@ -572,13 +564,13 @@ function ConfigPage() {
     // 计算每个卡片的位置
     cards.forEach((card, index) => {
       const height = cardHeights[card.type] || { lg: 10, md: 10, sm: 10 };
-      
+
       // 计算每个响应式布局的位置
       Object.keys(layouts).forEach(breakpoint => {
         const { cols } = baseParams[breakpoint];
         const row = Math.floor(index / cols);
         const col = index % cols;
-        
+
         layouts[breakpoint].push({
           'card_type': card.type,
           i: card.id.toString(),
@@ -612,7 +604,7 @@ function ConfigPage() {
       visible: true, // 新添加的卡片默认可见
       titleVisible: true // 新添加的卡片默认显示标题
     }]);
-    
+
     setHasUnsavedChanges(true);
     setShowAddModal(false);
   };
@@ -625,12 +617,12 @@ function ConfigPage() {
   const handleConfigChange = (cardId, key, value) => {
     setCards(cards.map(card => {
       if (card.id === cardId) {
-        const newConfig = {...card.config, [key]: value};
+        const newConfig = { ...card.config, [key]: value };
         // 如果是 LightOverviewCard，更新预览配置
         if (card.type === 'LightOverviewCard') {
           setPreviewConfig(newConfig);
         }
-        return {...card, config: newConfig};
+        return { ...card, config: newConfig };
       }
       return card;
     }));
@@ -650,7 +642,7 @@ function ConfigPage() {
         desktop: JSON.parse(localStorage.getItem('desktop-default-dashboard-layouts') || '{}')
       }
     };
-    
+
     const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -670,14 +662,14 @@ function ConfigPage() {
       reader.onload = (e) => {
         try {
           const config = JSON.parse(e.target.result);
-          
+
           // 更新卡片配置
           setCards(config.cards.map(card => ({
             ...card,
             visible: card.visible !== false, // 确保所有卡片都有visible属性
             titleVisible: card.titleVisible !== false // 确保所有卡片都有titleVisible属性
           })));
-          
+
           // 更新布局配置
           if (config.layouts) {
             // 分别保存移动端和桌面端布局
@@ -689,7 +681,7 @@ function ConfigPage() {
             localStorage.setItem('mobile-default-dashboard-layouts', config.defaultLayouts);
             localStorage.setItem('desktop-default-dashboard-layouts', config.defaultLayouts);
           }
-          
+
           setHasUnsavedChanges(true);
         } catch (error) {
           console.error('解析配置文件失败:', error);
@@ -700,124 +692,7 @@ function ConfigPage() {
     }
   };
 
-  // 添加获取版本信息的函数
-  React.useEffect(() => {
-    fetch('./version.json')
-      .then(response => response.json())
-      .then(data => {
-        setVersionInfo(data);
-      })
-      .catch(error => {
-        console.error('获取版本信息失败:', error);
-      });
-  }, []);
 
-  // const fetchWithTimeout = async (url, options = {}) => {
-  //   const timeout = options.timeout || 30000; // 默认30秒超时
-  //   const controller = new AbortController();
-  //   const id = setTimeout(() => controller.abort(), timeout);
-
-  //   try {
-  //     const response = await fetch(url, {
-  //       ...options,
-  //       signal: controller.signal
-  //     });
-  //     clearTimeout(id);
-      
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-      
-  //     return response;
-  //   } catch (error) {
-  //     clearTimeout(id);
-  //     if (error.name === 'AbortError') {
-  //       throw new Error('请求超时');
-  //     }
-  //     throw error;
-  //   }
-  // };
-
-  // 修改检查更新的函数
-  const checkUpdate = async () => {
-    try {
-      setIsChecking(true);
-      const response = await fetch('https://api.github.com/repos/mrtian2016/hass-panel/releases/latest');
-      const data = await response.json();
-      if (data && data.tag_name) {
-        // 只有当新版本号大于当前版本时才设置新版本
-        if (compareVersions(data.tag_name, versionInfo?.version) > 0) {
-          setLatestVersion({
-            version: data.tag_name,
-            updateTime: new Date().toISOString()
-          });
-          message.info(`${t('update.newVersion')}: ${data.tag_name}`);
-        } else {
-          message.success(t('update.latestVersion'));
-          setLatestVersion(null);
-        }
-      }
-    } catch (error) {
-      console.error('检查更新失败:', error);
-      message.error(t('update.checkFailed'));
-    } finally {
-      setIsChecking(false);
-    }
-  };
-  // 添加执行更新的函数
-  const handleUpdate = async () => {
-    try {
-      message.loading({ content: t('update.checking'), key: 'update' });
-      const response = await fetch('./api/update');
-      const result = await response.json();
-      
-      if (result.status === 'success') {
-        message.success({ 
-          content: result.message, 
-          key: 'update',
-          duration: 5 
-        });
-        setTimeout(() => {
-          message.loading({ 
-            content: t('update.complete'), 
-            key: 'update' 
-          });
-          window.location.reload();
-        }, 3000);
-        
-      } else {
-        message.error({ 
-          content: `${t('update.failed')}: ${result.message}`, 
-          key: 'update',
-          duration: 5 
-        });
-      }
-    } catch (error) {
-      message.error({ 
-        content: `${t('update.failed')}: ${error.message}`, 
-        key: 'update',
-        duration: 5 
-      });
-    }
-  };
-
-  // 添加版本号比较函数
-  const compareVersions = (v1, v2) => {
-    // 移除版本号中的 'v' 前缀
-    const version1 = v1.replace('v', '').split('.');
-    const version2 = v2.replace('v', '').split('.');
-    
-    // 比较每个版本号部分
-    for (let i = 0; i < Math.max(version1.length, version2.length); i++) {
-      const num1 = parseInt(version1[i] || 0);
-      const num2 = parseInt(version2[i] || 0);
-      
-      if (num1 > num2) return 1;
-      if (num1 < num2) return -1;
-    }
-    
-    return 0;
-  };
 
   // 修改 WebDAV 相关函数
   const handleWebDAVSubmit = async (values) => {
@@ -887,16 +762,7 @@ function ConfigPage() {
       label: t('webdav.versionList'),
       icon: <Icon path={mdiFileFind} size={0.8} />,
       onClick: async () => {
-        try {
-          setLoadingVersions(true);
-          const versions = await fetchVersionList();
-          setVersionList(versions);
-          setShowVersionModal(true);
-        } catch (error) {
-          message.error('获取版本列表失败: ' + error.message);
-        } finally {
-          setLoadingVersions(false);
-        }
+        setShowVersionModal(true);
       }
     }
   ] : [
@@ -919,7 +785,7 @@ function ConfigPage() {
             accept=".json"
             style={{ display: 'none' }}
           />
-          
+
           {/* 配置导入导出下拉菜单 */}
           <Dropdown menu={{ items: configMenuItems }} placement="bottomLeft">
             <Button>
@@ -935,10 +801,10 @@ function ConfigPage() {
               <Icon path={mdiServerNetwork} size={0.8} style={{ marginLeft: 8 }} />
             </Button>
           </Dropdown>
-         
+
         </Space>
       </div>
-      
+
       <div className="config-list">
         {cards.map(card => (
           <div key={card.id} className="config-item">
@@ -948,29 +814,29 @@ function ConfigPage() {
                 <span>{cardTypes[card.type].name}</span>
               </div>
               <div className="item-actions">
-              <Switch 
+                <Switch
                   type="link"
-                  style={{color: 'var(--color-primary)',backgroundColor: card.titleVisible ? 'var(--color-primary)' : ''}}
+                  style={{ color: 'var(--color-primary)', backgroundColor: card.titleVisible ? 'var(--color-primary)' : '' }}
                   defaultChecked={card.titleVisible}
                   onChange={() => handleTitleVisibilityChange(card.id)}
                   checkedChildren={t('config.showTitle')}
                   unCheckedChildren={t('config.hideTitle')}
                 >
-                  
+
                 </Switch>
-               
-                <Switch 
+
+                <Switch
                   type="link"
-                  style={{color: 'var(--color-primary)',backgroundColor: card.visible ? 'var(--color-primary)' : ''}}
+                  style={{ color: 'var(--color-primary)', backgroundColor: card.visible ? 'var(--color-primary)' : '' }}
                   defaultChecked={card.visible}
                   onChange={() => handleVisibilityChange(card.id)}
                   checkedChildren={t('config.showCard')}
                   unCheckedChildren={t('config.hideCard')}
                 >
-                  
+
                 </Switch>
                 {card.type === 'LightOverviewCard' && (
-                  <button 
+                  <button
                     className="preview-button"
                     onClick={() => {
                       setPreviewConfig(card.config);
@@ -979,10 +845,10 @@ function ConfigPage() {
                     title={t('config.preview')}
                   >
                     <Icon path={mdiEye} size={1} />
-                    
+
                   </button>
                 )}
-                <button 
+                <button
                   className="delete-button"
                   onClick={() => handleDeleteCard(card.id)}
                 >
@@ -1014,219 +880,52 @@ function ConfigPage() {
 
       {previewConfig && (
         <div className={`preview-container ${showPreview ? 'visible' : ''}`}>
-          <button 
-            className="close-preview" 
+          <button
+            className="close-preview"
             onClick={() => setShowPreview(false)}
           >
             <Icon path={mdiClose} size={1} />
           </button>
-          <LightOverviewCard 
-            key={JSON.stringify(previewConfig)} 
-            config={previewConfig} 
+          <LightOverviewCard
+            key={JSON.stringify(previewConfig)}
+            config={previewConfig}
           />
         </div>
       )}
 
-      {/* 修改 WebDAV 配置模态框 */}
-      <Modal
-        title={t('webdav.config')}
-        open={showWebDAVModal}
+      <WebdavConfig
+        visible={showWebDAVModal}
         onCancel={() => setShowWebDAVModal(false)}
-        footer={null}
-        destroyOnClose
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleWebDAVSubmit}
-          initialValues={webdavConfig}
-        >
-          <Form.Item
-            label={t('webdav.url')}
-            name="url"
-            rules={[{ required: true, message: t('enterWebdavUrl') }]}
-          >
-            <Input placeholder={t('webdav.url')} />
-          </Form.Item>
+        onSubmit={handleWebDAVSubmit}
+        initialValues={webdavConfig}
+      />
 
-          <Form.Item
-            label={t('webdav.username')}
-            name="username"
-          >
-            <Input placeholder={t('webdav.username')} />
-          </Form.Item>
-
-          <Form.Item
-            label={t('webdav.password')}
-            name="password"
-          >
-            <Input.Password placeholder={t('webdav.password')} />
-          </Form.Item>
-
-          <Form.Item
-            name="autoSync"
-            valuePropName="checked"
-          >
-            <Checkbox>{t('webdav.autoSync')}</Checkbox>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
-              {t('webdav.save')}
-            </Button>
-            <Button onClick={() => setShowWebDAVModal(false)}>
-              {t('webdav.cancel')}
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+      <VersionListModal
+        visible={showVersionModal}
+        onCancel={() => setShowVersionModal(false)}
+        setCards={setCards}
+        setHasUnsavedChanges={setHasUnsavedChanges}
+        setShowVersionModal={setShowVersionModal}
+      />
 
       {/* 保存按钮 */}
       <button
-      className={`save-button ${hasUnsavedChanges ? 'has-changes' : ''}`}
-          onClick={handleSave}
-          
-        >
-          <Icon path={mdiCheck} size={2} />
-        </button>
+        className={`save-button ${hasUnsavedChanges ? 'has-changes' : ''}`}
+        onClick={handleSave}
 
-        {/* 添加卡片按钮 */}
-        <button
-        className="add-card-button"
-          onClick={() => setShowAddModal(true)}
-        >
-          <Icon path={mdiPlus} size={3} />
-        </button>
-        <div className='bottom-buttons'>
-        {versionInfo && (
-          <div className="version-info">
-            <Icon path={mdiInformationOutline} size={0.8} />
-            <span>
-              {t('currentVersion')}: {versionInfo.version}
-              {latestVersion && compareVersions(latestVersion.version, versionInfo.version) > 0 ? (
-                <Tooltip title={`${t('update.newVersion')}: ${latestVersion.version}`}>
-                  <Button 
-                    type="link" 
-                    size="small" 
-                    onClick={handleUpdate}
-                    style={{ marginLeft: 8, padding: '0 4px' }}
-                  >
-                    {t('update.updateToNew')}
-                  </Button>
-                </Tooltip>
-              ) : (
-                <Button 
-                  type="link" 
-                  size="small" 
-                  loading={isChecking}
-                  onClick={checkUpdate}
-                  style={{ marginLeft: 8, padding: '0 4px' }}
-                >
-                  {t('update.checkUpdate')}
-                </Button>
-              )}
-            </span>
-            
-          </div>
-          
-        )}
-<span>
-            <Button 
-            type="link"
-            size="small"
-            onClick={() => {
-              localStorage.setItem('debugMode', !debugMode);
-              setDebugMode(!debugMode);
-            }}
-            title={t('config.debug')}
-          >
-            {t('config.debug')}: {debugMode ? t('config.debugOn') : t('config.debugOff')}
-          </Button>
-          </span>
-          </div>
-      {/* 版本列表模态框 */}
-      <Modal
-        title={t('webdav.versionList')}
-        open={showVersionModal}
-        onCancel={() => setShowVersionModal(false)}
-        footer={null}
-        width={600}
       >
-        <div className="version-list">
-          {loadingVersions ? (
-            <div style={{ textAlign: 'center', padding: '20px' }}>
-              {t('loading')}...
-            </div>
-          ) : (
-            <List
-              dataSource={versionList}
-              renderItem={item => (
-                <List.Item
-                  actions={[
-                    <Space>
-                      <Button 
-                        type="link" 
-                        onClick={async () => {
-                          try {
-                            const configData = await restoreVersion(item.filename);
-                            setCards(configData.cards.map(card => ({
-                              ...card,
-                              visible: card.visible !== false
-                            })));
-                            setHasUnsavedChanges(true);
-                            message.success('恢复配置成功');
-                            setShowVersionModal(false);
-                          } catch (error) {
-                            message.error('恢复配置失败: ' + error.message);
-                          }
-                        }}
-                      >
-                        {t('webdav.restoreVersion')}
-                      </Button>
-                      {item.filename !== 'config.json' && (
-                        <Button 
-                          type="link" 
-                          danger
-                          onClick={() => {
-                            Modal.confirm({
-                              title: t('webdav.confirmDelete'),
-                              content: `${t('webdav.confirmDeleteVersion')} ${item.basename}?`,
-                              okText: t('confirm'),
-                              cancelText: t('cancel'),
-                              onOk: async () => {
-                                try {
-                                  await deleteVersion(item.filename);
-                                  const versions = await fetchVersionList();
-                                  setVersionList(versions);
-                                  message.success('删除版本成功');
-                                } catch (error) {
-                                  message.error('删除版本失败: ' + error.message);
-                                }
-                              }
-                            });
-                          }}
-                        >
-                          {t('webdav.delete')}
-                        </Button>
-                      )}
-                    </Space>
-                  ]}
-                >
-                  <List.Item.Meta
-                    title={
-                      <Space>
-                        <span>{item.basename}</span>
-                        <span style={{ color: '#999', fontSize: '12px' }}>({item.size})</span>
-                      </Space>
-                    }
-                    description={`${t('webdav.lastModified')}: ${item.lastmod}`}
-                  />
-                </List.Item>
-              )}
-            />
-          )}
-        </div>
-      </Modal>
+        <Icon path={mdiCheck} size={2} />
+      </button>
+
+      {/* 添加卡片按钮 */}
+      <button
+        className="add-card-button"
+        onClick={() => setShowAddModal(true)}
+      >
+        <Icon path={mdiPlus} size={3} />
+      </button>
+      
+      <BottomInfo />
     </div>
   );
 }

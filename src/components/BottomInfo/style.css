@@ -1,0 +1,68 @@
+
+.bottom-buttons {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    max-width: 1100px;
+    padding: 8px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    z-index: 99;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+  }
+  
+  .bottom-buttons .version-info {
+    margin: 0;
+    padding: 4px 0;
+    border: none;
+    background: transparent;
+    max-width: none;
+    overflow: visible;
+    font-size: 12px;
+    color: var(--color-text-secondary) !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .bottom-buttons .ant-btn-link {
+    padding: 4px 8px;
+    height: auto;
+    font-size: 12px;
+    color: var(--color-text-secondary) !important;
+  }
+  
+  .bottom-buttons .ant-btn-link:hover {
+    color: var(--color-primary) !important;
+  }
+  
+  @media (max-width: 1232px) {
+    .bottom-buttons {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .bottom-buttons {
+      padding: 8px 16px;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+    }
+    
+    .bottom-buttons .version-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .bottom-buttons span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
