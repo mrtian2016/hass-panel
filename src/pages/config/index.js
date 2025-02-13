@@ -777,16 +777,14 @@ function ConfigPage() {
           key: 'update',
           duration: 5 
         });
-        // 如果更新成功，3秒后刷新页面
-        if (result.message.includes(t('updateSuccess'))) {
-          setTimeout(() => {
-            message.loading({ 
-              content: t('update.complete'), 
-              key: 'update' 
-            });
-            window.location.reload();
-          }, 3000);
-        }
+        setTimeout(() => {
+          message.loading({ 
+            content: t('update.complete'), 
+            key: 'update' 
+          });
+          window.location.reload();
+        }, 3000);
+        
       } else {
         message.error({ 
           content: `${t('update.failed')}: ${result.message}`, 

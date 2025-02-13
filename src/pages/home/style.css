@@ -632,7 +632,7 @@
 
 @media (min-width: 768px) {
   .page-container {
-    margin-left: var(--sidebar-width, 200px);
+    margin-left: var(--sidebar-width, 160px);
     padding: 20px;
   }
   

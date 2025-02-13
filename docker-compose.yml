@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   hass-panel:
-    image: ghcr.io/mrtian2016/hass-panel:v1.2.8
+    image: ghcr.io/mrtian2016/hass-panel:v1.3.0
     ports:
       - "51230:5123"
       - "51240:5124"

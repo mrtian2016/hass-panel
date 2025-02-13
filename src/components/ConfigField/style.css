@@ -1,16 +1,18 @@
+
 .config-field {
   margin-bottom: 16px;
   max-width: 100%;
   overflow: hidden;
   width: 100%;
   box-sizing: border-box;
+  font-size: 12px !important;
 }
 
 .config-field label {
   display: block;
   margin-bottom: 8px;
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
@@ -24,12 +26,18 @@
   border-radius: var(--border-radius-small);
   background: var(--color-background);
   color: var(--color-text-primary);
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.3s;
   box-sizing: border-box;
   word-break: break-all;
 }
-
+.ant-select-item-option {
+  font-size: 12px !important;
+}
+.ant-select-selection-item {
+  line-height: 24px !important;
+  font-size: 12px !important;
+}
 .config-field input:hover {
   border-color: var(--color-primary);
 }
@@ -94,7 +102,7 @@
   background: var(--color-error);
   color: white;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 /* 传感器配置样式 */
@@ -128,7 +136,7 @@
 }
 
 .sensor-config-type {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--color-text-secondary);
   white-space: nowrap;
   width: 80px;
@@ -189,7 +197,7 @@
   color: var(--color-text-primary);
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 14px;
+  font-size: 13px;
   min-width: 32px;
   display: flex;
   align-items: center;
@@ -215,7 +223,7 @@
   color: white;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .delete-button:hover {
@@ -231,7 +239,7 @@
   color: white;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 14px;
+  font-size: 13px;
   align-self: flex-start;
 }
 
@@ -378,7 +386,7 @@
 
 /* 通用字段名称样式 */
 .field-name {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -453,7 +461,7 @@
   }
 
   .nas-section h4 {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .volume-config,
@@ -501,7 +509,7 @@
   }
 
   .ant-select-selection-item {
-    line-height: 34px;
+    line-height: 34px !important;
   }
 
   /* 优化下拉菜单在移动端的显示 */
@@ -553,7 +561,7 @@
   background: var(--color-primary);
   color: white;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
   align-self: flex-start;
 }
@@ -662,7 +670,7 @@
   background: var(--color-error);
   color: white;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   width: 100px;
   text-align: center;
   margin-top: 12px;
@@ -696,7 +704,7 @@
   background: var(--color-primary);
   color: white;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   align-self: flex-start;
   margin-top: 12px;
 }
@@ -730,7 +738,7 @@
 }
 
 .waterpuri-field .field-name {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -756,7 +764,7 @@
 }
 
 .electricity-field .field-name {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -865,7 +873,7 @@
   margin: 0;
   white-space: nowrap;
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .room-field .ant-select,
@@ -881,7 +889,7 @@
   background: var(--color-error);
   color: white;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   width: 100px;
   text-align: center;
   margin-top: 12px;
@@ -900,7 +908,7 @@
   background: var(--color-primary);
   color: white;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   width: 100px;
   text-align: center;
   margin-top: 12px;
