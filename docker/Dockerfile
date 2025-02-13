@@ -1,7 +1,7 @@
 FROM ghcr.io/hassio-addons/base:17.1.0
 
 # 安装依赖
-RUN apk add --no-cache nginx gettext curl jq unzip tzdata python3 py3-pip
+RUN apk add --no-cache nginx gettext curl jq unzip tzdata python3 py3-pip rsync
 
 # 设置时区
 ENV TZ=Asia/Shanghai

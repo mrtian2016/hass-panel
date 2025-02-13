@@ -11,7 +11,7 @@ GITHUB_REPO = "mrtian2016/hass-panel"
 APP_DIR = "/app"
 VERSION_FILE = os.path.join(APP_DIR, "version.json")
 TMP_DIR = "/tmp/hass-panel-update"
-EXCLUDE_DIRS = ['media']
+EXCLUDE_PATH = ['/app/media','/app/env.js','/app/env.template.js']
 
 def ensure_version_file():
     """确保version.json文件存在"""
@@ -37,28 +37,6 @@ def get_latest_release() -> tuple[str, str]:
     logger.info(f"获取到最新版本: {version}")
     return version, download_url
 
-def backup_important_files() -> list[str]:
-    """备份重要文件"""
-    backup_files = ['env.js', 'env.template.js']
-    backed_up = []
-    for file in backup_files:
-        src = os.path.join(APP_DIR, file)
-        if os.path.exists(src):
-            dst = os.path.join(TMP_DIR, f"{file}.backup")
-            logger.info(f"备份文件: {src} -> {dst}")
-            shutil.copy2(src, dst)
-            backed_up.append(file)
-    return backed_up
-
-def restore_backup_files(backed_up_files: list[str]):
-    """恢复备份的文件"""
-    for file in backed_up_files:
-        backup = os.path.join(TMP_DIR, f"{file}.backup")
-        if os.path.exists(backup):
-            dst = os.path.join(APP_DIR, file)
-            logger.info(f"恢复文件: {backup} -> {dst}")
-            shutil.copy2(backup, dst)
-
 def update_version_file(version: str):
     """更新版本文件"""
     current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -68,8 +46,9 @@ def update_version_file(version: str):
 
 def sync_files(src_dir: str, dst_dir: str):
     """使用rsync同步文件，排除特定目录"""
-    exclude_args = ' '.join([f'--exclude={dir}' for dir in EXCLUDE_DIRS])
+    exclude_args = ' '.join([f'--exclude={APP_DIR}/{dir}' for dir in EXCLUDE_PATH])
     cmd = f'rsync -av --delete {exclude_args} {src_dir}/ {dst_dir}/'
+
     logger.info(f"执行同步命令: {cmd}")
     try:
         result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
@@ -128,15 +107,9 @@ def run_update() -> str | None:
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(extract_path)
             
-            # 备份重要文件
-            backed_up_files = backup_important_files()
-            
             # 使用rsync同步文件
             logger.info("开始同步文件")
             sync_files(extract_path, APP_DIR)
-            
-            # 恢复备份的文件
-            restore_backup_files(backed_up_files)
             
             # 更新版本文件
             update_version_file(latest_version)
