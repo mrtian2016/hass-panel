@@ -5,11 +5,13 @@ import requests
 from datetime import datetime
 import zipfile
 from loguru import logger
+import subprocess
 
 GITHUB_REPO = "mrtian2016/hass-panel"
 APP_DIR = "/app"
 VERSION_FILE = os.path.join(APP_DIR, "version.json")
 TMP_DIR = "/tmp/hass-panel-update"
+EXCLUDE_DIRS = ['media']
 
 def ensure_version_file():
     """确保version.json文件存在"""
@@ -64,6 +66,19 @@ def update_version_file(version: str):
     with open(VERSION_FILE, 'w') as f:
         json.dump({"version": version, "updateTime": current_time}, f)
 
+def sync_files(src_dir: str, dst_dir: str):
+    """使用rsync同步文件，排除特定目录"""
+    exclude_args = ' '.join([f'--exclude={dir}' for dir in EXCLUDE_DIRS])
+    cmd = f'rsync -av --delete {exclude_args} {src_dir}/ {dst_dir}/'
+    logger.info(f"执行同步命令: {cmd}")
+    try:
+        result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
+        logger.debug(result.stdout)
+    except subprocess.CalledProcessError as e:
+        logger.error(f"同步失败: {e}")
+        logger.error(e.stderr)
+        raise Exception("文件同步失败")
+
 def run_update() -> str | None:
     """
     执行更新逻辑
@@ -116,24 +131,9 @@ def run_update() -> str | None:
             # 备份重要文件
             backed_up_files = backup_important_files()
             
-            # 删除旧文件
-            logger.info("清理旧文件")
-            for item in os.listdir(APP_DIR):
-                path = os.path.join(APP_DIR, item)
-                if os.path.isfile(path):
-                    os.remove(path)
-                elif os.path.isdir(path):
-                    shutil.rmtree(path)
-            
-            # 复制新文件
-            logger.info("复制新文件")
-            for item in os.listdir(extract_path):
-                src = os.path.join(extract_path, item)
-                dst = os.path.join(APP_DIR, item)
-                if os.path.isfile(src):
-                    shutil.copy2(src, dst)
-                else:
-                    shutil.copytree(src, dst)
+            # 使用rsync同步文件
+            logger.info("开始同步文件")
+            sync_files(extract_path, APP_DIR)
             
             # 恢复备份的文件
             restore_backup_files(backed_up_files)

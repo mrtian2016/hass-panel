@@ -193,7 +193,8 @@ export const translations = {
       delete: '删除',
       restore: '恢复',
       versions: '版本',
-      
+      configFailed: '配置失败',
+      configSuccess: '配置成功'
     },
 
     // 更新相关
@@ -782,7 +783,9 @@ export const translations = {
       lastModified: 'Last Modified',
       delete: 'Delete',
       restore: 'Restore',
-      versions: 'Versions'
+      versions: 'Versions',
+      configFailed: 'Configuration Failed',
+      configSuccess: 'Configuration Success'
     },
 
     // Update Related

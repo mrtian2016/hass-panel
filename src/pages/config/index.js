@@ -824,24 +824,9 @@ function ConfigPage() {
   // 修改 WebDAV 相关函数
   const handleWebDAVSubmit = async (values) => {
     try {
-      const testResponse = await fetch('./api/webdav/test', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(values)
-      });
-      
-      const testResult = await testResponse.json();
-      
-      if (testResult.status === 'success') {
-        setWebdavConfig(values);
-        localStorage.setItem('webdav-config', JSON.stringify(values));
-        setShowWebDAVModal(false);
-        message.success(t('webdav.configSuccess'));
-      } else {
-        throw new Error(testResult.message);
-      }
+      setWebdavConfig(values);
+      localStorage.setItem('webdav-config', JSON.stringify(values));
+      setShowWebDAVModal(false);
     } catch (error) {
       message.error(`${t('webdav.configFailed')}: ${error.message}`);
     }
