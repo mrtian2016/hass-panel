@@ -210,7 +210,11 @@ function WeatherCard({config}) {
         </div>}
         {aqi && <div className="weather-item">
           <span className="label">{t('weather.metrics.airQuality')}</span>
-          <span className="value">{aqi} ({aqi_description})</span>
+          <span className="value">
+            {typeof aqi === 'object' 
+              ? `${aqi.aqi || aqi.level} (${aqi.category})` 
+              : `${aqi} (${aqi_description})`}
+          </span>
         </div>}
         {pressure && !aqi && <div className="weather-item">
           <span className="label">{t('weather.metrics.pressure')}</span>
