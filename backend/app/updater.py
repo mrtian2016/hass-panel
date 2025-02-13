@@ -11,7 +11,7 @@ GITHUB_REPO = "mrtian2016/hass-panel"
 APP_DIR = "/app"
 VERSION_FILE = os.path.join(APP_DIR, "version.json")
 TMP_DIR = "/tmp/hass-panel-update"
-EXCLUDE_PATH = ['/app/media','/app/env.js','/app/env.template.js']
+EXCLUDE_PATH = ['media', 'env.js', 'env.template.js']
 
 def ensure_version_file():
     """确保version.json文件存在"""
@@ -45,18 +45,47 @@ def update_version_file(version: str):
         json.dump({"version": version, "updateTime": current_time}, f)
 
 def sync_files(src_dir: str, dst_dir: str):
-    """使用rsync同步文件，排除特定目录"""
-    exclude_args = ' '.join([f'--exclude={APP_DIR}/{dir}' for dir in EXCLUDE_PATH])
-    cmd = f'rsync -av --delete {exclude_args} {src_dir}/ {dst_dir}/'
-
-    logger.info(f"执行同步命令: {cmd}")
+    """使用rsync同步文件，排除特定目录
+    
+    Args:
+        src_dir: 源目录路径
+        dst_dir: 目标目录路径
+        
+    Raises:
+        Exception: 当目录不存在或同步失败时抛出
+    """
+    # 验证目录是否存在
+    if not os.path.exists(src_dir):
+        raise Exception(f"源目录不存在: {src_dir}")
+    if not os.path.exists(dst_dir):
+        raise Exception(f"目标目录不存在: {dst_dir}")
+        
+    # 直接使用相对路径构建exclude参数
+    exclude_args = ' '.join([f"--exclude='{path}'" for path in EXCLUDE_PATH])
+    
+    # 使用列表构建命令，避免命令注入
+    cmd_parts = ['rsync', '-a']
+    cmd_parts.extend(exclude_args.split())
+    cmd_parts.extend([f"{src_dir}/", f"{dst_dir}/"])
+    
+    logger.info(f"开始同步文件: {' '.join(cmd_parts)}")
     try:
-        result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
-        logger.debug(result.stdout)
+        result = subprocess.run(
+            cmd_parts,
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        # 只在debug级别记录输出
+        if result.stdout.strip():
+            logger.debug(f"rsync输出: {result.stdout}")
     except subprocess.CalledProcessError as e:
-        logger.error(f"同步失败: {e}")
-        logger.error(e.stderr)
-        raise Exception("文件同步失败")
+        error_msg = f"同步失败: 退出码 {e.returncode}"
+        if e.stderr.strip():
+            error_msg += f"\n错误输出: {e.stderr}"
+        logger.error(error_msg)
+        raise Exception(error_msg)
+    logger.info("文件同步完成")
 
 def run_update() -> str | None:
     """
@@ -108,7 +137,6 @@ def run_update() -> str | None:
                 zip_ref.extractall(extract_path)
             
             # 使用rsync同步文件
-            logger.info("开始同步文件")
             sync_files(extract_path, APP_DIR)
             
             # 更新版本文件
