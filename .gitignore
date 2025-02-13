@@ -34,6 +34,6 @@ docker-compose-dev.yml
 webdav
 data
 *.log
-frontend/build
+/frontend/build
 __pycache__
 .cache
