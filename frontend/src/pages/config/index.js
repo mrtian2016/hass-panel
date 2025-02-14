@@ -17,7 +17,7 @@ import {
   mdiServerNetwork,
   mdiScriptText,
   mdiCheck,
-  mdiEye,
+  // mdiEye,
   // mdiEyeOff,
   mdiSnowflake,
   mdiExport,
@@ -25,15 +25,13 @@ import {
   mdiMotionSensor,
   mdiHomeFloorG,
   mdiFileFind,
-  mdiClose,
+  // mdiClose,
   mdiPencil,
 } from '@mdi/js';
-import ConfigField from '../../components/ConfigField';
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
 // import Modal from '../../components/Modal';
-import LightOverviewCard from '../../components/LightOverviewCard';
-import { message, Button, Space, Dropdown, Switch, Spin, Card } from 'antd';
+import { message, Button, Space, Dropdown, Switch, Spin } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
 
@@ -707,20 +705,20 @@ function ConfigPage() {
     setHasUnsavedChanges(true);
   };
 
-  const handleConfigChange = (cardId, key, value) => {
-    setCards(cards.map(card => {
-      if (card.id === cardId) {
-        const newConfig = { ...card.config, [key]: value };
-        // 如果是 LightOverviewCard，更新预览配置
-        if (card.type === 'LightOverviewCard') {
-          setPreviewConfig(newConfig);
-        }
-        return { ...card, config: newConfig };
-      }
-      return card;
-    }));
-    setHasUnsavedChanges(true);
-  };
+  // const handleConfigChange = (cardId, key, value) => {
+  //   setCards(cards.map(card => {
+  //     if (card.id === cardId) {
+  //       const newConfig = { ...card.config, [key]: value };
+  //       // 如果是 LightOverviewCard，更新预览配置
+  //       if (card.type === 'LightOverviewCard') {
+  //         setPreviewConfig(newConfig);
+  //       }
+  //       return { ...card, config: newConfig };
+  //     }
+  //     return card;
+  //   }));
+  //   setHasUnsavedChanges(true);
+  // };
 
   // 修改版本列表相关函数
   const handleVersionList = async () => {

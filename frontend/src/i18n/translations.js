@@ -663,7 +663,6 @@ export const translations = {
     // Config Page
     config: {
       edit: 'Edit',
-      delete: 'Delete',
       preview: 'Preview',
       cancel: 'Cancel',
       save: 'Save',

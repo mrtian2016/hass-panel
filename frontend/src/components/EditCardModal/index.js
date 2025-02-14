@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, Space } from 'antd';
 import Icon from '@mdi/react';
-import { mdiEye, mdiClose, mdiCheck } from '@mdi/js';
+import { mdiClose, mdiCheck } from '@mdi/js';
 import ConfigField from '../ConfigField';
 import { useLanguage } from '../../i18n/LanguageContext';
 import LightOverviewCard from '../LightOverviewCard';
