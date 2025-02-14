@@ -7,11 +7,11 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from hass_panel.core.middlewares import proc_custom_exception
 
-from hass_panel.routers import items, update, user_config
+from hass_panel.routers import update, user_config,common
 from hass_panel.core.initial import lifespan
 from hass_panel.core.initial import cfg
 ROUTERS = [
-    items.router,
+    common.router,
     update.router,
     user_config.router
 ]

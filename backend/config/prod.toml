@@ -3,7 +3,9 @@ name = 'Hass Panel'
 web_port = 5124
 debug = false
 user_config_dir = "/config/hass-panel/user_configs"
+upload_dir = "/config/hass-panel/upload"
 hass_url = "HASS_BACKEND_URL"
+
 
 [update_cfg]
 github_repo = "mrtian2016/hass-panel"

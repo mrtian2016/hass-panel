@@ -4,6 +4,7 @@ web_port = 5124
 debug = true
 user_config_dir = "../data/user_configs"
 hass_url = "http://10.0.0.70:8123"
+upload_dir = '../data/upload'
 
 [update_cfg]
 github_repo = "mrtian2016/hass-panel"
