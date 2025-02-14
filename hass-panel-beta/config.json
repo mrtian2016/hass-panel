@@ -1,0 +1,41 @@
+{
+  "name": "Hass Panel Beta",
+  "version": "v1.3.1-beta.2",
+  "slug": "hass_panel_beta",
+  "description": "一个基于 React 的智能家居控制面板，此 Beta 版本仅供测试，可能问题较多，请谨慎使用",
+  "url": "https://github.com/mrtian2016/hass-panel-beta",
+  "image": "ghcr.io/mrtian2016/hass-panel",
+  "arch": [
+    "aarch64",
+    "amd64",
+    "armv7"
+  ],
+  "startup": "application",
+  "boot": "auto",
+  "auth_api": true,
+  "ingress": true,
+  "ingress_port": 5123,
+  "ingress_stream": true,
+  "ingress_entry": "/",
+  "panel_icon": "mdi:view-dashboard",
+  "homeassistant_api": true,
+  "init": false,
+  "map": [
+    "config:rw"
+  ],
+  "ports": {
+    "5123/tcp": 5123
+  },
+  "ports_description": {
+    "5123/tcp": "Web界面"
+  },
+  "webui": "http://[HOST]:[PORT:5123]",
+  "options": {
+    "hass_url": "http://homeassistant.local:8123",
+    "hass_token": ""
+  },
+  "schema": {
+    "hass_url": "str",
+    "hass_token": "str"
+  }
+} 
