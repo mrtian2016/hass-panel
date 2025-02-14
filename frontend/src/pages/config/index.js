@@ -27,6 +27,8 @@ import {
   mdiFileFind,
   // mdiClose,
   mdiPencil,
+  mdiArrowLeft,
+  mdiCog,
 } from '@mdi/js';
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
@@ -34,6 +36,7 @@ import EditCardModal from '../../components/EditCardModal';
 import { message, Button, Space, Dropdown, Switch, Spin } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 import './style.css';
 import VersionListModal from '../../components/VersionList';
@@ -378,7 +381,7 @@ const getCardTypes = (t) => ({
 });
 
 
-function ConfigPage() {
+function ConfigPage({ sidebarVisible, setSidebarVisible }) {
   const fileInputRef = useRef(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -387,11 +390,18 @@ function ConfigPage() {
   const [showVersionModal, setShowVersionModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const { t } = useLanguage();
+  const navigate = useNavigate();
   
   // 修改卡片状态的初始化
   const [cards, setCards] = useState([]);
   const [editingCard, setEditingCard] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showGlobalConfig, setShowGlobalConfig] = useState(false);
+  const [globalConfig, setGlobalConfig] = useState({
+    backgroundColor: '',
+    backgroundImage: '',
+    betaVersion: false
+  });
 
   // 加载配置数据
   useEffect(() => {
@@ -416,6 +426,50 @@ function ConfigPage() {
 
     loadConfig();
   }, [t]);
+
+  // 加载全局配置
+  useEffect(() => {
+    const loadGlobalConfig = async () => {
+      try {
+        const config = await configApi.getConfig();
+        if (config.globalConfig) {
+          setGlobalConfig(config.globalConfig);
+          applyGlobalConfig(config.globalConfig);
+        }
+      } catch (error) {
+        console.error('加载全局配置失败:', error);
+      }
+    };
+    loadGlobalConfig();
+  }, []);
+
+  // 应用全局配置
+  const applyGlobalConfig = (config) => {
+    if (config.backgroundColor) {
+      document.body.style.backgroundColor = config.backgroundColor;
+    } else {
+      document.body.style.backgroundColor = '';
+    }
+    if (config.backgroundImage) {
+      document.body.style.backgroundImage = `url(${config.backgroundImage})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundAttachment = 'fixed';
+    } else {
+      document.body.style.backgroundImage = 'none';
+    }
+  };
+
+  // 保存全局配置
+  const handleSaveGlobalConfig = async () => {
+    try {
+      await configApi.setGlobalConfig(globalConfig);
+      setShowGlobalConfig(false);
+    } catch (error) {
+      console.error('保存全局配置失败:', error);
+      message.error(t('config.saveFailed'));
+    }
+  };
 
   // 修改计算布局函数
   const calculateLayouts = (cards, currentLayouts = null) => {
@@ -751,11 +805,28 @@ function ConfigPage() {
     }
   ];
 
+ 
   return (
-    <div className="config-page">
+    <div className={`config-page ${!sidebarVisible ? 'sidebar-hidden' : ''}`}>
       <div className="config-container">
         <div className="config-header">
           <Space className="header-buttons">
+            <Button 
+              className="back-button"
+              onClick={() => navigate('/')}
+              icon={<Icon path={mdiArrowLeft} size={0.8} />}
+            >
+              {t('nav.home')}
+            </Button>
+
+            <Button
+              className="global-config-button"
+              onClick={() => setShowGlobalConfig(true)}
+              icon={<Icon path={mdiCog} size={0.8} />}
+            >
+              {t('config.globalConfig')}
+            </Button>
+            
             <input
               type="file"
               ref={fileInputRef}
@@ -764,7 +835,6 @@ function ConfigPage() {
               style={{ display: 'none' }}
             />
 
-            {/* 配置导入导出下拉菜单 */}
             <Dropdown menu={{ items: configMenuItems }} placement="bottomLeft">
               <Button>
                 {t('config.title')}
@@ -822,6 +892,10 @@ function ConfigPage() {
             </div>
           ))}
         </div>
+
+        <div className="bottom-info">
+          <BottomInfo />
+        </div>
       </div>
 
       {showAddModal && (
@@ -871,14 +945,126 @@ function ConfigPage() {
       >
         <Icon path={mdiPlus} size={3} />
       </button>
-      
-      <BottomInfo />
 
       {loading && (
         <div className="loading-state">
           <Spin size="large" />
           <p>{t('loading')}</p>
         </div>
+      )}
+
+      {showGlobalConfig && (
+        <>
+          <div className="global-config-modal-overlay" onClick={() => setShowGlobalConfig(false)} />
+          <div className="global-config-modal">
+            <h3>{t('config.globalConfig')}</h3>
+            <div className="global-config-form">
+              <div className="global-config-form-item">
+                <label>{t('config.backgroundColor')}</label>
+                <div className="color-input-group">
+                  <input
+                    type="color"
+                    value={globalConfig.backgroundColor}
+                    onChange={(e) => setGlobalConfig({
+                      ...globalConfig,
+                      backgroundColor: e.target.value
+                    })}
+                  />
+                  <button 
+                    className="reset-button" 
+                    onClick={() => setGlobalConfig({
+                      ...globalConfig,
+                      backgroundColor: ''
+                    })}
+                  >
+                    {t('config.reset')}
+                  </button>
+                </div>
+                <div className="hint">{t('config.backgroundColorHint')}</div>
+              </div>
+              <div className="global-config-form-item">
+                <label>{t('config.backgroundImage')}</label>
+                <div className="image-input-group">
+                  <input
+                    type="text"
+                    value={globalConfig.backgroundImage}
+                    onChange={(e) => setGlobalConfig({
+                      ...globalConfig,
+                      backgroundImage: e.target.value
+                    })}
+                    placeholder={t('config.backgroundImagePlaceholder')}
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        configApi.uploadBackground(file).then(filePath => {
+                          setGlobalConfig({
+                            ...globalConfig,
+                            backgroundImage: filePath
+                          });
+                        });
+                      }
+                    }}
+                    ref={fileInputRef}
+                  />
+                  <button 
+                    className="upload-button"
+                    onClick={() => fileInputRef.current.click()}
+                  >
+                    {t('fields.upload')}
+                  </button>
+                  <button 
+                    className="reset-button"
+                    onClick={() => setGlobalConfig({
+                      ...globalConfig,
+                      backgroundImage: ''
+                    })}
+                  >
+                    {t('config.reset')}
+                  </button>
+                </div>
+                <div className="hint">{t('config.backgroundImageHint')}</div>
+              </div>
+              <div className="global-config-form-item">
+                <label>{t('config.betaVersion')}</label>
+                <div className="switch-group">
+                  <Switch
+                    checked={globalConfig.betaVersion}
+                    onChange={(checked) => setGlobalConfig({
+                      ...globalConfig,
+                      betaVersion: checked
+                    })}
+                  />
+                </div>
+                <div className="hint">{t('config.betaVersionHint')}</div>
+              </div>
+              <div className="global-config-actions">
+                <button 
+                  className="reset-all" 
+                  onClick={() => {
+                    setGlobalConfig({
+                      backgroundColor: '',
+                      backgroundImage: '',
+                      betaVersion: false
+                    });
+                  }}
+                >
+                  {t('config.resetAll')}
+                </button>
+                <button className="cancel" onClick={() => setShowGlobalConfig(false)}>
+                  {t('config.cancel')}
+                </button>
+                <button className="save" onClick={handleSaveGlobalConfig}>
+                  {t('config.save')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

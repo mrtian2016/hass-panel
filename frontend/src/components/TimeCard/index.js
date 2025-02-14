@@ -13,12 +13,14 @@ function TimeCard({config}) {
   const { t } = useLanguage();
   const [currentTime, setCurrentTime] = useState(dayjs());
   const [lunarDate, setLunarDate] = useState('');
-
+  const [weekday, setWeekday] = useState('');
   useEffect(() => {
     const updateTime = () => {
       const now = dayjs();
       setCurrentTime(now);
-      
+      const weekday = now.format('dddd');
+
+      setWeekday(t(`weekday.${weekday}`));
       const lunar = Lunar.Lunar.fromDate(now.toDate());
       const yearZhi = lunar.getYearShengXiao(); // 获取生肖
       setLunarDate(`${lunar.getYearInGanZhi()}年${lunar.getMonthInChinese()}月${lunar.getDayInChinese()}(${yearZhi}年)`);
@@ -29,6 +31,8 @@ function TimeCard({config}) {
 
     return () => clearInterval(timer);
   }, [t]); // 添加 t 到依赖数组
+
+
 
   return (
     <BaseCard
@@ -43,6 +47,9 @@ function TimeCard({config}) {
         </div>
         <div className="date">
           {currentTime.format(dateFormat)}
+          <span className="weekday">
+            {weekday}
+          </span>
         </div>
         <div className="lunar-date">
           {lunarDate}

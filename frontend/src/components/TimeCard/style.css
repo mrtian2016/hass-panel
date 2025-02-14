@@ -28,6 +28,14 @@
   font-size: 1.2rem;
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.weekday {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
 }
 
 .lunar-date {

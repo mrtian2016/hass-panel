@@ -2,17 +2,59 @@
   padding: 20px;
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
-
 .config-container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .config-page {
+    margin-left: var(--sidebar-width, 160px);
+    padding: 20px;
+  }
+  
+  .config-page.sidebar-hidden {
+    margin-left: 0;
+  }
+  
+  /* 当侧边栏隐藏时调整内容最大宽度 */
+  .config-page.sidebar-hidden .config-container {
+    max-width: 100%;
+  }
+
+  .config-container {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .config-page {
+    padding: 16px;
+  }
+  
+  .config-container {
+    padding: 0;
+  }
+
+  .config-list {
+    padding: 0 16px;
+  }
+
+  .header-buttons {
+    padding: 0 16px;
+  }
 }
 
 .config-header {
@@ -44,12 +86,37 @@
   gap: 8px;
 }
 
+.header-buttons .back-button {
+  margin-right: auto;
+  background: var(--color-background) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-buttons .global-config-button {
+  background: var(--color-background) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-buttons .global-config-button:hover,
+.header-buttons .back-button:hover {
+  background: var(--color-background-secondary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
+
 .header-buttons button {
   display: flex;
   align-items: center;
   padding: 8px 16px;
   border: none;
- 
   border-radius: var(--border-radius-small);
   background: var(--color-primary);
   color: white;
@@ -167,6 +234,7 @@
   gap: 16px;
   margin-bottom: 80px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .config-card {
@@ -460,17 +528,181 @@
   background-color: #e2e8f0;
 }
 
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .config-container {
-    padding: 0 16px;
-  }
-  
-  .config-list {
-    grid-template-columns: 1fr;
-  }
-  
-  .config-page {
-    padding: 16px;
-  }
+.global-config-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 4px 12px var(--color-shadow);
+  z-index: 1001;
+}
+
+.global-config-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.global-config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.global-config-form-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.global-config-form-item label {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.global-config-form-item input {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.global-config-form-item input[type="color"] {
+  height: 40px;
+  padding: 4px;
+}
+
+.global-config-form-item .hint {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+
+.global-config-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.global-config-actions button {
+  padding: 8px 16px;
+  border-radius: var(--border-radius-small);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.global-config-actions .cancel {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.global-config-actions .save {
+  background: var(--color-primary);
+  border: none;
+  color: white;
+}
+
+.global-config-actions .cancel:hover {
+  background: var(--color-background-secondary);
+  border-color: var(--color-primary);
+}
+
+.global-config-actions .save:hover {
+  opacity: 0.9;
+}
+
+.global-config-form-item .color-input-group,
+.global-config-form-item .image-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.global-config-form-item .reset-button {
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.global-config-form-item .reset-button:hover {
+  background: var(--color-background-secondary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.global-config-actions .reset-all {
+  padding: 8px 16px;
+  border-radius: var(--border-radius-small);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  margin-right: auto;
+}
+
+.global-config-actions .reset-all:hover {
+  background: var(--color-background-secondary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.global-config-form-item .upload-button {
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background: var(--color-primary);
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.global-config-form-item .upload-button:hover {
+  opacity: 0.9;
+}
+
+.global-config-form-item .image-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.global-config-form-item .image-input-group input[type="text"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.global-config-form-item .switch-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.global-config-form-item .switch-group .ant-switch {
+  background: var(--color-border) !important;
+}
+
+.global-config-form-item .switch-group .ant-switch-checked {
+  background: var(--color-primary) !important;
 }

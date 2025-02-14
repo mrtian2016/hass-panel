@@ -13,6 +13,15 @@ export const translations = {
       toggle: '切换语言',
       current: 'Zh'
     },
+    weekday: {
+      'Monday': '星期一',
+      'Tuesday': '星期二',
+      'Wednesday': '星期三',
+      'Thursday': '星期四',
+      'Friday': '星期五',
+      'Saturday': '星期六',
+      'Sunday': '星期日',
+    },
     sidebar: {
       show: '显示侧边栏',
       hide: '隐藏侧边栏',
@@ -88,6 +97,16 @@ export const translations = {
       exportSuccess: '导出成功',
       importFailed: '导入失败',
       exportFailed: '导出失败',
+      globalConfig: '全局配置',
+      backgroundColor: '背景颜色',
+      backgroundColorHint: '选择页面的背景颜色',
+      backgroundImage: '背景图片',
+      backgroundImageHint: '输入背景图片的URL地址',
+      backgroundImagePlaceholder: '请输入图片URL',
+      reset: '重置',
+      resetAll: '重置所有',
+      betaVersion: 'Beta 版本更新',
+      betaVersionHint: '开启后将接收 Beta 版本的更新',
     },
     
     // 卡片类型
@@ -613,9 +632,12 @@ export const translations = {
       delete: '删除',
       moveUp: '上移',
       moveDown: '下移'
-    }
+    },
+    'fullscreen.enter': '进入全屏',
+    'fullscreen.exit': '退出全屏',
   },
   en: {
+    
     // Common
     currentVersion:'Current Version',
     edit: 'Edit Layout',
@@ -629,6 +651,15 @@ export const translations = {
       current: 'En'
     },
    
+    weekday: {
+      'Monday': 'Monday',
+      'Tuesday': 'Tuesday',
+      'Wednesday': 'Wednesday',
+      'Thursday': 'Thursday',
+      'Friday': 'Friday',
+      'Saturday': 'Saturday',
+      'Sunday': 'Sunday',
+    },
     sidebar: {
       show: 'Show Sidebar',
       hide: 'Hide Sidebar',
@@ -705,7 +736,16 @@ export const translations = {
       exportSuccess: 'Export Success',
       importFailed: 'Import Failed',
       exportFailed: 'Export Failed',
-
+      globalConfig: 'Global Settings',
+      backgroundColor: 'Background Color',
+      backgroundColorHint: 'Choose the page background color',
+      backgroundImage: 'Background Image',
+      backgroundImageHint: 'Enter the URL of the background image',
+      backgroundImagePlaceholder: 'Enter image URL',
+      reset: 'Reset',
+      resetAll: 'Reset All',
+      betaVersion: 'Beta Version Updates',
+      betaVersionHint: 'Enable to receive beta version updates',
     },
     
     // Card Types
@@ -1220,6 +1260,8 @@ export const translations = {
       delete: 'Delete',
       moveUp: 'Move Up',
       moveDown: 'Move Down'
-    }
+    },
+    'fullscreen.enter': 'Enter Fullscreen',
+    'fullscreen.exit': 'Exit Fullscreen',
   }
 };

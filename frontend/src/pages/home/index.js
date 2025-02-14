@@ -11,6 +11,9 @@ import {
   mdiMenu,
   mdiViewDashboard,
   mdiGoogleTranslate,
+  mdiFullscreen,
+  mdiFullscreenExit,
+  mdiCog,
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
 import { Responsive } from 'react-grid-layout';
@@ -36,6 +39,7 @@ import MotionCard from '../../components/MotionCard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 // 获取当前断点
 const getCurrentBreakpoint = (width) => {
@@ -53,6 +57,31 @@ const getColumnLayoutIcon = (columns) => {
 function Home({ sidebarVisible, setSidebarVisible }) {
   const { theme, toggleTheme } = useTheme();
   const { t, toggleLanguage } = useLanguage();
+  const navigate = useNavigate();
+
+  // 加载全局配置
+  useEffect(() => {
+    const loadGlobalConfig = async () => {
+      try {
+        const config = await configApi.getConfig();
+        if (config.globalConfig) {
+          // 应用背景设置
+          if (config.globalConfig.backgroundColor) {
+            document.body.style.backgroundColor = config.globalConfig.backgroundColor;
+          }
+          if (config.globalConfig.backgroundImage) {
+            document.body.style.backgroundImage = `url(${config.globalConfig.backgroundImage})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            document.body.style.backgroundAttachment = 'fixed';
+          }
+        }
+      } catch (error) {
+        console.error('加载全局配置失败:', error);
+      }
+    };
+    loadGlobalConfig();
+  }, []);
 
   // 状态定义
   const [width, setWidth] = useState(window.innerWidth);
@@ -61,6 +90,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   const [loading, setLoading] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [touchStartY, setTouchStartY] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(0);
   const [columnCount, setColumnCount] = useState(() => {
     const savedColumns = localStorage.getItem('dashboard-columns');
     return savedColumns ? JSON.parse(savedColumns) : { lg: 3, md: 3, sm: 1 };
@@ -254,9 +286,10 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     function handleResize() {
       const isMobile = window.innerWidth < 768;
       // 根据侧边栏状态动态计算宽度
-      const sidebarWidth = isMobile ? 0 : (sidebarVisible ? 200 : 0);
+      // const sidebarWidth = 0 //isMobile ? 0 : (sidebarVisible ? 200 : 0);
       const containerPadding = isMobile ? 32 : 40;
-      const availableWidth = window.innerWidth - sidebarWidth - containerPadding;
+      // const availableWidth = window.innerWidth - sidebarWidth - containerPadding;
+      const availableWidth = window.innerWidth - containerPadding;
       setWidth(availableWidth);
 
       // 获取保存的列数设置
@@ -312,6 +345,68 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     localStorage.setItem('dashboard-columns', JSON.stringify(newColumnCount));
   };
 
+  // 添加全屏相关的事件处理
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+        setSidebarVisible(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isFullscreen, setSidebarVisible]);
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+    setSidebarVisible(false);
+    
+    // 保持背景图设置
+    const applyBackground = async () => {
+      try {
+        const config = await configApi.getConfig();
+        if (config.globalConfig) {
+          if (config.globalConfig.backgroundColor) {
+            document.body.style.backgroundColor = config.globalConfig.backgroundColor;
+          }
+          if (config.globalConfig.backgroundImage) {
+            document.body.style.backgroundImage = `url(${config.globalConfig.backgroundImage})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            document.body.style.backgroundAttachment = 'fixed';
+          }
+        }
+      } catch (error) {
+        console.error('应用背景设置失败:', error);
+      }
+    };
+    
+    // 延迟一下应用背景，确保在全屏切换后应用
+    setTimeout(applyBackground, 100);
+  };
+
+  // 添加触摸事件处理
+  const handleTouchStart = (e) => {
+    if (isFullscreen) {
+      setTouchStartY(e.touches[0].clientY);
+      setTouchStartX(e.touches[0].clientX);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isFullscreen || isDragging) return;
+
+    const deltaY = e.touches[0].clientY - touchStartY;
+    const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+
+    // 如果垂直滑动距离大于50px且水平滑动小于垂直滑动（确保是垂直下滑），则退出全屏
+    if (deltaY > 50 && deltaX < deltaY) {
+      setIsFullscreen(false);
+      setSidebarVisible(false);
+    }
+  };
+
   const renderCard = (card) => {
     switch (card.type) {
       case 'TimeCard':
@@ -353,7 +448,11 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
 
   return (
-    <div className={`page-container ${!sidebarVisible ? 'sidebar-hidden' : ''}`}>
+    <div 
+      className={`page-container ${!sidebarVisible ? 'sidebar-hidden' : ''} ${isFullscreen ? 'fullscreen' : ''}`}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+    >
       {/* <PullToRefresh
         onRefresh={handleRefresh}
         pullingText="下拉刷新"
@@ -369,7 +468,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
           </div>
         ) : (
           <>
-            <div className="header">
+            <div className={`header ${isFullscreen ? 'hidden' : ''}`}>
               <button
                 className="theme-toggle"
                 onClick={toggleTheme}
@@ -389,6 +488,18 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               >
                 <Icon
                   path={mdiGoogleTranslate}
+                  size={1}
+                  color="var(--color-text-primary)"
+                />
+              </button>
+
+              <button
+                className="config-toggle"
+                onClick={() => navigate('/config')}
+                title={t('nav.config')}
+              >
+                <Icon
+                  path={mdiCog}
                   size={1}
                   color="var(--color-text-primary)"
                 />
@@ -450,7 +561,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 </button>
               )}
 
-              {!isMobile && (
+              {!isMobile && false && (
                 <button
                   className="sidebar-toggle"
                   onClick={() => setSidebarVisible(!sidebarVisible)}
@@ -464,8 +575,17 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 </button>
               )}
 
-
-
+              <button
+                className="fullscreen-toggle"
+                onClick={toggleFullscreen}
+                title={t(`fullscreen.${isFullscreen ? 'exit' : 'enter'}`)}
+              >
+                <Icon
+                  path={isFullscreen ? mdiFullscreenExit : mdiFullscreen}
+                  size={1}
+                  color="var(--color-text-primary)"
+                />
+              </button>
             </div>
 
 

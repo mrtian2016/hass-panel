@@ -1172,6 +1172,28 @@
   transform: scale(0.95);
 }
 
+.config-toggle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.config-toggle:hover {
+  background: var(--color-background);
+}
+
+.config-toggle:active {
+  transform: scale(0.95);
+}
+
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -1183,4 +1205,99 @@
 
 .loading-state p {
   margin-top: 16px;
+}
+
+.fullscreen-toggle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.fullscreen-toggle:hover {
+  background: var(--color-background);
+}
+
+.fullscreen-toggle:active {
+  transform: scale(0.95);
+}
+
+/* 全屏模式样式 */
+.page-container.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  margin: 0;
+  padding: 0;
+  background: inherit;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 添加下滑提示器 */
+.page-container.fullscreen::after {
+  content: '';
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: var(--color-text-secondary);
+  border-radius: 2px;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+}
+
+.page-container.fullscreen:active::after {
+  opacity: 0.5;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    transform: translateX(-50%) scaleX(1.2);
+  }
+}
+
+.page-container.fullscreen::after {
+  animation: bounce 2s infinite;
+}
+
+.page-container.fullscreen .content {
+  padding: 20px;
+  flex: 1;
+  overflow: auto;
+  background: inherit;
+}
+
+.page-container.fullscreen .header.hidden {
+  display: none;
+}
+
+/* 确保全屏模式下的布局正确 */
+.page-container.fullscreen .layout {
+  margin: 0 auto;
+  max-width: 100%;
+  width: 100%;
+  background: inherit;
+}
+
+/* 全屏模式下的滚动处理 */
+.page-container.fullscreen {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }

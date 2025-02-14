@@ -5,15 +5,16 @@ import { HassConnect } from '@hakit/core';
 import { ThemeProvider } from './theme/ThemeContext';
 import { LanguageProvider } from './i18n/LanguageContext';
 import Bottom from './components/Bottom';
-import Sidebar from './components/Sidebar';
+// import Sidebar from './components/Sidebar';
 import Home from './pages/home';
 import AppRoutes from './routes';
 import './App.css';
 
 function App() {
   const [sidebarVisible, setSidebarVisible] = useState(() => {
-    const saved = localStorage.getItem('sidebar-visible');
-    return saved !== null ? JSON.parse(saved) : true;
+    return false;
+    // const saved = localStorage.getItem('sidebar-visible');
+    // return saved !== null ? JSON.parse(saved) : true;
   });
 
   // 保存侧边栏状态到 localStorage
@@ -32,10 +33,10 @@ function App() {
         >
           <Router>
             <div className="App">
-              {isDesktop && <Sidebar visible={sidebarVisible} />}
+              {/* {isDesktop && <Sidebar visible={sidebarVisible} />} */}
               <Routes>
                 <Route path="/" element={<Home sidebarVisible={sidebarVisible} setSidebarVisible={setSidebarVisible} />} />
-                {AppRoutes()}
+                {AppRoutes({sidebarVisible, setSidebarVisible})}
               </Routes>
               {!isDesktop && <Bottom />}
             </div>
