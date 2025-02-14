@@ -8,8 +8,7 @@ if [ -f "/data/options.json" ]; then
     # Addon 模式
     export IS_ADDON=true
     export REACT_APP_HASS_URL=$(jq -r '.hass_url // empty' /data/options.json)
-    export WEBDAV_USERNAME=$(jq -r '.webdav_username // empty' /data/options.json)
-    export WEBDAV_PASSWORD=$(jq -r '.webdav_password // empty' /data/options.json)
+   
     export REACT_APP_HASS_TOKEN=$(jq -r '.hass_token // empty' /data/options.json)
    
     # 如果没有设置hass_token，和hass_url，则退出容器
@@ -41,21 +40,9 @@ fi
 
 echo "Running mode: $([ "$IS_ADDON" = "true" ] && echo "Addon" || echo "Docker")"
 echo "REACT_APP_HASS_URL: $REACT_APP_HASS_URL"
-echo "WEBDAV_USERNAME: $WEBDAV_USERNAME"
 echo "CONFIG_DIR: $CONFIG_DIR"
 
-# 创建必要的目录
-mkdir -p "$CONFIG_DIR/media"
 
-
-if [ -d "$CONFIG_DIR/media" ]; then
-    # 如果 media 目录存在，覆盖/app/media
-    rm -rf /app/media
-    ln -sf "$CONFIG_DIR/media" /app/media
-else
-    # 如果不存在则使用示例配置
-    cp -r /app/media/* "$CONFIG_DIR/media/"
-fi
 
 # 如果 user_configs 目录不存在，则创建
 if [ ! -d "$CONFIG_DIR/user_configs" ]; then

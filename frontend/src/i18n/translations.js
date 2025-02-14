@@ -46,6 +46,11 @@ export const translations = {
 
     // 配置页面
     config: {
+      edit: '编辑',
+      delete: '删除',
+      preview: '预览',
+      cancel: '取消',
+      save: '保存',
       loadFailed: '加载失败',
       loadFailedDesc: '加载失败,请检查配置',
       versionList: '版本列表',
@@ -56,9 +61,6 @@ export const translations = {
       title: '配置管理',
       addCard: '添加卡片',
       cardTypes: '卡片类型',
-      preview: '预览',
-      save: '保存',
-      cancel: '取消',
       confirmDelete: '确认删除?',
       deleteSuccess: '删除成功',
       saveSuccess: '保存成功',
@@ -74,7 +76,6 @@ export const translations = {
       positionExample: '例如: 50%',
       lightImage: '灯光效果图片',
       enterImageUrl: '输入图片URL',
-      delete: '删除',
       add: '添加',
       moveUp: '上移',
       moveDown: '下移',
@@ -168,7 +169,10 @@ export const translations = {
       motionEntity: '人体传感器实体',
       luxEntity: '光照传感器实体',
       background: '背景图片',
-      roomsConfig: '房间灯光配置'
+      roomsConfig: '房间灯光配置',
+      upload: '上传',
+      uploadImage: '上传图片',
+      placeholderImage: '请上传图片',
     },
 
     version: {
@@ -658,6 +662,11 @@ export const translations = {
 
     // Config Page
     config: {
+      edit: 'Edit',
+      delete: 'Delete',
+      preview: 'Preview',
+      cancel: 'Cancel',
+      save: 'Save',
       loadFailed: 'Load Failed',
       loadFailedDesc: 'Load Failed, Please Check Configuration',
       versionList: 'Version List',
@@ -668,9 +677,6 @@ export const translations = {
       title: 'Configuration Manager',
       addCard: 'Add Card',
       cardTypes: 'Card Types',
-      preview: 'Preview',
-      save: 'Save',
-      cancel: 'Cancel',
       confirmDelete: 'Confirm Delete?',
       deleteSuccess: 'Deleted Successfully',
       saveSuccess: 'Saved Successfully',

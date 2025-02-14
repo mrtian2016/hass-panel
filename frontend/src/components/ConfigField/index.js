@@ -61,6 +61,52 @@ function ConfigField({ field, value, onChange }) {
         </div>
       );
       
+    case 'image':
+      return (
+        <div className="config-field">
+          <div className="config-field-row">
+            <label>{field.label}</label>
+            <div className="upload-field">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    try {
+                      const response = await fetch('/api/common/upload', {
+                        method: 'POST',
+                        body: formData
+                      });
+                      const result = await response.json();
+                      if (result.code === 200) {
+                        onChange(result.data.file_path);
+                      }
+                    } catch (error) {
+                      console.error('上传失败:', error);
+                    }
+                  }
+                }}
+                style={{ display: 'none' }}
+                id={`image-upload-${field.key}`}
+              />
+              <Input 
+                value={value || ''}
+                placeholder={field.placeholder || t('fields.placeholderImage')}
+                readOnly
+                addonAfter={
+                  <label htmlFor={`image-upload-${field.key}`} style={{ cursor: 'pointer' }}>
+                    {t('fields.uploadImage')}
+                  </label>
+                }
+              />
+            </div>
+          </div>
+        </div>
+      );
+      
     case 'entity':
       const entities = getFilteredEntities(field.filter);
       return (
@@ -141,11 +187,46 @@ function ConfigField({ field, value, onChange }) {
 
                 <div className="room-field">
                   <label>{t('configField.lightEffectImage')}</label>
-                  <Input
-                    value={room.image}
-                    onChange={(e) => handleLightOverviewChange(index, 'image', e.target.value)}
-                    placeholder={t('configField.placeholderLightEffectImage')}
-                  />
+                  <div className="upload-field">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const formData = new FormData();
+                          formData.append('file', file);
+                          try {
+                            const response = await fetch('/api/common/upload', {
+                              method: 'POST',
+                              body: formData
+                            });
+                            const result = await response.json();
+                            if (result.code === 200) {
+                              handleLightOverviewChange(index, 'image', result.data.file_path);
+                              console.log(result.data.file_path);
+                              // 给input赋值
+
+                            }
+                          } catch (error) {
+                            console.error('上传失败:', error);
+                          }
+                        }
+                      }}
+                      style={{ display: 'none' }}
+                      id={`image-upload-${index}`}
+                    />
+                    <Input 
+                      value={room.image || ''}
+                      placeholder={t('fields.placeholderImage')}
+                      readOnly
+                      addonAfter={
+                        <label htmlFor={`image-upload-${index}`} style={{ cursor: 'pointer' }}>
+                          {t('fields.uploadImage')}
+                        </label>
+                      }
+                    />
+                  </div>
                 </div>
 
                 <button onClick={() => handleDeleteRoom(index)}>{t('configField.deleteButton')}</button>

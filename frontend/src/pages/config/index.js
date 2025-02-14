@@ -26,13 +26,14 @@ import {
   mdiHomeFloorG,
   mdiFileFind,
   mdiClose,
-
+  mdiPencil,
 } from '@mdi/js';
 import ConfigField from '../../components/ConfigField';
 import AddCardModal from '../../components/AddCardModal';
+import EditCardModal from '../../components/EditCardModal';
 // import Modal from '../../components/Modal';
 import LightOverviewCard from '../../components/LightOverviewCard';
-import { message, Button, Space, Dropdown, Switch, Spin } from 'antd';
+import { message, Button, Space, Dropdown, Switch, Spin, Card } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
 
@@ -364,7 +365,8 @@ const getCardTypes = (t) => ({
       {
         key: 'background',
         label: t('fields.background'),
-        type: 'text',
+        type: 'image',
+        placeholder: t('fields.placeholderImage'),
         default: ''
       },
       {
@@ -390,6 +392,8 @@ function ConfigPage() {
   
   // 修改卡片状态的初始化
   const [cards, setCards] = useState([]);
+  const [editingCard, setEditingCard] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // 加载配置数据
   useEffect(() => {
@@ -554,6 +558,7 @@ function ConfigPage() {
       });
 
       setHasUnsavedChanges(false);
+      message.success(t('config.saveSuccess'));
     } catch (error) {
       console.error('保存配置失败:', error);
       message.error(t('config.saveFailed'));
@@ -576,11 +581,7 @@ function ConfigPage() {
         // 保存到后端
         await configApi.saveConfig({
           ...importedConfig,
-          layouts: importedConfig.layouts || {
-            mobile: {},
-            desktop: {}
-          },
-          defaultLayouts: importedConfig.defaultLayouts || calculateLayouts(importedConfig.cards)
+          layouts: importedConfig.layouts || calculateLayouts(importedConfig.cards)
         });
         
         // 更新本地状态
@@ -633,18 +634,37 @@ function ConfigPage() {
       titleVisible: true
     };
 
-      // 添加默认配置
-      const cardType = getCardTypes(t)[type];
-      if (cardType && cardType.fields) {
-        cardType.fields.forEach(field => {
-          if (field.default !== undefined) {
-            newCard.config[field.key] = field.default;
-          }
-        });
-      }
+    // 添加默认配置
+    const cardType = getCardTypes(t)[type];
+    if (cardType && cardType.fields) {
+      cardType.fields.forEach(field => {
+        if (field.default !== undefined) {
+          newCard.config[field.key] = field.default;
+        }
+      });
+    }
 
     setCards(prevCards => [...prevCards, newCard]);
     setShowAddModal(false);
+    setHasUnsavedChanges(true);
+  };
+
+  // 添加编辑卡片的处理函数
+  const handleEditCard = (card) => {
+    setEditingCard(card);
+    if (card.type === 'LightOverviewCard') {
+      setPreviewConfig(card.config);
+    }
+    setShowEditModal(true);
+  };
+
+  // 添加保存编辑的处理函数
+  const handleSaveEdit = (updatedCard) => {
+    setCards(prevCards =>
+      prevCards.map(card =>
+        card.id === updatedCard.id ? updatedCard : card
+      )
+    );
     setHasUnsavedChanges(true);
   };
 
@@ -664,6 +684,7 @@ function ConfigPage() {
       return newCards;
     });
   };
+
   // 处理卡片标题显示状态变化
   const handleTitleVisibilityChange = (cardId) => {
     setCards(prevCards => {
@@ -734,90 +755,75 @@ function ConfigPage() {
 
   return (
     <div className="config-page">
-      <div className="config-header">
-        <Space className="header-buttons">
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImport}
-            accept=".json"
-            style={{ display: 'none' }}
-          />
+      <div className="config-container">
+        <div className="config-header">
+          <Space className="header-buttons">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImport}
+              accept=".json"
+              style={{ display: 'none' }}
+            />
 
-          {/* 配置导入导出下拉菜单 */}
-          <Dropdown menu={{ items: configMenuItems }} placement="bottomLeft">
-            <Button>
-              {t('config.title')}
-              <Icon path={mdiImport} size={0.8} style={{ marginLeft: 8 }} />
-            </Button>
-          </Dropdown>
+            {/* 配置导入导出下拉菜单 */}
+            <Dropdown menu={{ items: configMenuItems }} placement="bottomLeft">
+              <Button>
+                {t('config.title')}
+                <Icon path={mdiImport} size={0.8} style={{ marginLeft: 8 }} />
+              </Button>
+            </Dropdown>
+          </Space>
+        </div>
 
-        </Space>
-      </div>
-
-      <div className="config-list">
-        {cards.map(card => (
-          <div key={card.id} className="config-item">
-            <div className="item-header">
-              <div className="item-title">
-                <Icon path={getCardTypes(t)[card.type].icon} size={1} />
-                <span>{getCardTypes(t)[card.type].name}</span>
+        <div className="config-list">
+          {cards.map(card => (
+            <div key={card.id} className="config-card">
+              <div className="card-header">
+                <div className="card-icon">
+                  <Icon path={getCardTypes(t)[card.type].icon} size={1} />
+                </div>
+                <h3 className="card-title">{getCardTypes(t)[card.type].name}</h3>
               </div>
-              <div className="item-actions">
-                <Switch
-                  type="link"
-                  style={{ color: 'var(--color-primary)', backgroundColor: card.titleVisible ? 'var(--color-primary)' : '' }}
-                  defaultChecked={card.titleVisible}
-                  onChange={() => handleTitleVisibilityChange(card.id)}
-                  checkedChildren={t('config.showTitle')}
-                  unCheckedChildren={t('config.hideTitle')}
+              <div className="card-switches">
+                <div className="switch-item">
+                  <span>{t('config.showTitle')}</span>
+                  <Switch
+                    size="small"
+                    checked={card.titleVisible}
+                    onChange={() => handleTitleVisibilityChange(card.id)}
+                  />
+                </div>
+                <div className="switch-item">
+                  <span>{t('config.showCard')}</span>
+                  <Switch
+                    size="small"
+                    checked={card.visible}
+                    onChange={() => handleVisibilityChange(card.id)}
+                  />
+                </div>
+              </div>
+              <div className="card-actions">
+                <Button
+                  size="small"
+                  icon={<Icon path={mdiPencil} size={0.8} />}
+                  onClick={() => handleEditCard(card)}
                 >
-
-                </Switch>
-
-                <Switch
-                  type="link"
-                  style={{ color: 'var(--color-primary)', backgroundColor: card.visible ? 'var(--color-primary)' : '' }}
-                  defaultChecked={card.visible}
-                  onChange={() => handleVisibilityChange(card.id)}
-                  checkedChildren={t('config.showCard')}
-                  unCheckedChildren={t('config.hideCard')}
-                >
-
-                </Switch>
-                {card.type === 'LightOverviewCard' && (
-                  <button
-                    className="preview-button"
-                    onClick={() => {
-                      setPreviewConfig(card.config);
-                      setShowPreview(true);
-                    }}
-                    title={t('config.preview')}
-                  >
-                    <Icon path={mdiEye} size={1} />
-
-                  </button>
-                )}
-                <button
-                  className="delete-button"
+                  {t('config.edit')}
+                </Button>
+                <Button
+                  size="small"
+                  type="text"
+                  danger
+                  icon={<Icon path={mdiDelete} size={0.8} />}
                   onClick={() => handleDeleteCard(card.id)}
                 >
-                  <Icon path={mdiDelete} size={1} />
-                </button>
+                  {t('config.delete')}
+                </Button>
               </div>
             </div>
-            <div className="item-content">
-              {getCardTypes(t)[card.type].fields.map(field => (
-                <ConfigField
-                  key={field.key}
-                  field={field}
-                  value={card.config[field.key]}
-                  onChange={(value) => handleConfigChange(card.id, field.key, value)}
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {showAddModal && (
@@ -828,20 +834,21 @@ function ConfigPage() {
         />
       )}
 
-      {previewConfig && (
-        <div className={`preview-container ${showPreview ? 'visible' : ''}`}>
-          <button
-            className="close-preview"
-            onClick={() => setShowPreview(false)}
-          >
-            <Icon path={mdiClose} size={1} />
-          </button>
-          <LightOverviewCard
-            key={JSON.stringify(previewConfig)}
-            config={previewConfig}
-          />
-        </div>
-      )}
+      <EditCardModal
+        visible={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setEditingCard(null);
+          setShowPreview(false);
+        }}
+        card={editingCard}
+        cardTypes={getCardTypes(t)}
+        onSave={handleSaveEdit}
+        showPreview={showPreview}
+        setShowPreview={setShowPreview}
+        previewConfig={previewConfig}
+        setPreviewConfig={setPreviewConfig}
+      />
 
       <VersionListModal
         visible={showVersionModal}
@@ -855,7 +862,6 @@ function ConfigPage() {
       <button
         className={`save-button ${hasUnsavedChanges ? 'has-changes' : ''}`}
         onClick={handleSave}
-
       >
         <Icon path={mdiCheck} size={2} />
       </button>
@@ -880,4 +886,4 @@ function ConfigPage() {
   );
 }
 
-export default ConfigPage; 
+export default ConfigPage;

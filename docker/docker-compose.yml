@@ -13,6 +13,4 @@ services:
       - ../data/:/config/hass-panel/
     environment:
       - REACT_APP_HASS_URL=http://10.0.0.70:8123
-      - WEBDAV_USERNAME=admin
-      - WEBDAV_PASSWORD=admin
     restart: unless-stopped 

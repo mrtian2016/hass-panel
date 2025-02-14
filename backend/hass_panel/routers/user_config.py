@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Security
-
+from loguru import logger
 from hass_panel.utils.common import generate_resp
 from hass_panel.core.initial import cfg
 
@@ -29,6 +29,9 @@ async def verify_token(credentials: HTTPAuthorizationCredentials = Security(secu
     # 验证token
     async with aiohttp.ClientSession() as session:
         try:
+            token = token.replace("Bearer ", "")
+            logger.info(f"token: {token}")
+            logger.info(f"cfg.base.hass_url: {cfg.base.hass_url}")
             async with session.get(
                 f"{cfg.base.hass_url}/api/",
                 headers={"Authorization": f"Bearer {token}"}

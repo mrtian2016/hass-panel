@@ -9,19 +9,13 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone
 
 # 安装 Python 依赖
-RUN pip install fastapi uvicorn requests loguru toml omegaconf aiohttp
-
-# 设置 WebDAV 版本
-ENV WEBDAV_VERSION=5.7.2
-
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple fastapi uvicorn requests loguru toml omegaconf aiohttp python-multipart
 
 # 创建必要的目录
 RUN mkdir -p /config/hass-panel && mkdir -p /var/log
 
 # 复制配置文件
 COPY docker/config/nginx.conf /etc/nginx/http.d/default.conf
-
-
 
 # 创建工作目录
 WORKDIR /app
@@ -35,8 +29,6 @@ WORKDIR /backend
 COPY backend /backend
 
 # 设置默认环境变量
-ENV WEBDAV_USERNAME=admin
-ENV WEBDAV_PASSWORD=admin
 ENV IS_ADDON=false
 
 # 复制并设置启动脚本
