@@ -24,19 +24,24 @@
     "config:rw"
   ],
   "ports": {
-    "5123/tcp": 5123
+    "5123/tcp": 5123,
+    "5124/tcp": 5124
   },
   "ports_description": {
-    "5123/tcp": "Web界面"
+    "5123/tcp": "Web界面",
+    "5124/tcp": "WebDAV"
   },
   "webui": "http://[HOST]:[PORT:5123]",
   "options": {
     "hass_url": "http://homeassistant.local:8123",
-    "hass_token": ""
+    "hass_token": "",
+    "webdav_user": "admin",
+    "webdav_password": "admin"
   },
   "schema": {
     "hass_url": "str",
-    "hass_token": "str"
-    
+    "hass_token": "str",
+    "webdav_user": "str",
+    "webdav_password": "str"
   }
 } 
