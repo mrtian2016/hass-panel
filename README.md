@@ -37,6 +37,7 @@ docker run \
   --name hass-panel \
   --restart unless-stopped \
   -p 5123:5123 \
+  -p 5124:5124 ＼
   -v ./data/:/config/hass-panel \
   -e REACT_APP_HASS_URL=http://your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
