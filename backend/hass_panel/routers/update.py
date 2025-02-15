@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File
 from loguru import logger
 from typing import Dict
+import os
 from hass_panel.utils.common import generate_resp
-from hass_panel.utils.updater import run_update
+from hass_panel.utils.updater import run_update, process_manual_update, apply_manual_update
 from hass_panel.core.initial import cfg
 
 router = APIRouter(
@@ -23,4 +24,46 @@ async def update():
         return generate_resp(message=f"更新成功，新版本：{result}")
     except Exception as e:
         logger.exception("更新失败")
-        return generate_resp(message=str(e)) 
+        return generate_resp(code=500, message=str(e))
+
+@router.post("/upload-update")
+async def upload_update(package: UploadFile = File(...)):
+    """
+    处理手动上传更新包的端点
+    
+    Args:
+        package: 上传的更新包文件
+        
+    Returns:
+        Dict: 包含处理结果的响应
+    """
+    logger.info(f"收到更新包上传请求: {package.filename}")
+    
+    # 验证文件类型
+    if not (package.filename.endswith('.zip') or package.filename.endswith('.tar.gz')):
+        return generate_resp(code=400, message="不支持的文件格式，仅支持 .zip 和 .tar.gz")
+    
+    try:
+        # 确保临时目录存在
+        os.makedirs(cfg.update_cfg.tmp_dir, exist_ok=True)
+        
+        # 处理更新包
+        package_info = process_manual_update(package)
+        
+        return generate_resp(data=package_info)
+    except Exception as e:
+        logger.exception("处理更新包失败")
+        return generate_resp(code=500, message=str(e))
+
+@router.post("/manual-update")
+async def manual_update(package_info: Dict):
+    """
+    处理手动更新的端点
+    """
+    logger.info(f"收到手动更新请求: {package_info}")
+    try:
+        version = apply_manual_update(package_info)
+        return generate_resp(message=f"更新成功，新版本：{version}")
+    except Exception as e:
+        logger.exception("手动更新失败")
+        return generate_resp(code=500, message=str(e)) 

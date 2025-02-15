@@ -7,6 +7,9 @@ import zipfile
 from loguru import logger
 import subprocess
 from hass_panel.core.initial import cfg
+import tarfile
+from typing import Dict
+from fastapi import UploadFile
 
 def ensure_version_file():
     """确保version.json文件存在"""
@@ -83,6 +86,141 @@ def sync_files(src_dir: str, dst_dir: str):
         logger.error(error_msg)
         raise Exception(error_msg)
     logger.info("文件同步完成")
+
+def extract_package(file_path: str, extract_path: str) -> None:
+    """解压更新包文件
+    
+    Args:
+        file_path: 更新包文件路径
+        extract_path: 解压目标路径
+        
+    Raises:
+        Exception: 当解压失败时抛出
+    """
+    logger.info(f"开始解压文件: {file_path} 到 {extract_path}")
+    try:
+        if file_path.endswith('.zip'):
+            with zipfile.ZipFile(file_path, 'r') as zip_ref:
+                zip_ref.extractall(extract_path)
+        elif file_path.endswith('.tar.gz'):
+            with tarfile.open(file_path, 'r:gz') as tar_ref:
+                tar_ref.extractall(extract_path)
+        else:
+            raise Exception("不支持的文件格式，仅支持 .zip 和 .tar.gz")
+    except Exception as e:
+        logger.error(f"解压文件失败: {e}")
+        raise Exception(f"解压文件失败: {e}")
+
+def verify_update_package(extract_path: str) -> Dict:
+    """验证更新包的有效性并返回版本信息
+    
+    Args:
+        extract_path: 解压后的目录路径
+        
+    Returns:
+        Dict: 包含版本信息的字典
+        
+    Raises:
+        Exception: 当验证失败时抛出
+    """
+    logger.info(f"验证更新包: {extract_path}")
+    version_file = os.path.join(extract_path, "version.json")
+    
+    if not os.path.exists(version_file):
+        raise Exception("无效的更新包：缺少 version.json 文件")
+        
+    try:
+        with open(version_file, 'r') as f:
+            version_info = json.load(f)
+            
+        if "version" not in version_info:
+            raise Exception("无效的更新包：version.json 缺少版本信息")
+            
+        return version_info
+    except json.JSONDecodeError:
+        raise Exception("无效的更新包：version.json 格式错误")
+    except Exception as e:
+        raise Exception(f"验证更新包失败: {e}")
+
+def process_manual_update(file: UploadFile) -> Dict:
+    """处理手动上传的更新包
+    
+    Args:
+        file: 上传的文件对象
+        
+    Returns:
+        Dict: 包含版本信息的字典
+        
+    Raises:
+        Exception: 当处理失败时抛出
+    """
+    logger.info(f"开始处理手动更新包: {file.filename}")
+    
+    # 创建临时目录
+    tmp_dir = os.path.join(cfg.update_cfg.tmp_dir, "manual_update")
+    if os.path.exists(tmp_dir):
+        shutil.rmtree(tmp_dir)
+    os.makedirs(tmp_dir)
+    
+    try:
+        # 保存上传的文件
+        file_path = os.path.join(tmp_dir, file.filename)
+        with open(file_path, "wb") as f:
+            content = file.file.read()
+            f.write(content)
+        
+        # 解压文件
+        extract_path = os.path.join(tmp_dir, "app")
+        extract_package(file_path, extract_path)
+        
+        # 验证更新包
+        version_info = verify_update_package(extract_path)
+        
+        return {
+            "version": version_info["version"],
+            "extract_path": extract_path
+        }
+    except Exception as e:
+        logger.error(f"处理更新包失败: {e}")
+        if os.path.exists(tmp_dir):
+            shutil.rmtree(tmp_dir)
+        raise
+    finally:
+        # 删除上传的文件
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+def apply_manual_update(package_info: Dict) -> str:
+    """应用手动更新
+    
+    Args:
+        package_info: 包含更新信息的字典
+        
+    Returns:
+        str: 更新后的版本号
+        
+    Raises:
+        Exception: 当更新失败时抛出
+    """
+    logger.info(f"开始应用手动更新: {package_info}")
+    
+    try:
+        # 同步文件
+        sync_files(package_info["extract_path"], cfg.update_cfg.app_dir)
+        
+        # 更新版本文件
+        update_version_file(package_info["version"])
+        
+        logger.success("手动更新成功完成")
+        return package_info["version"]
+    except Exception as e:
+        logger.error(f"应用更新失败: {e}")
+        raise
+    finally:
+        # 清理临时文件
+        tmp_dir = os.path.dirname(package_info["extract_path"])
+        if os.path.exists(tmp_dir):
+            shutil.rmtree(tmp_dir)
 
 def run_update() -> str | None:
     """

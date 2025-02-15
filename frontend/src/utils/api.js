@@ -265,4 +265,68 @@ export const configApi = {
       throw error;
     }
   }
+};
+
+// 更新相关API
+export const updateApi = {
+  // 检查更新
+  checkUpdate: async () => {
+    try {
+      const response = await request('/update');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // 上传更新包
+  uploadPackage: async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append('package', file);
+      
+      const accessToken = window.env?.REACT_APP_HASS_TOKEN || JSON.parse(localStorage.getItem('hassTokens'))?.access_token;
+      
+      const response = await fetch('/api/upload-update', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: formData
+      });
+
+      const result = await response.json();
+      console.log(result)
+      if (result.code === 200) {
+        return result;
+      } else {
+        throw new Error(result.message || '上传失败');
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // 应用手动更新
+  applyManualUpdate: async (packageInfo) => {
+    try {
+      const response = await request('/manual-update', {
+        method: 'POST',
+        body: JSON.stringify(packageInfo),
+      });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // 获取当前版本信息
+  getCurrentVersion: async () => {
+    try {
+      const response = await fetch('./version.json');
+      return await response.json();
+    } catch (error) {
+      throw error;
+    }
+  }
 }; 
