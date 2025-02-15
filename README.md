@@ -40,6 +40,8 @@ docker run \
   -v ./data/:/config/hass-panel \
   -e REACT_APP_HASS_URL=http://your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
+  -e WEBDAV_USERNAME=admin ＼
+  -e WEBDAV_PASSWORD=admin ＼
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
