@@ -810,6 +810,7 @@ function ConfigField({ field, value, onChange }) {
         { key: 'status', name: t('configField.status') },
         { key: 'temperature', name: t('configField.temperature') }
       ];
+      console.log(value);
       
       return (
         <div className="config-field">
@@ -818,7 +819,7 @@ function ConfigField({ field, value, onChange }) {
             <div className="nas-section">
               <h4>{t('configField.mainInfo')}</h4>
               {nasMainFields.map(nasField => {
-                const currentValue = value.main?.[nasField.key] || {};
+                const currentValue = value?.main?.[nasField.key] || {};
                 
                 return (
                   <div key={nasField.key} className="nas-field">
@@ -856,13 +857,13 @@ function ConfigField({ field, value, onChange }) {
 
             <div className="nas-section">
               <h4>{t('configField.volumes')}</h4>
-              {(value.volumes || []).map((volume, volumeIndex) => (
+              {(value?.volumes || []).map((volume, volumeIndex) => (
                 <div key={volumeIndex} className="volume-config">
                   <Input
                     type="text"
                     value={volume.name || null}
                     onChange={(e) => {
-                      const newVolumes = [...(value.volumes || [])];
+                      const newVolumes = [...(value?.volumes || [])];
                       newVolumes[volumeIndex] = {
                         ...volume,
                         name: e.target.value
@@ -884,7 +885,7 @@ function ConfigField({ field, value, onChange }) {
                           allowClear
                           value={currentValue.entity_id || null}
                           onChange={(selectedValue) => {
-                            const newVolumes = [...(value.volumes || [])];
+                            const newVolumes = [...(value?.volumes || [])];
                             newVolumes[volumeIndex] = {
                               ...volume,
                               [field.key]: {
@@ -913,7 +914,7 @@ function ConfigField({ field, value, onChange }) {
                   })}
                   <button
                     onClick={() => {
-                      const newVolumes = [...(value.volumes || [])];
+                      const newVolumes = [...(value?.volumes || [])];
                       newVolumes.splice(volumeIndex, 1);
                       onChange({
                         ...value,
@@ -930,7 +931,7 @@ function ConfigField({ field, value, onChange }) {
                   onChange({
                     ...value,
                     volumes: [
-                      ...(value.volumes || []),
+                      ...(value?.volumes || []),
                       {
                         name: '',
                         status: {},
@@ -949,13 +950,13 @@ function ConfigField({ field, value, onChange }) {
 
             <div className="nas-section">
               <h4>{t('configField.drives')}</h4>
-              {(value.drives || []).map((drive, driveIndex) => (
+              {(value?.drives || []).map((drive, driveIndex) => (
                 <div key={driveIndex} className="drive-config">
                   <Input
                     type="text"
                     value={drive.name || null}
                     onChange={(e) => {
-                      const newDrives = [...(value.drives || [])];
+                      const newDrives = [...(value?.drives || [])];
                       newDrives[driveIndex] = {
                         ...drive,
                         name: e.target.value
@@ -977,7 +978,7 @@ function ConfigField({ field, value, onChange }) {
                           allowClear
                           value={currentValue.entity_id || null}
                           onChange={(selectedValue) => {
-                            const newDrives = [...(value.drives || [])];
+                            const newDrives = [...(value?.drives || [])];
                             newDrives[driveIndex] = {
                               ...drive,
                               [field.key]: {
@@ -1006,7 +1007,7 @@ function ConfigField({ field, value, onChange }) {
                   })}
                   <button
                     onClick={() => {
-                      const newDrives = [...(value.drives || [])];
+                      const newDrives = [...(value?.drives || [])];
                       newDrives.splice(driveIndex, 1);
                       onChange({
                         ...value,
@@ -1023,7 +1024,7 @@ function ConfigField({ field, value, onChange }) {
                   onChange({
                     ...value,
                     drives: [
-                      ...(value.drives || []),
+                      ...(value?.drives || []),
                       {
                         name: '',
                         status: {},
@@ -1039,13 +1040,13 @@ function ConfigField({ field, value, onChange }) {
 
             <div className="nas-section">
               <h4>{t('configField.m2ssd')}</h4>
-              {(value.m2ssd || []).map((ssd, ssdIndex) => (
+              {(value?.m2ssd || []).map((ssd, ssdIndex) => (
                 <div key={ssdIndex} className="m2ssd-config">
                   <Input
                     type="text"
                     value={ssd.name || null}
                     onChange={(e) => {
-                      const newSsds = [...(value.m2ssd || [])];
+                      const newSsds = [...(value?.m2ssd || [])];
                       newSsds[ssdIndex] = {
                         ...ssd,
                         name: e.target.value
@@ -1067,7 +1068,7 @@ function ConfigField({ field, value, onChange }) {
                           allowClear
                           value={currentValue.entity_id || null}
                           onChange={(selectedValue) => {
-                            const newSsds = [...(value.m2ssd || [])];
+                            const newSsds = [...(value?.m2ssd || [])];
                             newSsds[ssdIndex] = {
                               ...ssd,
                               [field.key]: {
@@ -1096,7 +1097,7 @@ function ConfigField({ field, value, onChange }) {
                   })}
                   <button
                     onClick={() => {
-                      const newSsds = [...(value.m2ssd || [])];
+                      const newSsds = [...(value?.m2ssd || [])];
                       newSsds.splice(ssdIndex, 1);
                       onChange({
                         ...value,
@@ -1113,7 +1114,7 @@ function ConfigField({ field, value, onChange }) {
                   onChange({
                     ...value,
                     m2ssd: [
-                      ...(value.m2ssd || []),
+                      ...(value?.m2ssd || []),
                       {
                         name: '',
                         status: {},

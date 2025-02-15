@@ -276,7 +276,8 @@ export const translations = {
         dry: '除湿',
         fan_only: '送风',
         heat: '制热',
-        off: '关闭'
+        off: '关闭',
+        auto: '自动'
       },
       swingModes: {
         off: '关闭',
@@ -576,6 +577,9 @@ export const translations = {
       volumeUsedPercent: '存储池使用率',
       volumeAvgTemp: '存储池平均温度',
       deviceStatus: '存储设备状态',
+      storagePoolName: '存储池名称',
+      driveName: '硬盘名称',
+      ssdName: 'M.2 SSD名称',
       diskStatus: '硬盘状态',
       m2Status: 'M.2 SSD状态',
       volumes: '存储池',
@@ -615,6 +619,8 @@ export const translations = {
       urlRequired: '请输入URL',
       invalidUrl: '无效的URL',
       mainInfo: '主要信息',
+      sensorName: '传感器名称',
+      sensorEntity: '传感器实体', 
       // light
       features: {
         temperature: '温度控制',
@@ -635,6 +641,16 @@ export const translations = {
     },
     'fullscreen.enter': '进入全屏',
     'fullscreen.exit': '退出全屏',
+    updateTime: '更新时间',
+    scriptName: '脚本名称',
+    upload: '上传',
+    uploadImage: '上传图片',
+    placeholderImage: '请上传图片',
+    mainInfo: '主要信息',
+    uptime: '运行时间',
+    updateSuccess: '更新成功',
+    updateFailed: '更新失败',
+    updateComplete: '更新完成,即将刷新页面',
   },
   en: {
     
@@ -905,7 +921,8 @@ export const translations = {
         dry: 'Dry',
         fan_only: 'Fan Only',
         heat: 'Heat',
-        off: 'Off'
+        off: 'Off',
+        auto: 'Auto'
       },
       swingModes: {
         off: 'Off',
@@ -1244,6 +1261,8 @@ export const translations = {
       nameRequired: 'Please enter a name',
       urlRequired: 'Please enter URL',
       invalidUrl: 'Invalid URL',
+      sensorName: 'Sensor Name',
+      sensorEntity: 'Sensor Entity',
       features: {
         temperature: 'Temperature Control',
         fanSpeed: 'Fan Speed Control',
@@ -1263,5 +1282,15 @@ export const translations = {
     },
     'fullscreen.enter': 'Enter Fullscreen',
     'fullscreen.exit': 'Exit Fullscreen',
+    checkUpdate: 'Check for Updates',
+    updateTime: 'Update Time',
+    upload: 'Upload',
+    uploadImage: 'Upload Image',
+    placeholderImage: 'Please Upload Image',
+    mainInfo: 'Main Information',
+    uptime: 'Uptime',
+    updateSuccess: 'Update Successful',
+    updateFailed: 'Update Failed',
+    updateComplete: 'Update Complete, Refreshing Page...',
   }
 };
