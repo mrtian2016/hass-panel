@@ -132,6 +132,9 @@ export const translations = {
       mediaplayer: '媒体播放器',
       scriptpanel: '快捷指令',
       waterpurifier: '净水器',
+      socketStatus: '插座状态',
+      socketstatus: '插座状态',
+      socket: '插座'
     },
 
     // 卡片操作
@@ -162,7 +165,10 @@ export const translations = {
       lightOverview: '灯光概览',
       scriptpanel: '快捷指令',
       waterpurifier: '净水器',
-      lightstatus: '灯光状态'
+      lightstatus: '灯光状态',
+      socketstatus: '插座状态',
+      socketStatus: '插座状态',
+      socket: '插座',
     },
 
     // 配置字段
@@ -192,6 +198,7 @@ export const translations = {
       upload: '上传',
       uploadImage: '上传图片',
       placeholderImage: '请上传图片',
+      socketsConfig: '插座配置',
     },
 
     version: {
@@ -640,6 +647,8 @@ export const translations = {
       sensorEntity: '传感器实体', 
       climateTemperatureEntity: '手动指定温度传感器',
       climateHumidityEntity: '手动指定湿度传感器',
+      socketName: '插座名称',
+      socketEntity: '插座实体',
       // light
       lightIcons: '灯光图标',
       selectIcon: '选择图标',
@@ -802,7 +811,11 @@ export const translations = {
       camera: 'Camera',
       climate: 'Climate',
       motion: 'Motion Sensor',
-      lightOverview: 'Light Overview' 
+      lightOverview: 'Light Overview',
+      socket: 'Socket',
+      socketsConfig: 'Sockets Configuration',
+      socketStatus: 'Socket Status'
+
     },
 
     // Card Actions
@@ -833,7 +846,11 @@ export const translations = {
       lightOverview: 'Light Overview',
       scriptpanel: 'Quick Scripts',
       waterpurifier: 'Water Purifier',
-      lightstatus: 'Light Status'
+      lightstatus: 'Light Status',
+      socketstatus: 'Socket Status',
+      socket: 'Socket',
+      socketsConfig: 'Sockets Configuration',
+      socketStatus: 'Socket Status'
     },
 
     // Configuration Fields
@@ -859,7 +876,8 @@ export const translations = {
       motionEntity: 'Motion Entity',
       luxEntity: 'Illuminance Entity',
       background: 'Background Image',
-      roomsConfig: 'Room Lights Configuration'
+      roomsConfig: 'Room Lights Configuration',
+      socketsConfig: 'Sockets Configuration'
     },
 
     // WebDAV Related
@@ -1304,6 +1322,8 @@ export const translations = {
       climateTemperatureEntity: 'Manually Specify Temperature Sensor',
       climateHumidityEntity: 'Manually Specify Humidity Sensor',
       selectIcon: 'Select Icon',  
+      socketName: 'Socket Name',
+      socketEntity: 'Socket Entity',
       features: {
         temperature: 'Temperature Control',
         fanSpeed: 'Fan Speed Control',

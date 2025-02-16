@@ -1,32 +1,9 @@
-.light-status-card {
-  width: calc(100vw - 40px);
-  background: var(--color-card-bg);
-  border-radius: var(--border-radius-medium);
-  margin-top: var(--spacing-lg);
-  box-shadow: 0 2px 8px var(--color-shadow);
-  box-sizing: border-box;
-  padding: 0;
-  overflow: visible;
-}
-.light-button:hover {
-  background: var(--color-background-secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.light-status-card .card-header {
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.light-summary {
+.socket-summary {
   font-size: 14px;
   color: var(--color-text-secondary);
 }
 
-.light-buttons {
+.socket-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
@@ -34,7 +11,7 @@
   justify-content: center;
 }
 
-.light-button {
+.socket-button {
   width: 100%;
   aspect-ratio: 1;
   display: flex;
@@ -49,11 +26,13 @@
   transition: all 0.3s;
 }
 
-.light-button.switch-entity {
-  opacity: 0.8;
+.socket-button:hover {
+  background: var(--color-background-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.light-name {
+.socket-name {
   margin-top: 5px;
   font-size: 1em;
   line-height: 1.2;
@@ -65,6 +44,22 @@
   overflow: hidden;
 }
 
-.light-name.long-text {
+.socket-name.long-text {
   font-size: 0.85em;
+}
+
+@media (max-width: 768px) {
+  .socket-buttons {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .socket-button {
+    padding: 8px;
+  }
+  
+  .socket-name {
+    font-size: 0.9em;
+  }
 } 

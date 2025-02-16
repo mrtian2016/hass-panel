@@ -114,7 +114,7 @@
   background-size: 32px 100%;
 }
 
-.control-button {
+.curtain-control-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,11 +128,11 @@
   transition: all 0.2s ease;
 }
 
-.control-button:hover:not(:disabled) {
+.curtain-control-button:hover:not(:disabled) {
   background: var(--color-background-hover);
 }
 
-.control-button:disabled {
+.curtain-control-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

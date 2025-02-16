@@ -36,6 +36,7 @@ import ScriptPanel from '../../components/ScriptPanel';
 import WaterPurifierCard from '../../components/WaterPurifierCard';
 import IlluminanceCard from '../../components/IlluminanceCard';
 import MotionCard from '../../components/MotionCard';
+import SocketStatusCard from '../../components/SocketStatusCard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
@@ -441,6 +442,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         return <MotionCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'LightOverviewCard':
         return <LightOverviewCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+      case 'SocketStatusCard':
+        return <SocketStatusCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       default:
         return null;
     }

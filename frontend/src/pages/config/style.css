@@ -208,6 +208,16 @@
   transition: all 0.3s;
   z-index: 100;
 }
+@media (max-width: 767px) {
+  .save-button {
+    bottom: 150px;
+    right: 10px;
+  }
+  .add-card-button {
+    bottom: 80px;
+    right: 10px;
+  }
+}
 
 .loading-state {
   position: fixed;

@@ -1,9 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { Icon } from '@iconify/react';
-import { 
-  mdiCeilingLight,
-  mdiLightbulbGroup,
-} from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';

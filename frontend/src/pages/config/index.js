@@ -29,6 +29,7 @@ import {
   mdiPencil,
   mdiArrowLeft,
   mdiCog,
+  mdiPowerSocket,
 } from '@mdi/js';
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
@@ -390,7 +391,25 @@ const getCardTypes = (t) => ({
         default: []
       }
     ]
-  }
+  },
+  SocketStatusCard: {
+    name: t('cards.socket'),
+    icon: mdiPowerSocket,
+    fields: [
+      {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.socketStatus')
+      },
+      {
+        key: 'sockets',
+        label: t('fields.socketsConfig'),
+        type: 'socket-config',
+        default: {}
+      }
+    ]
+  },
 });
 
 
@@ -403,6 +422,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
   const [showVersionModal, setShowVersionModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const { t } = useLanguage();
+  const [isMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
   
   // 修改卡片状态的初始化
@@ -521,7 +541,8 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
       IlluminanceCard: { lg: 16, md: 16, sm: 16 },
       CameraCard: { lg: 20, md: 20, sm: 20 },
       ClimateCard: { lg: 28, md: 28, sm: 28 },
-      MotionCard: { lg: 20, md: 20, sm: 20 }
+      MotionCard: { lg: 20, md: 20, sm: 20 },
+      SocketStatusCard: { lg: 24, md: 24, sm: 24 },
     };
 
     // 计算每个卡片的位置
@@ -821,13 +842,14 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
       <div className="config-container">
         <div className="config-header">
           <Space className="header-buttons">
-            <Button 
-              className="back-button"
-              onClick={() => navigate('/')}
-              icon={<Icon path={mdiArrowLeft} size={0.8} />}
-            >
-              {t('nav.home')}
-            </Button>
+           {!isMobile && <Button 
+                className="back-button"
+                onClick={() => navigate('/')}
+                icon={<Icon path={mdiArrowLeft} size={0.8} />}
+              >
+                {t('nav.home')}
+              </Button>
+          }
 
             <Button
               className="global-config-button"

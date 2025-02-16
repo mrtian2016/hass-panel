@@ -57,7 +57,7 @@ function CurtainItem({ entity_id, name }) {
         <div className="curtain-side">
           <div className="curtain-controls">
             <button 
-              className="control-button"
+              className="curtain-control-button"
               onClick={() => curtain.service.openCover()}
               disabled={curtain.state === 'open'}
               title={t('curtain.open')}
@@ -65,14 +65,14 @@ function CurtainItem({ entity_id, name }) {
               <MdiArrowExpandHorizontal />
             </button>
             <button 
-              className="control-button"
+              className="curtain-control-button"
               onClick={() => curtain.service.stopCover()}
               title={t('curtain.stop')}
             >
               <MdiStop />
             </button>
             <button 
-              className="control-button"
+              className="curtain-control-button"
               onClick={() => curtain.service.closeCover()}
               disabled={curtain.state === 'closed'}
               title={t('curtain.close')}

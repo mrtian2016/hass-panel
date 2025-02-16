@@ -1,5 +1,4 @@
-
-
+import { listIcons } from '@iconify/react';
 // 添加版本号比较函数
 export const compareVersions = (v1, v2) => {
     // 移除版本号中的 'v' 前缀
@@ -31,4 +30,119 @@ export const safeGetState = (entity, defaultValue = '0') => {
     return defaultValue;
   }
   return entity.state;
+};
+
+export const getMdiIcons = (type='light') => {
+  const allIcons = listIcons();
+  console.log(allIcons);
+  // 预定义常用的 MDI 图标
+  let icons = [];
+  if (type === 'light') {
+    icons = [
+      // 天花灯具
+      'mdi:ceiling-light',
+      'mdi:light-flood-down',
+      'mdi:light-recessed',
+      'mdi:chandelier',
+      'mdi:track-light',
+      // 壁灯
+      'mdi:wall-sconce',
+      'mdi:wall-sconce-flat',
+      'mdi:wall-sconce-round',
+      'mdi:coach-lamp',
+      // 台灯/落地灯
+      'mdi:desk-lamp',
+      'mdi:floor-lamp',
+      'mdi:floor-lamp-dual',
+      'mdi:floor-lamp-torchiere',
+      'mdi:lamp',
+      'mdi:lamp-outline',
+      // 装饰灯具
+      'mdi:led-strip',
+      'mdi:led-strip-variant',
+      'mdi:string-lights',
+      'mdi:lava-lamp',
+      'mdi:vanity-light',
+      // 室外灯具
+      'mdi:outdoor-lamp',
+      'mdi:post-lamp',
+      'mdi:spotlight',
+      'mdi:spotlight-beam',
+      // 灯泡
+      'mdi:lightbulb',
+      'mdi:lightbulb-outline',
+      'mdi:lightbulb-on',
+      'mdi:lightbulb-off',
+      'mdi:lightbulb-group',
+      'mdi:lightbulb-multiple',
+      'mdi:lightbulb-spot',
+      'mdi:lightbulb-fluorescent-tube',
+      'mdi:led-off',
+      'mdi:led-on',
+      'mdi:led-variant-off',
+      'mdi:led-variant-on'
+    ];
+  } else if (type === 'socket') {
+    icons = [
+      'mdi:power-socket',
+      'mdi:power-socket-eu',
+      'mdi:power-socket-us',
+      'mdi:power-socket-uk',
+      'mdi:power-socket-au',
+      'mdi:power-socket-de',
+      'mdi:power-socket-fr',
+      'mdi:power-socket-it',
+      'mdi:power-socket-ch',
+      'mdi:power-socket-jp',
+      'mdi:power-socket-mx',
+      // 开关
+      'mdi:toggle-switch-variant',
+      'mdi:toggle-switch-variant-off',
+      'mdi:toggle-switch',
+      'mdi:toggle-switch-off',
+      // 厨房电器
+      'mdi:refrigerator',
+      'mdi:microwave',
+      'mdi:coffee-maker',
+      'mdi:kettle',
+      'mdi:toaster',
+      'mdi:blender',
+      // 生活电器
+      'mdi:washing-machine',
+      'mdi:tumble-dryer',
+      'mdi:air-conditioner',
+      'mdi:vacuum',
+      'mdi:hair-dryer',
+      'mdi:iron',
+      // 娱乐设备
+      'mdi:tv',
+      'mdi:tv-box',
+      'mdi:youtube-tv',
+      'mdi:nintendo-switch',
+      'mdi:playstation',
+      'mdi:xbox',
+      // 办公设备
+      'mdi:computer-classic',
+      'mdi:laptop',
+      'mdi:desktop-tower-monitor',
+      'mdi:printer',
+      'mdi:scanner',
+      'mdi:server',
+      // 其他电器
+      'mdi:fan',
+      'mdi:air-purifier',
+      'mdi:water-heater',
+      'mdi:water-pump',
+      'mdi:battery-charging',
+
+      'mdi:bicycle-electric'
+    ];
+  }
+
+  return icons.map(name => ({
+    name,
+    label: name.replace('mdi:', '').split('-').map(
+      word => word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ')
+  }));
 };

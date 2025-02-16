@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { Icon } from '@iconify/react';
-import { mdiCeilingLight } from '@mdi/js';
 import Modal from '../Modal';
 import LightControl from './LightControl';
 import { useLanguage } from '../../i18n/LanguageContext';
