@@ -14,6 +14,7 @@ import './style.css';
 import { useEntity } from '@hakit/core';
 import { notification } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { safeParseFloat, safeGetState } from '../../utils/helper';
 
 function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
   const viewBoxSize = 200;  // 用于 SVG viewBox
@@ -68,12 +69,11 @@ function NASCard({ config }) {
   const debugMode = localStorage.getItem('debugMode') === 'true';
   let entities = {};
   try {
-
     const mainEntities = Object.entries(config.syno_nas?.main).map(([key, feature]) => ({
       key,
       ...feature,
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      entity: useEntity(feature.entity_id),
+      entity: useEntity(feature.entity_id, { returnNullIfNotFound: true }),
     }));
 
     entities = mainEntities.reduce((acc, curr) => {
@@ -101,10 +101,10 @@ function NASCard({ config }) {
     );
   }
 
-  const cpuUsage = parseFloat(entities.cpuUsage?.state || 0);
-  const memoryUsage = parseFloat(entities.memoryUsage?.state || 0);
-  const downloadSpeed = (parseFloat(entities.downloadSpeed?.state || 0) / 1024).toFixed(2);
-  const uploadSpeed = (parseFloat(entities.uploadSpeed?.state || 0) / 1024).toFixed(2);
+  const cpuUsage = safeParseFloat(entities.cpuUsage?.state);
+  const memoryUsage = safeParseFloat(entities.memoryUsage?.state);
+  const downloadSpeed = (safeParseFloat(entities.downloadSpeed?.state) / 1024).toFixed(2);
+  const uploadSpeed = (safeParseFloat(entities.uploadSpeed?.state) / 1024).toFixed(2);
 
   return (
     <>
@@ -150,17 +150,17 @@ function NASCard({ config }) {
                 let volumeUsagePercent = null;
                 let volumeTemp = null;
                 let volumeTotal = null;
-                try { 
+                try {
                   // eslint-disable-next-line react-hooks/rules-of-hooks
-                  volumeStatus = useEntity(volume.status.entity_id);
+                  volumeStatus = useEntity(volume.status.entity_id, { returnNullIfNotFound: true });
                   // eslint-disable-next-line react-hooks/rules-of-hooks
-                  volumeUsage = useEntity(volume.usage.entity_id);
+                  volumeUsage = useEntity(volume.usage.entity_id, { returnNullIfNotFound: true });
                   // eslint-disable-next-line react-hooks/rules-of-hooks
-                  volumeUsagePercent = useEntity(volume.usagePercent.entity_id);
+                  volumeUsagePercent = useEntity(volume.usagePercent.entity_id, { returnNullIfNotFound: true });
                   // eslint-disable-next-line react-hooks/rules-of-hooks
-                  volumeTemp = useEntity(volume.avgTemperature.entity_id);
+                  volumeTemp = useEntity(volume.avgTemperature.entity_id, { returnNullIfNotFound: true });
                   // eslint-disable-next-line react-hooks/rules-of-hooks
-                  volumeTotal = useEntity(volume.total.entity_id);
+                  volumeTotal = useEntity(volume.total.entity_id, { returnNullIfNotFound: true });
                 } catch (error) {
                   if (debugMode) {
                     notification.error({
@@ -183,21 +183,21 @@ function NASCard({ config }) {
                         </div>
                         <div className="volume-status-group">
                           <span className="volume-status">
-                            {volumeStatus?.state === "normal" 
+                            {safeGetState(volumeStatus, t('nas.status.unknown')) === "normal" 
                               ? t('nas.status.normal') 
-                              : volumeStatus?.state || t('nas.status.unknown')}
+                              : t('nas.status.unknown')}
                           </span>
                           <span className="status-divider">|</span>
                           <span className="volume-temp">
-                            {volumeTemp?.state || '0'}{t('nas.labels.unit.temp')}
+                            {safeGetState(volumeTemp, '0')}{t('nas.labels.unit.temp')}
                           </span>
                         </div>
                       </div>
                       <div className="volume-info">
                         <div className="volume-details">
                           {(() => {
-                            const usedSpace = parseFloat(volumeUsage?.state || 0);
-                            const totalSpace = parseFloat(volumeTotal?.state || 0);
+                            const usedSpace = safeParseFloat(volumeUsage?.state);
+                            const totalSpace = safeParseFloat(volumeTotal?.state);
                             
                             const formatSpace = (space) => {
                               const v = (space * 1000 * 1000 * 1000 * 1000)/ 1024 / 1024 / 1024 / 1024;
@@ -220,7 +220,7 @@ function NASCard({ config }) {
                           <div className="progress-bar">
                             <div 
                               className="progress-fill"
-                              style={{ width: `${volumeUsagePercent?.state || 0}%` }}
+                              style={{ width: `${safeParseFloat(volumeUsagePercent?.state)}%` }}
                             />
                           </div>
                         </div>
@@ -247,9 +247,9 @@ function NASCard({ config }) {
             let driveTemp = null;
             try {
               // eslint-disable-next-line react-hooks/rules-of-hooks
-              driveStatus = useEntity(drive.status.entity_id);
+              driveStatus = useEntity(drive.status.entity_id, { returnNullIfNotFound: true });
               // eslint-disable-next-line react-hooks/rules-of-hooks
-              driveTemp = drive.temperature ? useEntity(drive.temperature.entity_id) : null;
+              driveTemp = drive.temperature ? useEntity(drive.temperature.entity_id, { returnNullIfNotFound: true }) : null;
             } catch (error) {
               console.error(`加载NAS实体 ${drive.entity_id} 失败:`, error);
               if (debugMode) {
@@ -272,9 +272,15 @@ function NASCard({ config }) {
                     <span className="label">{drive.name}</span>
                   </div>
                   <div className="drive-status">
-                    <span>{driveStatus?.state === "normal" ? t('nas.status.normal') : t('nas.status.abnormal') || t('nas.status.unknown')}</span>
+                    <span>
+                      {safeGetState(driveStatus, t('nas.status.unknown')) === "normal" 
+                        ? t('nas.status.normal') 
+                        : t('nas.status.abnormal')}
+                    </span>
                     {driveTemp && (
-                      <span className="drive-temp">{driveTemp.state || '0'}{t('nas.labels.unit.temp')}</span>
+                      <span className="drive-temp">
+                        {safeGetState(driveTemp, '0')}{t('nas.labels.unit.temp')}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -291,9 +297,9 @@ function NASCard({ config }) {
                 let driveTemp = null;
                 try {
                   // eslint-disable-next-line react-hooks/rules-of-hooks
-                  driveStatus = useEntity(drive.status.entity_id);
+                  driveStatus = useEntity(drive.status.entity_id, { returnNullIfNotFound: true });
                   // eslint-disable-next-line react-hooks/rules-of-hooks
-                  driveTemp = useEntity(drive.temperature.entity_id);
+                  driveTemp = useEntity(drive.temperature.entity_id, { returnNullIfNotFound: true });
                 } catch (error) {
                   console.error(`加载NAS实体 ${drive.entity_id} 失败:`, error);
                   if (debugMode) {
@@ -316,8 +322,14 @@ function NASCard({ config }) {
                         <span className="label">{drive.name}</span>
                       </div>
                       <div className="drive-status">
-                        <span>{driveStatus?.state === "normal" ? t('nas.status.normal') : t('nas.status.abnormal') || t('nas.status.unknown')}</span>
-                        <span className="drive-temp">{driveTemp?.state || '0'}{t('nas.labels.unit.temp')}</span>
+                        <span>
+                          {safeGetState(driveStatus, t('nas.status.unknown')) === "normal" 
+                            ? t('nas.status.normal') 
+                            : t('nas.status.abnormal')}
+                        </span>
+                        <span className="drive-temp">
+                          {safeGetState(driveTemp, '0')}{t('nas.labels.unit.temp')}
+                        </span>
                       </div>
                     </div>
                   </React.Fragment>

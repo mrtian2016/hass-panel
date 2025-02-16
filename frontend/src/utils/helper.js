@@ -1,3 +1,5 @@
+
+
 // 添加版本号比较函数
 export const compareVersions = (v1, v2) => {
     // 移除版本号中的 'v' 前缀
@@ -15,3 +17,18 @@ export const compareVersions = (v1, v2) => {
     
     return 0;
   };
+
+// 安全地解析数值，如果解析失败返回默认值
+export const safeParseFloat = (value, defaultValue = 0) => {
+  if (!value || value === 'unavailable' || value === 'unknown') return defaultValue;
+  const parsed = parseFloat(value);
+  return isNaN(parsed) ? defaultValue : parsed;
+};
+
+  // 安全地获取状态值，处理 null 和异常情况
+export const safeGetState = (entity, defaultValue = '0') => {
+  if (!entity || entity.state === 'unavailable' || entity.state === 'unknown') {
+    return defaultValue;
+  }
+  return entity.state;
+};

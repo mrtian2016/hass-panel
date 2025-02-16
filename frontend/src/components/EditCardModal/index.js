@@ -25,7 +25,7 @@ function EditCardModal({
       setConfig(card.config);
       if (card.type === 'LightOverviewCard') {
         setPreviewConfig(card.config);
-        setShowPreview(true);
+        // setShowPreview(true);
       }
     }
   }, [card, setPreviewConfig, setShowPreview]);
@@ -60,6 +60,15 @@ function EditCardModal({
 
   const footer = (
     <Space>
+      {card.type === 'LightOverviewCard' && (
+        <Button 
+          onClick={() => setShowPreview(true)}
+          style={{ borderColor: 'var(--color-primary)', color: 'var(--color-primary)' }}
+        >
+          {t('config.preview')}
+        </Button>
+      )}
+
       <Button 
         onClick={handleClose}
         style={{ borderColor: 'var(--color-primary)', color: 'var(--color-primary)' }}
@@ -98,7 +107,7 @@ function EditCardModal({
         </div>
       </Modal>
 
-      {card.type === 'LightOverviewCard' && (
+      {card.type === 'LightOverviewCard' && showPreview && (
         <div className={`preview-container ${showPreview ? 'visible' : ''}`}>
           <button
             className="close-preview"

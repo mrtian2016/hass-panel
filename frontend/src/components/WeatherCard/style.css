@@ -13,6 +13,14 @@
   gap: var(--spacing-xs);
 }
 
+.weather-item {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
 .weather-item .label {
   font-size: 13px;
   color: var(--color-text-secondary);
@@ -37,14 +45,14 @@
   min-width: 0;
 }
 
-.date {
+.weather-date {
   font-size: 13px;
   color: #666;
   margin-bottom: 6px;
   white-space: nowrap;
 }
 
-.icon {
+.weather-icon {
   height: 24px;
   display: flex;
   align-items: center;
@@ -52,7 +60,7 @@
   margin: 6px 0;
 }
 
-.temp {
+.weather-temp {
   display: flex;
   flex-direction: column;
   align-items: center;

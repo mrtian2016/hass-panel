@@ -288,19 +288,25 @@ export const translations = {
         fan_only: '送风',
         heat: '制热',
         off: '关闭',
-        auto: '自动'
+        auto: '自动',
+        unavailable: '未知',
+        undefined: '未知'
       },
       swingModes: {
         off: '关闭',
         vertical: '垂直摆动',
-        null: '关闭'
+        null: '关闭',
+        unavailable: '未知',
+        undefined: '未知'
       },
       fanModes: {
         auto: '自动',
         low: '低速',
         medium: '中速',
         high: '高速',
-        none: '关闭'
+        none: '关闭',
+        unavailable: '未知',
+        undefined: '未知'
       }
     },
 
@@ -632,7 +638,11 @@ export const translations = {
       mainInfo: '主要信息',
       sensorName: '传感器名称',
       sensorEntity: '传感器实体', 
+      climateTemperatureEntity: '手动指定温度传感器',
+      climateHumidityEntity: '手动指定湿度传感器',
       // light
+      lightIcons: '灯光图标',
+      selectIcon: '选择图标',
       features: {
         temperature: '温度控制',
         fanSpeed: '风速控制',
@@ -944,19 +954,25 @@ export const translations = {
         fan_only: 'Fan Only',
         heat: 'Heat',
         off: 'Off',
-        auto: 'Auto'
+        auto: 'Auto',
+        unavailable: 'Unknown',
+        undefined: 'Unknown'
       },
       swingModes: {
         off: 'Off',
         vertical: 'Vertical',
-        null: 'Off'
+        null: 'Off',
+        unavailable: 'Unknown',
+        undefined: 'Unknown'
       },
       fanModes: {
         auto: 'Auto',
         low: 'Low',
         medium: 'Medium',
         high: 'High',
-        none: 'Off'
+        none: 'Off',
+        unavailable: 'Unknown',
+        undefined: 'Unknown'
       }
     },
 
@@ -1285,6 +1301,9 @@ export const translations = {
       invalidUrl: 'Invalid URL',
       sensorName: 'Sensor Name',
       sensorEntity: 'Sensor Entity',
+      climateTemperatureEntity: 'Manually Specify Temperature Sensor',
+      climateHumidityEntity: 'Manually Specify Humidity Sensor',
+      selectIcon: 'Select Icon',  
       features: {
         temperature: 'Temperature Control',
         fanSpeed: 'Fan Speed Control',

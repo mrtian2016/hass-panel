@@ -310,6 +310,12 @@ const getCardTypes = (t) => ({
         type: 'text',
         default: t('cardTitles.climate')
       },
+
+      {
+        key: 'name',
+        label: t('fields.name'),
+        type: 'text'
+      },
       {
         key: 'entity_id',
         label: t('fields.climateEntity'),
@@ -317,9 +323,16 @@ const getCardTypes = (t) => ({
         filter: 'climate.*'
       },
       {
-        key: 'name',
-        label: t('fields.name'),
-        type: 'text'
+        key: 'temperature_entity_id',
+        label: t('configField.climateTemperatureEntity'),
+        type: 'entity',
+        filter: 'sensor.*'
+      },
+      {
+        key: 'humidity_entity_id',
+        label: t('configField.climateHumidityEntity'),
+        type: 'entity',
+        filter: 'sensor.*'
       },
       {
         key: 'features',
@@ -519,10 +532,9 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
       // 处理移动端布局
       const existingMobileLayout = currentLayouts?.mobile?.sm?.find(item => item.i === cardId);
       if (existingMobileLayout) {
-        // 使用现有布局，但确保高度正确
+        // 完全保留现有布局，只更新卡片类型
         layouts.mobile.sm.push({
           ...existingMobileLayout,
-          h: height.sm,
           card_type: card.type
         });
       } else {
@@ -554,12 +566,10 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
       // 处理桌面端布局
       ['lg', 'md'].forEach(breakpoint => {
         const existingDesktopLayout = currentLayouts?.desktop?.[breakpoint]?.find(item => item.i === cardId);
-        console.log(existingDesktopLayout);
         if (existingDesktopLayout) {
-          // 使用现有布局，但确保高度正确
+          // 完全保留现有布局，只更新卡片类型
           layouts.desktop[breakpoint].push({
             ...existingDesktopLayout,
-            h: height[breakpoint],
             card_type: card.type
           });
         } else {

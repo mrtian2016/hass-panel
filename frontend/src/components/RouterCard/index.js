@@ -16,7 +16,7 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import './style.css';
 import { useEntity } from '@hakit/core';
-
+import { safeParseFloat, safeGetState } from '../../utils/helper';
 function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
   // 使用相对单位定义尺寸
   const viewBoxSize = 200;  // 用于 SVG viewBox
@@ -63,6 +63,8 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
   );
 }
 
+
+
 function RouterCard({ config }) {
   const titleVisible = config.titleVisible;
   const { theme } = useTheme();
@@ -71,7 +73,7 @@ function RouterCard({ config }) {
     key,
     ...feature,
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    entity: useEntity(feature.entity_id),
+    entity: useEntity(feature.entity_id, { returnNullIfNotFound: true }),
   }));
 
   // 将 routerEntities 数组转换为以 key 为键的对象
@@ -80,14 +82,15 @@ function RouterCard({ config }) {
     return acc;
   }, {});
 
-  const cpuUsage = parseFloat(entities.cpuUsage?.state || 0);
-  const memoryUsage = parseFloat(entities.memoryUsage?.state || 0);
-  const wanDownloadSpeed = parseFloat(entities.wanDownloadSpeed?.state || '0').toFixed(3);
-  const wanUploadSpeed = parseFloat(entities.wanUploadSpeed?.state || '0').toFixed(3);
-  const onlineUsers = entities.onlineUsers?.state || '0';
-  const networkConnections = entities.networkConnections?.state || '0';
-  const cpuTemp = entities.cpuTemp?.state || '0';
-  const wanIp = entities.wanIp?.state || '0';
+  // 使用安全解析函数处理所有数值
+  const cpuUsage = safeParseFloat(entities.cpuUsage?.state);
+  const memoryUsage = safeParseFloat(entities.memoryUsage?.state);
+  const wanDownloadSpeed = safeParseFloat(entities.wanDownloadSpeed?.state).toFixed(3);
+  const wanUploadSpeed = safeParseFloat(entities.wanUploadSpeed?.state).toFixed(3);
+  const onlineUsers = safeGetState(entities.onlineUsers);
+  const networkConnections = safeGetState(entities.networkConnections);
+  const cpuTemp = safeGetState(entities.cpuTemp);
+  const wanIp = safeGetState(entities.wanIp, '-');
 
   return (
     <BaseCard

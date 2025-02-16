@@ -14,11 +14,11 @@ import {
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
 import BaseCard from '../BaseCard';
-import './style.css';
+
 import { useWeather } from '@hakit/core';
 import { notification } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
-
+import './style.css';
 // 添加穿衣指数计算函数
 const calculateClothingIndex = (temperature, humidity, windSpeed) => {
   // 基础分值基于温度
@@ -176,7 +176,9 @@ function WeatherCard({config}) {
     return t('weather.wind.level.hurricane');
   };
 
-  const forecastData = Array.isArray(weather?.forecast?.forecast) ? weather.forecast.forecast : [];
+  const forecastData = Array.isArray(weather?.forecast?.forecast) 
+  ? weather.forecast.forecast.slice(0, 7) 
+  : [];
   
   const clothingAdvice = calculateClothingIndex(
     weather.attributes.temperature,
@@ -239,15 +241,15 @@ function WeatherCard({config}) {
       <div className="forecast">
         {forecastData.map((day, index) => (
           <div key={index} className="forecast-day">
-            <div className="date">{formatDate(day.datetime)}</div>
-            <div className="icon">
+            <div className="weather-date">{formatDate(day.datetime)}</div>
+            <div className="weather-icon">
               <Icon 
                 path={getWeatherIcon(day.condition)}
                 size={1}
                 color={theme === 'dark' ? '#ffffff' : '#333333'}
               />
             </div>
-            <div className="temp">
+            <div className="weather-temp">
               <span className="high">{day.temperature}°</span>
               <span className="low">{day.templow}°</span>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import Icon from '@mdi/react';
+import { Icon } from '@iconify/react';
 import { 
   mdiCeilingLight,
   mdiLightbulbGroup,
@@ -11,6 +11,8 @@ import {useEntity} from '@hakit/core';
 import Modal from '../Modal';
 import LightControl from '../LightOverviewCard/LightControl';
 import { notification } from 'antd';
+
+
 function LightStatusCard({ config }) {
   
   const { theme } = useTheme();
@@ -85,8 +87,9 @@ function LightStatusCard({ config }) {
       {config.titleVisible !== false && <div className="card-header">
         <h3>
           <Icon 
-            path={mdiLightbulbGroup} 
-            size={1} 
+            icon={'mdi:lightbulb-group'} 
+            width={24}
+            height={24}
             color={theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D'}
             style={{ marginRight: '8px', verticalAlign: 'bottom' }} 
           />
@@ -116,8 +119,9 @@ function LightStatusCard({ config }) {
             title={`${light.name}${!light.isLight ? t('lightStatus.switchEntity') : ''}`}
           >
             <Icon
-              path={mdiCeilingLight}
-              size={1.5}
+              icon={light.icon || 'mdi:ceiling-light'}
+              width={30}
+              height={30}
               color={light.entity.state === 'on' 
                 ? 'var(--color-secondary)' 
                 : theme === 'dark' 

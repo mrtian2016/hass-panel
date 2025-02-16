@@ -45,6 +45,10 @@ function ClimateCard({
   const { theme } = useTheme();
   const { t } = useLanguage();
   const climate = useEntity(config?.entity_id || '', {returnNullIfNotFound: true});
+  const tempSensor = useEntity(config?.temperature_entity_id || '', {returnNullIfNotFound: true});
+  const humiditySensor = useEntity(config?.humidity_entity_id || '', {returnNullIfNotFound: true});
+  const currentShowTemp = tempSensor?.state || climate?.attributes?.current_temperature;
+  const currentShowHumidity = humiditySensor?.state || climate?.attributes?.current_humidity;
   const [showFanModes, setShowFanModes] = useState(false);
   const [showSwingModes, setShowSwingModes] = useState(false);
   const [showHvacModes, setShowHvacModes] = useState(false);
@@ -109,8 +113,6 @@ function ClimateCard({
   // console.log(services);
 
   const isOn = climate?.state !== 'off';
-  const currentTemp = climate?.attributes?.current_temperature;
-  const currentHumidity = climate?.attributes?.current_humidity;
   const targetTemp = climate?.attributes?.temperature;
   const fanMode = climate?.attributes?.fan_mode;
   const fanModes = climate?.attributes?.fan_modes || [];
@@ -217,7 +219,7 @@ function ClimateCard({
                 <span>{t('climate.currentTemp')}</span>
               </div>
               <div className="reading-value">
-                <span className="value">{currentTemp || '--'}</span>
+                <span className="value">{currentShowTemp || '--'}</span>
                 <span className="unit">°C</span>
               </div>
             </div>
@@ -227,7 +229,7 @@ function ClimateCard({
                 <span>{t('climate.currentHumidity')}</span>
               </div>
               <div className="reading-value">
-                <span className="value">{currentHumidity || '--'}</span>
+                <span className="value">{currentShowHumidity || '--'}</span>
                 <span className="unit">%</span>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import Icon from '@mdi/react';
+import { Icon } from '@iconify/react';
 import { mdiCeilingLight } from '@mdi/js';
 import Modal from '../Modal';
 import LightControl from './LightControl';
@@ -81,8 +81,9 @@ function FloorPlan({ lights }) {
               title={light.name}
             >
               <Icon 
-                path={mdiCeilingLight}
-                size={1}
+                icon={light.icon || 'mdi:ceiling-light'}
+                width={22}
+                height={22}
                 className="light-icon"
               />
             </button>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHass } from '@hakit/core';
 import { Select, Input } from 'antd';
+import { Icon } from '@iconify/react';
 // import Icon from '@mdi/react';
 // import { mdiDelete, mdiPlus } from '@mdi/js';
 import './style.css';
@@ -46,6 +47,41 @@ function ConfigField({ field, value, onChange }) {
     onChange(newRooms);
   };
   
+  const getMdiIcons = () => {
+    // 预定义常用的 MDI 图标
+    const icons = [
+      'mdi:light-flood-down',
+      'mdi:ceiling-light',
+      'mdi:floor-lamp',
+      'mdi:desk-lamp',
+      'mdi:wall-sconce',
+      'mdi:led-strip',
+      'mdi:chandelier',
+      'mdi:track-light',
+      'mdi:light-recessed',
+      'mdi:vanity-light',
+      'mdi:outdoor-lamp',
+      'mdi:lamp',
+      'mdi:lava-lamp',
+      'mdi:lightbulb',
+      'mdi:lightbulb-group',
+      'mdi:lightbulb-multiple',
+      'mdi:lightbulb-spot',
+      'mdi:string-lights',
+      'mdi:coach-lamp',
+      'mdi:lamp-outline',
+      'mdi:led-strip-variant',
+      
+    ];
+
+    return icons.map(name => ({
+      name,
+      label: name.replace('mdi:', '').split('-').map(
+        word => word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ')
+    }));
+  };
+
   switch (field.type) {
     case 'text':
       return (
@@ -147,6 +183,28 @@ function ConfigField({ field, value, onChange }) {
                     placeholder={t('configField.placeholderRoomName')}
                   />
                 </div>
+                <div className="room-field">
+                  <label>{t('configField.selectIcon')}</label>
+                  <Select
+                    allowClear
+                    value={room.icon}
+                    onChange={(value) => handleLightOverviewChange(index, 'icon', value)}
+                    showSearch
+                    placeholder={t('configField.selectIcon')} 
+                    optionFilterProp="children"
+                    style={{ width: '100%' }}
+                  >
+                    {getMdiIcons().map(icon => (
+                      <Select.Option key={icon.name} value={icon.name}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <Icon icon={icon.name} width="20" />
+                          <span>{icon.label}</span>
+                        </div>
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </div>
+                
                 
                 <div className="room-field">
                   <label>{t('configField.selectEntity')}</label>
@@ -382,6 +440,7 @@ function ConfigField({ field, value, onChange }) {
 
     case 'lights-config':
       const lightEntities = getFilteredEntities('light.*|switch.*');
+      const lightIcons = getMdiIcons();
       
       return (
         <div className="config-field">
@@ -426,6 +485,35 @@ function ConfigField({ field, value, onChange }) {
                     options={lightEntities.map(entity => ({
                       value: entity.id,
                       label: entity.name + ' (' + entity.id + ')'
+                    }))}
+                  />
+                  <Select
+                    allowClear
+                    value={light.icon || null}
+                    onChange={(selectedValue) => {
+                      const currentValue = typeof value === 'object' ? value : {};
+                      onChange({
+                        ...currentValue,
+                        [key]: {
+                          ...light,
+                          icon: selectedValue
+                        }
+                      });
+                    }}
+                    showSearch
+                    placeholder={t('configField.selectIcon')}
+                    optionFilterProp="children"
+                    // filterOption={(input, option) =>
+                    //   (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    // }
+                    options={lightIcons.map(icon => ({
+                      value: icon.name,
+                      label: (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <Icon icon={icon.name} width="20" />
+                          <span>{icon.name}</span>
+                        </div>
+                      )
                     }))}
                   />
                 </div>
@@ -484,7 +572,8 @@ function ConfigField({ field, value, onChange }) {
                   [newKey]: {
                     entity_id: '',
                     name: '',
-                    room: ''
+                    room: '',
+                    icon: ''
                   }
                 });
               }}
