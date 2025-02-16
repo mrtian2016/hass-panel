@@ -37,12 +37,9 @@ docker run \
   --name hass-panel \
   --restart unless-stopped \
   -p 5123:5123 \
-  -p 5124:5124 ＼
   -v ./data/:/config/hass-panel \
   -e REACT_APP_HASS_URL=http://your-hass-instance:8123 \
   -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
-  -e WEBDAV_USERNAME=admin ＼
-  -e WEBDAV_PASSWORD=admin ＼
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
@@ -50,8 +47,6 @@ docker run \
 环境变量说明:
 - `REACT_APP_HASS_URL`: Home Assistant 实例地址
 - `REACT_APP_HASS_TOKEN`: Home Assistant 长期访问令牌(可选)
-- `WEBDAV_USERNAME`: Home Assistant 用户名
-- `WEBDAV_PASSWORD`: Home Assistant 密码
 
 ### Docker方式 测试版
 ```bash
@@ -68,8 +63,6 @@ docker run \
 环境变量说明:
 - `REACT_APP_HASS_URL`: Home Assistant 实例地址
 - `REACT_APP_HASS_TOKEN`: Home Assistant 长期访问令牌(可选)
-
-
 
 
 ### Home Assistant Addon方式
