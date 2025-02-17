@@ -157,6 +157,25 @@ const getCardTypes = (t) => ({
       }
     ]
   },
+  MaxPlayerCard: {  
+    name: t('cards.maxPlayer'),
+    icon: mdiPlayCircle,
+    fields: [
+      {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.maxPlayer')
+      },
+      {
+        key: 'entity_id',
+        label: t('configField.selectEntity'),
+        type: 'entity',
+        filter: 'media_player.*',
+        default: ''
+      }
+    ]
+  },
   RouterCard: {
     name: t('cards.router'),
     icon: mdiRouterNetwork,
@@ -534,6 +553,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
       RouterCard: { lg: 26, md: 26, sm: 26 },
       NASCard: { lg: 36, md: 36, sm: 36 },
       MediaPlayerCard: { lg: 30, md: 30, sm: 30 },
+      MaxPlayerCard: { lg: 30, md: 30, sm: 30 },
       CurtainCard: { lg: 30, md: 30, sm: 30 },
       ElectricityCard: { lg: 24, md: 24, sm: 24 },
       ScriptPanel: { lg: 14, md: 14, sm: 14 },

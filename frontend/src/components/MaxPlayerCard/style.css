@@ -1,0 +1,113 @@
+.max-player-card {
+  margin: 0 auto;
+  background: var(--color-card-bg);
+}
+
+.max-player-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.max-cover-image {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  margin-bottom: 20px;
+  /* box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); */
+}
+
+.max-cover-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.max-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--color-background-secondary);
+}
+
+.max-track-info {
+  text-align: center;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.max-track-title {
+  font-size: 1.5em;
+  margin: 0 0 8px 0;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.max-track-artist {
+  font-size: 1em;
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.max-player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 5px;
+}
+
+.max-control-button {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.max-control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.max-control-button:not(:disabled):hover {
+  background: var(--color-background-secondary);
+}
+
+.max-control-button.play {
+  background: var(--color-primary);
+  color: white;
+  padding: 16px;
+}
+
+.max-control-button.play:not(:disabled):hover {
+  transform: scale(1.05);
+  background: var(--color-primary-dark);
+}
+
+.max-progress-bar {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.max-progress-bar .ant-slider-rail {
+  border-radius: 10px !important;
+}
+
+.max-progress-bar .ant-slider-track {
+  background-color: var(--color-primary);
+  border-radius: 10px !important;
+}
+
+.max-progress-bar .ant-slider-track:hover {
+  background-color: var(--color-primary);
+}
+
+

@@ -34,11 +34,11 @@ const request = async (endpoint, options = {}) => {
 // 创建防抖和节流的请求函数
 const debouncedRequest = debounce(async (endpoint, options = {}) => {
   return await request(endpoint, options);
-}, 200);
+}, 100);
 
 const throttledRequest = throttle(async (endpoint, options = {}) => {
   return await request(endpoint, options);
-}, 200);
+}, 100);
 
 // 应用背景设置到body
 const applyBackgroundToBody = (globalConfig) => {
@@ -262,6 +262,36 @@ export const configApi = {
       return updatedConfig.globalConfig;
     } catch (error) {
       message.error('重置背景失败: ' + error.message);
+      throw error;
+    }
+  }
+};
+
+// 摄像头相关API
+export const cameraApi = {
+  // 获取ONVIF摄像头源
+  getOnvifSources: async () => {
+    try {
+      const accessToken = window.env?.REACT_APP_HASS_TOKEN || JSON.parse(localStorage.getItem('hassTokens'))?.access_token;
+      const response = await fetch('/go2rtc/api/onvif', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      });
+      if (!response.ok) {
+        throw new Error('请求失败');
+      }
+      const data = await response.json();
+      
+      // 过滤只保留IPv4地址的源
+      const filteredSources = data.sources.map(source => ({
+        ...source,
+        url: source.url.split('%20')[0]  // 只保留第一个URL（IPv4）
+      }));
+      
+      return filteredSources;
+    } catch (error) {
+      // message.error('获取ONVIF摄像头列表失败: ' + error.message);
       throw error;
     }
   }

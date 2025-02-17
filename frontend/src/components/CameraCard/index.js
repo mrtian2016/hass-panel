@@ -4,18 +4,22 @@ import Modal from '../Modal';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
 
-function CameraCard({ camera, streamUrl, name }) {
+function CameraCard({ camera, streamUrl, name, playUrl }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const { t } = useLanguage();
 
+  console.log(camera);
+
   if (!camera) return null;
   // console.log(camera);
 
   const previewUrl = camera.poster?.url || 
     window.env?.REACT_APP_HASS_URL + camera?.attributes?.entity_picture;
+
+  const webrtc_play_url = playUrl || streamUrl;
 
   const handleClick = () => {
     setIsModalVisible(true);
@@ -81,7 +85,7 @@ function CameraCard({ camera, streamUrl, name }) {
             </div>
           )}
           <iframe
-            src={`${streamUrl}${streamUrl.includes('?') ? '&' : '?'}scrolling=no`}
+            src={`${webrtc_play_url}${webrtc_play_url.includes('?') ? '&' : '?'}scrolling=no`}
             title={name || camera.attributes?.friendly_name}
             frameBorder="0"
             allowFullScreen

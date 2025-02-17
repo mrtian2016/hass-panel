@@ -18,14 +18,14 @@
 }
 
 .time {
-  font-size: 2.5rem;
+  font-size: 2.5rem !important;
   font-weight: bold;
   color: var(--color-text-primary);
   margin-bottom: var(--spacing-sm);
 }
 
 .date {
-  font-size: 1.2rem;
+  font-size: 1.2rem !important;
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-sm);
   display: flex;
@@ -34,7 +34,7 @@
 }
 
 .weekday {
-  font-size: 1.2rem;
+  font-size: 1.2rem !important;
   color: var(--color-text-secondary);
 }
 

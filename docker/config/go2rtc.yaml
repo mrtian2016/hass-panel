@@ -1,0 +1,6 @@
+api:
+    listen: ":5125"
+    base_path: "/go2rtc"
+
+streams:
+  

@@ -1,0 +1,217 @@
+@import '../../theme/variables.css';
+.mini-player-card {
+  width: 100%;
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  margin-top: var(--spacing-lg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.mini-players {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.mini-player {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  position: relative;
+  overflow: hidden;
+}
+
+.mini-player::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(5px);
+  opacity: 0.3;
+  transform: scale(1.2);
+  z-index: 0;
+}
+
+.mini-player[data-has-cover="true"]::before {
+  background-image: var(--cover-image);
+}
+
+.mini-player-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.mini-player-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.mini-player-info-row {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.mini-player-cover {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-card-bg);
+}
+.mini-player-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mini-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+}
+
+.mini-cover-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mini-player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mini-player-state {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-player-artist {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-player-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-xs);
+}
+
+.mini-volume-slider {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.mini-volume-slider .ant-slider {
+  flex: 1;
+  margin: 0;
+  min-width: 80px;
+}
+
+.mini-volume-slider .ant-slider-rail {
+  border-radius: 10px !important;
+}
+
+.mini-volume-slider .ant-slider-track {
+  background-color: var(--color-primary);
+  border-radius: 10px !important;
+}
+
+.mini-volume-slider .ant-slider-track:hover {
+  background-color: var(--color-primary);
+}
+
+.mini-volume-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.mini-player-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.mini-control-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.mini-play-button {
+  width: 40px;
+  height: 40px;
+  background: var(--color-primary);
+  color: white;
+}
+
+.mini-volume-buttons .mini-control-button {
+  width: 32px;
+  height: 32px;
+  box-shadow: none;
+  background: transparent;
+}
+
+.mini-volume-buttons .mini-control-button:not(:disabled):hover {
+  background: var(--color-background);
+  transform: none;
+  box-shadow: none;
+}
+
+.mini-control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mini-control-button:not(:disabled):hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.mini-control-button:not(:disabled):active {
+  transform: scale(0.95);
+} 

@@ -1,13 +1,12 @@
 import React from 'react';
 import { useHass } from '@hakit/core';
 import { Command } from 'lucide-react';
-import { DynamicIcon } from 'lucide-react/dynamic';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { notification } from 'antd';
 import BaseCard from '../BaseCard';
 import './style.css';
 import { useTheme } from '../../theme/ThemeContext';
-
+import {Icon} from '@iconify/react';
 function ScriptPanel({ config }) {
   const titleVisible = config.titleVisible;
   const { theme } = useTheme();
@@ -49,7 +48,7 @@ function ScriptPanel({ config }) {
             className="script-button"
             onClick={() => handleScriptClick(script.entity_id, script.name)}
           >
-            <DynamicIcon name={script.icon} size={20} className="script-icon" />
+            <Icon icon={script.icon} width={20} className="script-icon" />
             <span className="script-name">{script.name}</span>
           </button>
         ))}

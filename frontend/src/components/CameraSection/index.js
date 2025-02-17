@@ -52,6 +52,7 @@ function CameraSection({ config, titleVisible }) {
             key={camera.entity_id} 
             camera={camera.entity} 
             streamUrl={camera.stream_url}
+            playUrl={camera.play_url}
             name={camera.name}
           />
         ))}

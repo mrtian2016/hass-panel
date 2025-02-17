@@ -5,12 +5,9 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    ports:
-      - "51230:5123"
-      - "51240:5124"
-      - "51250:5125"
+    network_mode: host
     volumes:
-      - ../data/:/config/hass-panel/
+      - ../data:/config/hass-panel
     environment:
       - REACT_APP_HASS_URL=http://10.0.0.70:8123
     restart: unless-stopped 

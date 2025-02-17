@@ -1,3 +1,0 @@
-streams:
-  entrance: onvif://tianjy:Martin520.@10.0.0.21/onvif/device_service
-  living_room: onvif://tianjy:Martin520.@10.0.0.20/onvif/device_service

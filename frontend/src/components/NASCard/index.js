@@ -75,6 +75,7 @@ function NASCard({ config }) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       entity: useEntity(feature.entity_id, { returnNullIfNotFound: true }),
     }));
+    console.log(mainEntities);
 
     entities = mainEntities.reduce((acc, curr) => {
       acc[curr.key] = curr.entity;
@@ -103,6 +104,8 @@ function NASCard({ config }) {
 
   const cpuUsage = safeParseFloat(entities.cpuUsage?.state);
   const memoryUsage = safeParseFloat(entities.memoryUsage?.state);
+  console.log(entities.downloadSpeed?.state);
+  console.log(entities.uploadSpeed?.state);
   const downloadSpeed = (safeParseFloat(entities.downloadSpeed?.state) / 1024).toFixed(2);
   const uploadSpeed = (safeParseFloat(entities.uploadSpeed?.state) / 1024).toFixed(2);
 

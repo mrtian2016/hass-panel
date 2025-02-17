@@ -5,11 +5,14 @@ import json
 from datetime import datetime
 import os
 from pathlib import Path
+import yaml
+import hashlib
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Security
 from loguru import logger
 from hass_panel.utils.common import generate_resp
 from hass_panel.core.initial import cfg
+import subprocess
 
 router = APIRouter(
     prefix="/api/user_config",
@@ -61,6 +64,10 @@ async def get_config(token: str = Depends(verify_token)):
     except Exception as e:
         return generate_resp(code=500, error=str(e))
 
+def generate_stream_key(text: str) -> str:
+    """生成stream key的MD5哈希值（前8位）"""
+    return hashlib.md5(text.encode()).hexdigest()[:8]
+
 @router.post("/config")
 async def save_config(config: dict, token: str = Depends(verify_token)):
     """保存配置"""
@@ -87,11 +94,85 @@ async def save_config(config: dict, token: str = Depends(verify_token)):
             for f in backup_files[5:]:
                 f.unlink()
                 
-        # 保存新配置
-        with open(config_file, "w", encoding="utf-8") as f:
-            json.dump(config, f, indent=2, ensure_ascii=False)
+        # 更新go2rtc配置
+        try:
+            go2rtc_config_path = "/etc/go2rtc.yaml"
             
-        return generate_resp(message="保存成功")
+            with open(go2rtc_config_path, "r", encoding="utf-8") as f:
+                go2rtc_config = yaml.safe_load(f) or {}
+            logger.info(f"go2rtc_config: {go2rtc_config}")
+            
+            # 确保streams是一个字典
+            if not go2rtc_config.get("streams"):
+                go2rtc_config["streams"] = {}
+            
+            # 确保现有的streams是一个字典
+            if not isinstance(go2rtc_config["streams"], dict):
+                go2rtc_config["streams"] = {}
+            
+            existing_urls = set(go2rtc_config["streams"].values())
+            existing_keys = set()
+            
+            if "cards" in config:
+                for card in config["cards"]:
+                    logger.info(f"card: {card}")
+                    if card.get("type") == "CameraCard":
+                        logger.info(f"card.get('config'): {card.get('config')}")
+                        cameras = card.get("config", {}).get("cameras", [])
+                        logger.info(f"cameras: {cameras}")
+                        updated_cameras = []
+                        for camera in cameras:
+                            logger.info(f"camera: {camera}")
+                            if camera.get("stream_url"):
+                                # 生成基础key
+                                base_name = camera.get("name") or camera.get("entity_id") or camera["stream_url"]
+                                stream_key = generate_stream_key(base_name)
+                                
+                                # 确保key唯一
+                                counter = 1
+                                original_key = stream_key
+                                while stream_key in existing_keys:
+                                    stream_key = f"{original_key}_{counter}"
+                                    counter += 1
+                                existing_keys.add(stream_key)
+                                
+                                # 如果URL不存在，则添加到go2rtc配置
+                                if camera["stream_url"] not in existing_urls:
+                                    go2rtc_config["streams"][stream_key] = camera["stream_url"]
+                                    existing_urls.add(camera["stream_url"])
+                                
+                                # 添加播放地址到摄像头配置
+                                camera["play_url"] = f"/go2rtc/webrtc.html?src={stream_key}&media=video+audio"
+                            
+                            updated_cameras.append(camera)
+                        
+                        # 更新cameras列表
+                        card["config"]["cameras"] = updated_cameras
+            
+            # 保存更新后的go2rtc配置
+            logger.info(f"go2rtc_config: {go2rtc_config}")
+            with open(go2rtc_config_path, "w", encoding="utf-8") as f:
+                yaml.dump(go2rtc_config, f, allow_unicode=True, default_flow_style=False)
+            
+            # 保存更新后的用户配置（包含播放地址）
+            with open(config_file, "w", encoding="utf-8") as f:
+                json.dump(config, f, indent=2, ensure_ascii=False)
+            
+            logger.info("已更新go2rtc配置文件")
+            
+            # 重启go2rtc服务
+            try:
+                subprocess.run(["supervisorctl", "restart", "go2rtc"], check=True)
+                logger.info("已重启go2rtc服务")
+            except subprocess.CalledProcessError as e:
+                logger.error(f"重启go2rtc服务失败: {str(e)}")
+                return generate_resp(code=500, error=f"重启go2rtc服务失败: {str(e)}")
+            
+        except Exception as e:
+            logger.error(f"更新go2rtc配置失败: {str(e)}")
+            return generate_resp(code=500, error=f"更新go2rtc配置失败: {str(e)}")
+            
+        return generate_resp(message="保存成功并已重启go2rtc服务")
     except Exception as e:
         return generate_resp(code=500, error=str(e))
 

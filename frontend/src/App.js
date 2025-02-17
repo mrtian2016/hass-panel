@@ -34,6 +34,11 @@ function AppContent() {
           colorPrimary: '#FFB74D',
           borderRadius: 8,
         },
+        components: {
+          Slider: {
+            railSize:10
+          },
+        },
       }}
     >
       <LanguageProvider>

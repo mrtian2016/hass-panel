@@ -137,6 +137,71 @@ export const getMdiIcons = (type='light') => {
 
       'mdi:bicycle-electric'
     ];
+  } else if (type === 'scene') {
+    icons = [
+      // 离家/回家场景
+      'mdi:home',
+      'mdi:home-outline',
+      'mdi:home-export-outline',
+      'mdi:home-import-outline',
+      'mdi:home-automation',
+      'mdi:door-closed',
+      'mdi:door-open',
+      'mdi:exit-run',
+      'mdi:login',
+      'mdi:logout',
+      
+      // 睡眠/起床场景
+      'mdi:bed',
+      'mdi:bed-empty',
+      'mdi:power-sleep',
+      'mdi:weather-night',
+      'mdi:weather-sunset',
+      'mdi:weather-sunny',
+      'mdi:alarm',
+      
+      // 工作/娱乐场景
+      'mdi:briefcase',
+      'mdi:desk',
+      'mdi:movie',
+      'mdi:gamepad',
+      'mdi:television',
+      'mdi:book-open',
+      'mdi:party-popper',
+      
+      // 用餐场景
+      'mdi:food',
+      'mdi:food-fork-drink',
+      'mdi:coffee',
+      'mdi:silverware-fork-knife',
+      
+      // 清洁/打扫场景
+      'mdi:broom',
+      'mdi:vacuum',
+      'mdi:washing-machine',
+      
+      // 安全/警戒场景
+      'mdi:shield-home',
+      'mdi:shield-lock',
+      'mdi:cctv',
+      'mdi:alert',
+      'mdi:bell',
+      
+      // 节能场景
+      'mdi:leaf',
+      'mdi:power-plug-off',
+      'mdi:battery-charging',
+      'mdi:weather-sunset-down',
+      
+      // 其他常用场景
+      'mdi:cog',
+      'mdi:timer',
+      'mdi:calendar-clock',
+      'mdi:playlist-check',
+      'mdi:heart',
+      'mdi:star',
+      'mdi:flash'
+    ];
   }
 
   return icons.map(name => ({
