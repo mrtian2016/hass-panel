@@ -19,6 +19,7 @@
   "ingress_entry": "/",
   "panel_icon": "mdi:view-dashboard",
   "homeassistant_api": true,
+  "network_mode": "host",
   "init": false,
   "map": [
     "config:rw"
