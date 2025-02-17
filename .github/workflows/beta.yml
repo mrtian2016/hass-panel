@@ -32,7 +32,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./frontend  # 设置工作目录
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Build
         working-directory: ./frontend  # 设置工作目录
