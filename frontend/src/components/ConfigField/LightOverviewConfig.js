@@ -90,7 +90,7 @@ function LightOverviewConfig({field, value,handleLightOverviewChange,getFiltered
                           const formData = new FormData();
                           formData.append('file', file);
                           try {
-                            const response = await fetch('/api/common/upload', {
+                            const response = await fetch('./api/common/upload', {
                               method: 'POST',
                               body: formData
                             });

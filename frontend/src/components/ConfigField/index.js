@@ -82,7 +82,7 @@ function ConfigField({ field, value, onChange }) {
                     const formData = new FormData();
                     formData.append('file', file);
                     try {
-                      const response = await fetch('/api/common/upload', {
+                      const response = await fetch('./api/common/upload', {
                         method: 'POST',
                         body: formData
                       });

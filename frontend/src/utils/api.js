@@ -13,7 +13,7 @@ const request = async (endpoint, options = {}) => {
     throw new Error('未找到认证token');
   }
 
-  const response = await fetch(`/api${endpoint}`, {
+  const response = await fetch(`./api${endpoint}`, {
     ...options,
     headers: {
       'Authorization': `Bearer ${accessToken}`,
@@ -148,7 +148,7 @@ export const configApi = {
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch('/api/common/upload', {
+      const response = await fetch('./api/common/upload', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${window.env?.REACT_APP_HASS_TOKEN || JSON.parse(localStorage.getItem('hassTokens'))?.access_token}`,
@@ -317,7 +317,7 @@ export const updateApi = {
       
       const accessToken = window.env?.REACT_APP_HASS_TOKEN || JSON.parse(localStorage.getItem('hassTokens'))?.access_token;
       
-      const response = await fetch('/api/upload-update', {
+      const response = await fetch('./api/upload-update', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
