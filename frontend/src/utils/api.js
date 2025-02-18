@@ -255,7 +255,7 @@ export const cameraApi = {
   // 获取ONVIF摄像头源
   getOnvifSources: async () => {
     try {
-      const accessToken = window.env?.REACT_APP_HASS_TOKEN || JSON.parse(localStorage.getItem('hassTokens'))?.access_token;
+      const accessToken = JSON.parse(localStorage.getItem('hass_panel_token'))?.access_token;
       const response = await fetch('./go2rtc/api/onvif', {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -297,7 +297,7 @@ export const updateApi = {
       const formData = new FormData();
       formData.append('package', file);
       
-      const accessToken = window.env?.REACT_APP_HASS_TOKEN || JSON.parse(localStorage.getItem('hassTokens'))?.access_token;
+      const accessToken = JSON.parse(localStorage.getItem('hass_panel_token'))?.access_token;
       
       const response = await fetch('./api/upload-update', {
         method: 'POST',
