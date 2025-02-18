@@ -12,7 +12,7 @@
 
 ## 交流群
 
-<img src="https://i.imgur.com/M6wEC8M.jpeg" width="300" alt="交流群" />
+<img src="https://i.imgur.com/vnkkrY3.jpeg" width="300" alt="交流群" />
 
 ## 主要特性
 
@@ -39,7 +39,7 @@ docker run \
   -p 5123:5123 \
   -v ./data/:/config/hass-panel \
   -e REACT_APP_HASS_URL=http://your-hass-instance:8123 \
-  -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
+  -e REACT_APP_HASS_TOKEN=your-hass-token \ 
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
@@ -56,7 +56,7 @@ docker run \
   -p 5123:5123 \
   -v ./data/:/config/hass-panel \
   -e REACT_APP_HASS_URL=http://your-hass-instance:8123 \
-  -e REACT_APP_HASS_TOKEN=your-hass-token \ # 可选，如果需要使用token认证
+  -e REACT_APP_HASS_TOKEN=your-hass-token \
   -d \
   ghcr.io/mrtian2016/hass-panel:latest-beta
 ```

@@ -91,7 +91,7 @@
 
 ## 交流群
 
-<img src="https://i.imgur.com/M6wEC8M.jpeg" width="300" alt="交流群" />
+<img src="https://i.imgur.com/vnkkrY3.jpeg" width="300" alt="交流群" />
 
 ## 赞助
 
