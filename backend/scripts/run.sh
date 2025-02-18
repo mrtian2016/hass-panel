@@ -1,1 +1,1 @@
-~/conda/envs/fastapi_v111/bin/python base_fastapi/main.py
+~/conda/envs/fastapi_v111/bin/python hass_panel/main.py

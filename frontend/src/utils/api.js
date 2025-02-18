@@ -1,14 +1,10 @@
-import { message } from 'antd';
 import { debounce, throttle } from './throttleDebounce';
 
 // 通用请求函数
 const request = async (endpoint, options = {}) => {
-  let accessToken = window.env?.REACT_APP_HASS_TOKEN;
-  if (!accessToken) {
-    const localToken = localStorage.getItem('hassTokens');
-    const token = JSON.parse(localToken);
-    accessToken = token.access_token;
-  }
+  const localToken = localStorage.getItem('hass_panel_token');
+  const token = JSON.parse(localToken);
+  const accessToken = token.access_token;
   if (!accessToken) {
     throw new Error('未找到认证token');
   }
@@ -97,9 +93,7 @@ export const configApi = {
         applyBackgroundToBody(config.globalConfig);
       }
       
-      if (showMessage) {
-        // message.success('保存成功');
-      }
+     
       return response;
     } catch (error) {
       throw error;
@@ -112,7 +106,6 @@ export const configApi = {
       const response = await throttledRequest('/user_config/versions');
       return response.data;
     } catch (error) {
-    //   message.error('获取版本列表失败: ' + error.message);
       throw error;
     }
   },
@@ -123,7 +116,6 @@ export const configApi = {
       const response = await throttledRequest(`/user_config/versions/${filename}`);
       return response.data;
     } catch (error) {
-    //   message.error('获取版本失败: ' + error.message);
       throw error;
     }
   },
@@ -133,11 +125,9 @@ export const configApi = {
     try {
       const response = await debouncedRequest(`/user_config/versions/${filename}`, {
         method: 'DELETE',
-      });
-      message.success('删除成功');
+      }); 
       return response;
     } catch (error) {
-    //   message.error('删除失败: ' + error.message);
       throw error;
     }
   },
@@ -151,7 +141,7 @@ export const configApi = {
       const response = await fetch('./api/common/upload', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${window.env?.REACT_APP_HASS_TOKEN || JSON.parse(localStorage.getItem('hassTokens'))?.access_token}`,
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem('hass_panel_token'))?.access_token}`,
         },
         body: formData
       });
@@ -166,7 +156,6 @@ export const configApi = {
         throw new Error(result.message || '上传失败');
       }
     } catch (error) {
-      message.error('上传图片失败: ' + error.message);
       throw error;
     }
   },
@@ -195,10 +184,8 @@ export const configApi = {
       // 应用背景设置到body
       applyBackgroundToBody(updatedConfig.globalConfig);
       
-      message.success('背景图设置成功');
       return uploadResult.file_path;
     } catch (error) {
-      message.error('设置背景图失败: ' + error.message);
       throw error;
     }
   },
@@ -224,10 +211,8 @@ export const configApi = {
       // 应用背景设置到body
       applyBackgroundToBody(updatedConfig.globalConfig);
       
-      message.success('全局配置更新成功');
       return updatedConfig.globalConfig;
     } catch (error) {
-      message.error('更新全局配置失败: ' + error.message);
       throw error;
     }
   },
@@ -258,10 +243,8 @@ export const configApi = {
       document.body.style.backgroundPosition = '';
       document.body.style.backgroundAttachment = '';
       
-      message.success('已恢复默认背景');
       return updatedConfig.globalConfig;
     } catch (error) {
-      message.error('重置背景失败: ' + error.message);
       throw error;
     }
   }
@@ -291,7 +274,6 @@ export const cameraApi = {
       
       return filteredSources;
     } catch (error) {
-      // message.error('获取ONVIF摄像头列表失败: ' + error.message);
       throw error;
     }
   }
@@ -355,6 +337,40 @@ export const updateApi = {
     try {
       const response = await fetch('./version.json');
       return await response.json();
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+// 系统相关API
+export const systemApi = {
+  // 检查系统初始化状态
+  checkInitStatus: async () => {
+    try {
+      const response = await fetch('./api/common/init_info');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // 获取HASS配置
+  getHassConfig: async () => {
+    const token = localStorage.getItem('hass_panel_token');
+    if (!token) {
+      throw new Error('未找到认证token');
+    }
+
+    try {
+      const response = await fetch('./api/user_config/hass_config', {
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(token).access_token}`
+        }
+      });
+      const data = await response.json();
+      return data;
     } catch (error) {
       throw error;
     }

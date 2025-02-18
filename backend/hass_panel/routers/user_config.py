@@ -7,47 +7,26 @@ import os
 from pathlib import Path
 import yaml
 import hashlib
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi import Security
 from loguru import logger
 from hass_panel.utils.common import generate_resp
 from hass_panel.core.initial import cfg
 import subprocess
+from hass_panel.core.auth_deps import get_current_user
+from hass_panel.models.database import User, HassConfig, SessionLocal
 
 router = APIRouter(
     prefix="/api/user_config",
-    tags=["user_config"]
+    tags=["user_config"],       
+    dependencies=[Depends(get_current_user)]
 )
 
 # 配置文件存储路径
 CONFIG_DIR = Path(cfg.base.user_config_dir)
 CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
-security = HTTPBearer()
-
-async def verify_token(credentials: HTTPAuthorizationCredentials = Security(security)):
-    """验证Home Assistant token"""
-    token = credentials.credentials
-    
-    # 验证token
-    async with aiohttp.ClientSession() as session:
-        try:
-            token = token.replace("Bearer ", "")
-            logger.info(f"token: {token}")
-            logger.info(f"cfg.base.hass_url: {cfg.base.hass_url}")
-            async with session.get(
-                f"{cfg.base.hass_url}/api/",
-                headers={"Authorization": f"Bearer {token}"}
-            ) as response:
-                if response.status != 200:
-                    raise HTTPException(status_code=401, detail="Invalid token")
-        except Exception as e:
-            raise HTTPException(status_code=401, detail=str(e))
-    
-    return token
 
 @router.get("/config")
-async def get_config(token: str = Depends(verify_token)):
+async def get_config():
     """获取最新配置"""
     try:
         config_file = CONFIG_DIR / "config.json"
@@ -69,7 +48,10 @@ def generate_stream_key(text: str) -> str:
     return hashlib.md5(text.encode()).hexdigest()[:8]
 
 @router.post("/config")
-async def save_config(config: dict, token: str = Depends(verify_token)):
+async def save_config(
+    config: dict,
+    current_user: User = Depends(get_current_user)
+):
     """保存配置"""
     try:
         # 生成备份文件名
@@ -177,7 +159,7 @@ async def save_config(config: dict, token: str = Depends(verify_token)):
         return generate_resp(code=500, error=str(e))
 
 @router.get("/versions")
-async def get_versions(token: str = Depends(verify_token)):
+async def get_versions():
     """获取配置版本列表"""
     try:
         versions = []
@@ -195,7 +177,7 @@ async def get_versions(token: str = Depends(verify_token)):
         return generate_resp(code=500, error=str(e))
 
 @router.get("/versions/{filename}")
-async def get_version(filename: str, token: str = Depends(verify_token)):
+async def get_version(filename: str, ):
     """获取指定版本的配置"""
     try:
         config_file = CONFIG_DIR / filename
@@ -209,7 +191,7 @@ async def get_version(filename: str, token: str = Depends(verify_token)):
         return generate_resp(code=500, error=str(e))
 
 @router.delete("/versions/{filename}")
-async def delete_version(filename: str, token: str = Depends(verify_token)):
+async def delete_version(filename: str, ):
     """删除指定版本"""
     try:
         if filename == "config.json":
@@ -223,3 +205,44 @@ async def delete_version(filename: str, token: str = Depends(verify_token)):
         return generate_resp(message="删除成功")
     except Exception as e:
         return generate_resp(code=500, error=str(e))
+    
+@router.get("/hass_config")
+async def get_hass_config():
+    """获取Hass配置"""
+    db = SessionLocal()
+    try:
+        hass_config = db.query(HassConfig).first()
+        if not hass_config:
+            raise HTTPException(status_code=404, detail="Home Assistant configuration not found")
+        
+        return generate_resp(data={
+            "url": hass_config.hass_url,
+            "token": hass_config.hass_token
+        })
+    except Exception as e:
+        logger.error(f"获取Home Assistant配置失败: {str(e)}")
+        return generate_resp(code=500, message=str(e))
+    finally:
+        db.close()
+
+@router.put("/hass_config")
+async def update_hass_config(hass_url: str, hass_token: str):
+    """更新Hass配置"""
+    db = SessionLocal()
+    try:
+        hass_config = db.query(HassConfig).first()
+        if not hass_config:
+            hass_config = HassConfig()
+            db.add(hass_config)
+        
+        hass_config.hass_url = hass_url
+        hass_config.hass_token = hass_token
+        
+        db.commit()
+        return generate_resp(message="Home Assistant configuration updated successfully")
+    except Exception as e:
+        db.rollback()
+        logger.error(f"更新Home Assistant配置失败: {str(e)}")
+        return generate_resp(code=500, message=str(e))
+    finally:
+        db.close()

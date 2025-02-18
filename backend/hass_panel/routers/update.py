@@ -5,10 +5,11 @@ import os
 from hass_panel.utils.common import generate_resp
 from hass_panel.utils.updater import run_update, process_manual_update, apply_manual_update
 from hass_panel.core.initial import cfg
-
+from hass_panel.core.auth_deps import get_current_user
 router = APIRouter(
     prefix='/api',
-    tags=['update']
+    tags=['update'],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.get("/update")

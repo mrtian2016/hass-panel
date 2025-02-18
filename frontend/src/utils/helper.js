@@ -1,4 +1,11 @@
 import { listIcons } from '@iconify/react';
+
+import md5 from 'crypto-js/md5';
+
+export const hashPassword = (password) => {
+  return md5(password).toString();
+}; 
+
 // 添加版本号比较函数
 export const compareVersions = (v1, v2) => {
     // 移除版本号中的 'v' 前缀

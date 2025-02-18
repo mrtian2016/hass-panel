@@ -1,5 +1,5 @@
 from passlib.context import CryptContext
-
+import hashlib
 from core.initial import cfg
 
 schemes = cfg.security.schemes
@@ -9,28 +9,27 @@ schemes = cfg.security.schemes
 pwd_context = CryptContext(schemes=schemes, deprecated="auto")
 
 
-def hash_password(password):
+def hash_password(password: str) -> str:
     """
-    加密明文
-    :param password: 明文密码
-    :return:
+    直接使用前端传来的加密密码
+    :param password: 前端加密后的密码
+    :return: 密码
     """
-    return pwd_context.hash(password)
+    return password
 
-# def verify_password(plain_password, hashed_password):
-#     """
-#     验证明文密码 vs hash密码
-#     :param plain_password: 明文密码
-#     :param hashed_password: hash密码
-#     :return:
-#     """
-#     return pwd_context.verify(plain_password, hashed_password)
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    验证密码
+    :param plain_password: 前端加密后的密码
+    :param hashed_password: 数据库中存储的密码
+    :return: bool
+    """
+    return plain_password == hashed_password
 
-def verify_password(password, db_password):
+def md5_hash(text: str) -> str:
     """
-    直接在前端进行md5加密
-    :param plain_password: 输入的密码（在前端进行md5加密）
-    :param hashed_password: 数据库存储密码
-    :return:
+    MD5哈希函数(提供给前端参考)
+    :param text: 原始文本
+    :return: MD5哈希值
     """
-    return password == db_password
+    return hashlib.md5(text.encode()).hexdigest()

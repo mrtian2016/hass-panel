@@ -30,10 +30,24 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 
     
 # 安装 Python 依赖
-RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple fastapi uvicorn requests loguru toml omegaconf aiohttp python-multipart pyyaml
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple \
+    fastapi \
+    uvicorn \
+    requests \
+    loguru \
+    toml \
+    omegaconf \
+    aiohttp \
+    python-multipart \
+    pyyaml \
+    sqlalchemy \
+    pyjwt \
+    passlib[bcrypt] \
+    python-jose[cryptography] \
+    email-validator 
 
 # 创建必要的目录
-RUN mkdir -p /config/hass-panel && mkdir -p /var/log
+RUN mkdir -p /config/hass-panel  # 为SQLite数据库创建目录
 
 # 复制配置文件
 COPY docker/config/nginx.conf /etc/nginx/http.d/default.conf

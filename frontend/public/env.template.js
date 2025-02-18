@@ -1,4 +1,0 @@
-window.env = {
-    REACT_APP_HASS_URL: '${REACT_APP_HASS_URL}',
-    REACT_APP_HASS_TOKEN: '${REACT_APP_HASS_TOKEN}'
-  };

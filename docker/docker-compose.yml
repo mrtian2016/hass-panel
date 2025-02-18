@@ -6,6 +6,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     network_mode: host
+    hostname: hass-panel
     volumes:
       - ../data:/config/hass-panel
     environment:

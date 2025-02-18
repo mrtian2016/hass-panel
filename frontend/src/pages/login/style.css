@@ -1,0 +1,54 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.login-box h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--color-text-primary);
+}
+
+.login-box .ant-form-item-label > label {
+  color: var(--color-text-primary);
+}
+
+.login-box .ant-input,
+.login-box .ant-input-password {
+  background: var(--color-background);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.login-box .ant-input:hover,
+.login-box .ant-input-password:hover {
+  border-color: var(--color-primary);
+}
+
+.login-box .ant-input:focus,
+.login-box .ant-input-password:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-shadow);
+}
+
+.login-box .ant-btn-primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.login-box .ant-btn-primary:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+} 

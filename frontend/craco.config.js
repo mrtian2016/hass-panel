@@ -12,11 +12,11 @@ module.exports = {
   devServer: {
     proxy: {
       '/go2rtc/api/onvif': {
-        target: 'http://10.0.0.89:5123',
+        target: 'http://10.0.0.89:5173',
         changeOrigin: true
       },
       '/api': {
-        target: 'http://10.0.0.89:5123',
+        target: 'http://10.0.0.89:5124',
         changeOrigin: true
       }
     }

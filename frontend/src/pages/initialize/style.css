@@ -1,0 +1,77 @@
+.initialize-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.initialize-container.light {
+  background-color: #f0f2f5;
+}
+
+.initialize-container.dark {
+  background-color: #141414;
+}
+
+.initialize-form-container {
+  background-color: var(--background-color);
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+}
+
+.initialize-form-container h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: var(--text-color);
+}
+
+.initialize-box {
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.initialize-box h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--color-text-primary);
+}
+
+.initialize-box .ant-form-item-label > label {
+  color: var(--color-text-primary);
+}
+
+.initialize-box .ant-input,
+.initialize-box .ant-input-password {
+  background: var(--color-background);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.initialize-box .ant-input:hover,
+.initialize-box .ant-input-password:hover {
+  border-color: var(--color-primary);
+}
+
+.initialize-box .ant-input:focus,
+.initialize-box .ant-input-password:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-shadow);
+}
+
+.initialize-box .ant-btn-primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.initialize-box .ant-btn-primary:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+} 

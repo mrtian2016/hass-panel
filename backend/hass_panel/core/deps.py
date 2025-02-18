@@ -1,6 +1,14 @@
 from typing import Optional, List
-
 from fastapi import Request
+from sqlalchemy.orm import Session
+from hass_panel.models.database import SessionLocal
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 async def log_request_info(request: Request):
     try:
@@ -19,7 +27,6 @@ async def log_request_info(request: Request):
         f"\tForm: {request_form}\n"
         f"\tPath Params: {request.path_params}\n"
         f"\tQuery Params: {request.query_params}\n"
-        # f"\tCookies: {request.cookies}\n"
     )
     
 async def Logger(request: Request):

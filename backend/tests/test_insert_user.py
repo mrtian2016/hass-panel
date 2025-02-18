@@ -1,8 +1,8 @@
 import sys
 
 sys.path.append('.')
-sys.path.append('./base_fastapi')
-from base_fastapi.DAO.DAO import *
+sys.path.append('./hass_panel')
+from hass_panel.DAO.DAO import *
 
 def init_admin():
     admin_username = "admin"

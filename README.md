@@ -55,8 +55,6 @@ docker run \
   --restart unless-stopped \
   -p 5123:5123 \
   -v ./data/:/config/hass-panel \
-  -e REACT_APP_HASS_URL=http://your-hass-instance:8123 \
-  -e REACT_APP_HASS_TOKEN=your-hass-token \
   -d \
   ghcr.io/mrtian2016/hass-panel:latest-beta
 ```

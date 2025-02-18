@@ -4,7 +4,6 @@ web_port = 5124
 debug = false
 user_config_dir = "/config/hass-panel/user_configs"
 upload_dir = "/config/hass-panel/upload"
-hass_url = "HASS_BACKEND_URL"
 
 
 [update_cfg]
@@ -16,4 +15,13 @@ exclude_path = ["media", "env.js", "env.template.js"]
 
 [log]
 log_output_dir = "logs"
+
+[database]
+sqlite_path = "/config/hass-panel/hass_panel.db"
+
+[security]
+SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+schemes = ["bcrypt"]
 
