@@ -14,21 +14,15 @@
   "boot": "auto",
   "auth_api": true,
   "ingress": true,
-  "ingress_port": 5123,
   "ingress_stream": true,
-  "ingress_entry": "/",
   "panel_icon": "mdi:view-dashboard",
   "homeassistant_api": true,
-  "network_mode": "host",
   "init": false,
   "map": [
     "config:rw"
   ],
   "ports": {
     "5123/tcp": 5123
-  },
-  "ports_description": {
-    "5123/tcp": "Web界面"
   },
   "webui": "http://[HOST]:[PORT:5123]",
   "options": {
