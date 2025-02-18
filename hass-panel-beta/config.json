@@ -13,6 +13,7 @@
   "startup": "application",
   "boot": "auto",
   "auth_api": true,
+  "hassio_api": true,
   "ingress": true,
   "ingress_port": 5123,
   "ingress_stream": true,
