@@ -29,7 +29,6 @@
   "ports_description": {
     "5123/tcp": "Web界面"
   },
-  "webui": "http://[HOST]:[PORT:5123]",
   "options": {
     "hass_url": "http://homeassistant.local:8123",
     "hass_token": ""
