@@ -256,7 +256,7 @@ export const cameraApi = {
   getOnvifSources: async () => {
     try {
       const accessToken = window.env?.REACT_APP_HASS_TOKEN || JSON.parse(localStorage.getItem('hassTokens'))?.access_token;
-      const response = await fetch('/go2rtc/api/onvif', {
+      const response = await fetch('./go2rtc/api/onvif', {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         }
