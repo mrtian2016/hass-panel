@@ -627,7 +627,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             </Responsive>
 
             {cards.filter(card => card.visible !== false).length === 0 && (
-              <div className="empty-state">
+              <div className="empty-state" onClick={() => navigate('/config')}>
                 <Icon path={mdiViewDashboard} size={3} color="var(--color-text-secondary)" />
                 <h2>{t('empty.title')}</h2>
                 <p>{t('empty.desc')}</p>

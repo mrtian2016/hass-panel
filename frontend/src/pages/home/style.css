@@ -797,6 +797,10 @@
   margin: 20px;
   box-shadow: 0 2px 8px var(--color-shadow);
 }
+.empty-state:hover {
+  cursor: pointer;
+  transform: translateY(-2px);
+}
 
 .empty-state h2 {
   margin: 24px 0 12px;

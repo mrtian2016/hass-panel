@@ -66,8 +66,4 @@ envsubst < /app/env.template.js > /app/env.js
 escaped_url=$(echo "$REACT_APP_HASS_URL" | sed 's/[\/&]/\\&/g')
 sed -i "s|HASS_BACKEND_URL|$escaped_url|g" /backend/config/prod.toml
 
-# 启动 nginx
-nginx
-
-# 启动 fastapi
-python hass_panel/main.py
+/usr/bin/supervisord -c /etc/supervisord.conf

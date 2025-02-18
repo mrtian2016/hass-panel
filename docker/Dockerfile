@@ -63,4 +63,4 @@ COPY docker/config/supervisord.conf /etc/supervisord.conf
 EXPOSE 5123 5124
 
 # 使用启动脚本
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"] 
+ENTRYPOINT ["/docker-entrypoint.sh"] 

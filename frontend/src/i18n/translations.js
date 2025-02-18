@@ -42,7 +42,7 @@ export const translations = {
     // 空状态
     empty: {
       title: '还没有添加任何卡片',
-      desc: '点击左侧配置按钮，前往配置页面添加卡片吧'
+      desc: '点我前往配置页面添加卡片吧'
     },
     
     // 底部导航
@@ -734,8 +734,8 @@ export const translations = {
     
     // Empty State
     empty: {
-      title: 'No Cards Added Yet',
-      desc: 'Click the config button on the left to add cards'
+      title: 'No Cards',
+      desc: 'Click here to add cards in configuration page'
     },
 
     // Bottom Navigation
