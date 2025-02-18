@@ -4,10 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../theme/ThemeContext';
 import './style.css';
 import { hashPassword } from '../../utils/helper';
+
 function InitializePage() {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { isDarkMode } = useTheme();
+
+    const getHassUrl = () => {
+        const currentUrl = window.location.href;
+        if (currentUrl.includes('ingress')) {
+            const matches = currentUrl.match(/https?:\/\/[^:/]+(?::\d+)?/);
+            return matches ? matches[0] : '';
+        }
+        return '';
+    };
+
+    React.useEffect(() => {
+        const hassUrl = getHassUrl();
+        if (hassUrl) {
+            form.setFieldValue('hass_url', hassUrl);
+        }
+    }, [form]);
 
     const onFinish = async (values) => {
         try {
