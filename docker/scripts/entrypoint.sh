@@ -12,7 +12,8 @@ else
     export IS_ADDON=false
 fi
 CONFIG_DIR="/config/hass-panel"
-echo "Running mode: $([ "$IS_ADDON" = "true" ] && echo "Addon" || echo "Docker")"
+
+echo "IS_ADDON: $IS_ADDON"
 
 echo "CONFIG_DIR: $CONFIG_DIR"
 

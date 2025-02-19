@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, UploadFile, HTTPException
 from loguru import logger
 import os
 from hass_panel.core.initial import cfg
-from hass_panel.utils.common import check_hass_token, generate_resp, handle_excel_file
+from hass_panel.utils.common import check_hass_token, generate_resp, handle_upload_file
 from hass_panel.core.auth_deps import get_current_user
 from hass_panel.models.database import User, HassConfig, SessionLocal
 from hass_panel.core.hash_utils import hash_password
@@ -21,8 +21,12 @@ class InitializeData(BaseModel):
 
 @router.post("/upload")
 async def upload_file(file: UploadFile):
-    file_name, file_path = await handle_excel_file(file, file_dir=cfg.base.upload_dir)
-    # copy_one_file(file_path, cfg.base.wms_path)
+    file_name, file_path = await handle_upload_file(file, file_dir=cfg.base.upload_dir)
+    logger.info(f"Upload file: {file_name}, {file_path}")
+    # 判断是否为ingress环境
+    if cfg.base.env == "prod" and os.environ.get("IS_ADDON") == "true":
+        # 复制文件到ingress路径
+        file_path = f".{file_path}"
     return generate_resp(data={"file_name": file_name, "file_path": file_path})
 
 @router.get("/init_info")

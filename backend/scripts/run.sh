@@ -1,1 +1,0 @@
-~/conda/envs/fastapi_v111/bin/python hass_panel/main.py

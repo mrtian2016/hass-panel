@@ -30,7 +30,7 @@ def generate_resp(code: Optional[int]=200, message: Optional[str]=None, data: Op
 
 
 
-async def handle_excel_file(file: UploadFile, file_dir=None, file_path=None):
+async def handle_upload_file(file: UploadFile, file_dir=None, file_path=None):
     os.makedirs(file_dir, exist_ok=True)
     file_name = get_file_name(file.filename, file_dir)
 
