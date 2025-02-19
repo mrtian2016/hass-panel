@@ -22,5 +22,13 @@ if [ ! -d "$CONFIG_DIR/user_configs" ]; then
     mkdir -p "$CONFIG_DIR/user_configs"
 fi
 
+# 创建上传目录并设置权限
+if [ ! -d "$CONFIG_DIR/upload" ]; then
+    mkdir -p "$CONFIG_DIR/upload"
+fi
+
+# 设置目录权限
+chown -R nginx:nginx "$CONFIG_DIR/upload"
+chmod -R 755 "$CONFIG_DIR/upload"
 
 /usr/bin/supervisord -c /etc/supervisord.conf

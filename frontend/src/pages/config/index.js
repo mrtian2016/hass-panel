@@ -470,7 +470,6 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
         }
       } catch (error) {
         console.error('加载配置失败:', error);
-        message.error(t('config.loadFailed'));
       } finally {
         setLoading(false);
       }
