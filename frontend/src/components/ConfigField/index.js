@@ -9,6 +9,7 @@ import SocketConfig from './SocketConfig';
 import NasConfig from './NasConfig';
 import ScriptsConfig from './ScriptsConfig';
 import CameraConfig from './CameraConfig';
+import { configApi } from '../../utils/api';
 
 function ConfigField({ field, value, onChange }) {
   const { getAllEntities } = useHass();
@@ -79,17 +80,9 @@ function ConfigField({ field, value, onChange }) {
                 onChange={async (e) => {
                   const file = e.target.files[0];
                   if (file) {
-                    const formData = new FormData();
-                    formData.append('file', file);
                     try {
-                      const response = await fetch('./api/common/upload', {
-                        method: 'POST',
-                        body: formData
-                      });
-                      const result = await response.json();
-                      if (result.code === 200) {
-                        onChange(result.data.file_path);
-                      }
+                      const result = await configApi.uploadImage(file);
+                      onChange(result.file_path);
                     } catch (error) {
                       console.error('上传失败:', error);
                     }

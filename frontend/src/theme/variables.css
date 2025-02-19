@@ -32,14 +32,33 @@
 }
 
 [data-theme="dark"] {
+  /* 主色调 - 保持橙色但略微调整以适应深色背景 */
   --color-primary: #FFB74D;
   --color-primary-light: #FFD180;
   --color-primary-dark: #FFA726;
+  
+  /* 次要色调 */
+  --color-secondary: #FFE082;
+  
+  /* 背景色 - 使用更深的黑色以增加对比度 */
   --color-background: #121212;
   --color-card-bg: #1E1E1E;
-  --color-text-primary: #ECEFF1;
-  --color-text-secondary: #B0BEC5;
-  --color-text-light: #78909C;
-  --color-border: #2C2C2C;
-  --color-shadow: rgba(0, 0, 0, 0.3);
+  
+  /* 文本颜色 - 提高对比度 */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #E0E0E0;
+  --color-text-light: #BDBDBD;
+  
+  /* 边框和阴影 */
+  --color-border: #333333;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  
+  /* 状态颜色 - 调整以适应深色主题 */
+  --color-error: #FF5252;
+  --color-error-light: #FF7676;
+  --color-error-dark: #D32F2F;
+  
+  --color-success: #69F0AE;
+  --color-success-light: #B9F6CA;
+  --color-success-dark: #00C853;
 } 

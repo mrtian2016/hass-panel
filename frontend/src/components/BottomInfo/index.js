@@ -1,7 +1,7 @@
 import { Icon } from '@mdi/react';
 import React from 'react';
 import { useState, useRef } from 'react';
-import { mdiInformationOutline, mdiUpload } from '@mdi/js';
+import { mdiInformationOutline, mdiUpload, mdiGithub } from '@mdi/js';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { compareVersions } from '../../utils/helper';
 import { message, Button, Tooltip, Modal } from 'antd';
@@ -40,11 +40,11 @@ function BottomInfo() {
       setIsChecking(true);
       const response = await updateApi.checkUpdate();
       if (response.code === 200) {
-        if (response.message.includes('已经是最新版本')) {
+        if (response.data.version === versionInfo.version) {
           message.success(t('update.latestVersion'));
           setLatestVersion(null);
         } else {
-          const newVersion = response.message.match(/新版本：(.+)$/)?.[1];
+          const newVersion = response.data.version;
           if (newVersion) {
             setLatestVersion({
               version: newVersion,
@@ -127,7 +127,7 @@ function BottomInfo() {
   const handleUpdate = async () => {
     try {
       message.loading({ content: t('update.checking'), key: 'update' });
-      const response = await updateApi.checkUpdate();
+      const response = await updateApi.confirmUpdate();
 
       if (response.code === 200) {
         message.success({
@@ -222,6 +222,18 @@ function BottomInfo() {
           title={t('config.debug')}
         >
           {t('config.debug')}: {debugMode ? t('config.debugOn') : t('config.debugOff')}
+        </Button>
+      </span>
+
+      <span>
+        <Button
+          type="link"
+          size="small"
+          onClick={() => {
+            window.open('https://github.com/mrtian2016/hass-panel', '_blank');
+          }}
+        >
+          <Icon path={mdiGithub} size={0.8} />
         </Button>
       </span>
 

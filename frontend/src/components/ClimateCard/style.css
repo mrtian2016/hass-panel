@@ -441,3 +441,6 @@
 .power-button:active {
   background: none !important;
 } 
+.adm-list-body-inner {
+  background-color: var(--color-background) !important;
+}

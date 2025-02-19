@@ -1,40 +1,50 @@
-import { debounce, throttle } from './throttleDebounce';
+import axios from 'axios';
 
-// 通用请求函数
-const request = async (endpoint, options = {}) => {
+// 创建不需要认证的axios实例
+const publicAxiosInstance = axios.create({
+  baseURL: './api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// 创建需要认证的axios实例
+const axiosInstance = axios.create({
+  baseURL: './api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// 添加请求拦截器
+axiosInstance.interceptors.request.use((config) => {
   const localToken = localStorage.getItem('hass_panel_token');
   const token = JSON.parse(localToken);
-  const accessToken = token.access_token;
+  const accessToken = token?.access_token;
+  
   if (!accessToken) {
     throw new Error('未找到认证token');
   }
+  
+  config.headers.Authorization = `Bearer ${accessToken}`;
+  return config;
+});
 
-  const response = await fetch(`./api${endpoint}`, {
-    ...options,
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || '请求失败');
+// 添加响应拦截器
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // 清除本地token
+      localStorage.removeItem('hass_panel_token');
+      // 跳转到登录页面
+      window.location.href = '/login';
+      return Promise.reject(new Error('登录已过期，请重新登录'));
+    }
+    return Promise.reject(error);
   }
+);
 
-  const data = await response.json();
-  return data;
-};
-
-// 创建防抖和节流的请求函数
-const debouncedRequest = debounce(async (endpoint, options = {}) => {
-  return await request(endpoint, options);
-}, 100);
-
-const throttledRequest = throttle(async (endpoint, options = {}) => {
-  return await request(endpoint, options);
-}, 100);
 
 // 应用背景设置到body
 const applyBackgroundToBody = (globalConfig) => {
@@ -63,12 +73,11 @@ const applyBackgroundToBody = (globalConfig) => {
 
 // 配置相关API
 export const configApi = {
-  // 获取最新配置 (使用节流，因为是读取操作)
+  // 获取最新配置
   getConfig: async () => {
     try {
-      const response = await throttledRequest('/user_config/config');
+      const response = await axiosInstance.get('/user_config/config');
       const config = response.data;
-      
       // 获取配置时自动应用背景设置
       if (config.globalConfig) {
         applyBackgroundToBody(config.globalConfig);
@@ -80,53 +89,47 @@ export const configApi = {
     }
   },
 
-  // 保存配置 (使用防抖，因为是写入操作)
-  saveConfig: async (config, showMessage = true) => {
+  // 保存配置
+  saveConfig: async (config) => {
     try {
-      const response = await debouncedRequest('/user_config/config', {
-        method: 'POST',
-        body: JSON.stringify(config),
-      });
+      const response = await axiosInstance.post('/user_config/config', config);
       
       // 保存配置时自动应用背景设置
       if (config.globalConfig) {
         applyBackgroundToBody(config.globalConfig);
       }
       
-     
-      return response;
+      return response.data;
     } catch (error) {
       throw error;
     }
   },
 
-  // 获取版本列表 (使用节流)
+  // 获取版本列表
   getVersions: async () => {
     try {
-      const response = await throttledRequest('/user_config/versions');
+      const response = await axiosInstance.get('/user_config/versions');
       return response.data;
     } catch (error) {
       throw error;
     }
   },
 
-  // 获取指定版本 (使用节流)
+  // 获取指定版本
   getVersion: async (filename) => {
     try {
-      const response = await throttledRequest(`/user_config/versions/${filename}`);
+      const response = await axiosInstance.get(`/user_config/versions/${filename}`);
       return response.data;
     } catch (error) {
       throw error;
     }
   },
 
-  // 删除指定版本 (使用防抖)
+  // 删除指定版本
   deleteVersion: async (filename) => {
     try {
-      const response = await debouncedRequest(`/user_config/versions/${filename}`, {
-        method: 'DELETE',
-      }); 
-      return response;
+      const response = await axiosInstance.delete(`/user_config/versions/${filename}`);
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -138,22 +141,19 @@ export const configApi = {
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch('./api/common/upload', {
-        method: 'POST',
+      const response = await axiosInstance.post('/common/upload', formData, {
         headers: {
-          'Authorization': `Bearer ${JSON.parse(localStorage.getItem('hass_panel_token'))?.access_token}`,
+          'Content-Type': 'multipart/form-data',
         },
-        body: formData
       });
 
-      const result = await response.json();
-      if (result.code === 200) {
+      if (response.data.code === 200) {
         return {
-          url: result.data.file_path,
-          file_path: result.data.file_path
+          url: response.data.data.file_path,
+          file_path: response.data.data.file_path
         };
       } else {
-        throw new Error(result.message || '上传失败');
+        throw new Error(response.data.message || '上传失败');
       }
     } catch (error) {
       throw error;
@@ -165,9 +165,14 @@ export const configApi = {
     try {
       // 先上传图片
       const uploadResult = await configApi.uploadImage(file);
-      
+ 
       // 获取当前配置
-      const config = await configApi.getConfig();
+      const response = await configApi.getConfig();
+      if (response.code !== 200) {
+        throw new Error('获取配置失败');
+      }
+      const config = response.data;
+
       
       // 更新全局配置中的背景图
       const updatedConfig = {
@@ -194,7 +199,8 @@ export const configApi = {
   setGlobalConfig: async (globalConfig) => {
     try {
       // 获取当前配置
-      const config = await configApi.getConfig();
+      const response = await configApi.getConfig();
+      const config = response.data;
       
       // 更新全局配置
       const updatedConfig = {
@@ -221,7 +227,8 @@ export const configApi = {
   resetBackground: async () => {
     try {
       // 获取当前配置
-      const config = await configApi.getConfig();
+      const response = await configApi.getConfig();
+      const config = response.data;
       
       // 移除背景相关的配置
       const updatedConfig = {
@@ -255,19 +262,10 @@ export const cameraApi = {
   // 获取ONVIF摄像头源
   getOnvifSources: async () => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem('hass_panel_token'))?.access_token;
-      const response = await fetch('./go2rtc/api/onvif', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        }
-      });
-      if (!response.ok) {
-        throw new Error('请求失败');
-      }
-      const data = await response.json();
+      const response = await axios.get('./go2rtc/api/onvif');
       
       // 过滤只保留IPv4地址的源
-      const filteredSources = data.sources.map(source => ({
+      const filteredSources = response.data.sources.map(source => ({
         ...source,
         url: source.url.split('%20')[0]  // 只保留第一个URL（IPv4）
       }));
@@ -284,8 +282,17 @@ export const updateApi = {
   // 检查更新
   checkUpdate: async () => {
     try {
-      const response = await request('/update');
-      return response;
+      const response = await axiosInstance.get('/version');
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  // 确认更新
+  confirmUpdate: async () => {
+    try {
+      const response = await axiosInstance.get('/update');
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -297,22 +304,16 @@ export const updateApi = {
       const formData = new FormData();
       formData.append('package', file);
       
-      const accessToken = JSON.parse(localStorage.getItem('hass_panel_token'))?.access_token;
-      
-      const response = await fetch('./api/upload-update', {
-        method: 'POST',
+      const response = await axiosInstance.post('/upload-update', formData, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data',
         },
-        body: formData
       });
 
-      const result = await response.json();
-      console.log(result)
-      if (result.code === 200) {
-        return result;
+      if (response.data.code === 200) {
+        return response.data;
       } else {
-        throw new Error(result.message || '上传失败');
+        throw new Error(response.data.message || '上传失败');
       }
     } catch (error) {
       throw error;
@@ -322,11 +323,8 @@ export const updateApi = {
   // 应用手动更新
   applyManualUpdate: async (packageInfo) => {
     try {
-      const response = await request('/manual-update', {
-        method: 'POST',
-        body: JSON.stringify(packageInfo),
-      });
-      return response;
+      const response = await axiosInstance.post('/manual-update', packageInfo);
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -335,8 +333,8 @@ export const updateApi = {
   // 获取当前版本信息
   getCurrentVersion: async () => {
     try {
-      const response = await fetch('./version.json');
-      return await response.json();
+      const response = await axios.get('/version.json');
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -348,9 +346,8 @@ export const systemApi = {
   // 检查系统初始化状态
   checkInitStatus: async () => {
     try {
-      const response = await fetch('./api/common/init_info');
-      const data = await response.json();
-      return data;
+      const response = await publicAxiosInstance.get('/common/init_info');
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -358,19 +355,9 @@ export const systemApi = {
 
   // 获取HASS配置
   getHassConfig: async () => {
-    const token = localStorage.getItem('hass_panel_token');
-    if (!token) {
-      throw new Error('未找到认证token');
-    }
-
     try {
-      const response = await fetch('./api/user_config/hass_config', {
-        headers: {
-          'Authorization': `Bearer ${JSON.parse(token).access_token}`
-        }
-      });
-      const data = await response.json();
-      return data;
+      const response = await axiosInstance.get('/user_config/hass_config');
+      return response.data;
     } catch (error) {
       throw error;
     }

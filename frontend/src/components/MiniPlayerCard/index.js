@@ -27,7 +27,6 @@ function MiniPlayerCard({
   const coverUrl = entity?.attributes?.entity_picture 
     ? `${window.env?.REACT_APP_HASS_URL}${entity.attributes.entity_picture}`
     : null;
-  console.log(entity)
   const { t } = useLanguage();
 
   return (

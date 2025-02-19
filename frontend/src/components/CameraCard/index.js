@@ -11,7 +11,6 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const { t } = useLanguage();
 
-  console.log(camera);
 
   if (!camera) return null;
   // console.log(camera);

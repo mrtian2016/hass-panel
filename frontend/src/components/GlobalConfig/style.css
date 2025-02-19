@@ -1,0 +1,190 @@
+
+.global-config-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-card-bg);
+    border-radius: var(--border-radius-medium);
+    padding: 24px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 4px 12px var(--color-shadow);
+    z-index: 1001;
+  }
+  
+  .global-config-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .global-config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .global-config-form-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .global-config-form-item label {
+    font-size: 14px;
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+  
+  .global-config-form-item input {
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    background: var(--color-background);
+    color: var(--color-text-primary);
+  }
+  
+  .global-config-form-item input[type="color"] {
+    height: 40px;
+    padding: 4px;
+  }
+  
+  .global-config-form-item .hint {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+  }
+  
+  .global-config-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  
+  .global-config-actions button {
+    padding: 8px 16px;
+    border-radius: var(--border-radius-small);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .global-config-actions .cancel {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+  }
+  
+  .global-config-actions .save {
+    background: var(--color-primary);
+    border: none;
+    color: white;
+  }
+  
+  .global-config-actions .cancel:hover {
+    background: var(--color-background-secondary);
+    border-color: var(--color-primary);
+  }
+  
+  .global-config-actions .save:hover {
+    opacity: 0.9;
+  }
+  
+  .global-config-form-item .color-input-group,
+  .global-config-form-item .image-input-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .global-config-form-item .reset-button {
+    padding: 4px 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .global-config-form-item .reset-button:hover {
+    background: var(--color-background-secondary);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  .global-config-actions .reset-all {
+    padding: 8px 16px;
+    border-radius: var(--border-radius-small);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    margin-right: auto;
+  }
+  .global-config-actions .reinitialize {
+    padding: 8px 16px;
+    border-radius: var(--border-radius-small);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+  }
+  
+  .global-config-actions .reset-all:hover {
+    background: var(--color-background-secondary);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  .global-config-form-item .upload-button {
+    padding: 4px 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    background: var(--color-primary);
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .global-config-form-item .upload-button:hover {
+    opacity: 0.9;
+  }
+  
+  .global-config-form-item .image-input-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .global-config-form-item .image-input-group input[type="text"] {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .global-config-form-item .switch-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .global-config-form-item .switch-group .ant-switch {
+    background: var(--color-border) !important;
+  }
+  
+  .global-config-form-item .switch-group .ant-switch-checked {
+    background: var(--color-primary) !important;
+  }
+  

@@ -5,7 +5,7 @@ env = "dev"
 debug = true
 user_config_dir = "../data/user_configs"
 upload_dir = '../data/upload'
-
+go2rtc_config_path = "../data/go2rtc.yaml"
 [update_cfg]
 github_repo = "mrtian2016/hass-panel"
 app_dir = "../frontend/build"

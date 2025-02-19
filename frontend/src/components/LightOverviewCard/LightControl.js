@@ -223,7 +223,6 @@ function LightControl({ lightEntity, onClose }) {
   };
   // console.log(entity.attributes)
   React.useEffect(() => {
-    console.log(entity)
     const brightnessPercent = ((entity.attributes?.brightness || 0) / 255) * 100;
     if (sliderRef.current) {
       sliderRef.current.style.setProperty('--value-percent', `${brightnessPercent}%`);

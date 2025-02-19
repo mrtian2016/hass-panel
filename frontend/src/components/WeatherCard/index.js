@@ -118,7 +118,6 @@ function WeatherCard({config}) {
       <div>{t('weather.loadError')}</div>
     </BaseCard> ;
   }
-  console.log(weather);
   
   const {
     apparent_temperature,

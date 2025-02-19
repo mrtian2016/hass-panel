@@ -2,21 +2,31 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, message } from 'antd';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLanguage } from '../../i18n/LanguageContext';
+import Icon from '@mdi/react';
+import { 
+  mdiGithub, 
+  mdiGoogleTranslate, 
+  mdiWeatherNight,
+  mdiWhiteBalanceSunny,
+  mdiHomeAutomation
+} from '@mdi/js';
 import './style.css';
 import { hashPassword } from '../../utils/helper';
+
 function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
+  const { t, toggleLanguage } = useLanguage();
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-        const requestData = {
-            username: values.username,
-            password: hashPassword(values.password),
-        }
-        console.log(requestData);
+      const requestData = {
+        username: values.username,
+        password: hashPassword(values.password),
+      }
         
       const response = await fetch('./api/auth/token', {
         method: 'POST',
@@ -29,56 +39,99 @@ function Login() {
       const data = await response.json();
       
       if (data.code === 200) {
-        // 存储token
         localStorage.setItem('hass_panel_token', JSON.stringify({
           access_token: data.data.access_token,
         }));
-        message.success('登录成功');
+        message.success(t('login.success'));
         setTimeout(() => {
           navigate('/');
-          window.location.reload(); // 刷新页面以重新获取配置
+          window.location.reload();
         }, 2000);
       } else {
-        message.error(data.message || '登录失败');
+        message.error(data.message || t('login.failed'));
       }
     } catch (error) {
-      message.error('登录失败: ' + error.message);
+      message.error(t('login.error') + error.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-      <div className={`login-container ${theme}`}>
-        <div className="login-box">
-          <h2>登录</h2>
+    <div className={`login-container ${theme}`}>
+      <div className="login-box">
+        <div className="login-header">
+          <Icon
+            path={mdiHomeAutomation}
+            size={2}
+            className="login-logo"
+            color="var(--color-primary)"
+          />
+          <h2>{t('title')}</h2>
+        </div>
         <Form
           name="login"
           onFinish={onFinish}
           layout="vertical"
         >
           <Form.Item
-            label="用户名"
+            label={t('login.username')}
             name="username"
-            rules={[{ required: true, message: '请输入用户名' }]}
+            rules={[{ required: true, message: t('login.usernameRequired') }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="密码"
+            label={t('login.password')}
             name="password"
-            rules={[{ required: true, message: '请输入密码' }]}
+            rules={[{ required: true, message: t('login.passwordRequired') }]}
           >
             <Input.Password />
           </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading} block>
-              登录
+              {t('login.submit')}
             </Button>
           </Form.Item>
         </Form>
+
+        <div className="login-footer">
+          <button
+            className="icon-button"
+            onClick={toggleTheme}
+            title={t('theme.' + (theme === 'light' ? 'light' : 'dark'))}
+          >
+            <Icon
+              path={theme === 'light' ? mdiWeatherNight : mdiWhiteBalanceSunny}
+              size={1}
+              color="var(--color-text-primary)"
+            />
+          </button>
+          <button
+            className="icon-button"
+            onClick={toggleLanguage}
+            title={t('language.toggle')}
+          >
+            <Icon
+              path={mdiGoogleTranslate}
+              size={1}
+              color="var(--color-text-primary)"
+            />
+          </button>
+          <button
+            className="icon-button"
+            onClick={() => window.open('https://github.com/mrtian2016/hass-panel', '_blank')}
+            title="GitHub"
+          >
+            <Icon
+              path={mdiGithub}
+              size={1}
+              color="var(--color-text-primary)"
+            />
+          </button>
+        </div>
       </div>
     </div>
   );

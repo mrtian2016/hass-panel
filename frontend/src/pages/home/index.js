@@ -61,29 +61,6 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   const { t, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
 
-  // 加载全局配置
-  useEffect(() => {
-    const loadGlobalConfig = async () => {
-      try {
-        const config = await configApi.getConfig();
-        if (config.globalConfig) {
-          // 应用背景设置
-          if (config.globalConfig.backgroundColor) {
-            document.body.style.backgroundColor = config.globalConfig.backgroundColor;
-          }
-          if (config.globalConfig.backgroundImage) {
-            document.body.style.backgroundImage = `url(${config.globalConfig.backgroundImage})`;
-            document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundPosition = 'center';
-            document.body.style.backgroundAttachment = 'fixed';
-          }
-        }
-      } catch (error) {
-        console.error('加载全局配置失败:', error);
-      }
-    };
-    loadGlobalConfig();
-  }, []);
 
   // 状态定义
   const [width, setWidth] = useState(window.innerWidth);
@@ -100,6 +77,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     return savedColumns ? JSON.parse(savedColumns) : { lg: 3, md: 3, sm: 1 };
   });
 
+  // 添加当前配置状态
+  const [currentConfig, setCurrentConfig] = useState(null);
+
   // 监听窗口大小变化
   useEffect(() => {
     function handleResize() {
@@ -108,14 +88,14 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       setWidth(newWidth);
       setIsMobile(newIsMobile);
 
-      // 根据设备类型加载对应的布局
-      configApi.getConfig().then(config => {
-        if (config.layouts) {
-          setCurrentLayouts(newIsMobile ? config.layouts.mobile : config.layouts.desktop);
-        }
-      }).catch(error => {
-        console.error('加载布局配置失败:', error);
-      });
+      // // 根据设备类型加载对应的布局
+      // configApi.getConfig().then(config => {
+      //   if (config.layouts) {
+      //     setCurrentLayouts(newIsMobile ? config.layouts.mobile : config.layouts.desktop);
+      //   }
+      // }).catch(error => {
+      //   console.error('加载布局配置失败:', error);
+      // });
     }
 
     handleResize();
@@ -130,50 +110,11 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         setLoading(true);
 
         // 尝试从后端获取配置
-        let config = await configApi.getConfig();
-
-        // 如果后端没有数据(cards为空数组)，且本地有数据，则上传本地数据到后端
-        if (config.cards.length === 0) {
-          const localConfig = localStorage.getItem('card-config');
-          if (localConfig) {
-            try {
-              const localCards = JSON.parse(localConfig);
-              const mobileLayouts = localStorage.getItem('mobile-dashboard-layouts');
-              const desktopLayouts = localStorage.getItem('desktop-dashboard-layouts');
-              const mobileDefaultLayouts = localStorage.getItem('mobile-default-dashboard-layouts');
-              const desktopDefaultLayouts = localStorage.getItem('desktop-default-dashboard-layouts');
-
-              // 准备要上传的配置
-              const uploadConfig = {
-                cards: localCards,
-                layouts: {
-                  mobile: mobileLayouts ? JSON.parse(mobileLayouts) : {},
-                  desktop: desktopLayouts ? JSON.parse(desktopLayouts) : {}
-                },
-                defaultLayouts: {
-                  mobile: mobileDefaultLayouts ? JSON.parse(mobileDefaultLayouts) : {},
-                  desktop: desktopDefaultLayouts ? JSON.parse(desktopDefaultLayouts) : {}
-                }
-              };
-
-              // 上传到后端
-              await configApi.saveConfig(uploadConfig);
-
-              // 重新获取配置
-              config = await configApi.getConfig();
-
-              // 清除本地存储的配置
-              localStorage.removeItem('card-config');
-              localStorage.removeItem('mobile-dashboard-layouts');
-              localStorage.removeItem('desktop-dashboard-layouts');
-              localStorage.removeItem('mobile-default-dashboard-layouts');
-              localStorage.removeItem('desktop-default-dashboard-layouts');
-            } catch (error) {
-              console.error('迁移本地配置失败:', error);
-            }
-          }
+        let response = await configApi.getConfig();
+        if (response.code !== 200) {
+          return
         }
-
+        let config = response.data;
         // 设置卡片配置
         if (config.cards) {
           setCards(config.cards.map(card => ({
@@ -184,9 +125,32 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         }
 
         // 设置布局配置
-        if (config.layouts) {
+        if (config.layouts && Object.keys(config.layouts).length > 0) {
           setCurrentLayouts(isMobile ? config.layouts.mobile : config.layouts.desktop);
+        } else {
+          // 如果没有布局配置，设置一个默认的空布局
+          setCurrentLayouts({
+            lg: [],
+            md: [],
+            sm: []
+          });
         }
+
+        if (config.globalConfig) {
+          // 应用背景设置
+          if (config.globalConfig.backgroundColor) {
+            document.body.style.backgroundColor = config.globalConfig.backgroundColor;
+          }
+          if (config.globalConfig.backgroundImage) {
+            document.body.style.backgroundImage = `url(${config.globalConfig.backgroundImage})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            document.body.style.backgroundAttachment = 'fixed';
+          }
+        }
+    
+        // 保存完整配置
+        setCurrentConfig(config);
 
       } catch (error) {
         console.error('加载配置失败:', error);
@@ -217,65 +181,110 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
       // 处理已保存的布局
       if (savedLayouts) {
-        return JSON.parse(savedLayouts);
+        const parsedLayouts = JSON.parse(savedLayouts);
+        if (Object.keys(parsedLayouts).length > 0) {
+          return parsedLayouts;
+        }
       }
 
       // 处理默认布局
       if (defaultLayouts) {
-        return JSON.parse(defaultLayouts);
+        const parsedDefaultLayouts = JSON.parse(defaultLayouts);
+        if (Object.keys(parsedDefaultLayouts).length > 0) {
+          return parsedDefaultLayouts;
+        }
       }
 
-      return {};
+      // 如果没有任何布局配置，返回空布局
+      return {
+        lg: [],
+        md: [],
+        sm: []
+      };
     } catch (error) {
       console.error('解析布局配置失败:', error);
-      return {};
+      return {
+        lg: [],
+        md: [],
+        sm: []
+      };
     }
   });
+
+  // 添加未保存更改状态
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // 处理布局变化
   const handleLayoutChange = (layout, layouts) => {
     setCurrentLayouts(layouts);
+    setHasUnsavedChanges(true);
+  };
 
-    // 获取当前配置
-    configApi.getConfig().then(config => {
-      // 根据设备类型更新对应的布局
+  // 修改保存布局函数
+  const handleSaveLayout = async () => {
+    try {
+      if (!currentConfig) {
+        message.error('配置数据不完整，请刷新页面重试');
+        return;
+      }
+
+      // 更新布局配置
       const newLayouts = {
-        ...config.layouts,
-        [isMobile ? 'mobile' : 'desktop']: layouts
+        ...currentConfig.layouts,
+        [isMobile ? 'mobile' : 'desktop']: currentLayouts
+      };
+
+      // 准备新的配置
+      const newConfig = {
+        ...currentConfig,
+        layouts: newLayouts
       };
 
       // 保存更新后的配置
-      configApi.saveConfig({
-        ...config,
-        layouts: newLayouts
-      }, false);
-    }).catch(error => {
+      await configApi.saveConfig(newConfig);
+      
+      // 更新本地状态
+      setCurrentConfig(newConfig);
+      setIsEditing(false);
+      setHasUnsavedChanges(false);
+      message.success(t('config.saveSuccess'));
+    } catch (error) {
       console.error('保存布局失败:', error);
-    });
+      message.error(t('config.saveFailed'));
+    }
   };
 
   // 修改重置布局功能
   const handleResetLayout = async () => {
     try {
-      const config = await configApi.getConfig();
-      if (config.defaultLayouts) {
-        const defaultLayout = isMobile ?
-          config.defaultLayouts.mobile :
-          config.defaultLayouts.desktop;
-
-        setCurrentLayouts(defaultLayout);
-
-        // 更新布局配置
-        const newLayouts = {
-          ...config.layouts,
-          [isMobile ? 'mobile' : 'desktop']: defaultLayout
-        };
-
-        await configApi.saveConfig({
-          ...config,
-          layouts: newLayouts
-        });
+      if (!currentConfig?.defaultLayouts) {
+        message.error('默认布局数据不存在');
+        return;
       }
+
+      const defaultLayout = isMobile ?
+        currentConfig.defaultLayouts.mobile :
+        currentConfig.defaultLayouts.desktop;
+
+      setCurrentLayouts(defaultLayout);
+
+      // 更新布局配置
+      const newLayouts = {
+        ...currentConfig.layouts,
+        [isMobile ? 'mobile' : 'desktop']: defaultLayout
+      };
+
+      // 准备新的配置
+      const newConfig = {
+        ...currentConfig,
+        layouts: newLayouts
+      };
+
+      // 保存更新后的配置
+      await configApi.saveConfig(newConfig);
+      
+      // 更新本地状态
+      setCurrentConfig(newConfig);
       setIsEditing(false);
     } catch (error) {
       console.error('重置布局失败:', error);
@@ -626,6 +635,17 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 ))}
             </Responsive>
 
+            {/* 添加保存按钮 */}
+            {hasUnsavedChanges && isEditing && (
+              <button
+                className="save-button has-changes"
+                onClick={handleSaveLayout}
+                title={t('config.save')}
+              >
+                <Icon path={mdiCheck} size={2} />
+              </button>
+            )}
+
             {cards.filter(card => card.visible !== false).length === 0 && (
               <div className="empty-state" onClick={() => navigate('/config')}>
                 <Icon path={mdiViewDashboard} size={3} color="var(--color-text-secondary)" />
@@ -637,7 +657,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             {isEditing && isMobile && (
               <button
                 className="edit-toggle active"
-                onClick={() => setIsEditing(false)}
+                onClick={() => {
+                  handleSaveLayout();
+                }}
                 title="完成编辑"
               >
                 <Icon

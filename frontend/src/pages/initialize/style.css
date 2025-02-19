@@ -1,9 +1,9 @@
 .initialize-container {
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  height: 100vh;
+  background-color: var(--background-color);
 }
 
 .initialize-container.light {
@@ -31,21 +31,86 @@
 
 .initialize-box {
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
   padding: 2rem;
-  background: var(--color-card-bg);
-  border-radius: var(--border-radius-medium);
-  box-shadow: 0 2px 8px var(--color-shadow);
+  background-color: var(--component-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.initialize-box h2 {
+.initialize-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  color: var(--color-text-primary);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.initialize-logo {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.initialize-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-text-primary);
+}
+
+.initialize-footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.icon-button:hover {
+  background-color: var(--color-hover);
+  transform: translateY(-1px);
+}
+
+/* Dark theme styles */
+.dark .initialize-box {
+  background-color: var(--component-background);
+}
+
+.dark .initialize-header h2 {
   color: var(--color-text-primary);
 }
 
 .initialize-box .ant-form-item-label > label {
   color: var(--color-text-primary);
+  font-weight: 500;
 }
 
 .initialize-box .ant-input,
@@ -53,6 +118,9 @@
   background: var(--color-background);
   border-color: var(--color-border);
   color: var(--color-text-primary);
+  height: 40px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
 .initialize-box .ant-input:hover,
@@ -69,9 +137,15 @@
 .initialize-box .ant-btn-primary {
   background: var(--color-primary);
   border-color: var(--color-primary);
+  height: 40px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .initialize-box .ant-btn-primary:hover {
   background: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 } 

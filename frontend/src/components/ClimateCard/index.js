@@ -45,6 +45,8 @@ function ClimateCard({
   const { theme } = useTheme();
   const { t } = useLanguage();
   const climate = useEntity(config?.entity_id || '', {returnNullIfNotFound: true});
+
+  const target_temp_step = climate?.attributes?.target_temp_step;
   const tempSensor = useEntity(config?.temperature_entity_id || '', {returnNullIfNotFound: true});
   const humiditySensor = useEntity(config?.humidity_entity_id || '', {returnNullIfNotFound: true});
   const currentShowTemp = tempSensor?.state || climate?.attributes?.current_temperature;
@@ -244,14 +246,14 @@ function ClimateCard({
           <div className="temp-controls">
             <button 
               className="temp-button" 
-              onClick={() => handleTempChange(-0.5)}
+              onClick={() => handleTempChange(-target_temp_step)}
               disabled={!isOn || !canAdjustTemperature(climate?.state) || (targetTemp <= climate?.attributes?.min_temp)}
             >
               <Icon path={mdiMinus} size={1} />
             </button>
             <button 
               className="temp-button" 
-              onClick={() => handleTempChange(0.5)}
+              onClick={() => handleTempChange(target_temp_step)}
               disabled={!isOn || !canAdjustTemperature(climate?.state) || (targetTemp >= climate?.attributes?.max_temp)}
             >
               <Icon path={mdiPlus} size={1} />
@@ -319,6 +321,7 @@ function ClimateCard({
           borderTopRightRadius: '8px',
           minHeight: '40vh',
           maxHeight: '80vh',
+          backgroundColor: 'var(--color-background)',
         }}
       >
         <div className="fan-mode-popup">
@@ -377,6 +380,7 @@ function ClimateCard({
           borderTopRightRadius: '8px',
           minHeight: '40vh',
           maxHeight: '80vh',
+          backgroundColor: 'var(--color-background) !important',
         }}
       >
         <div className="fan-mode-popup">

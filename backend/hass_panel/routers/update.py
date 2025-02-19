@@ -3,7 +3,7 @@ from loguru import logger
 from typing import Dict
 import os
 from hass_panel.utils.common import generate_resp
-from hass_panel.utils.updater import run_update, process_manual_update, apply_manual_update
+from hass_panel.utils.updater import get_latest_release, run_update, process_manual_update, apply_manual_update
 from hass_panel.core.initial import cfg
 from hass_panel.core.auth_deps import get_current_user
 router = APIRouter(
@@ -11,6 +11,14 @@ router = APIRouter(
     tags=['update'],
     dependencies=[Depends(get_current_user)]
 )
+
+@router.get("/version")
+async def version():
+    """
+    获取最新版本信息
+    """
+    version, download_url = get_latest_release()
+    return generate_resp(data={"version": version, "download_url": download_url})
 
 @router.get("/update")
 async def update():

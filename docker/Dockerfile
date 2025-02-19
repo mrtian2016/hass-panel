@@ -20,7 +20,7 @@ RUN case "$(uname -m)" in \
     chmod +x /usr/local/bin/go2rtc && \
     rm -f /tmp/go2rtc_*
 
-COPY docker/config/go2rtc.yaml /etc/go2rtc.yaml
+
 
 # 设置时区
 ENV TZ=Asia/Shanghai
@@ -48,6 +48,9 @@ RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple \
 
 # 创建必要的目录
 RUN mkdir -p /config/hass-panel  # 为SQLite数据库创建目录
+
+# 复制go2rtc配置文件
+COPY docker/config/go2rtc.yaml /config/hass-panel/go2rtc.yaml
 
 # 复制配置文件
 COPY docker/config/nginx.conf /etc/nginx/http.d/default.conf

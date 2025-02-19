@@ -37,7 +37,7 @@ function CurtainItem({ entity_id, name }) {
   }
   
   const position = curtain?.attributes?.current_position || 0;
-  const currentPosition = 50 - (position / 2);
+  const currentPosition = 50 - (position / 2) + 50;
 
   return (
     <div className="curtain-content">

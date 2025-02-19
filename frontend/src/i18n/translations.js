@@ -1,6 +1,7 @@
 export const translations = {
   zh: {
     // 通用
+    title: 'Hass Panel',
     currentVersion:'当前版本',
     checkUpdate:'检查更新',
     edit: '编辑布局',
@@ -303,6 +304,8 @@ export const translations = {
       },
       swingModes: {
         off: '关闭',
+        on: '开启',
+        horizontal: '水平摆动',
         vertical: '垂直摆动',
         null: '关闭',
         unavailable: '未知',
@@ -690,9 +693,50 @@ export const translations = {
     updateSuccess: '更新成功',
     updateFailed: '更新失败',
     updateComplete: '更新完成,即将刷新页面',
+    login: {
+      title: '登录',
+      username: '用户名',
+      password: '密码',
+      submit: '登录',
+      usernameRequired: '请输入用户名',
+      passwordRequired: '请输入密码',
+      success: '登录成功',
+      failed: '登录失败',
+      error: '登录失败: '
+    },
+    initialize: {
+      title: '系统初始化',
+      adminUsername: '管理员用户名',
+      adminPassword: '管理员密码',
+      confirmPassword: '确认密码',
+      hassUrl: 'HomeAssistant地址',
+      hassToken: 'HomeAssistant Token',
+      submit: '初始化系统',
+      // placeholders
+      usernamePlaceholder: '请输入管理员用户名',
+      passwordPlaceholder: '请输入管理员密码',
+      confirmPasswordPlaceholder: '请再次输入管理员密码',
+      hassUrlPlaceholder: '例如: http://homeassistant.local:8123',
+      hassTokenPlaceholder: '请输入HomeAssistant长期访问令牌 (可选)',
+      requiredMark: '可选',
+      // validation messages
+      usernameRequired: '请输入管理员用户名',
+      passwordRequired: '请输入管理员密码',
+      passwordMinLength: '密码长度至少6位',
+      confirmPasswordRequired: '请确认管理员密码',
+      passwordMismatch: '两次输入的密码不一致',
+      hassUrlRequired: '请输入HomeAssistant访问地址',
+      invalidUrl: '请输入有效的URL地址',
+      // success/error messages
+      initSuccess: '系统初始化成功！',
+      initFailed: '初始化失败，请重试',
+      systemError: '系统错误，请重试',
+      invalidHassUrl: 'Home Assistant URL 无效',
+      invalidHassToken: 'Home Assistant Token 无效'
+    },
   },
   en: {
-    
+    title: 'Hass Panel',
     // Common
     currentVersion:'Current Version',
     edit: 'Edit Layout',
@@ -988,7 +1032,9 @@ export const translations = {
       swingModes: {
         off: 'Off',
         vertical: 'Vertical',
+        horizontal: 'Horizontal',
         null: 'Off',
+        on: 'On',
         unavailable: 'Unknown',
         undefined: 'Unknown'
       },
@@ -1367,5 +1413,46 @@ export const translations = {
     updateSuccess: 'Update Successful',
     updateFailed: 'Update Failed',
     updateComplete: 'Update Complete, Refreshing Page...',
+    login: {
+      title: 'Login',
+      username: 'Username',
+      password: 'Password',
+      submit: 'Login',
+      usernameRequired: 'Please input your username',
+      passwordRequired: 'Please input your password',
+      success: 'Login successful',
+      failed: 'Login failed',
+      error: 'Login failed: '
+    },
+    initialize: {
+      title: 'System Initialization',
+      adminUsername: 'Admin Username',
+      adminPassword: 'Admin Password',
+      confirmPassword: 'Confirm Password',
+      hassUrl: 'HomeAssistant URL',
+      hassToken: 'HomeAssistant Token',
+      submit: 'Initialize System',
+      // placeholders
+      usernamePlaceholder: 'Please enter admin username',
+      passwordPlaceholder: 'Please enter admin password',
+      confirmPasswordPlaceholder: 'Please confirm admin password',
+      hassUrlPlaceholder: 'e.g. http://homeassistant.local:8123',
+      hassTokenPlaceholder: 'Please enter HomeAssistant long-lived access token (optional)',
+      requiredMark: 'optional',
+      // validation messages
+      usernameRequired: 'Please enter admin username',
+      passwordRequired: 'Please enter admin password',
+      passwordMinLength: 'Password must be at least 6 characters',
+      confirmPasswordRequired: 'Please confirm admin password',
+      passwordMismatch: 'The two passwords do not match',
+      hassUrlRequired: 'Please enter HomeAssistant URL',
+      invalidUrl: 'Please enter a valid URL',
+      // success/error messages
+      initSuccess: 'System initialized successfully!',
+      initFailed: 'Initialization failed, please try again',
+      systemError: 'System error, please try again',
+      invalidHassUrl: 'Invalid Home Assistant URL',
+      invalidHassToken: 'Invalid Home Assistant Token'
+    },
   }
 };

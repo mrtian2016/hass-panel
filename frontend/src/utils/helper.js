@@ -1,5 +1,3 @@
-import { listIcons } from '@iconify/react';
-
 import md5 from 'crypto-js/md5';
 
 export const hashPassword = (password) => {
@@ -40,8 +38,6 @@ export const safeGetState = (entity, defaultValue = '0') => {
 };
 
 export const getMdiIcons = (type='light') => {
-  const allIcons = listIcons();
-  console.log(allIcons);
   // 预定义常用的 MDI 图标
   let icons = [];
   if (type === 'light') {

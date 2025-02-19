@@ -43,11 +43,11 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
-  background: #fff;
+  background: var(--curtain-visual-bg, #fff);
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-top: 8px solid #eef3ff;
+  border: 1px solid var(--curtain-border-color, rgba(0, 0, 0, 0.1));
+  border-top: 8px solid var(--curtain-border-top-color, #eef3ff);
   width: 100%;
 }
 
@@ -56,10 +56,10 @@
   min-width: 4px;
   background: repeating-linear-gradient(
     90deg,
-    rgba(200, 220, 255, 0.3) 0px,
-    rgba(200, 220, 255, 0.3) 16px,
-    rgba(220, 230, 255, 0.3) 16px,
-    rgba(220, 230, 255, 0.3) 32px
+    var(--curtain-stripe-color-1, rgba(200, 220, 255, 0.3)) 0px,
+    var(--curtain-stripe-color-1, rgba(200, 220, 255, 0.3)) 16px,
+    var(--curtain-stripe-color-2, rgba(220, 230, 255, 0.3)) 16px,
+    var(--curtain-stripe-color-2, rgba(220, 230, 255, 0.3)) 32px
   );
   transition: width 0.3s ease;
   position: relative;
@@ -107,9 +107,9 @@
   bottom: 0;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0) 50%,
-    rgba(255, 255, 255, 0.1) 100%
+    var(--curtain-gradient-color, rgba(255, 255, 255, 0.1)) 0%,
+    var(--curtain-gradient-color-middle, rgba(255, 255, 255, 0)) 50%,
+    var(--curtain-gradient-color, rgba(255, 255, 255, 0.1)) 100%
   );
   background-size: 32px 100%;
 }
@@ -161,4 +161,24 @@
   .curtain-visual {
     width: 100%;
   }
+}
+
+:root {
+  --curtain-stripe-color-1: rgba(200, 220, 255, 0.3);
+  --curtain-stripe-color-2: rgba(220, 230, 255, 0.3);
+  --curtain-gradient-color: rgba(255, 255, 255, 0.1);
+  --curtain-gradient-color-middle: rgba(255, 255, 255, 0);
+  --curtain-visual-bg: #fff;
+  --curtain-border-color: rgba(0, 0, 0, 0.1);
+  --curtain-border-top-color: #eef3ff;
+}
+
+[data-theme='dark'] {
+  --curtain-stripe-color-1: rgba(50, 60, 80, 0.3);
+  --curtain-stripe-color-2: rgba(60, 70, 90, 0.3);
+  --curtain-gradient-color: rgba(0, 0, 0, 0.15);
+  --curtain-gradient-color-middle: rgba(0, 0, 0, 0);
+  --curtain-visual-bg: #1a1a1a;
+  --curtain-border-color: rgba(255, 255, 255, 0.1);
+  --curtain-border-top-color: #2a3346;
 } 

@@ -78,7 +78,7 @@ async def save_config(
                 
         # 更新go2rtc配置
         try:
-            go2rtc_config_path = "/etc/go2rtc.yaml"
+            go2rtc_config_path = cfg.base.go2rtc_config_path
             
             with open(go2rtc_config_path, "r", encoding="utf-8") as f:
                 go2rtc_config = yaml.safe_load(f) or {}

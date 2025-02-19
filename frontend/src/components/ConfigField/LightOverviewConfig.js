@@ -2,6 +2,8 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import { Select, Input } from 'antd';
 import { Icon } from '@iconify/react';
 import { getMdiIcons } from '../../utils/helper';
+import { configApi } from '../../utils/api';
+
 function LightOverviewConfig({field, value,handleLightOverviewChange,getFilteredEntities,handleDeleteRoom,handleAddRoom}) {
     const { t } = useLanguage();
     return (
@@ -90,17 +92,9 @@ function LightOverviewConfig({field, value,handleLightOverviewChange,getFiltered
                           const formData = new FormData();
                           formData.append('file', file);
                           try {
-                            const response = await fetch('./api/common/upload', {
-                              method: 'POST',
-                              body: formData
-                            });
-                            const result = await response.json();
-                            if (result.code === 200) {
-                              handleLightOverviewChange(index, 'image', result.data.file_path);
-                              console.log(result.data.file_path);
-                              // 给input赋值
-
-                            }
+                            const result = await configApi.uploadImage(file);
+                            handleLightOverviewChange(index, 'image', result.file_path);
+                        
                           } catch (error) {
                             console.error('上传失败:', error);
                           }

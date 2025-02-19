@@ -18,7 +18,6 @@ import {Slider} from 'antd';
 function MaxPlayerCard({ 
   config,
 }) {
-  console.log(config);
   const { theme } = useTheme();
   const titleVisible = config.titleVisible;
   const entity = useEntity(config.entity_id);
