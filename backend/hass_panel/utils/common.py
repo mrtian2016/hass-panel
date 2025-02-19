@@ -39,6 +39,9 @@ async def handle_upload_file(file: UploadFile, file_dir=None, file_path=None):
 
     with open(file_path, "wb") as f:
         f.write(await file.read())
+    
+    os.chmod(file_path, 0o777)
+
     return file_name, file_path
 
 
