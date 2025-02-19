@@ -102,6 +102,28 @@ function InitializePage() {
                     </Form.Item>
 
                     <Form.Item
+                        label="确认密码"
+                        name="confirmPassword"
+                        dependencies={['password']}
+                        rules={[
+                            {
+                                required: true,
+                                message: '请确认管理员密码',
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('password') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('两次输入的密码不一致'));
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input.Password placeholder="请再次输入管理员密码" />
+                    </Form.Item>
+
+                    <Form.Item
                         label="HomeAssistant地址"
                         name="hass_url"
                         rules={[

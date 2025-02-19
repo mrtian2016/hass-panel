@@ -71,6 +71,7 @@ function MainContent() {
     } catch (error) {
       console.error('检查系统状态失败:', error);
       setIsLoading(false);
+      navigate('/initialize');
     }
   }, [navigate, checkAuth]);
 
