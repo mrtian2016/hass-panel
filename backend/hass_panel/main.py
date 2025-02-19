@@ -9,6 +9,7 @@ from hass_panel.core.middlewares import proc_custom_exception
 from hass_panel.routers import update, user_config, common, auth, users
 from hass_panel.core.initial import lifespan
 from hass_panel.core.initial import cfg
+from loguru import logger
 ROUTERS = [
     common.router,
     update.router,
@@ -40,6 +41,7 @@ app.add_middleware(BaseHTTPMiddleware, dispatch=proc_custom_exception)
 
 
 if __name__ == '__main__':
+    print(f"Starting {cfg.base.name} on port {cfg.base.web_port}, env: {cfg.base.env}")
     uvicorn.run(
         app='main:app', 
         host="0.0.0.0", 
