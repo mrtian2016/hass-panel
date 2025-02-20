@@ -37,19 +37,15 @@ function Login() {
       });
       
       const data = await response.json();
-      
-      if (data.code === 200) {
-        localStorage.setItem('hass_panel_token', JSON.stringify({
-          access_token: data.data.access_token,
-        }));
-        message.success(t('login.success'));
-        setTimeout(() => {
-          navigate('/');
-          window.location.reload();
-        }, 2000);
-      } else {
-        message.error(data.message || t('login.failed'));
-      }
+  
+      localStorage.setItem('hass_panel_token', JSON.stringify({
+        access_token: data.access_token,
+      }));
+      message.success(t('login.success'));
+      setTimeout(() => {
+        navigate('/');
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       message.error(t('login.error') + error.message);
     } finally {

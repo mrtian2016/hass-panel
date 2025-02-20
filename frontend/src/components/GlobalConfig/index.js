@@ -1,5 +1,5 @@
 import { useLanguage } from '../../i18n/LanguageContext';
-import { configApi } from '../../utils/api';
+import { configApi,systemApi } from '../../utils/api';
 import { Switch, message } from 'antd';
 import { useRef, useEffect, useState } from 'react';
 import './style.css';
@@ -139,11 +139,19 @@ function GlobalConfig({ setShowGlobalConfig }) {
                         </button>
                         <button
                             className="reinitialize"
-                            onClick={() => {
-                                
+                            onClick={async () => {
+                                const result = await systemApi.reinitialize();
+                                if (result.code === 200) {
+                                    message.success(t('config.reinitializeSuccess'));
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                } else {
+                                    message.error(t('config.reinitializeFailed'));
+                                }
                             }}
                         >
-                            重新初始化
+                            {t('config.reinitialize')}
                         </button>
                         <button className="cancel" onClick={() => setShowGlobalConfig(false)}>
                             {t('config.cancel')}

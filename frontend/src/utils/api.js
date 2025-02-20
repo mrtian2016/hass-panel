@@ -361,5 +361,54 @@ export const systemApi = {
     } catch (error) {
       throw error;
     }
+  },
+  // 更新HASS配置
+  updateHassConfig: async (config) => {
+    try {
+      const response = await axiosInstance.put('/user_config/hass_config', config);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  // 重新初始化
+  reinitialize: async () => {
+    try {
+      const response = await axiosInstance.post('/common/reinitialize');
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 }; 
+
+export const hassApi = {
+  // 获取用电量统计数据
+  getEnergyStatistics: async (entityId) => {
+    try { 
+      const response = await axiosInstance.get(`/hass/energy/statistics/${entityId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  // 获取今日用电量数据
+  getTodayConsumption: async (entityId) => {
+    try {
+      const response = await axiosInstance.get(`/hass/energy/today/${entityId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  // 获取每日用电量数据
+  getDailyConsumption: async (entityId, days) => {
+    try {
+      const response = await axiosInstance.get(`/hass/energy/daily/${entityId}?days=${days}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  } 
+};
+

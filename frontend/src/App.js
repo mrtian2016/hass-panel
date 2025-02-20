@@ -40,9 +40,10 @@ function MainContent() {
           hassUrl: data.data.url,
           hassToken: data.data.token
         });
+        localStorage.setItem('hass_url', data.data.url);
         setIsAuthenticated(true);
       } else if (data.code === 401) {
-        localStorage.removeItem('hassPanelToken');
+        localStorage.removeItem('hass_panel_token');
         navigate('/login');
       }
     } catch (error) {
@@ -51,6 +52,20 @@ function MainContent() {
       setIsLoading(false);
     }
   }, [navigate, setHassConfig, setIsAuthenticated, setIsLoading]);
+
+  const updateHassConfig = async () => {
+    try {
+      const hassToken = JSON.parse(localStorage.getItem('hassTokens'));
+      console.log('hassToken', hassToken);
+      const result = await systemApi.updateHassConfig({
+        hass_url: hassToken.hassUrl,
+        hass_token: hassToken.access_token
+      });
+      console.log('result', result);
+    } catch (error) {
+      console.error('更新 HASS 配置失败:', error);
+    }
+  }
 
   const checkInitStatus = useCallback(async () => {
     try {
@@ -89,6 +104,10 @@ function MainContent() {
                 <HassConnect 
                   hassUrl={hassConfig.hassUrl} 
                   hassToken={hassConfig.hassToken}
+                  onReady={async () => {
+                    console.log('HassConnect ready');
+                    await updateHassConfig();
+                  }}
                 >
                   <div className="App">
                     <Routes>

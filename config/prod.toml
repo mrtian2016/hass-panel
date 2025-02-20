@@ -1,8 +1,0 @@
-[database.sqlite]
-db_dir = "data"
-db_name = "hass_panel.db"
-
-[security]
-SECRET_KEY = "your-secret-key-here"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1440 

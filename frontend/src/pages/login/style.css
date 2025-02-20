@@ -112,7 +112,7 @@
   background: var(--color-background);
   border-color: var(--color-border);
   color: var(--color-text-primary);
-  height: 40px;
+  /* height: 40px; */
   border-radius: 6px;
   transition: all 0.3s ease;
 }

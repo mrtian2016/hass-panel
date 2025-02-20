@@ -10,9 +10,8 @@ from omegaconf.errors import ConfigAttributeError
 from loguru import logger
 logger.remove()
 
-from utils.log_handler import CompatibleSMTPSSLHandler
-from utils.config import read_config, DEFAULT_CONFIG_PATH
-cfg = read_config(DEFAULT_CONFIG_PATH)
+from hass_panel.utils.log_handler import CompatibleSMTPSSLHandler
+from hass_panel.utils.config import cfg
 
 # exce_handler 自动发送邮件handler
 try:

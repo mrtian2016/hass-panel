@@ -1,18 +1,79 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import BaseCard from '../BaseCard';
 import { mdiLightningBolt, mdiEye } from '@mdi/js';
-import Icon from '@mdi/react';
 import ReactECharts from 'echarts-for-react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
 import { useEntity } from '@hakit/core';
 import { notification } from 'antd';
+import { hassApi } from '../../utils/api';
+import { ElectricityInfoItem } from './ElectricityInfoItem';
 
 function ElectricityCard({ 
   config,
 }) {
   const { t } = useLanguage();
+  // {
+  //   "summary": {
+  //     "yesterday": 13.09,
+  //     "last_month": 44.36,
+  //     "this_month": 244.42,
+  //     "this_year": 288.8
+  //   },
+  //   "daily": {
+  //     "2025-02-19": 13.09,
+  //     "2025-02-18": 12.47,
+  //     "2025-02-17": 12.5,
+  //     "2025-02-16": 14.2,
+  //     "2025-02-15": 14.62,
+  //     "2025-02-14": 13.03,
+  //     "2025-02-13": 11.7
+  //   }
+  // }
+  const [summaryData, setSummaryData] = useState([]);
+  const [chartData, setChartData] = useState({ dates: [], values: [] });
+  const [todayUsage, setTodayUsage] = useState(0.0);
+
+
+
   const debugMode = localStorage.getItem('debugMode') === 'true';
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!config.electricity?.totalUsage?.entity_id) {
+        return;
+      }
+      try {
+        const [statisticsData, todayUsageData] = await Promise.all([
+          hassApi.getEnergyStatistics(config.electricity.totalUsage.entity_id),
+          hassApi.getTodayConsumption(config.electricity.totalUsage.entity_id)
+        ]);
+        console.log(statisticsData, todayUsageData);
+        if (statisticsData.code === 200) {
+          setSummaryData(statisticsData.data.summary);
+          setChartData({
+            dates: Object.keys(statisticsData.data.daily),
+            values: Object.values(statisticsData.data.daily),
+          });
+        }
+
+        if (todayUsageData.code === 200) {
+          setTodayUsage(todayUsageData.data.total);
+        }
+      } catch (error) {
+        console.error('获取数据失败:', error);
+        if (debugMode) {
+          notification.error({
+            message: t('electricity.fetchError'),
+            description: error.message,
+          });
+        }
+      }
+    };
+    fetchData();
+  }, [config.electricity?.totalUsage?.entity_id, debugMode, t]);
+
   // 检查配置是否存在
   if (!config || !config.electricity) {
     return (
@@ -27,7 +88,6 @@ function ElectricityCard({
       </BaseCard>
     );
   }
-
   // 动态加载电力数据实体
   const electricityEntities = Object.entries(config.electricity).reduce((acc, [key, config]) => {
     try {
@@ -56,43 +116,8 @@ function ElectricityCard({
     return acc;
   }, {});
 
-  // 安全获取历史数据
-  const historyData = electricityEntities.dailyHistory?.entity?.state;
-  
-  // 解析历史数据字符串
-  let parsedData = [];
-  let chartData = { dates: [], values: [] };
-  
-  try {
-    if (historyData) {
-      parsedData = historyData.split('\n').map(line => {
-        const [date, usage] = line.split(': ');
-        if (!date || !usage) {
-          throw new Error('数据格式无效');
-        }
-        return {
-          date: date,
-          usage: parseFloat(usage.replace(' kWh', ''))
-        };
-      });
 
-      chartData = {
-        dates: parsedData.map(item => item.date),
-        values: parsedData.map(item => item.usage)
-      };
-    }
-  } catch (error) {
-    console.error('解析历史数据失败:', error);
-    if (debugMode) {
-      notification.error({
-        message: t('electricity.parseError'),
-        description: t('electricity.parseErrorDesc') + error.message,
-        placement: 'topRight',
-        duration: 3,
-        key: 'ElectricityCard',
-      });
-    }
-  }
+  
 
   // 图表配置
   const chartOption = {
@@ -174,13 +199,63 @@ function ElectricityCard({
   };
 
   // 在渲染实体状态的地方添加安全检查
-  const getEntityValue = (entityKey) => {
+  const getEntityValue = (entityKey,returnBooleanIfNotFound = false) => {
     const entity = electricityEntities[entityKey]?.entity;
     if (!entity || entity.error || entity.state === undefined || entity.state === null) {
-      return '- -';
+      return returnBooleanIfNotFound ? false : '- -';
     }
     return entity.state;
   };
+
+  // 替换 electricity-yearly-info 部分
+  const yearlyInfoItems = [
+    {
+      icon: mdiLightningBolt,
+      label: t('electricity.voltage'),
+      value: getEntityValue('voltage'),
+      unit: t('electricity.unit.volt')
+    },
+    {
+      icon: mdiLightningBolt,
+      label: t('electricity.current'),
+      value: getEntityValue('electric_current'),
+      unit: t('electricity.unit.ampere')
+    },
+    {
+      icon: mdiLightningBolt,
+      label: t('electricity.power'),
+      value: getEntityValue('currentPower'),
+      unit: t('electricity.unit.watt')
+    }
+  ];
+
+  // 替换 electricity-info-grid 部分
+  const gridInfoItems = [
+    {
+      icon: mdiLightningBolt,
+      label: t('electricity.monthUsage'),
+      value: summaryData.this_month,
+      unit: t('electricity.unit.degree')
+    },
+    {
+      icon: mdiLightningBolt,
+      label: t('electricity.lastMonthUsage'),
+      value: summaryData.last_month,
+      unit: t('electricity.unit.degree')
+    },
+    {
+      icon: mdiLightningBolt,
+      label: t('electricity.todayUsage'),
+      value: getEntityValue('todayUsage', true) || todayUsage,
+      unit: t('electricity.unit.degree')
+    },
+    {
+      icon: mdiLightningBolt,
+      label: t('electricity.yesterdayUsage'),
+      value: summaryData.yesterday,
+      unit: t('electricity.unit.degree')
+    }
+  ];
 
   return (
     
@@ -208,86 +283,15 @@ function ElectricityCard({
         </div>}
 
         <div className="electricity-yearly-info">
-          <div className="yearly-item">
-            <div className="info-label">
-              <Icon path={mdiLightningBolt} size={0.8} />
-              <span>{t('electricity.voltage')}</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{getEntityValue('voltage')}</span>
-              <span className="unit">{t('electricity.unit.volt')}</span>
-            </div>
-          </div>
-          <div className="yearly-item">
-            <div className="info-label">
-              <Icon path={mdiLightningBolt} size={0.8} />
-                <span>{t('electricity.current')}</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{getEntityValue('electric_current')}</span>
-                <span className="unit">{t('electricity.unit.ampere')}</span>
-            </div>
-          </div>
-          <div className="yearly-item">
-            <div className="info-label">
-              <Icon path={mdiLightningBolt} size={0.8} />
-              <span>{t('electricity.power')}</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{getEntityValue('currentPower')}</span>
-              <span className="unit">{t('electricity.unit.watt')}</span>
-            </div>
-          </div>
+          {yearlyInfoItems.map((item, index) => (
+            <ElectricityInfoItem key={index} {...item} />
+          ))}
         </div>
 
         <div className="electricity-info-grid">
-       
-
-          <div className="electricity-info-item">
-            <div className="info-label">
-              <Icon path={mdiLightningBolt} size={0.8} />
-              <span>{t('electricity.monthUsage')}</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{getEntityValue('monthUsage')}</span>
-              <span className="unit">{t('electricity.unit.degree')}</span>
-            </div>
-          </div>
-          <div className="electricity-info-item">
-            <div className="info-label">
-              <Icon path={mdiLightningBolt} size={0.8} />
-              <span>{t('electricity.lastMonthUsage')}</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{getEntityValue('lastMonthUsage')}</span>
-              <span className="unit">{t('electricity.unit.degree')}</span>
-            </div>
-          </div>
-
-         
-
-          <div className="electricity-info-item">
-            <div className="info-label">
-              <Icon path={mdiLightningBolt} size={0.8} />
-              <span>{t('electricity.todayUsage')}</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{getEntityValue('todayUsage')}</span>
-              <span className="unit">{t('electricity.unit.degree')}</span>
-
-            </div>
-          </div>
-          <div className="electricity-info-item">
-            <div className="info-label">
-              <Icon path={mdiLightningBolt} size={0.8} />
-              <span>{t('electricity.yesterdayUsage')}</span>
-            </div>
-            <div className="electricity-value">
-              <span className="value">{getEntityValue('yesterdayUsage')}</span>
-              <span className="unit">{t('electricity.unit.degree')}</span>
-
-            </div>
-          </div>
+          {gridInfoItems.map((item, index) => (
+            <ElectricityInfoItem key={index} {...item} />
+          ))}
         </div>
       </div>
     </BaseCard>

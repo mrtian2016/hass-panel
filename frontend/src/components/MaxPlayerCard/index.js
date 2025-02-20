@@ -23,8 +23,9 @@ function MaxPlayerCard({
   const entity = useEntity(config.entity_id);
   const { t } = useLanguage();
   const entityState = entity?.state || 'off';
+  const hassUrl = localStorage.getItem('hass_url');
   const coverUrl = entity?.attributes?.entity_picture 
-    ? `${window.env?.REACT_APP_HASS_URL}${entity.attributes.entity_picture}`
+    ? `${hassUrl}${entity.attributes.entity_picture}`
     : null;
 
     

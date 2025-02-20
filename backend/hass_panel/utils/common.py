@@ -12,7 +12,7 @@ from loguru import logger
 from core.exc import MSTimeout
 from glob import glob
 from fastapi.responses import JSONResponse
-from hass_panel.core.initial import cfg
+from hass_panel.utils.config import cfg
 def generate_resp(code: Optional[int]=200, message: Optional[str]=None, data: Optional[dict]=None, error: Optional[str]=None, **kwargs):
     # assert message or data or error, 'generate response error'
     resp = {

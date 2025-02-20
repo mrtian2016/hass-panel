@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, UploadFile, HTTPException
 from loguru import logger
 import os
-from hass_panel.core.initial import cfg
+from hass_panel.utils.config import cfg
 from hass_panel.utils.common import check_hass_token, generate_resp, handle_upload_file
 from hass_panel.core.auth_deps import get_current_user
 from hass_panel.models.database import User, HassConfig, SessionLocal
@@ -86,41 +86,16 @@ async def initialize(data: InitializeData):
     finally:
         db.close()
 
-@router.get("/hass_config")
-async def get_hass_config(current_user: User = Depends(get_current_user)):
-    """获取Home Assistant配置"""
+@router.post("/reinitialize")
+async def reinitialize(current_user: User = Depends(get_current_user)):
+    """重新初始化"""
     db = SessionLocal()
     try:
-        hass_config = db.query(HassConfig).first()
-        if not hass_config:
-            return generate_resp(code=404, message="Home Assistant configuration not found")
-        
-        return generate_resp(data={
-            "url": hass_config.hass_url,
-            "token": hass_config.hass_token
-        })
-    finally:
-        db.close()
-
-@router.put("/hass_config")
-async def update_hass_config(
-    hass_url: str,
-    hass_token: str,
-    current_user: User = Depends(get_current_user)
-):
-    """更新Home Assistant配置"""
-    db = SessionLocal()
-    try:
-        hass_config = db.query(HassConfig).first()
-        if not hass_config:
-            hass_config = HassConfig()
-            db.add(hass_config)
-        
-        hass_config.hass_url = hass_url
-        hass_config.hass_token = hass_token
-        
+        # 删除所有用户和Home Assistant配置
+        db.query(User).delete()
+        db.query(HassConfig).delete()
         db.commit()
-        return generate_resp(message="Home Assistant configuration updated successfully")
+        return generate_resp(message="System reinitialized successfully")
     except Exception as e:
         db.rollback()
         return generate_resp(code=500, message=str(e))

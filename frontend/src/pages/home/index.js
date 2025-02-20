@@ -76,6 +76,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     const savedColumns = localStorage.getItem('dashboard-columns');
     return savedColumns ? JSON.parse(savedColumns) : { lg: 3, md: 3, sm: 1 };
   });
+  const maxColumnCount = 8;
+  const minColumnCount = 1;
 
   // 添加当前配置状态
   const [currentConfig, setCurrentConfig] = useState(null);
@@ -350,7 +352,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     }
     const newColumnCount = {
       ...columnCount,
-      [breakpoint]: columnCount[breakpoint] >= 5 ? 3 : columnCount[breakpoint] + 1
+      [breakpoint]: columnCount[breakpoint] >= maxColumnCount ? minColumnCount : columnCount[breakpoint] + 1
     };
     setColumnCount(newColumnCount);
     localStorage.setItem('dashboard-columns', JSON.stringify(newColumnCount));
@@ -549,7 +551,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               {isEditing && !isMobile && (
                 <button
                   className={`pc-edit-toggle ${isEditing ? 'active' : ''}`}
-                  onClick={() => setIsEditing(false)}
+                  onClick={() => {
+                    handleSaveLayout()
+                  }}
                   title={t('done')}
                 >
                   <Icon

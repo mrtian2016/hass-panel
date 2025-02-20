@@ -3,9 +3,11 @@ name = 'Hass Panel'
 web_port = 5124
 env = "dev"
 debug = true
-user_config_dir = "../data/user_configs"
-upload_dir = '../data/upload'
-go2rtc_config_path = "../data/go2rtc.yaml"
+user_config_dir = "../data/hass-panel-dev/user_configs"
+upload_dir = '../data/hass-panel-dev/upload'
+go2rtc_config_path = "../data/hass-panel-dev/go2rtc.yaml"
+cache_dir = "../data/hass-panel-dev/cache"
+
 [update_cfg]
 github_repo = "mrtian2016/hass-panel"
 app_dir = "../frontend/build"
@@ -13,15 +15,16 @@ version_file = "../frontend/build/version.json"
 tmp_dir = "/tmp/hass-panel-update"
 exclude_path = ["media", "env.js", "env.template.js"]
 
+
 [log]
 log_output_dir = "logs"
 
 [database]
-sqlite_path = "../data/hass_panel.db"
+sqlite_path = "../data/hass-panel-dev/hass_panel.db"
 
 [security]
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_DAYS = 30
 schemes = ["bcrypt"]
 

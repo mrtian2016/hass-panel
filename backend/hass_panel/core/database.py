@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from hass_panel.core.initial import cfg
+from hass_panel.utils.config import cfg
 import os
 
 # 确保数据库目录存在

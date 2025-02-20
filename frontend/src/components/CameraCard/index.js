@@ -10,13 +10,13 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
   const [hasError, setHasError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const { t } = useLanguage();
+  const hassUrl = localStorage.getItem('hass_url');
 
 
   if (!camera) return null;
   // console.log(camera);
 
-  const previewUrl = camera.poster?.url || 
-    window.env?.REACT_APP_HASS_URL + camera?.attributes?.entity_picture;
+  const previewUrl = hassUrl + camera?.attributes?.entity_picture;
 
   const webrtc_play_url = playUrl || streamUrl;
 

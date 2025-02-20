@@ -27,6 +27,11 @@ if [ ! -d "$CONFIG_DIR/upload" ]; then
     mkdir -p "$CONFIG_DIR/upload"
 fi
 
+# 如果 go2rtc.yaml 文件不存在，则创建
+if [ ! -f "$CONFIG_DIR/go2rtc.yaml" ]; then
+    cp /etc/go2rtc.yaml "$CONFIG_DIR/go2rtc.yaml"
+fi
+
 # 设置目录权限
 chown -R nginx:nginx "$CONFIG_DIR/upload"
 chmod -R 755 "$CONFIG_DIR/upload"

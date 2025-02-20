@@ -555,12 +555,8 @@ function ConfigField({ field, value, onChange }) {
         { key: 'currentPower', name: t('configField.currentPower') },
         { key: 'voltage', name: t('configField.voltage') },
         { key: 'electric_current', name: t('configField.electricCurrent') },
+        { key: 'totalUsage', name: t('configField.totalUsage') },
         { key: 'todayUsage', name: t('configField.todayUsage') },
-        { key: 'yesterdayUsage', name: t('configField.yesterdayUsage') },
-        { key: 'monthUsage', name: t('configField.monthUsage') },
-        { key: 'lastMonthUsage', name: t('configField.lastMonthUsage') },
-        { key: 'yearlyUsage', name: t('configField.yearlyUsage') },
-        { key: 'dailyHistory', name: t('configField.dailyHistory') }
       ];
       
       return (

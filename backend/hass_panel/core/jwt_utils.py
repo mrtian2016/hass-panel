@@ -2,14 +2,14 @@ from typing import Optional
 from datetime import datetime, timedelta
 import jwt
 from fastapi.security import OAuth2PasswordBearer
-from hass_panel.core.initial import cfg
+from hass_panel.utils.config import cfg
 
 cfg_security = cfg.security
 token_url = "api/auth/token"
 
 SECRET_KEY = cfg_security.SECRET_KEY
 ALGORITHM = cfg_security.ALGORITHM
-ACCESS_TOKEN_EXPIRE_MINUTES = cfg_security.ACCESS_TOKEN_EXPIRE_MINUTES
+ACCESS_TOKEN_EXPIRE_DAYS = cfg_security.ACCESS_TOKEN_EXPIRE_DAYS
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=token_url)
 

@@ -4,7 +4,7 @@ from typing import Dict
 import os
 from hass_panel.utils.common import generate_resp
 from hass_panel.utils.updater import get_latest_release, run_update, process_manual_update, apply_manual_update
-from hass_panel.core.initial import cfg
+from hass_panel.utils.config import cfg
 from hass_panel.core.auth_deps import get_current_user
 router = APIRouter(
     prefix='/api',

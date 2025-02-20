@@ -6,7 +6,7 @@ from datetime import datetime
 import zipfile
 from loguru import logger
 import subprocess
-from hass_panel.core.initial import cfg
+from hass_panel.utils.config import cfg
 import tarfile
 from typing import Dict
 from fastapi import UploadFile

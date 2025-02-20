@@ -8,7 +8,7 @@ from hass_panel.core.hash_utils import verify_password, hash_password
 from hass_panel.core.jwt_utils import create_access_token
 from hass_panel.models.database import User
 from hass_panel.utils.common import generate_resp
-from hass_panel.core.initial import cfg
+from hass_panel.utils.config import cfg
 
 router = APIRouter(
     prefix="/api/auth",
@@ -46,14 +46,14 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    access_token_expires = timedelta(minutes=cfg.security.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(days=cfg.security.ACCESS_TOKEN_EXPIRE_DAYS)
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    return generate_resp(data={
+    return {
         "access_token": access_token,
         "token_type": "Bearer"
-    })
+    }
 
 @router.post("/register")
 async def register(username: str, password: str, db: Session = Depends(get_db)):

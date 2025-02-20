@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 import hashlib
-from core.initial import cfg
+from hass_panel.utils.config import cfg
 
 schemes = cfg.security.schemes
 

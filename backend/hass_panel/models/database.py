@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
-from hass_panel.core.initial import cfg
+from hass_panel.utils.config import cfg
 
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{cfg.database.sqlite_path}"
 
@@ -29,6 +29,15 @@ class HassConfig(Base):
     id = Column(Integer, primary_key=True, index=True)
     hass_url = Column(String, nullable=False)
     hass_token = Column(Text, nullable=False)  # 使用Text类型存储可能较长的token
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
+
+class Entity(Base):
+    __tablename__ = "entities"
+
+    id = Column(Integer, primary_key=True, index=True)
+    entity_id = Column(String, nullable=False, unique=True)
+    name = Column(String, nullable=False, unique=True)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 

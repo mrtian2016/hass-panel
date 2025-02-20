@@ -8,8 +8,9 @@ from pathlib import Path
 import yaml
 import hashlib
 from loguru import logger
-from hass_panel.utils.common import generate_resp
-from hass_panel.core.initial import cfg
+from pydantic import BaseModel
+from hass_panel.utils.common import generate_resp,check_hass_token
+from hass_panel.utils.config import cfg
 import subprocess
 from hass_panel.core.auth_deps import get_current_user
 from hass_panel.models.database import User, HassConfig, SessionLocal
@@ -213,7 +214,17 @@ async def get_hass_config():
     try:
         hass_config = db.query(HassConfig).first()
         if not hass_config:
-            raise HTTPException(status_code=404, detail="Home Assistant configuration not found")
+            return generate_resp(code=400, error="Home Assistant configuration not found")
+
+        # 检查hass_token是否正确
+        check_result = await check_hass_token(hass_config.hass_url, hass_config.hass_token)
+        if not check_result:
+            hass_config.hass_token = ''
+            db.commit()
+            return generate_resp(data={
+                "url": hass_config.hass_url,
+                "token": ''
+            })
         
         return generate_resp(data={
             "url": hass_config.hass_url,
@@ -225,18 +236,29 @@ async def get_hass_config():
     finally:
         db.close()
 
+class HassConfigUpdate(BaseModel):
+    hass_url: str
+    hass_token: str
+
 @router.put("/hass_config")
-async def update_hass_config(hass_url: str, hass_token: str):
+async def update_hass_config(config: HassConfigUpdate):
     """更新Hass配置"""
     db = SessionLocal()
     try:
+        # 检查存在hass_url和hass_token是否正确
+        logger.info(f"config: {config.hass_url}，{config.hass_token}")
+        check_result = await check_hass_token(config.hass_url, config.hass_token)
+        logger.info(f"check_result: {check_result}")
+        if not check_result:
+            return generate_resp(code=400, error="Home Assistant token is invalid")
+
         hass_config = db.query(HassConfig).first()
         if not hass_config:
             hass_config = HassConfig()
             db.add(hass_config)
         
-        hass_config.hass_url = hass_url
-        hass_config.hass_token = hass_token
+        hass_config.hass_url = config.hass_url
+        hass_config.hass_token = config.hass_token
         
         db.commit()
         return generate_resp(message="Home Assistant configuration updated successfully")

@@ -451,7 +451,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
   const [showGlobalConfig, setShowGlobalConfig] = useState(false);
   
 
-  // 加载配置数据
+  // 修改加载配置数据的 useEffect
   useEffect(() => {
     const loadConfig = async () => {
       try {
@@ -473,7 +473,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
     };
 
     loadConfig();
-  }, [t]);
+  }, []); // 移除 t 依赖，因为它不需要在这里触发重新加载
 
 
 
@@ -704,6 +704,8 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
 
     setCards(prevCards => [...prevCards, newCard]);
     setShowAddModal(false);
+    setShowEditModal(true);
+    setEditingCard(newCard);
     setHasUnsavedChanges(true);
   };
 
