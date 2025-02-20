@@ -125,7 +125,7 @@ async def save_config(
                                     existing_urls.add(camera["stream_url"])
                                 
                                 # 添加播放地址到摄像头配置
-                                camera["play_url"] = f"/go2rtc/webrtc.html?src={stream_key}&media=video+audio"
+                                camera["play_url"] = f"./go2rtc/stream.html?src={stream_key}"
                             
                             updated_cameras.append(camera)
                         

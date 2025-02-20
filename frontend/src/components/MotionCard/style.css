@@ -37,12 +37,12 @@
 }
 
 .history-item .time {
-  font-size: 14px;
+  font-size: 14px !important;
   color: var(--color-text-primary);
   font-weight: normal;
   min-width: 45px;
   text-align: right;
-margin: 0;
+  margin: 0;
 }
 
 .history-item::after {
