@@ -111,16 +111,25 @@ async def save_config(
                                 base_name = camera.get("name") or camera.get("entity_id") or camera["stream_url"]
                                 stream_key = generate_stream_key(base_name)
                                 
-                                # 确保key唯一
-                                counter = 1
-                                original_key = stream_key
-                                while stream_key in existing_keys:
-                                    stream_key = f"{original_key}_{counter}"
-                                    counter += 1
-                                existing_keys.add(stream_key)
+                                # 检查URL是否已存在，如果存在则使用原有的key
+                                existing_key = None
+                                for key, url in go2rtc_config["streams"].items():
+                                    if url == camera["stream_url"]:
+                                        existing_key = key
+                                        break
                                 
-                                # 如果URL不存在，则添加到go2rtc配置
-                                if camera["stream_url"] not in existing_urls:
+                                if existing_key:
+                                    stream_key = existing_key
+                                else:
+                                    # 确保key唯一
+                                    counter = 1
+                                    original_key = stream_key
+                                    while stream_key in existing_keys:
+                                        stream_key = f"{original_key}_{counter}"
+                                        counter += 1
+                                    existing_keys.add(stream_key)
+                                    
+                                    # 添加新的URL到go2rtc配置
                                     go2rtc_config["streams"][stream_key] = camera["stream_url"]
                                     existing_urls.add(camera["stream_url"])
                                 
