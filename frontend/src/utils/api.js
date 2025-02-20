@@ -333,7 +333,7 @@ export const updateApi = {
   // 获取当前版本信息
   getCurrentVersion: async () => {
     try {
-      const response = await axios.get('/version.json');
+      const response = await axios.get('./version.json');
       return response.data;
     } catch (error) {
       throw error;
