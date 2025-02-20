@@ -2,5 +2,11 @@ api:
     listen: ":5125"
     base_path: "/go2rtc"
 
+rtsp:
+    listen: ":5126"
+
+webrtc:
+    listen: ":5127"
+
 streams:
   
