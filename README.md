@@ -52,7 +52,7 @@ docker run \
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
-
+安装完成后直接打开机器的5123端口即可使用
 
 ### Home Assistant Addon方式
 
