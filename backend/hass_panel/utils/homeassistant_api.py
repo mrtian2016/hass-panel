@@ -371,6 +371,8 @@ class HomeAssistantAPI:
             else:
                 daily_consumption[day_str] = 0
         
+        # 按日期排序 日期是key, 日期是字符串
+        daily_consumption = dict(sorted(daily_consumption.items(), key=lambda x: x[0]))
         return daily_consumption
 
     async def get_all_statistics(self, entity_id: str, daily_days: int = 7) -> Dict[str, Any]:
@@ -466,6 +468,8 @@ class HomeAssistantAPI:
             day_str = day_start.strftime('%Y-%m-%d')
             daily[day_str] = get_period_consumption(day_start, day_end)
         
+        # 按日期排序 日期是key, 日期是字符串 返回结果需要是字典
+        daily = dict(sorted(daily.items(), key=lambda x: x[0]))
         return {
             "summary": summary,
             "daily": daily
