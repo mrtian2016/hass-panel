@@ -20,6 +20,9 @@
 - 🔧 高度可配置，自由拖拽布局
 - 🚀 PWA支持，可安装到桌面
 - 🎨 美观的用户界面，支持暗色模式
+- 👥 多用户管理系统，支持JWT认证
+- 🔐 安全的密码加密存储
+- 🎥 强大的摄像头支持，包括WebRTC/ONVIF/RTSP
 - 🔌 丰富的设备支持:
   - 灯光控制
   - 空调控制
@@ -27,40 +30,28 @@
   - 传感器监控
   - 摄像头查看
   - 场景控制
+  - 用电量统计
+  - 插座控制
   - 更多设备支持中...
 
 ## 安装部署
+
+### 重要提示
+从 v1.3.2 版本开始:
+- 系统使用 SQLite 数据库进行配置存储
+- 首次使用需要完成系统初始化流程
+- 摄像头功能需要正确配置 ONVIF/RTSP 地址
 
 ### Docker方式 正式版
 ```bash
 docker run \
   --name hass-panel \
   --restart unless-stopped \
-  -p 5123:5123 \
+  --network host \
   -v ./data/:/config/hass-panel \
-  -e REACT_APP_HASS_URL=http://your-hass-instance:8123 \
-  -e REACT_APP_HASS_TOKEN=your-hass-token \ 
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
-
-环境变量说明:
-- `REACT_APP_HASS_URL`: Home Assistant 实例地址
-- `REACT_APP_HASS_TOKEN`: Home Assistant 长期访问令牌(可选)
-
-### Docker方式 测试版
-```bash
-docker run \
-  --name hass-panel \
-  --restart unless-stopped \
-  -p 5123:5123 \
-  -v ./data/:/config/hass-panel \
-  -d \
-  ghcr.io/mrtian2016/hass-panel:latest-beta
-```
-环境变量说明:
-- `REACT_APP_HASS_URL`: Home Assistant 实例地址
-- `REACT_APP_HASS_TOKEN`: Home Assistant 长期访问令牌(可选)
 
 
 ### Home Assistant Addon方式
@@ -86,16 +77,18 @@ docker run \
 4. 房间灯光概览卡片 (LightOverviewCard)
 5. 传感器卡片 (SensorCard)
 6. 媒体播放器卡片 (MediaPlayerCard)
-7. 窗帘控制卡片 (CurtainCard)
-8. 电量监控卡片 (ElectricityCard)
-9. 路由器监控卡片 (RouterCard)
-10. NAS监控卡片 (NASCard)
-11. 摄像头卡片 (CameraCard)
-12. 空调控制卡片 (ClimateCard)
-13. 人体传感器卡片 (MotionCard)
-14. 净水器卡片 (WaterPurifierCard)
-15. 光照传感器卡片 (IlluminanceCard)
-16. 快捷指令面板 (ScriptPanel)
+7. 大型媒体播放器卡片 (MaxPlayerCard)
+8. 窗帘控制卡片 (CurtainCard)
+9. 电量监控卡片 (ElectricityCard)
+10. 路由器监控卡片 (RouterCard)
+11. NAS监控卡片 (NASCard)
+12. 摄像头卡片 (CameraCard)
+13. 空调控制卡片 (ClimateCard)
+14. 人体传感器卡片 (MotionCard)
+15. 净水器卡片 (WaterPurifierCard)
+16. 光照传感器卡片 (IlluminanceCard)
+17. 快捷指令面板 (ScriptPanel)
+18. 插座状态卡片 (SocketCard)
 
 ### 卡片管理
 
@@ -103,7 +96,7 @@ docker run \
 - 支持拖拽排序
 - 支持自定义大小(桌面端)
 - 支持添加/编辑/删除卡片
-- 支持自定义布局(3-5列)
+- 支持自定义布局(3-8列)
 - 支持响应式布局
 
 ## 开发

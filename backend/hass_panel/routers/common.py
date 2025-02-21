@@ -1,8 +1,11 @@
 from fastapi import APIRouter, Depends, UploadFile, HTTPException
+from fastapi.responses import FileResponse
 from loguru import logger
 import os
+import shutil
+from datetime import datetime
 from hass_panel.utils.config import cfg
-from hass_panel.utils.common import check_hass_token, generate_resp, handle_upload_file
+from hass_panel.utils.common import check_hass_token, compress_directory, generate_resp, handle_upload_file
 from hass_panel.core.auth_deps import get_current_user
 from hass_panel.models.database import User, HassConfig, SessionLocal
 from hass_panel.core.hash_utils import hash_password
@@ -101,3 +104,32 @@ async def reinitialize(current_user: User = Depends(get_current_user)):
         return generate_resp(code=500, message=str(e))
     finally:
         db.close()
+
+# 下载日志
+@router.get("/download_log")
+async def download_log(current_user: User = Depends(get_current_user)):
+    """下载日志文件
+    将日志目录打包成zip文件并提供下载
+    """
+    try:
+        log_path = cfg.log.server_log
+        if not os.path.exists(log_path):
+            raise HTTPException(status_code=404, detail="Log directory not found")
+        
+        # 创建临时zip文件
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        zip_filename = f"hass_panel_logs_{timestamp}.tar"
+        zip_path = os.path.join('/tmp', zip_filename)
+        compress_directory(log_path, zip_path)
+        # 返回文件响应
+        return FileResponse(
+            path=zip_path,
+            filename=zip_filename,
+            media_type='application/x-tar',
+            background=None  # 同步删除临时文件
+        )
+    except Exception as e:
+        logger.error(f"Failed to download logs: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+

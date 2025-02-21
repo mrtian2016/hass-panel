@@ -2,10 +2,12 @@ import inspect
 import asyncio
 import datetime
 import functools
+import tarfile
 from typing import Optional, Callable, Union, Iterable
 from asyncio.exceptions import TimeoutError
 import os.path as osp
 import os
+import zipfile
 import aiohttp
 from fastapi import UploadFile
 from loguru import logger
@@ -79,3 +81,28 @@ async def check_hass_token(hass_url: str, hass_token: str):
             logger.error(f"check_hass_token error: {e}")
             return False
     return True
+
+
+
+def compress_directory(input_path, output_path):
+    # 检查输出文件的扩展名来决定压缩格式
+    if output_path.endswith(".zip"):
+        with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(input_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    zipf.write(
+                        file_path,
+                        os.path.relpath(file_path, input_path),
+                        compresslevel=1,
+                    )
+    elif output_path.endswith(".tar.gz"):
+        with tarfile.open(output_path, "w:gz") as tar:
+            tar.add(input_path, arcname=os.path.basename(input_path))
+    elif output_path.endswith(".tar"):
+        with tarfile.open(output_path, "w") as tar:
+            tar.add(input_path, arcname=os.path.basename(input_path))
+    else:
+        raise ValueError(
+            "Unsupported file format. Please use '.zip' or '.tar.gz' or '.tar' as the file extension."
+        )

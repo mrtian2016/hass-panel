@@ -3,10 +3,7 @@ version: '3.8'
 services:
   hass-panel:
     image: ghcr.io/mrtian2016/hass-panel:latest
-    ports:
-      - "5123:5123"
+    network_mode: host
     volumes:
       - ./data/hass-panel/:/config/hass-panel
-    environment:
-      - REACT_APP_HASS_URL=http://your-hass-url:8123
     restart: unless-stopped 

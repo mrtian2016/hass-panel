@@ -62,10 +62,12 @@ function InitializePage() {
                 } else if (data.code === 402) {
                     message.error(t('initialize.invalidHassToken'));
                 } else {
+                    console.log(data);
                     message.error(data.message || t('initialize.initFailed'));
                 }
             }
         } catch (error) {
+            console.log(error);
             message.error(t('initialize.systemError'));
         }
     };
@@ -161,8 +163,10 @@ function InitializePage() {
                     <Form.Item
                         label={t('initialize.hassToken')}
                         name="hass_token"
+
                     >
                         <Input.Password placeholder={t('initialize.hassTokenPlaceholder')} />
+                        <Button size="small" type="link" onClick={() => window.open('https://community.home-assistant.io/t/how-to-get-long-lived-access-token/162159', '_blank')}>{t('initialize.hassTokenHelp')}</Button>
                     </Form.Item>
 
                     <Form.Item>

@@ -61,6 +61,7 @@ export const translations = {
       preview: '预览',
       cancel: '取消',
       save: '保存',
+      downloadLog: '下载日志',
       loadFailed: '加载失败',
       loadFailedDesc: '加载失败,请检查配置',
       versionList: '版本列表',
@@ -716,7 +717,7 @@ export const translations = {
       adminPassword: '管理员密码',
       confirmPassword: '确认密码',
       hassUrl: 'HomeAssistant地址',
-      hassToken: 'HomeAssistant Token',
+      hassToken: 'HomeAssistant Token （默认请不要填写）',
       submit: '初始化系统',
       // placeholders
       usernamePlaceholder: '请输入管理员用户名',
@@ -738,7 +739,8 @@ export const translations = {
       initFailed: '初始化失败，请重试',
       systemError: '系统错误，请重试',
       invalidHassUrl: 'Home Assistant URL 无效',
-      invalidHassToken: 'Home Assistant Token 无效'
+      invalidHassToken: 'Home Assistant Token 无效',
+      hassTokenHelp: '如何获取HomeAssistant长期访问令牌？'
     },
   },
   en: {
@@ -802,6 +804,7 @@ export const translations = {
       preview: 'Preview',
       cancel: 'Cancel',
       save: 'Save',
+      downloadLog: 'Download Log',
       loadFailed: 'Load Failed',
       loadFailedDesc: 'Load Failed, Please Check Configuration',
       versionList: 'Version List',
@@ -1442,8 +1445,9 @@ export const translations = {
       adminPassword: 'Admin Password',
       confirmPassword: 'Confirm Password',
       hassUrl: 'HomeAssistant URL',
-      hassToken: 'HomeAssistant Token',
+      hassToken: 'HomeAssistant Token (Default: Not Required)',
       submit: 'Initialize System',
+      hassTokenHelp: 'How to get HomeAssistant long-lived access token ?',
       // placeholders
       usernamePlaceholder: 'Please enter admin username',
       passwordPlaceholder: 'Please enter admin password',

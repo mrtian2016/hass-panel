@@ -17,7 +17,8 @@ exclude_path = ["media", "env.js", "env.template.js"]
 
 
 [log]
-log_output_dir = "logs"
+server_log = "../data/hass-panel-dev/logs"
+log_output_dir = "../data/hass-panel-dev/logs/backend"
 
 [database]
 sqlite_path = "../data/hass-panel-dev/hass_panel.db"

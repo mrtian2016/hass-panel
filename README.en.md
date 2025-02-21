@@ -20,6 +20,9 @@ A React-based smart home control panel that uses the Home Assistant Websocket AP
 - 🔧 Highly configurable with drag-and-drop layout
 - 🚀 PWA support, can be installed on desktop
 - 🎨 Beautiful user interface with dark mode support
+- 👥 Multi-user management system with JWT authentication
+- 🔐 Secure password encryption storage
+- 🎥 Powerful camera support, including WebRTC/ONVIF/RTSP
 - 🔌 Rich device support:
   - Light control
   - AC control
@@ -27,42 +30,28 @@ A React-based smart home control panel that uses the Home Assistant Websocket AP
   - Sensor monitoring
   - Camera viewing
   - Scene control
+  - Power consumption statistics
+  - Socket control
   - More devices coming soon...
 
 ## Installation
 
-### Docker Method
+### Important Note
+Starting from version v1.3.2:
+- The system uses SQLite database for configuration storage
+- Initial system setup is required for first-time use
+- Camera functionality requires proper ONVIF/RTSP address configuration
+
+### Docker Method (Stable)
 ```bash
 docker run \
   --name hass-panel \
   --restart unless-stopped \
-  -p 5123:5123 \
+  --network host \
   -v ./data/:/config/hass-panel \
-  -e REACT_APP_HASS_URL=http://your-hass-instance:8123 \
-  -e REACT_APP_HASS_TOKEN=your-hass-token \ # Optional, if token authentication is needed
   -d \
   ghcr.io/mrtian2016/hass-panel:latest
 ```
-
-Environment Variables:
-- `REACT_APP_HASS_URL`: Home Assistant instance address
-- `REACT_APP_HASS_TOKEN`: Home Assistant long-lived access token (optional)
-
-
-### Docker Method Beta
-```bash
-docker run \
-  --name hass-panel \
-  --restart unless-stopped \
-  -p 5123:5123 \
-  -v ./data/:/config/hass-panel \
-  -d \
-  ghcr.io/mrtian2016/hass-panel:latest-beta 
-```
-
-Environment Variables:
-- `REACT_APP_HASS_URL`: Home Assistant instance address
-- `REACT_APP_HASS_TOKEN`: Home Assistant long-lived access token (optional)
 
 ### Home Assistant Addon Method
 
@@ -87,16 +76,18 @@ Or manually add:
 4. Light Overview Card
 5. Sensor Card
 6. Media Player Card
-7. Curtain Card
-8. Electricity Card
-9. Router Card
-10. NAS Card
-11. Camera Card
-12. Climate Card
-13. Motion Card
-14. Water Purifier Card
-15. Illuminance Card
-16. Script Panel
+7. Max Player Card
+8. Curtain Card
+9. Electricity Card
+10. Router Card
+11. NAS Card
+12. Camera Card
+13. Climate Card
+14. Motion Card
+15. Water Purifier Card
+16. Illuminance Card
+17. Script Panel
+18. Socket Card
 
 ### Card Management
 
@@ -104,7 +95,7 @@ Or manually add:
 - Support drag-and-drop sorting
 - Support custom size (desktop)
 - Support add/edit/delete cards
-- Support custom layout (3-5 columns)
+- Support custom layout (3-8 columns)
 - Support responsive layout
 
 ## Development
@@ -135,6 +126,10 @@ npm run build
    - Check if icon name is correct
    - Confirm using supported icons
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=mrtian2016/hass-panel&type=Date)](https://star-history.com/#mrtian2016/hass-panel&Date)
+
 ## Contributing
 
 Pull Requests and Issues are welcome!
@@ -152,10 +147,6 @@ This project is licensed under the GNU Affero General Public License v3.0 (AGPL-
 - All derivative works must also be licensed under AGPL-3.0
 
 For more details, see the [full license text](https://www.gnu.org/licenses/agpl-3.0.en.html).
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=mrtian2016/hass-panel&type=Date)](https://star-history.com/#mrtian2016/hass-panel&Date)
 
 ## Sponsorship
 

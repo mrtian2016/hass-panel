@@ -18,7 +18,7 @@ function VersionListModal({ visible, onCancel, setCards, setHasUnsavedChanges, s
     try {
       setLoading(true);
       const data = await configApi.getVersions();
-      setVersions(data);
+      setVersions(data.data);
     } catch (error) {
       console.error('加载版本列表失败:', error);
     } finally {

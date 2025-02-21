@@ -16,7 +16,8 @@ tmp_dir = "/tmp/hass-panel-update"
 exclude_path = ["media", "env.js", "env.template.js"]
 
 [log]
-log_output_dir = "logs"
+server_log = "/config/hass-panel/logs"
+log_output_dir = "/config/hass-panel/logs/backend"
 
 [database]
 sqlite_path = "/config/hass-panel/hass_panel.db"

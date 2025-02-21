@@ -5,7 +5,7 @@ import { mdiInformationOutline, mdiUpload, mdiGithub } from '@mdi/js';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { compareVersions } from '../../utils/helper';
 import { message, Button, Tooltip, Modal } from 'antd';
-import { updateApi } from '../../utils/api';
+import { systemApi, updateApi } from '../../utils/api';
 import './style.css';
 
 function BottomInfo() {
@@ -59,6 +59,27 @@ function BottomInfo() {
       message.error(t('update.checkFailed'));
     } finally {
       setIsChecking(false);
+    }
+  };
+
+  // 下载日志
+  const downloadLog = async () => {
+    try {
+      const response = await systemApi.downloadLog({
+        responseType: 'blob'
+      });
+      const blob = new Blob([response], { type: 'application/x-tar' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '').slice(0, 14);
+      a.download = `hass-panel-logs-${timestamp}.tar`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      message.error('下载日志失败');
     }
   };
 
@@ -224,7 +245,15 @@ function BottomInfo() {
           {t('config.debug')}: {debugMode ? t('config.debugOn') : t('config.debugOff')}
         </Button>
       </span>
-
+      <span>
+        <Button
+          type="link"
+          size="small"
+          onClick={downloadLog}
+        >
+          {t('config.downloadLog')}
+        </Button>
+      </span>
       <span>
         <Button
           type="link"

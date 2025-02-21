@@ -379,6 +379,18 @@ export const systemApi = {
     } catch (error) {
       throw error;
     }
+  },
+  // 下载日志
+  downloadLog: async (config = {}) => {
+    try {
+      const response = await axiosInstance.get('/common/download_log', {
+        ...config,
+        responseType: 'blob'
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 }; 
 
