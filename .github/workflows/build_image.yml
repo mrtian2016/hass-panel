@@ -1,9 +1,6 @@
 name: Build Image
 
 on:
-  push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+' # 只匹配标准版本号，如 v1.0.0，不包含 beta
   workflow_dispatch:
     inputs:
       version:
