@@ -35,7 +35,10 @@ function Login() {
         },
         body: new URLSearchParams(requestData).toString(),
       });
-      
+      if (response.status !== 200) {
+        message.error(t('login.error'));
+        return;
+      }
       const data = await response.json();
   
       localStorage.setItem('hass_panel_token', JSON.stringify({
@@ -47,7 +50,8 @@ function Login() {
         window.location.reload();
       }, 2000);
     } catch (error) {
-      message.error(t('login.error') + error.message);
+      console.log(error);
+      message.error(t('login.error'));
     } finally {
       setLoading(false);
     }

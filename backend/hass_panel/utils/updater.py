@@ -88,7 +88,7 @@ def sync_files(src_dir: str, dst_dir: str):
     logger.info("文件同步完成")
 
 def extract_package(file_path: str, extract_path: str) -> None:
-    """解压更新包文件
+    """解压更新包文件，直接解压到目标目录而不创建额外的父目录
     
     Args:
         file_path: 更新包文件路径
@@ -101,10 +101,52 @@ def extract_package(file_path: str, extract_path: str) -> None:
     try:
         if file_path.endswith('.zip'):
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
-                zip_ref.extractall(extract_path)
+                # 获取所有文件列表
+                file_list = zip_ref.namelist()
+                # 检查是否所有文件都在同一个根目录下
+                common_prefix = os.path.commonprefix(file_list)
+                if common_prefix and common_prefix.endswith('/'):
+                    # 去除共同前缀
+                    for member in file_list:
+                        if member == common_prefix:
+                            continue
+                        if member.startswith(common_prefix):
+                            # 提取相对路径
+                            rel_path = member[len(common_prefix):]
+                            if not rel_path:
+                                continue
+                            # 读取文件内容
+                            content = zip_ref.read(member)
+                            # 构建目标路径
+                            target_path = os.path.join(extract_path, rel_path)
+                            # 确保目标目录存在
+                            os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                            # 如果是目录则跳过
+                            if not member.endswith('/'):
+                                with open(target_path, 'wb') as f:
+                                    f.write(content)
+                else:
+                    # 如果没有共同前缀，直接解压
+                    zip_ref.extractall(extract_path)
         elif file_path.endswith('.tar.gz'):
             with tarfile.open(file_path, 'r:gz') as tar_ref:
-                tar_ref.extractall(extract_path)
+                # 获取所有成员
+                members = tar_ref.getmembers()
+                # 检查是否所有文件都在同一个根目录下
+                common_prefix = os.path.commonprefix([m.name for m in members])
+                if common_prefix and common_prefix.endswith('/'):
+                    for member in members:
+                        if member.name == common_prefix:
+                            continue
+                        if member.name.startswith(common_prefix):
+                            # 修改成员的路径
+                            member.name = member.name[len(common_prefix):]
+                            if not member.name:
+                                continue
+                            tar_ref.extract(member, extract_path)
+                else:
+                    # 如果没有共同前缀，直接解压
+                    tar_ref.extractall(extract_path)
         else:
             raise Exception("不支持的文件格式，仅支持 .zip 和 .tar.gz")
     except Exception as e:
@@ -174,7 +216,7 @@ def process_manual_update(file: UploadFile) -> Dict:
         extract_package(file_path, extract_path)
         
         # 验证更新包
-        version_info = verify_update_package(extract_path)
+        version_info = verify_update_package(f'{extract_path}')
         
         return {
             "version": version_info["version"],
@@ -182,13 +224,7 @@ def process_manual_update(file: UploadFile) -> Dict:
         }
     except Exception as e:
         logger.error(f"处理更新包失败: {e}")
-        if os.path.exists(tmp_dir):
-            shutil.rmtree(tmp_dir)
         raise
-    finally:
-        # 删除上传的文件
-        if os.path.exists(file_path):
-            os.remove(file_path)
 
 def apply_manual_update(package_info: Dict) -> str:
     """应用手动更新

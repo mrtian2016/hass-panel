@@ -53,14 +53,13 @@ function FloorPlan({ lights }) {
       />
       
       {lights.rooms.map((light) => {
-        if (!light.image) return null;
 
         const isLight = isLightEntity(light.entity?.entity_id);
 
         return (
           <React.Fragment key={light.entity?.entity_id}>
             <img
-              src={light.image}
+              src={light.image || lights.background}
               alt={light.name}
               className={`light-layer ${light.state === 'on' ? 'active' : ''}`}
               style={{ pointerEvents: 'none' }}

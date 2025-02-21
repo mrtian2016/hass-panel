@@ -317,6 +317,7 @@ function LightControl({ lightEntity, onClose }) {
           borderTopRightRadius: '8px',
           minHeight: '40vh',
           maxHeight: '80vh',
+          backgroundColor: 'var(--color-background) !important',
         }}
       >
         <List header={t('lightOverview.lightControl.selectEffect')}>

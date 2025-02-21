@@ -1,4 +1,4 @@
-.modal-overlay {
+.custom-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -10,11 +10,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 99;
   padding: 20px;
 }
 
-.modal-content {
+.custom-modal-content {
   position: relative;
   width: 90%;
   max-width: 1280px;
@@ -25,7 +25,7 @@
   background: rgba(255, 255, 255, 1);
 }
 
-.modal-title {
+.custom-modal-title {
   padding: 12px 16px;
   font-size: 16px;
   font-weight: 500;
@@ -35,18 +35,18 @@
 }
 
 /* 亮色主题 */
-.modal-content.light .modal-title {
+.custom-modal-content.light, .custom-modal-title {
   background: #fff;
   color: #333;
 }
 
 /* 暗色主题 */
-.modal-content.dark .modal-title {
+.custom-modal-content.dark,.custom-modal-title {
   background: #1a1a1a;
   color: #fff;
 }
 
-.modal-close {
+.custom-modal-close {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -79,7 +79,7 @@
   }
 }
 
-.modal-close:hover {
+.custom-modal-close:hover {
   background: rgba(0, 0, 0, 0.7);
   transform: scale(1.1);
 }

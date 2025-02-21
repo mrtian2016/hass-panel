@@ -23,6 +23,7 @@ axiosInstance.interceptors.request.use((config) => {
   const accessToken = token?.access_token;
   
   if (!accessToken) {
+    window.location.href = './#/login';
     throw new Error('未找到认证token');
   }
   
@@ -38,7 +39,7 @@ axiosInstance.interceptors.response.use(
       // 清除本地token
       localStorage.removeItem('hass_panel_token');
       // 跳转到登录页面
-      window.location.href = '/login';
+      window.location.href = './#/login';
       return Promise.reject(new Error('登录已过期，请重新登录'));
     }
     return Promise.reject(error);
