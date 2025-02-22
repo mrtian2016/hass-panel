@@ -11,14 +11,15 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const { t } = useLanguage();
   const hassUrl = localStorage.getItem('hass_url');
+  const webrtc_play_url = playUrl || streamUrl;
 
 
   if (!camera) return null;
-  // console.log(camera);
+  console.log(camera);
 
-  const previewUrl = hassUrl + camera?.attributes?.entity_picture;
+  const previewUrl = hassUrl + camera?.attributes?.entity_picture ;
 
-  const webrtc_play_url = playUrl || streamUrl;
+
 
   const handleClick = () => {
     setIsModalVisible(true);
@@ -78,12 +79,12 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
               <span className="loading-text">{t('camera.loading')}</span>
             </div>
           )}
-          {hasError && (
+          {(hasError || !webrtc_play_url) && (
             <div className="error-container">
               <span className="error-text">{t('camera.loadError')}</span>
             </div>
           )}
-          <iframe
+          {webrtc_play_url && <iframe
             src={`${webrtc_play_url}${webrtc_play_url.includes('?') ? '&' : '?'}scrolling=no`}
             title={name || camera.attributes?.friendly_name}
             frameBorder="0"
@@ -101,7 +102,7 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
               }
             }}
             onError={handleIframeError}
-          />
+          />}
         </div>
       </Modal>
     </div>

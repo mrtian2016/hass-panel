@@ -860,7 +860,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
                 <div className="card-icon">
                   <Icon path={getCardTypes(t)[card.type].icon} size={1} />
                 </div>
-                <h3 className="card-title">{getCardTypes(t)[card.type].name}</h3>
+                <h3 className="card-title">{card.config.title}</h3>
               </div>
               <div className="card-switches">
                 <div className="switch-item">
