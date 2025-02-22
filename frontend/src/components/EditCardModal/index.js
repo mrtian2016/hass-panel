@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Space } from 'antd';
+import { Modal, Button, Space, message } from 'antd';
 import Icon from '@mdi/react';
 import { mdiClose, mdiCheck } from '@mdi/js';
 import ConfigField from '../ConfigField';
@@ -42,10 +42,27 @@ function EditCardModal({
   };
 
   const handleSave = () => {
+    if (card.type === 'CameraCard') {
+      const cameras = config.cameras;
+      let hasError = false;
+      
+      cameras.forEach(camera => {
+        if (camera.stream_url?.startsWith('onvif://') && camera.url_type === 'auto' && (!camera.onvif_username || !camera.onvif_password)) {
+          message.error(t('configField.onvifCredentialsRequired'));
+          hasError = true;
+        }
+      });
+
+      if (hasError) {
+        return;
+      }
+    }
+    
     onSave({
       ...card,
       config
     });
+
     handleClose();
   };
 
@@ -91,7 +108,6 @@ function EditCardModal({
       <Modal
         title={`${t('config.edit')} ${cardType.name}`}
         open={visible}
-        onCancel={handleClose}
         footer={footer}
         width={800}
       >

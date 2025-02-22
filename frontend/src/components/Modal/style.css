@@ -35,13 +35,13 @@
 }
 
 /* 亮色主题 */
-.custom-modal-content.light, .custom-modal-title {
+.custom-modal-content.light {
   background: #fff;
   color: #333;
 }
 
 /* 暗色主题 */
-.custom-modal-content.dark,.custom-modal-title {
+.custom-modal-content.dark{
   background: #1a1a1a;
   color: #fff;
 }
