@@ -5,7 +5,7 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import CameraCard from '../CameraCard';
 import './style.css';
-import { useEntity } from '@hakit/core';
+import { useCamera } from '@hakit/core';
 import { notification } from 'antd';
 
 function CameraSection({ config, titleVisible }) {
@@ -16,7 +16,8 @@ function CameraSection({ config, titleVisible }) {
   const cameraEntities = config.cameras.map(camera => {
     try {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const entity = useEntity(camera.entity_id);
+      const entity = useCamera(camera.entity_id,{stream:true});
+      console.log(entity);
       return {
         ...camera,
         entity,

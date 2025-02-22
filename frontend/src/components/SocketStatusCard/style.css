@@ -38,6 +38,7 @@
   line-height: 1.2;
   text-align: center;
   word-break: break-word;
+  color: var(--color-text-primary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

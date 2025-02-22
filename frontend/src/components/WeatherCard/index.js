@@ -105,6 +105,7 @@ function WeatherCard({config}) {
   try {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     weather = useWeather(config.entity_id);
+    console.log(weather);
   } catch (error) {
     if (debugMode) {
       notification.error({
@@ -124,7 +125,6 @@ function WeatherCard({config}) {
     visibility,
     visibility_unit,
     aqi,
-    aqi_description,
     temperature,
     pressure,
     pressure_unit,
@@ -145,6 +145,7 @@ function WeatherCard({config}) {
     };
     return iconMap[condition] || mdiWeatherCloudy;
   };
+  
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -160,7 +161,22 @@ function WeatherCard({config}) {
     if (bearing >= 202.5 && bearing < 247.5) return t('weather.wind.southWest');
     if (bearing >= 247.5 && bearing < 292.5) return t('weather.wind.west');
     if (bearing >= 292.5 && bearing < 337.5) return t('weather.wind.northWest');
-    return t('weather.wind.unknown');
+    return bearing;
+  };
+
+  const getAQIDescription = (aqi) => {
+    if (typeof aqi === 'object') {
+      return aqi.category || '';
+    }
+    const aqiValue = parseInt(aqi);
+    if (isNaN(aqiValue)) return '';
+    
+    if (aqiValue <= 50) return t('weather.aqi.level1');
+    if (aqiValue <= 100) return t('weather.aqi.level2');
+    if (aqiValue <= 150) return t('weather.aqi.level3');
+    if (aqiValue <= 200) return t('weather.aqi.level4');
+    if (aqiValue <= 300) return t('weather.aqi.level5');
+    return t('weather.aqi.level6');
   };
 
   const getWindLevel = (speed) => {
@@ -213,8 +229,8 @@ function WeatherCard({config}) {
           <span className="label">{t('weather.metrics.airQuality')}</span>
           <span className="value">
             {typeof aqi === 'object' 
-              ? `${aqi.aqi || aqi.level} (${aqi.category})` 
-              : `${aqi} (${aqi_description})`}
+              ? `${aqi.aqi || aqi.level} (${getAQIDescription(aqi)})` 
+              : `${aqi} (${getAQIDescription(aqi)})`}
           </span>
         </div>}
         {pressure && !aqi && <div className="weather-item">

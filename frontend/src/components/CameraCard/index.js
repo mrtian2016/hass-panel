@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SpinLoading } from 'antd-mobile';
+import ReactPlayer from 'react-player';
 import Modal from '../Modal';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
@@ -7,43 +8,55 @@ import './style.css';
 function CameraCard({ camera, streamUrl, name, playUrl }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [useHls, setUseHls] = useState(false);
   const { t } = useLanguage();
-  const hassUrl = localStorage.getItem('hass_url');
   const webrtc_play_url = playUrl || streamUrl;
 
+  useEffect(() => {
+    if (webrtc_play_url) {
+      fetch(webrtc_play_url)
+        .then(res => res.text())
+        .then(data => {
+          if (data.includes('Hass Panel')) {
+            setUseHls(true);
+          }
+          if (data.includes('502 Bad Gateway')) {
+            setUseHls(true);
+          }
+        })
+        .catch(() => {
+          setUseHls(true);
+        });
+    }
+  }, [webrtc_play_url]);
 
   if (!camera) return null;
   console.log(camera);
 
-  const previewUrl = hassUrl + camera?.attributes?.entity_picture ;
-
-
+  const previewUrl = camera?.poster?.url || camera?.mjpeg?.url;
+  const hlsUrl = camera?.stream?.url;
 
   const handleClick = () => {
     setIsModalVisible(true);
     setIsLoading(true);
-    setHasError(false);
   };
 
   const handleClose = () => {
     setIsModalVisible(false);
     setIsLoading(true);
-    setHasError(false);
   };
 
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
 
-  const handleIframeLoad = () => {
+  const handleVideoReady = () => {
     setIsLoading(false);
   };
 
-  const handleIframeError = () => {
+  const handleVideoError = () => {
     setIsLoading(false);
-    setHasError(true);
   };
 
   return (
@@ -60,7 +73,6 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
           alt={name || camera.attributes?.friendly_name}
           className={`camera-image ${imageLoaded ? 'loaded' : ''}`}
           onLoad={handleImageLoad}
-          onError={() => setHasError(true)}
         />
         <div className="camera-name">
           {name || camera.attributes?.friendly_name}
@@ -79,30 +91,52 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
               <span className="loading-text">{t('camera.loading')}</span>
             </div>
           )}
-          {(hasError || !webrtc_play_url) && (
+          {(!webrtc_play_url && !hlsUrl) && (
             <div className="error-container">
               <span className="error-text">{t('camera.loadError')}</span>
             </div>
           )}
-          {webrtc_play_url && <iframe
+          {!useHls && webrtc_play_url && <iframe
             src={`${webrtc_play_url}${webrtc_play_url.includes('?') ? '&' : '?'}scrolling=no`}
             title={name || camera.attributes?.friendly_name}
             frameBorder="0"
             allowFullScreen
             sandbox="allow-scripts allow-same-origin"
             scrolling="no"
-            className={`stream-iframe ${isLoading ? 'loading' : ''}`}
+            className={'stream-iframe'}
             onLoad={(e) => {
-              handleIframeLoad();
-              // 尝试向 iframe 内部发送消息来禁用滚动
+              handleVideoReady();
               try {
                 e.target.contentWindow.postMessage({ type: 'disable-scroll' }, '*');
               } catch (err) {
                 console.log('Failed to send message to iframe');
               }
             }}
-            onError={handleIframeError}
+            onError={handleVideoError}
           />}
+          {useHls && hlsUrl && (
+            <div className="player-wrapper">
+              <ReactPlayer
+                url={hlsUrl}
+                className="react-player"
+                width="100%"
+                height="100%"
+                playing
+                controls
+                playsinline
+                config={{
+                  file: {
+                    forceHLS: true,
+                    attributes: {
+                      crossOrigin: "anonymous"
+                    }
+                  }
+                }}
+                onReady={handleVideoReady}
+                onError={handleVideoError}
+              />
+            </div>
+          )}
         </div>
       </Modal>
     </div>

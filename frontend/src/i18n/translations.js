@@ -509,6 +509,14 @@ export const translations = {
     weather: {
       loadError: '天气卡片加载失败',
       loadErrorDesc: '天气加载失败: ',
+      aqi: {
+        level1: '优',
+        level2: '良',
+        level3: '轻度污染',
+        level4: '中度污染',
+        level5: '重度污染',
+        level6: '严重污染'
+      },
       metrics: {
         temperature: '温度',
         feelTemp: '体感温度',
@@ -1245,12 +1253,19 @@ export const translations = {
     weather: {
       loadError: 'Failed to load weather card',
       loadErrorDesc: 'Failed to load weather: ',
+      aqi: {
+        level1: 'Excellent',
+        level2: 'Good',
+        level3: 'Lightly Polluted',
+        level4: 'Moderately Polluted',
+        level5: 'Heavily Polluted',
+        level6: 'Severely Polluted'
+      },
       metrics: {
         temperature: 'Temperature',
         feelTemp: 'Feels Like',
         humidity: 'Humidity',
         visibility: 'Visibility',
-        airQuality: 'Air Quality',
         pressure: 'Pressure',
         wind: 'Wind'
       },
