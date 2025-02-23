@@ -1,10 +1,10 @@
 import React from 'react';
 import Icon from '@mdi/react';
-import { 
+import {
   mdiRouterNetwork,
   mdiTemperatureCelsius,
   // mdiCpu64Bit,
-  // mdiMemory,
+  mdiClock,
   mdiAccountMultiple,
   mdiEthernet,
   mdiIpNetwork,
@@ -66,6 +66,7 @@ function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
 
 
 function RouterCard({ config }) {
+  console.log(config);
   const titleVisible = config.titleVisible;
   const { theme } = useTheme();
   const { t } = useLanguage();
@@ -73,7 +74,7 @@ function RouterCard({ config }) {
     key,
     ...feature,
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    entity: useEntity(feature.entity_id, { returnNullIfNotFound: true }),
+    entity: feature.entity_id ? useEntity(feature.entity_id, { returnNullIfNotFound: true }) : null,
   }));
 
   // 将 routerEntities 数组转换为以 key 为键的对象
@@ -85,12 +86,13 @@ function RouterCard({ config }) {
   // 使用安全解析函数处理所有数值
   const cpuUsage = safeParseFloat(entities.cpuUsage?.state);
   const memoryUsage = safeParseFloat(entities.memoryUsage?.state);
-  const wanDownloadSpeed = safeParseFloat(entities.wanDownloadSpeed?.state).toFixed(3);
-  const wanUploadSpeed = safeParseFloat(entities.wanUploadSpeed?.state).toFixed(3);
+  const wanDownloadSpeed = safeParseFloat(entities.wanDownloadSpeed?.state).toFixed(2);
+  const wanUploadSpeed = safeParseFloat(entities.wanUploadSpeed?.state).toFixed(2);
   const onlineUsers = safeGetState(entities.onlineUsers);
   const networkConnections = safeGetState(entities.networkConnections);
   const cpuTemp = safeGetState(entities.cpuTemp);
   const wanIp = safeGetState(entities.wanIp, '-');
+  const uptime = safeGetState(entities.uptime);
 
   return (
     <BaseCard
@@ -100,14 +102,14 @@ function RouterCard({ config }) {
       titleVisible={titleVisible}
     >
       <div className="router-data">
-        <div className="usage-section">
+        {(Boolean(cpuUsage) || Boolean(memoryUsage)) && <div className="usage-section">
           <CircularProgress value={cpuUsage} label="CPU" />
           <CircularProgress value={memoryUsage} label={t('router.memory')} />
-        </div>
-        
+        </div>}
+
         <div className="metrics-section">
           <div className="network-speeds">
-            <div className="speed-row">
+             <div className="speed-row">
               <div className="speed-item">
                 <Icon path={mdiUpload} size={0.8} />
                 <span className="speed-value">
@@ -122,34 +124,42 @@ function RouterCard({ config }) {
               </div>
             </div>
             <div className="divider"></div>
-            <div className="speed-item">
+            {Boolean(onlineUsers) && <div className="speed-item">
               <div className="metric-label">
                 <Icon path={mdiAccountMultiple} size={0.8} />
                 <span className="label">{t('router.metrics.onlineDevices')}</span>
               </div>
               <span>{onlineUsers}</span>
-            </div>
-            <div className="speed-item">
+            </div>}
+            
+            {Boolean(networkConnections) && <div className="speed-item">
               <div className="metric-label">
                 <Icon path={mdiEthernet} size={0.8} />
                 <span className="label">{t('router.metrics.connections')}</span>
               </div>
               <span>{networkConnections}</span>
-            </div>
-            <div className="speed-item">
+            </div>}
+            {Boolean(cpuTemp) && <div className="speed-item">
               <div className="metric-label">
                 <Icon path={mdiTemperatureCelsius} size={0.8} />
                 <span className="label">{t('router.metrics.cpuTemp')}</span>
               </div>
               <span>{cpuTemp}{t('router.unit.temp')}</span>
-            </div>
-            <div className="speed-item">
+            </div>}
+            {Boolean(wanIp !== '-') && <div className="speed-item">
               <div className="metric-label">
                 <Icon path={mdiIpNetwork} size={0.8} />
                 <span className="label">{t('router.metrics.publicIp')}</span>
               </div>
               <span>{wanIp}</span>
-            </div>
+            </div>}
+            {Boolean(uptime) && <div className="speed-item">
+              <div className="metric-label">
+                <Icon path={mdiClock} size={0.8} />
+                <span className="label">{t('router.metrics.uptime')}</span>
+              </div>
+              <span>{uptime}</span>
+            </div>}
           </div>
         </div>
       </div>

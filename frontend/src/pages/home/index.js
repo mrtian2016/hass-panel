@@ -38,6 +38,7 @@ import IlluminanceCard from '../../components/IlluminanceCard';
 import MotionCard from '../../components/MotionCard';
 import SocketStatusCard from '../../components/SocketStatusCard';
 import MaxPlayerCard from '../../components/MaxPlayerCard';
+import UniversalCard from '../../components/UniversalCard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
@@ -458,6 +459,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         return <SocketStatusCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'MaxPlayerCard':
         return <MaxPlayerCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+      case 'UniversalCard':
+        return <UniversalCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       default:
         return null;
     }

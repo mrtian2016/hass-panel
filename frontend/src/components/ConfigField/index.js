@@ -9,6 +9,7 @@ import SocketConfig from './SocketConfig';
 import NasConfig from './NasConfig';
 import ScriptsConfig from './ScriptsConfig';
 import CameraConfig from './CameraConfig';
+import UniversalConfig from './UniversalConfig';
 import { configApi } from '../../utils/api';
 
 function ConfigField({ field, value, onChange }) {
@@ -51,8 +52,6 @@ function ConfigField({ field, value, onChange }) {
     onChange(newRooms);
   };
   
-  
-
   switch (field.type) {
     case 'text':
       return (
@@ -824,7 +823,10 @@ function ConfigField({ field, value, onChange }) {
           </button>
         </div>
       );
-      
+
+    case 'universal-entities':
+      return <UniversalConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
+
     default:
       return null;
   }

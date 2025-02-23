@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  useEffect, useCallback } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../theme/ThemeContext';
@@ -13,12 +13,60 @@ import {
 } from '@mdi/js';
 import './style.css';
 import { hashPassword } from '../../utils/helper';
-
+import { systemApi } from '../../utils/api';
 function InitializePage() {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const { theme, toggleTheme } = useTheme();
     const { t, toggleLanguage } = useLanguage();
+
+    const checkAuth = useCallback(async () => {
+        console.log('checkAuth');
+        if (!localStorage.getItem('hass_panel_token')) {
+            console.log('checkAuth 1');
+            navigate('/login');
+            return;
+        }
+
+        try {
+            const data = await systemApi.getHassConfig();
+            console.log('checkAuth 2', data);
+            if (data.code === 200) {
+                navigate('/');
+                localStorage.setItem('hass_url', data.data.url);
+            } else if (data.code === 401) {
+                localStorage.removeItem('hass_panel_token');
+                navigate('/login');
+            }
+        } catch (error) {
+            console.log('checkAuth 3');
+            console.error('获取 HASS 配置失败:', error);
+        }
+    }, [navigate]);
+
+    const checkInitStatus = useCallback(async () => {
+        try {
+          const data = await systemApi.checkInitStatus();
+          
+          if (data.code === 200) {
+            if (!data.data.is_initialized) {
+              navigate('/initialize');
+              return;
+            }
+            // 如果已初始化，检查认证状态
+            checkAuth();
+          } else {
+            message.error('检查系统状态失败');
+          }
+        } catch (error) {
+          console.error('检查系统状态失败:', error);
+          navigate('/initialize');
+        }
+    }, [navigate, checkAuth]);
+    
+    useEffect(() => {
+        checkInitStatus();
+    }, [checkInitStatus, navigate]);
 
     const getHassUrl = () => {
         const currentUrl = window.location.href;

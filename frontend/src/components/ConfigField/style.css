@@ -20,7 +20,6 @@
 .config-field input {
   width: 100%;
   max-width: 100%;
-  padding: 8px 12px;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-small);
   background: var(--color-background);
@@ -582,6 +581,7 @@
 .climate-feature button,
 .illuminance-config button,
 .light-overview-config button,
+.universal-config button,
 .script-item button {
   background: var(--color-error);
 }
@@ -599,7 +599,8 @@
 .m2ssd-config button:hover,
 .climate-feature button:hover,
 .illuminance-config button:hover,
-.light-overview-config button:hover {
+.light-overview-config button:hover,
+.universal-config button:hover {
   background: var(--color-error-dark);
 }
 
@@ -662,7 +663,8 @@
 .m2ssd-config button,
 .light-overview-config button,
 .climate-feature button,
-.illuminance-config button {
+.illuminance-config button,
+.universal-config button {
   padding: 8px 24px;
   border: none;
   border-radius: var(--border-radius-small);
@@ -941,5 +943,88 @@
 .upload-field .ant-input-group-addon label:hover {
   color: var(--color-primary-dark);
   background: rgba(var(--color-primary-rgb), 0.1);
+}
+
+/* Universal Entities Config */
+.universal-entities-config {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.entity-group-config {
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+}
+
+.group-header {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.group-header .ant-input {
+  flex: 1;
+}
+
+.entities-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.entity-config-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr auto;
+  gap: var(--spacing-sm);
+  align-items: center;
+  background: var(--color-card-bg);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border);
+}
+
+.delete-button,
+.add-button,
+.add-group-button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.delete-button:hover {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.add-button,
+.add-group-button {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  width: fit-content;
+}
+
+.add-button:hover,
+.add-group-button:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .entity-config-item {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .group-header {
+    flex-direction: column;
+  }
 }
 

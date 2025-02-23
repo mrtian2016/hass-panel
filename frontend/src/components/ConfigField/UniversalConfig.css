@@ -1,0 +1,97 @@
+.entity-config-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+/* 类型选择器容器 */
+.entity-field {
+  display: flex;
+  gap: 8px;
+  width: 100%;  /* 设置容器宽度为100% */
+}
+
+.entity-field .entity-field-row {
+  flex: 1;  /* 让每个选择器平均分配空间 */
+  min-width: 0;  /* 防止flex项目溢出 */
+}
+
+/* 实体选择器容器 */
+.entity-select-field {
+  width: 100%;
+}
+
+.entity-select-field .ant-select {
+  width: 100%;
+}
+
+/* 删除按钮 */
+.delete-button {
+  background-color: var(--color-error-light) !important;
+  align-self: flex-end;
+}
+.delete-button:hover {
+  color: #fff !important;
+  background-color: var(--color-error-dark) !important;
+}
+
+.entity-field label {
+  font-size: 14px;
+  color: #666;
+}
+
+.entity-field .ant-input {
+  width: 100%;
+}
+
+.group-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.entity-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.order-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.order-button {
+    padding: 4px 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.order-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.order-button:hover:not(:disabled) {
+    background-color: #e6e6e6;
+}
+
+.group-header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.entity-config-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    margin-bottom: 8px;
+} 

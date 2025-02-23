@@ -1,0 +1,127 @@
+.universal-data {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin: 0;
+  padding: var(--spacing-lg);
+}
+
+.entity-group {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-sm);
+  background: var(--color-background);
+  border-radius: var(--border-radius-small);
+  gap: var(--spacing-md);
+}
+
+.group-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  flex: 1;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.entity-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.entity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-card-bg);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border);
+  flex: 1;
+  max-width: 110px;
+  min-width: 100px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition: all 0.3s ease;
+}
+
+.entity-item.status-on {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.entity-item.status-on .entity-icon,
+.entity-item.status-on .entity-info .label,
+.entity-item.status-on .entity-info .value {
+  color: white;
+}
+
+.entity-item.status-error {
+  border-color: var(--color-error);
+}
+
+.entity-item.status-error .entity-info .value {
+  color: var(--color-error);
+}
+
+.entity-icon {
+  flex: 0 1 auto;
+}
+
+.entity-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  flex: 1;
+}
+
+.entity-info .label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.entity-info .value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* 可点击实体的样式 */
+.entity-item[onclick] {
+  cursor: pointer;
+}
+
+.entity-item[onclick]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .entity-group {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .group-name {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .entity-items {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .entity-item {
+    min-width: 90px;
+  }
+}

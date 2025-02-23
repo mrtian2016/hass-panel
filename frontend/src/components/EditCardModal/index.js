@@ -108,6 +108,7 @@ function EditCardModal({
       <Modal
         title={`${t('config.edit')} ${cardType.name}`}
         open={visible}
+        onCancel={handleClose}
         footer={footer}
         width={800}
       >

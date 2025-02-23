@@ -429,6 +429,24 @@ const getCardTypes = (t) => ({
       }
     ]
   },
+  UniversalCard: {
+    name: t('cards.universal'),
+    icon: mdiThermometer,
+    fields: [
+      {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.universal')
+      },
+      {
+        key: 'entities',
+        label: t('fields.entitiesConfig'),
+        type: 'universal-entities',
+        default: []
+      }
+    ]
+  },
 });
 
 

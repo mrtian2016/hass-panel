@@ -132,6 +132,8 @@ export const translations = {
       climate: '空调控制',
       motion: '人体传感器',
       lightOverview: '房间概览',
+      socket: '插座状态',
+      universal: '通用卡片',
       lightStatus: '灯光状态',
       mediaPlayer: '媒体播放器',
       maxPlayer: '媒体播放器(大)',
@@ -141,7 +143,6 @@ export const translations = {
       waterpurifier: '净水器',
       socketStatus: '插座状态',
       socketstatus: '插座状态',
-      socket: '插座状态'
     },
 
     // 卡片操作
@@ -172,12 +173,14 @@ export const translations = {
       climate: '空调控制',
       motion: '人体传感器',
       lightOverview: '灯光概览',
+      socket: '插座',
+      universal: '通用卡片',
       scriptpanel: '快捷指令',
       waterpurifier: '净水器',
       lightstatus: '灯光状态',
       socketstatus: '插座状态',
       socketStatus: '插座状态',
-      socket: '插座',
+      socketsConfig: '插座配置',
     },
 
     // 配置字段
@@ -208,6 +211,7 @@ export const translations = {
       uploadImage: '上传图片',
       placeholderImage: '请上传图片',
       socketsConfig: '插座配置',
+      entitiesConfig: '实体配置',
     },
 
     version: {
@@ -451,7 +455,8 @@ export const translations = {
         onlineDevices: '在线设备',
         connections: '连接数',
         cpuTemp: 'CPU温度',
-        publicIp: '公网IP'
+        publicIp: '公网IP',
+        uptime: '运行时间'
       },
       unit: {
         speed: 'MB/s',
@@ -680,6 +685,15 @@ export const translations = {
       selectIcon: '选择图标',
       scriptIcons: '脚本图标',
       scriptName: '脚本名称', 
+      universalCard: {
+        name: '名称',
+        type: '类型',
+        icon: '图标',
+        entity: '实体',
+        entityType: '实体类型',
+        entityIcon: '实体图标',
+        entityEntity: '实体',
+      },
       features: {
         temperature: '温度控制',
         fanSpeed: '风速控制',
@@ -695,7 +709,15 @@ export const translations = {
       cancel: '取消',
       delete: '删除',
       moveUp: '上移',
-      moveDown: '下移'
+      moveDown: '下移',
+      groupName: '分组名称',
+      entityName: '实体名称',
+      selectType: '选择类型',
+      addEntity: '添加实体',
+      deleteEntity: '删除实体',
+      addGroup: '添加分组',
+      deleteGroup: '删除分组',
+      defaultGroupName: '默认分组',
     },
     'fullscreen.enter': '进入全屏',
     'fullscreen.exit': '退出全屏',
@@ -750,6 +772,32 @@ export const translations = {
       invalidHassUrl: 'Home Assistant URL 无效',
       invalidHassToken: 'Home Assistant Token 无效',
       hassTokenHelp: '如何获取HomeAssistant长期访问令牌？'
+    },
+    icons: {
+      thermometer: '温度计',
+      humidity: '湿度',
+      light: '灯光',
+      socket: '插座',
+      motion: '运动',
+      power: '电源'
+    },
+    entityTypes: {
+      sensor: '传感器',
+      switch: '开关',
+      light: '灯光'
+    },
+    universal: {
+      configIncomplete: '配置信息不完整',
+      loadError: '加载失败',
+      loadErrorDesc: '加载实体失败: ',
+      noValue: '- -',
+      on: '开启',
+      off: '关闭',
+      types: {
+        sensor: '传感器',
+        switch: '开关',
+        light: '灯光'
+      }
     },
   },
   en: {
@@ -888,8 +936,8 @@ export const translations = {
       lightOverview: 'Light Overview',
       socket: 'Socket',
       socketsConfig: 'Sockets Configuration',
-      socketStatus: 'Socket Status'
-
+      socketStatus: 'Socket Status',
+      universal: 'Universal Card',
     },
 
     // Card Actions
@@ -926,7 +974,8 @@ export const translations = {
       socketstatus: 'Socket Status',
       socket: 'Socket',
       socketsConfig: 'Sockets Configuration',
-      socketStatus: 'Socket Status'
+      socketStatus: 'Socket Status',
+      universal: 'Universal Card',
     },
 
     // Configuration Fields
@@ -953,7 +1002,8 @@ export const translations = {
       luxEntity: 'Illuminance Entity',
       background: 'Background Image',
       roomsConfig: 'Room Lights Configuration',
-      socketsConfig: 'Sockets Configuration'
+      socketsConfig: 'Sockets Configuration',
+      entitiesConfig: 'Entities Configuration',
     },
 
     // WebDAV Related
@@ -1195,7 +1245,8 @@ export const translations = {
         onlineDevices: 'Online Devices',
         connections: 'Connections',
         cpuTemp: 'CPU Temp',
-        publicIp: 'Public IP'
+        publicIp: 'Public IP',
+        uptime: 'Uptime'
       },
       unit: {
         speed: 'MB/s',
@@ -1431,7 +1482,15 @@ export const translations = {
       cancel: 'Cancel',
       delete: 'Delete',
       moveUp: 'Move Up',
-      moveDown: 'Move Down'
+      moveDown: 'Move Down',
+      groupName: 'Group Name',
+      entityName: 'Entity Name',
+      selectType: 'Select Type',
+      addEntity: 'Add Entity',
+      deleteEntity: 'Delete Entity',
+      addGroup: 'Add Group',
+      deleteGroup: 'Delete Group',
+      defaultGroupName: 'Default Group',
     },
     'fullscreen.enter': 'Enter Fullscreen',
     'fullscreen.exit': 'Exit Fullscreen',
@@ -1445,6 +1504,19 @@ export const translations = {
     updateSuccess: 'Update Successful',
     updateFailed: 'Update Failed',
     updateComplete: 'Update Complete, Refreshing Page...',
+    universalCard: {
+      type: 'Type',
+      icon: 'Icon',
+      entity: 'Entity',
+      name: 'Name',
+      selectType: 'Select Type',
+      selectIcon: 'Select Icon',
+      selectEntity: 'Select Entity',
+      entityName: 'Entity Name',
+      entityIcon: 'Entity Icon',
+      entityEntity: 'Entity Entity',
+      
+    },
     login: {
       title: 'Login',
       username: 'Username',
@@ -1486,6 +1558,32 @@ export const translations = {
       systemError: 'System error, please try again',
       invalidHassUrl: 'Invalid Home Assistant URL',
       invalidHassToken: 'Invalid Home Assistant Token'
+    },
+    icons: {
+      thermometer: 'Thermometer',
+      humidity: 'Humidity',
+      light: 'Light',
+      socket: 'Socket',
+      motion: 'Motion',
+      power: 'Power'
+    },
+    entityTypes: {
+      sensor: 'Sensor',
+      switch: 'Switch',
+      light: 'Light'
+    },
+    universal: {
+      configIncomplete: 'Configuration incomplete',
+      loadError: 'Load failed',
+      loadErrorDesc: 'Failed to load entity: ',
+      noValue: '- -',
+      on: 'On',
+      off: 'Off',
+      types: {
+        sensor: 'Sensor',
+        switch: 'Switch',
+        light: 'Light'
+      }
     },
   }
 };
