@@ -65,17 +65,22 @@ function SocketStatusCard({ config }) {
             className="socket-button"
             onClick={() => toggleSocket(socket.entity)}
             title={socket.name}
+            data-state={socket.entity.state}
           >
             <Icon
               icon={socket.icon || 'mdi:power-socket'}
-              width={30}
-              height={30}
+              width={32}
+              height={32}
               color={socket.entity.state === 'on' 
-                ? 'var(--color-secondary)' 
+                ? 'var(--color-primary)' 
                 : theme === 'dark' 
-                  ? '#999999'
+                  ? 'var(--color-text-secondary)'
                   : 'var(--color-text-light)'
               }
+              style={{
+                transition: 'all 0.3s ease',
+                transform: socket.entity.state === 'on' ? 'scale(1.1)' : 'scale(1)'
+              }}
             />
             <span className={`socket-name ${socket.name.length > 4 ? 'long-text' : ''}`}>
               {socket.name}

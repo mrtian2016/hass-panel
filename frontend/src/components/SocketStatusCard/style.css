@@ -1,66 +1,92 @@
 .socket-summary {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-text-secondary);
+  font-weight: 500;
 }
 
 .socket-buttons {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 15px;
+  padding: 16px;
   justify-content: center;
 }
 
 .socket-button {
-  width: 100%;
   aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 8px;
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-small);
+  border-radius: 12px;
   background: var(--color-background);
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .socket-button:hover {
-  background: var(--color-background-secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.socket-button:active {
+  transform: translateY(-1px);
+}
+
+.socket-button[data-state="on"] {
+  background: rgba(var(--color-primary-rgb), 0.1);
+  box-shadow: 0 4px 8px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.socket-button[data-state="on"]:hover {
+  box-shadow: 0 8px 16px rgba(var(--color-primary-rgb), 0.25),
+              0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .socket-name {
-  margin-top: 5px;
-  font-size: 1em;
-  line-height: 1.2;
+  margin-top: 8px;
+  font-size: 1.1em;
+  font-weight: 500;
+  line-height: 1.3;
   text-align: center;
   word-break: break-word;
-  color: var(--color-text-primary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  color: var(--color-text-primary);
+  transition: color 0.3s ease;
 }
 
 .socket-name.long-text {
-  font-size: 0.85em;
+  font-size: 0.95em;
+}
+
+.socket-button:hover .socket-name {
+  color: var(--color-primary);
 }
 
 @media (max-width: 768px) {
   .socket-buttons {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
     padding: 16px;
   }
   
   .socket-button {
-    padding: 8px;
+    padding: 12px;
   }
   
   .socket-name {
+    font-size: 1em;
+    margin-top: 6px;
+  }
+  
+  .socket-name.long-text {
     font-size: 0.9em;
   }
 } 

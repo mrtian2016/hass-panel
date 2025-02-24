@@ -12,6 +12,9 @@
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+.base-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
 
 .base-card .card-header {
   padding: 16px 20px;

@@ -1,62 +1,76 @@
 .light-status-card {
   width: calc(100vw - 40px);
+  max-width: 1200px;
+  margin: var(--spacing-lg) auto 0;
   background: var(--color-card-bg);
   border-radius: var(--border-radius-medium);
-  margin-top: var(--spacing-lg);
-  box-shadow: 0 2px 8px var(--color-shadow);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
   padding: 0;
   overflow: visible;
+  transition: box-shadow 0.3s ease;
 }
-.light-button:hover {
-  background: var(--color-background-secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+.light-status-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
 }
 
 .light-status-card .card-header {
-  padding: 16px 20px;
+  padding: 20px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .light-summary {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-text-secondary);
+  font-weight: 500;
 }
 
 .light-buttons {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 15px;
+  padding: 16px;
   justify-content: center;
 }
 
 .light-button {
-  width: 100%;
   aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 8px;
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-small);
+  border-radius: 12px;
   background: var(--color-background);
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.light-button:hover {
+  transform: translateY(-3px);
+}
+
+.light-button:active {
+  transform: translateY(-1px);
 }
 
 .light-button.switch-entity {
-  opacity: 0.8;
+  opacity: 0.9;
+  background: rgba(var(--color-primary-rgb), 0.1);
 }
 
 .light-name {
-  margin-top: 5px;
-  font-size: 1em;
-  line-height: 1.2;
+  margin-top: 8px;
+  font-size: 1.1em;
+  font-weight: 500;
+  line-height: 1.3;
   text-align: center;
   word-break: break-word;
   display: -webkit-box;
@@ -64,8 +78,13 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   color: var(--color-text-primary);
+  transition: color 0.3s ease;
 }
 
 .light-name.long-text {
-  font-size: 0.85em;
+  font-size: 0.95em;
+}
+
+.light-button:hover .light-name {
+  color: var(--color-primary);
 } 

@@ -95,13 +95,7 @@ function LightStatusCard({ config }) {
           {t('lightStatus.activeLights').replace('%1', activeLights).replace('%2', totalLights)}
         </span>
       </div>}
-      <div className="light-buttons" style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '16px',
-        padding: '20px',
-        justifyContent: 'center'
-      }}>
+      <div className="light-buttons">
         {Object.entries(lightEntities).map(([key, light]) => (
           <button
             key={key}

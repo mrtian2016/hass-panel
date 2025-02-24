@@ -40,6 +40,7 @@ import SocketStatusCard from '../../components/SocketStatusCard';
 import MaxPlayerCard from '../../components/MaxPlayerCard';
 import UniversalCard from '../../components/UniversalCard';
 import FamilyCard from '../../components/FamilyCard';
+
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
