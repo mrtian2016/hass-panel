@@ -12,7 +12,7 @@ A React-based smart home control panel that uses the Home Assistant Websocket AP
 
 ## Discussion Group
 
-<img src="https://i.imgur.com/vnkkrY3.jpeg" width="300" alt="Discussion Group" />
+<img src="https://i.imgur.com/8Fp7Csx.jpeg" width="300" alt="Discussion Group" />
 
 ## Key Features
 
