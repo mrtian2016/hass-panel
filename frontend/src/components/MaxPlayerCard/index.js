@@ -7,6 +7,7 @@ import {
   mdiSkipPrevious,
   mdiPlayCircle,
   mdiVolumeHigh,
+  mdiMusic,
 } from '@mdi/js';
 import BaseCard from '../BaseCard';
 import './style.css';
@@ -103,7 +104,11 @@ function MaxPlayerCard({
           {coverUrl ? (
             <img src={coverUrl} alt={entity?.attributes?.media_title || '封面'} />
           ) : (
-            <div className="max-cover-placeholder" />
+            <div className="max-cover-placeholder" >
+              <div className="max-cover-placeholder-icon">
+                <Icon path={mdiMusic} color="var(--color-primary)" size={8} />
+              </div>
+            </div>
           )}
         </div>
         

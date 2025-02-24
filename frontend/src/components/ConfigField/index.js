@@ -827,6 +827,70 @@ function ConfigField({ field, value, onChange }) {
     case 'universal-entities':
       return <UniversalConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
 
+    case 'persons-config':
+      const personEntities = getFilteredEntities('person.*');
+      
+      return (
+        <div className="config-field">
+          <label>{field.label}</label>
+          <div className="persons-config">
+            {(value || []).map((person, index) => (
+              <div key={index} className="person-item">
+                <div className="person-item-row">
+                  <Select
+                    allowClear
+                    value={person.entity_id || null}
+                    onChange={(selectedValue) => {
+                      const newPersons = [...value];
+                      newPersons[index] = {
+                        ...person,
+                        entity_id: selectedValue
+                      };
+                      onChange(newPersons);
+                    }}
+                    showSearch
+                    placeholder={t('configField.selectEntity')}
+                    optionFilterProp="children"
+                    style={{ flex: 1 }}
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={personEntities.map(entity => ({
+                      value: entity.id,
+                      label: entity.name + ' (' + entity.id + ')'
+                    }))}
+                  />
+                  <button
+                    className="delete-btn"
+                    style={{ marginTop: '0' }}
+                    onClick={() => {
+                      const newPersons = [...value];
+                      newPersons.splice(index, 1);
+                      onChange(newPersons);
+                    }}
+                  >
+                    {t('configField.deleteButton')}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            className="add-btn"
+            onClick={() => {
+              onChange([
+                ...(value || []),
+                {
+                  entity_id: ''
+                }
+              ]);
+            }}
+          >
+            {t('configField.addButton')}
+          </button>
+        </div>
+      );
+
     default:
       return null;
   }

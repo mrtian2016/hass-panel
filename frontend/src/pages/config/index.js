@@ -30,6 +30,7 @@ import {
   mdiArrowLeft,
   mdiCog,
   mdiPowerSocket,
+  mdiAccountGroup,
 } from '@mdi/js';
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
@@ -443,6 +444,24 @@ const getCardTypes = (t) => ({
         key: 'entities',
         label: t('fields.entitiesConfig'),
         type: 'universal-entities',
+        default: []
+      }
+    ]
+  },
+  FamilyCard: {
+    name: t('cards.family'),
+    icon: mdiAccountGroup,
+    fields: [
+      {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.family')
+      },
+      {
+        key: 'persons',
+        label: t('fields.personsConfig'),
+        type: 'persons-config',
         default: []
       }
     ]

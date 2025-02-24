@@ -5,6 +5,7 @@ import {
   mdiSkipNext,
   mdiSkipPrevious,
   mdiVolumeHigh,
+  mdiPlayCircle,
 } from '@mdi/js';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -43,7 +44,11 @@ function MiniPlayerCard({
             {coverUrl ? (
               <img src={coverUrl} alt={t('mediaPlayer.cover')} />
             ) : (
-              <div className="mini-cover-placeholder" />
+              <div className="mini-cover-placeholder" >
+                <div className="mini-cover-placeholder-icon">
+                  <Icon path={mdiPlayCircle} color="var(--color-primary)" size={1.2} />
+                </div>
+              </div>
             )}
           </div>
           <div className="mini-player-info">

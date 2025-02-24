@@ -145,7 +145,7 @@ function UniversalCard({ config }) {
                   />
                   <div className="entity-info">
                     <span className="label">
-                      {entity.name || t(`universal.types.${entity.entity_id}`)}
+                      {entity.name}
                     </span>
                     <span className="value">
                       {getEntityValue(entity)}

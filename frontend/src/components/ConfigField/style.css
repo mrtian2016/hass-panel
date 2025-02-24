@@ -1028,3 +1028,42 @@
   }
 }
 
+.person-item {
+  margin-bottom: 10px;
+}
+
+.person-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.person-item-row .delete-btn {
+  padding: 4px 8px;
+  background-color: var(--color-error);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.person-item-row .delete-btn:hover {
+  opacity: 0.9;
+}
+
+.persons-config .add-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.persons-config .add-btn:hover {
+  opacity: 0.9;
+}
+

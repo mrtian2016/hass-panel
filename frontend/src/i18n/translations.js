@@ -181,6 +181,7 @@ export const translations = {
       socketstatus: '插座状态',
       socketStatus: '插座状态',
       socketsConfig: '插座配置',
+      family: '人员状态',
     },
 
     // 配置字段
@@ -212,6 +213,7 @@ export const translations = {
       placeholderImage: '请上传图片',
       socketsConfig: '插座配置',
       entitiesConfig: '实体配置',
+      personsConfig: '人员配置',
     },
 
     version: {
@@ -976,6 +978,7 @@ export const translations = {
       socketsConfig: 'Sockets Configuration',
       socketStatus: 'Socket Status',
       universal: 'Universal Card',
+      family: 'Family',
     },
 
     // Configuration Fields
@@ -1004,6 +1007,7 @@ export const translations = {
       roomsConfig: 'Room Lights Configuration',
       socketsConfig: 'Sockets Configuration',
       entitiesConfig: 'Entities Configuration',
+      personsConfig: 'Persons Configuration',
     },
 
     // WebDAV Related

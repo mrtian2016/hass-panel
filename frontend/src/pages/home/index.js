@@ -19,7 +19,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { Responsive } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { message, Spin } from 'antd';
+import { message, Spin, Popconfirm } from 'antd';
 import WeatherCard from '../../components/WeatherCard';
 import SensorCard from '../../components/SensorCard';
 import TimeCard from '../../components/TimeCard';
@@ -39,6 +39,7 @@ import MotionCard from '../../components/MotionCard';
 import SocketStatusCard from '../../components/SocketStatusCard';
 import MaxPlayerCard from '../../components/MaxPlayerCard';
 import UniversalCard from '../../components/UniversalCard';
+import FamilyCard from '../../components/FamilyCard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
@@ -259,6 +260,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
   // 修改重置布局功能
   const handleResetLayout = async () => {
+
     try {
       if (!currentConfig?.defaultLayouts) {
         message.error('默认布局数据不存在');
@@ -461,6 +463,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         return <MaxPlayerCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'UniversalCard':
         return <UniversalCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+      case 'FamilyCard':
+        return <FamilyCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       default:
         return null;
     }
@@ -539,9 +543,15 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 </button>
               )}
               {isEditing && (
-                <button
+                  <Popconfirm
+                  title="重置布局"
+                  description="确定要重置布局吗？"
+                  okText="确定"
+                  cancelText="取消"
+                  onConfirm={() => handleResetLayout()}
+                >
+                   <button
                   className="reset-layout"
-                  onClick={() => handleResetLayout()}
                   title={t('reset')}
                 >
                   <Icon
@@ -550,6 +560,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                     color="var(--color-text-primary)"
                   />
                 </button>
+                </Popconfirm>
+               
               )}
               {isEditing && !isMobile && (
                 <button
