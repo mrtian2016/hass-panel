@@ -32,7 +32,6 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
   }, [webrtc_play_url]);
 
   if (!camera) return null;
-  console.log(camera);
 
   const previewUrl = camera?.poster?.url || camera?.mjpeg?.url;
   const hlsUrl = camera?.stream?.url;

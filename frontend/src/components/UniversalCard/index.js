@@ -13,7 +13,6 @@ import { notification } from 'antd';
 
 
 function UniversalCard({ config }) {
-  console.log('config', config);
   const titleVisible = config.titleVisible;
   const { theme } = useTheme();
   const { t } = useLanguage();
@@ -100,7 +99,6 @@ function UniversalCard({ config }) {
   // 修改点击处理函数
   const handleEntityClick = (entity) => {
     if(entity.entity_id.startsWith('sensor')){
-      console.log('handleEntityClick', entity);
       return
     }
    

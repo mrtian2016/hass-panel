@@ -84,9 +84,7 @@ function PVECard({ config }) {
   const [showDriveModal, setShowDriveModal] = useState(false);
   const debugMode = localStorage.getItem('debugMode') === 'true';
   let entities = {};
-  console.log(config);
   const nodeName = config.pve_server.nodeName;
-  console.log(config,nodeName);
   const optionClickHandler = (entity, option, isRunning) => {
     switch (option) {
       case 'start':
@@ -116,7 +114,6 @@ function PVECard({ config }) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       entity: useEntity(feature.entity_id, { returnNullIfNotFound: true }),
     }));
-    console.log(mainEntities);
     entities = mainEntities.reduce((acc, curr) => {
       acc[curr.key] = curr.entity;
       return acc;
@@ -206,7 +203,6 @@ function PVECard({ config }) {
             <div className="pve-vm-grid">
               {config.pve_server?.vms?.map((vm, index) => {
            
-                  console.log(vm);
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   const vmStatus = useEntity(vm.status?.entity_id || '', { returnNullIfNotFound: true });
                   
@@ -224,7 +220,7 @@ function PVECard({ config }) {
                   const vmShutdownOption = useEntity(vm.shutdownOption?.entity_id || '', { returnNullIfNotFound: true });
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   const lastBoot = useEntity(vm.lastBoot?.entity_id || '', { returnNullIfNotFound: true });
-                  console.log(lastBoot);
+                
 
                 const vmCpuUsageValue = parseFloat(safeGetState(vmCpuUsage, '0')).toFixed(2);
                 const vmMemoryUsageValue = parseFloat(safeGetState(vmMemoryUsage, '0')).toFixed(2);
@@ -326,7 +322,6 @@ function PVECard({ config }) {
                 try {
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   driveStatus = useEntity(drive.status?.entity_id, { returnNullIfNotFound: true });
-                  console.log(driveStatus);
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   driveTemp = useEntity(drive.temperature?.entity_id, { returnNullIfNotFound: true });
                   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -336,7 +331,6 @@ function PVECard({ config }) {
                   // eslint-disable-next-line react-hooks/rules-of-hooks
                   driveDiskSize = useEntity(drive.diskSize?.entity_id, { returnNullIfNotFound: true });
 
-                  console.log(driveDiskSize);
                 } catch (error) {
                   if (debugMode) {
                     notification.error({

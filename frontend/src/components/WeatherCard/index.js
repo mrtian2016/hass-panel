@@ -105,7 +105,6 @@ function WeatherCard({config}) {
   try {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     weather = useWeather(config.entity_id);
-    console.log(weather);
   } catch (error) {
     if (debugMode) {
       notification.error({

@@ -21,16 +21,13 @@ function InitializePage() {
     const { t, toggleLanguage } = useLanguage();
 
     const checkAuth = useCallback(async () => {
-        console.log('checkAuth');
         if (!localStorage.getItem('hass_panel_token')) {
-            console.log('checkAuth 1');
             navigate('/login');
             return;
         }
 
         try {
             const data = await systemApi.getHassConfig();
-            console.log('checkAuth 2', data);
             if (data.code === 200) {
                 navigate('/');
                 localStorage.setItem('hass_url', data.data.url);
@@ -39,7 +36,6 @@ function InitializePage() {
                 navigate('/login');
             }
         } catch (error) {
-            console.log('checkAuth 3');
             console.error('获取 HASS 配置失败:', error);
         }
     }, [navigate]);
@@ -110,12 +106,10 @@ function InitializePage() {
                 } else if (data.code === 402) {
                     message.error(t('initialize.invalidHassToken'));
                 } else {
-                    console.log(data);
                     message.error(data.message || t('initialize.initFailed'));
                 }
             }
         } catch (error) {
-            console.log(error);
             message.error(t('initialize.systemError'));
         }
     };

@@ -14,7 +14,6 @@ function FamilyCard({ config, visible = true, titleVisible = true }) {
   const renderPerson = (person) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const entity = useEntity(person.entity_id);
-    console.log(entity);
     const isHome = entity?.state === 'home';
     const personIcon = entity?.attributes?.entity_picture 
       ? `${hassUrl}${entity.attributes.entity_picture}`

@@ -17,7 +17,6 @@ function CameraSection({ config, titleVisible }) {
     try {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const entity = useCamera(camera.entity_id,{stream:true});
-      console.log(entity);
       return {
         ...camera,
         entity,

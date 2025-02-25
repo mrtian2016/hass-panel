@@ -20,7 +20,7 @@ function IlluminanceCard({ config, titleVisible }) {
       <div className="illuminance-sensors">
         {sensors.map((sensor) => {
           // eslint-disable-next-line react-hooks/rules-of-hooks
-          const { state, attributes, custom } = useEntity(sensor.entity_id, {returnNullIfNotFound: true});
+          const { state, attributes } = useEntity(sensor.entity_id, {returnNullIfNotFound: true});
           if (!state) {
             return (
               <div key={sensor.entity_id} className="illuminance-sensor">
@@ -29,7 +29,6 @@ function IlluminanceCard({ config, titleVisible }) {
               </div>
             );
           }
-          console.log(custom);
 
           
           return (

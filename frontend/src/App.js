@@ -56,12 +56,10 @@ function MainContent() {
   const updateHassConfig = async () => {
     try {
       const hassToken = JSON.parse(localStorage.getItem('hassTokens'));
-      console.log('hassToken', hassToken);
-      const result = await systemApi.updateHassConfig({
+      await systemApi.updateHassConfig({
         hass_url: hassToken.hassUrl,
         hass_token: hassToken.access_token
       });
-      console.log('result', result);
     } catch (error) {
       console.error('更新 HASS 配置失败:', error);
     }
@@ -105,7 +103,6 @@ function MainContent() {
                   hassUrl={hassConfig.hassUrl} 
                   hassToken={hassConfig.hassToken}
                   onReady={async () => {
-                    console.log('HassConnect ready');
                     await updateHassConfig();
                   }}
                 >

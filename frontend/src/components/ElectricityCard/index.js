@@ -49,7 +49,6 @@ function ElectricityCard({
           hassApi.getEnergyStatistics(config.electricity.totalUsage.entity_id),
           hassApi.getTodayConsumption(config.electricity.totalUsage.entity_id)
         ]);
-        console.log(statisticsData, todayUsageData);
         if (statisticsData.code === 200) {
           setSummaryData(statisticsData.data.summary);
           setChartData({

@@ -30,7 +30,6 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
       { key: 'status', name: t('configField.status') },
       { key: 'temperature', name: t('configField.temperature') }
     ];
-    console.log(value);
     
     return (
       <div className="config-field">
