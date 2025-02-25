@@ -21,7 +21,7 @@ function MaxPlayerCard({
 }) {
   const { theme } = useTheme();
   const titleVisible = config.titleVisible;
-  const entity = useEntity(config.entity_id);
+  const entity = useEntity(config.entity_id,{returnNullIfNotFound: true});
   const { t } = useLanguage();
   const entityState = entity?.state || 'off';
   const hassUrl = localStorage.getItem('hass_url');

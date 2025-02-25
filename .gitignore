@@ -37,3 +37,4 @@ data
 /frontend/build
 __pycache__
 .cache
+.vscode

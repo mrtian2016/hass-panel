@@ -3,8 +3,6 @@ import Icon from '@mdi/react';
 import { 
   mdiNas,
   mdiHarddisk,
-  mdiDownload,
-  mdiUpload,
   mdiDotsHorizontal
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
@@ -15,51 +13,7 @@ import { useEntity } from '@hakit/core';
 import { notification } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { safeParseFloat, safeGetState } from '../../utils/helper';
-
-function CircularProgress({ value, label, color = 'var(--color-primary)' }) {
-  const viewBoxSize = 200;  // 用于 SVG viewBox
-  const strokeWidth = viewBoxSize * 0.08;  // 笔画宽度设为 viewBox 的 8%
-  const radius = viewBoxSize / 2;  // 半径为 viewBox 的一半
-  const normalizedRadius = radius - strokeWidth * 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
-  const strokeDashoffset = circumference - (value / 100) * circumference;
-
-  return (
-    <div className="circular-progress-container">
-      <div className="circular-progress">
-        <svg
-          viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
-          width="100%"
-          height="100%"
-        >
-          <circle
-            stroke="var(--color-border)"
-            fill="transparent"
-            strokeWidth={strokeWidth}
-            r={normalizedRadius}
-            cx={radius}
-            cy={radius}
-          />
-          <circle
-            stroke={color}
-            fill="transparent"
-            strokeWidth={strokeWidth}
-            strokeDasharray={`${circumference} ${circumference}`}
-            style={{ strokeDashoffset }}
-            strokeLinecap="round"
-            r={normalizedRadius}
-            cx={radius}
-            cy={radius}
-          />
-        </svg>
-        <div className="progress-content">
-          <span className="progress-value">{value}%</span>
-        </div>
-      </div>
-      <span className="progress-label">{label}</span>
-    </div>
-  );
-}
+import ServerInfoCommon from '../ServerInfoCommon';
 
 function NASCard({ config }) {
   const titleVisible = config.titleVisible;
@@ -120,28 +74,7 @@ function NASCard({ config }) {
         }
       >
         <div className="nas-data">
-          <div className="usage-section">
-            <CircularProgress value={cpuUsage} label="CPU" />
-            <CircularProgress value={memoryUsage} label={t('nas.labels.memory')} />
-          </div>
-          
-          <div className="metrics-section">
-            <div className="network-speeds">
-              <div className="speed-row">
-                <div className="speed-item">
-                  <Icon path={mdiUpload} size={0.8} />
-                  <span className="speed-value">
-                    {uploadSpeed}<span> {t('nas.labels.unit.speed')}</span>
-                  </span>
-                </div>
-                <div className="speed-item">
-                  <Icon path={mdiDownload} size={0.8} />
-                  <span className="speed-value">
-                    {downloadSpeed}<span> {t('nas.labels.unit.speed')}</span>
-                  </span>
-                </div>
-              </div>
-              <div className="divider"></div>
+          <ServerInfoCommon cpuUsage={cpuUsage} memoryUsage={memoryUsage} uploadSpeed={uploadSpeed} downloadSpeed={downloadSpeed} />
               
               <div className="volume-header">{t('nas.storage.poolStatus')}</div>
               {config.syno_nas?.volumes?.map((volume, index) => {
@@ -230,8 +163,6 @@ function NASCard({ config }) {
                 );
               })}
             </div>
-          </div>
-        </div>
       </BaseCard>
 
       <Modal 
@@ -240,7 +171,7 @@ function NASCard({ config }) {
         title={t('nas.storage.deviceStatus')}
         width="600px"
       >
-        <div className="drive-modal-content">
+        <div className="nas-drive-modal-content">
           <div className="volume-header">{t('nas.storage.diskStatus')}</div>
           {config.syno_nas?.drives?.map((drive, index) => {  
             let driveStatus = null;
@@ -266,19 +197,19 @@ function NASCard({ config }) {
             
             return (
               <React.Fragment key={index}>
-                <div className="speed-item">
-                  <div className="metric-label">
+                <div className="nas-drive-item">
+                  <div className="nas-drive-metric-label">
                     <Icon path={mdiHarddisk} size={0.8} />
                     <span className="label">{drive.name}</span>
                   </div>
-                  <div className="drive-status">
+                  <div className="nas-drive-status">
                     <span>
                       {safeGetState(driveStatus, t('nas.status.unknown')) === "normal" 
                         ? t('nas.status.normal') 
                         : t('nas.status.abnormal')}
                     </span>
                     {driveTemp && (
-                      <span className="drive-temp">
+                      <span className="nas-drive-temp">
                         {safeGetState(driveTemp, '0')}{t('nas.labels.unit.temp')}
                       </span>
                     )}
@@ -290,7 +221,7 @@ function NASCard({ config }) {
 
           {config.syno_nas?.m2ssd && config.syno_nas?.m2ssd.length > 0 && (
             <>
-              <div className="divider"></div>
+              <div className="nas-divider"></div>
               <div className="volume-header">{t('nas.storage.m2Status')}</div>
               {config.syno_nas?.m2ssd?.map((drive, index) => {
                 let driveStatus = null;
@@ -316,18 +247,18 @@ function NASCard({ config }) {
                 
                 return (
                   <React.Fragment key={index}>
-                    <div className="speed-item">
-                      <div className="metric-label">
+                    <div className="nas-drive-item">
+                      <div className="nas-drive-metric-label">
                         <Icon path={mdiHarddisk} size={0.8} />
                         <span className="label">{drive.name}</span>
                       </div>
-                      <div className="drive-status">
+                      <div className="nas-drive-status">
                         <span>
                           {safeGetState(driveStatus, t('nas.status.unknown')) === "normal" 
                             ? t('nas.status.normal') 
                             : t('nas.status.abnormal')}
                         </span>
-                        <span className="drive-temp">
+                        <span className="nas-drive-temp">
                           {safeGetState(driveTemp, '0')}{t('nas.labels.unit.temp')}
                         </span>
                       </div>

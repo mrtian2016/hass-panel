@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHass } from '@hakit/core';
-import { Select, Input } from 'antd';
+import { AutoComplete, Input, Button } from 'antd';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import LightOverviewConfig from './LightOverviewConfig';
@@ -10,6 +10,8 @@ import NasConfig from './NasConfig';
 import ScriptsConfig from './ScriptsConfig';
 import CameraConfig from './CameraConfig';
 import UniversalConfig from './UniversalConfig';
+import PVEConfig from './PVEConfig';
+import ServerConfig from './ServerConfig';
 import { configApi } from '../../utils/api';
 
 function ConfigField({ field, value, onChange }) {
@@ -51,7 +53,7 @@ function ConfigField({ field, value, onChange }) {
     const newRooms = value.filter((_, i) => i !== index);
     onChange(newRooms);
   };
-  
+
   switch (field.type) {
     case 'text':
       return (
@@ -66,7 +68,7 @@ function ConfigField({ field, value, onChange }) {
           </div>
         </div>
       );
-      
+
     case 'image':
       return (
         <div className="config-field">
@@ -90,7 +92,7 @@ function ConfigField({ field, value, onChange }) {
                 style={{ display: 'none' }}
                 id={`image-upload-${field.key}`}
               />
-              <Input 
+              <Input
                 value={value || ''}
                 placeholder={field.placeholder || t('fields.placeholderImage')}
                 readOnly
@@ -104,14 +106,14 @@ function ConfigField({ field, value, onChange }) {
           </div>
         </div>
       );
-      
+
     case 'entity':
       const entities = getFilteredEntities(field.filter);
       return (
         <div className="config-field">
           <div className="config-field-row">
             <label>{field.label}</label>
-            <Select
+            <AutoComplete
               allowClear
               value={value}
               onChange={onChange}
@@ -121,17 +123,17 @@ function ConfigField({ field, value, onChange }) {
               style={{ width: '100%' }}
             >
               {entities.map(entity => (
-                <Select.Option key={entity.id} value={entity.id}>
+                <AutoComplete.Option key={entity.id} value={entity.id}>
                   {entity.name} ({entity.id})
-                </Select.Option>
+                </AutoComplete.Option>
               ))}
-            </Select>
+            </AutoComplete>
           </div>
         </div>
       );
 
     case 'light-overview-config':
-      return <LightOverviewConfig 
+      return <LightOverviewConfig
         field={field}
         value={value}
         handleLightOverviewChange={handleLightOverviewChange}
@@ -142,7 +144,7 @@ function ConfigField({ field, value, onChange }) {
     case 'entity-multiple':
       const availableEntities = getFilteredEntities(field.filter);
       const selectedEntities = value || [];
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
@@ -150,7 +152,9 @@ function ConfigField({ field, value, onChange }) {
             {selectedEntities.map((entityId, index) => (
               <div key={entityId} className="entity-item">
                 <span>{allEntities[entityId]?.attributes?.friendly_name || entityId}</span>
-                <button
+                <Button
+                  type="primary"
+                  danger
                   onClick={() => {
                     const newEntities = [...selectedEntities];
                     newEntities.splice(index, 1);
@@ -158,10 +162,10 @@ function ConfigField({ field, value, onChange }) {
                   }}
                 >
                   {t('configField.deleteButton')}
-                </button>
+                </Button>
               </div>
             ))}
-            <Select
+            <AutoComplete
               allowClear
               value=""
               onChange={(value) => {
@@ -211,7 +215,7 @@ function ConfigField({ field, value, onChange }) {
                   {Object.entries(group.sensors || {}).map(([type, sensor]) => (
                     <div key={type} className="sensor-config-item">
                       <span className="sensor-config-type">{sensor.name}</span>
-                      <Select
+                      <AutoComplete
                         allowClear
                         value={sensor.entity_id || null}
                         onChange={(selectedValue) => {
@@ -242,7 +246,9 @@ function ConfigField({ field, value, onChange }) {
                     </div>
                   ))}
                 </div>
-                <button
+                <Button
+                  type="primary"
+                  danger
                   onClick={() => {
                     const newGroups = [...(value || [])];
                     newGroups.splice(groupIndex, 1);
@@ -250,10 +256,11 @@ function ConfigField({ field, value, onChange }) {
                   }}
                 >
                   {t('configField.deleteButton')}
-                </button>
+                </Button>
               </div>
             ))}
-            <button
+            <Button
+              type="primary"
               onClick={() => {
                 onChange([
                   ...(value || []),
@@ -277,7 +284,7 @@ function ConfigField({ field, value, onChange }) {
               }}
             >
               {t('configField.addButton')}
-            </button>
+            </Button>
           </div>
         </div>
       );
@@ -293,7 +300,7 @@ function ConfigField({ field, value, onChange }) {
 
     case 'media-players':
       const mediaPlayerEntities = getFilteredEntities('media_player.*');
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
@@ -313,7 +320,7 @@ function ConfigField({ field, value, onChange }) {
                   }}
                   placeholder={t('configField.playerName')}
                 />
-                <Select
+                <AutoComplete
                   allowClear
                   value={player.entity_id || null}
                   onChange={(selectedValue) => {
@@ -335,7 +342,10 @@ function ConfigField({ field, value, onChange }) {
                     label: entity.name + ' (' + entity.id + ')'
                   }))}
                 />
-                <button
+                <Button
+                  type="primary"
+                  style={{ width: '100px' }}  
+                  danger
                   onClick={() => {
                     const newPlayers = [...value];
                     newPlayers.splice(index, 1);
@@ -343,10 +353,12 @@ function ConfigField({ field, value, onChange }) {
                   }}
                 >
                   {t('configField.deleteButton')}
-                </button>
+                </Button>
               </div>
             ))}
-            <button
+            <Button
+              style={{ width: '100px' }}
+              type="primary"
               onClick={() => {
                 onChange([
                   ...(value || []),
@@ -359,14 +371,14 @@ function ConfigField({ field, value, onChange }) {
               }}
             >
               {t('configField.addButton')}
-            </button>
+            </Button>
           </div>
         </div>
       );
 
     case 'curtains-config':
       const curtainEntities = getFilteredEntities('cover.*');
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
@@ -386,7 +398,7 @@ function ConfigField({ field, value, onChange }) {
                   }}
                   placeholder={t('configField.curtainName')}
                 />
-                <Select
+                <AutoComplete
                   allowClear
                   value={curtain.entity_id || null}
                   onChange={(selectedValue) => {
@@ -408,7 +420,10 @@ function ConfigField({ field, value, onChange }) {
                     label: entity.name + ' (' + entity.id + ')'
                   }))}
                 />
-                <button
+                <Button 
+                  type="primary"
+                  style={{ width: '100px' }}
+                  danger
                   onClick={() => {
                     const newCurtains = [...value];
                     newCurtains.splice(index, 1);
@@ -416,10 +431,12 @@ function ConfigField({ field, value, onChange }) {
                   }}
                 >
                   {t('configField.deleteButton')}
-                </button>
+                </Button>
               </div>
             ))}
-            <button
+            <Button
+              style={{ width: '100px' }}
+              type="primary"
               onClick={() => {
                 onChange([
                   ...(value || []),
@@ -432,7 +449,7 @@ function ConfigField({ field, value, onChange }) {
               }}
             >
               {t('configField.addButton')}
-            </button>
+            </Button>
           </div>
         </div>
       );
@@ -450,18 +467,31 @@ function ConfigField({ field, value, onChange }) {
         { key: 'wanDownloadSpeed', name: t('configField.downloadSpeed') },
         { key: 'wanUploadSpeed', name: t('configField.uploadSpeed') }
       ];
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
           <div className="router-config">
+            <div className="router-field">
+              <span className="field-name">{t('configField.routerName')}</span>
+              <Input
+                value={value?.routerName || ''}
+                onChange={(e) => {
+                  onChange({
+                    ...value,
+                    routerName: e.target.value
+                  });
+                }}
+                placeholder={t('configField.routerName')}
+              />
+            </div>
             {routerFields.map(routerField => {
               const currentValue = value?.[routerField.key] || {};
-              
+
               return (
                 <div key={routerField.key} className="router-field">
                   <span className="field-name">{routerField.name}</span>
-                  <Select
+                  <AutoComplete
                     allowClear
                     value={currentValue.entity_id || null}
                     onChange={(selectedValue) => {
@@ -493,6 +523,10 @@ function ConfigField({ field, value, onChange }) {
 
     case 'nas-config':
       return <NasConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
+    case 'server-config':
+      return <ServerConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
+    case 'pve-config':
+      return <PVEConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
 
     case 'scripts-config':
       return <ScriptsConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
@@ -507,18 +541,18 @@ function ConfigField({ field, value, onChange }) {
         { key: 'ro_filter_life', name: t('configField.roFilterLife') },
         { key: 'status', name: t('configField.status') }
       ];
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
           <div className="waterpuri-config">
             {waterPuriFields.map(waterPuriField => {
               const currentValue = value?.[waterPuriField.key] || {};
-              
+
               return (
                 <div key={waterPuriField.key} className="waterpuri-field">
                   <span className="field-name">{waterPuriField.name}</span>
-                  <Select
+                  <AutoComplete
                     allowClear
                     value={currentValue.entity_id || null}
                     onChange={(selectedValue) => {
@@ -557,18 +591,18 @@ function ConfigField({ field, value, onChange }) {
         { key: 'totalUsage', name: t('configField.totalUsage') },
         { key: 'todayUsage', name: t('configField.todayUsage') },
       ];
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
           <div className="electricity-config">
             {electricityFields.map(electricityField => {
               const currentValue = value?.[electricityField.key] || {};
-              
+
               return (
                 <div key={electricityField.key} className="electricity-field">
                   <span className="field-name">{electricityField.name}</span>
-                  <Select
+                  <AutoComplete
                     allowClear
                     value={currentValue.entity_id || null}
                     onChange={(selectedValue) => {
@@ -644,7 +678,7 @@ function ConfigField({ field, value, onChange }) {
           }
         }
       };
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
@@ -652,7 +686,7 @@ function ConfigField({ field, value, onChange }) {
             {Object.entries(value || {}).map(([type, feature]) => (
               <div key={type} className="climate-feature">
                 <div className="feature-header">
-                  <Select
+                  <AutoComplete
                     allowClear
                     value={feature.name || null}
                     onChange={(selectedName) => {
@@ -660,7 +694,7 @@ function ConfigField({ field, value, onChange }) {
                       const selectedFeatureKey = Object.entries(predefinedFeatures).find(
                         ([_, f]) => f.name === selectedName
                       )?.[0];
-                      
+
                       if (selectedFeatureKey) {
                         const predefinedFeature = predefinedFeatures[selectedFeatureKey];
                         onChange({
@@ -683,46 +717,50 @@ function ConfigField({ field, value, onChange }) {
                       label: f.name
                     }))}
                   />
-                
-              
-                    <Select
-                      allowClear
-                      value={feature.entity_id || null}
-                      onChange={(selectedValue) => {
-                        onChange({
-                          ...value,
-                          [type]: {
-                            ...feature,
-                            entity_id: selectedValue
-                          }
-                        });
-                      }}
-                      showSearch
-                      placeholder={t('configField.selectEntity')}
-                      optionFilterProp="children"
-                      filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                      }
-                      options={featureEntities.map(entity => ({
-                        value: entity.id,
-                        label: entity.name + ' (' + entity.id + ')'
-                      }))}
-                    />
-                 
-                </div>
-                 <button
-                    onClick={() => {
-                      const newValue = { ...value };
-                      delete newValue[type];
-                      onChange(newValue);
+
+
+                  <AutoComplete
+                    allowClear
+                    value={feature.entity_id || null}
+                    onChange={(selectedValue) => {
+                      onChange({
+                        ...value,
+                        [type]: {
+                          ...feature,
+                          entity_id: selectedValue
+                        }
+                      });
                     }}
-                  >
-                    {t('configField.deleteButton')}
-                  </button>
+                    showSearch
+                    placeholder={t('configField.selectEntity')}
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={featureEntities.map(entity => ({
+                      value: entity.id,
+                      label: entity.name + ' (' + entity.id + ')'
+                    }))}
+                  />
+
+                </div>
+                <Button
+                  type="primary"
+                  style={{ width: '100px' }}
+                  danger
+                  onClick={() => {
+                    const newValue = { ...value };
+                    delete newValue[type];
+                    onChange(newValue);
+                  }}
+                >
+                  {t('configField.deleteButton')}
+                </Button>
               </div>
             ))}
-            <button
-              className="add-btn"
+            <Button
+              type="primary"
+              style={{ width: '100px' }}
               onClick={() => {
                 const newKey = `feature_${Date.now()}`;
                 onChange({
@@ -739,14 +777,14 @@ function ConfigField({ field, value, onChange }) {
               }}
             >
               {t('configField.addButton')}
-            </button>
+            </Button>
           </div>
         </div>
       );
 
     case 'illuminance-config':
       const illuminanceEntities = getFilteredEntities('sensor.*');
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
@@ -771,7 +809,7 @@ function ConfigField({ field, value, onChange }) {
                 </div>
                 <div className="config-field-row">
                   <span className="field-name">{t('configField.sensorEntity')}</span>
-                  <Select
+                  <AutoComplete
                     allowClear
                     value={sensor.entity_id || null}
                     onChange={(selectedValue) => {
@@ -794,8 +832,10 @@ function ConfigField({ field, value, onChange }) {
                     }))}
                   />
                 </div>
-                <button
-                  className="delete-btn"
+                <Button
+                  style={{ width: '100px' }}
+                  type="primary"
+                  danger
                   onClick={() => {
                     const newSensors = [...value];
                     newSensors.splice(index, 1);
@@ -803,12 +843,13 @@ function ConfigField({ field, value, onChange }) {
                   }}
                 >
                   {t('configField.deleteButton')}
-                </button>
+                </Button>
               </div>
             ))}
           </div>
-          <button
-            className="add-btn"
+          <Button
+            style={{ width: '100px' ,marginTop: '10px'}}
+            type="primary"
             onClick={() => {
               onChange([
                 ...(value || []),
@@ -820,7 +861,7 @@ function ConfigField({ field, value, onChange }) {
             }}
           >
             {t('configField.addButton')}
-          </button>
+          </Button>
         </div>
       );
 
@@ -829,7 +870,7 @@ function ConfigField({ field, value, onChange }) {
 
     case 'persons-config':
       const personEntities = getFilteredEntities('person.*');
-      
+
       return (
         <div className="config-field">
           <label>{field.label}</label>
@@ -837,7 +878,7 @@ function ConfigField({ field, value, onChange }) {
             {(value || []).map((person, index) => (
               <div key={index} className="person-item">
                 <div className="person-item-row">
-                  <Select
+                  <AutoComplete
                     allowClear
                     value={person.entity_id || null}
                     onChange={(selectedValue) => {
@@ -860,8 +901,9 @@ function ConfigField({ field, value, onChange }) {
                       label: entity.name + ' (' + entity.id + ')'
                     }))}
                   />
-                  <button
-                    className="delete-btn"
+                  <Button
+                    type="primary"
+                    danger
                     style={{ marginTop: '0' }}
                     onClick={() => {
                       const newPersons = [...value];
@@ -870,13 +912,13 @@ function ConfigField({ field, value, onChange }) {
                     }}
                   >
                     {t('configField.deleteButton')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))}
           </div>
-          <button
-            className="add-btn"
+          <Button
+            type="primary"
             onClick={() => {
               onChange([
                 ...(value || []),
@@ -887,7 +929,7 @@ function ConfigField({ field, value, onChange }) {
             }}
           >
             {t('configField.addButton')}
-          </button>
+          </Button>
         </div>
       );
 

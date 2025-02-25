@@ -6,24 +6,24 @@
 }
 
 .curtain-content {
-  padding: var(--spacing-lg);
+  padding: 0 var(--spacing-lg);
 }
 
 .curtain-visualization {
   display: flex;
   align-items: center;
   gap: 16px;
-  height: 170px;
+  height: 160px;
   background: var(--color-background-primary);
   border-radius: 8px;
-  padding: 20px;
-
+  padding: 0 20px;
+  overflow: visible;
   flex-direction: column;
 }
 
 .curtain-name {
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .curtain-side {
@@ -49,6 +49,7 @@
   border: 1px solid var(--curtain-border-color, rgba(0, 0, 0, 0.1));
   border-top: 8px solid var(--curtain-border-top-color, #eef3ff);
   width: 100%;
+  overflow: visible;
 }
 
 .curtain-panel {
@@ -71,7 +72,7 @@
   top: 50%;
   width: 20px;
   height: 20px;
-  background: #fff;
+  background: var(--color-background-curtain-panel);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   transform: translateY(-50%);

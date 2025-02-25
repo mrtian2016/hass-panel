@@ -1,5 +1,5 @@
 import { useLanguage } from '../../i18n/LanguageContext';
-import { Select, Input } from 'antd';
+import { AutoComplete, Input, Button } from 'antd';
 import './UniversalConfig.css';
 function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
     const { t } = useLanguage();
@@ -30,8 +30,8 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                             />
                             <div className="group-actions">
                                 <div className="order-buttons">
-                                    <button
-                                        className="order-button"
+                                    <Button
+                                        type="primary"
                                         onClick={() => {
                                             if (groupIndex > 0) {
                                                 const newGroups = [...value];
@@ -43,9 +43,9 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                                         disabled={groupIndex === 0}
                                     >
                                         ↑ 上移
-                                    </button>
-                                    <button
-                                        className="order-button"
+                                    </Button>
+                                    <Button
+                                        type="primary"
                                         onClick={() => {
                                             if (groupIndex < groupArray.length - 1) {
                                                 const newGroups = [...value];
@@ -57,18 +57,19 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                                         disabled={groupIndex === groupArray.length - 1}
                                     >
                                         ↓ 下移
-                                    </button>
+                                    </Button>
                                 </div>
-                                <button
+                                <Button
+                                    type="primary"
+                                    danger
                                     onClick={() => {
                                         const newGroups = [...value];
                                         newGroups.splice(groupIndex, 1);
                                         onChange(newGroups);
                                     }}
-                                    className="delete-button"
                                 >
                                     {t('configField.deleteGroup')}
-                                </button>
+                                </Button>
                             </div>
                         </div>
 
@@ -91,13 +92,12 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                                                 placeholder={t('configField.entityName')}
                                             />
                                         </div>
-                                      
-                                    
+
                                     </div>
 
                                     <div className="entity-select-field">
                                         <label>{t('configField.selectEntity')}</label>
-                                        <Select
+                                        <AutoComplete
                                             allowClear
                                             value={entity.entity_id}
                                             onChange={(newEntityId) => {
@@ -128,8 +128,8 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
 
                                     <div className="entity-actions">
                                         <div className="order-buttons">
-                                            <button
-                                                className="order-button"
+                                            <Button
+                                                type="primary"
                                                 onClick={() => {
                                                     const entries = Object.entries(group.entities || {});
                                                     if (entityIndex > 0) {
@@ -144,9 +144,9 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                                                 disabled={entityIndex === 0}
                                             >
                                                 ↑ 上移
-                                            </button>
-                                            <button
-                                                className="order-button"
+                                            </Button>
+                                            <Button
+                                                type="primary"
                                                 onClick={() => {
                                                     const entries = Object.entries(group.entities || {});
                                                     if (entityIndex < entries.length - 1) {
@@ -161,9 +161,10 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                                                 disabled={entityIndex === entityArray.length - 1}
                                             >
                                                 ↓ 下移
-                                            </button>
+                                            </Button>
                                         </div>
-                                        <button
+                                        <Button
+                                            type="primary"
                                             onClick={() => {
                                                 const newGroups = [...value];
                                                 const newEntities = { ...group.entities };
@@ -171,15 +172,16 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                                                 newGroups[groupIndex].entities = newEntities;
                                                 onChange(newGroups);
                                             }}
-                                            className="delete-button"
+                                            danger
                                         >
                                             {t('configField.deleteEntity')}
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             ))}
 
-                            <button
+                            <Button
+                                style={{ width: '100px' }}
                                 onClick={() => {
                                     const newGroups = [...value];
                                     const newEntityId = `entity_${Date.now()}`;
@@ -194,15 +196,16 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                                     };
                                     onChange(newGroups);
                                 }}
-                                className="add-button"
+                                type="primary"
                             >
                                 {t('configField.addEntity')}
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 ))}
 
-                <button
+                <Button
+                    style={{ width: '100px' }}
                     onClick={() => {
                         onChange([
                             ...value,
@@ -213,10 +216,10 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                             }
                         ]);
                     }}
-                    className="add-group-button"
+                    type="primary"
                 >
                     {t('configField.addGroup')}
-                </button>
+                </Button>
             </div>
         </div>
     );

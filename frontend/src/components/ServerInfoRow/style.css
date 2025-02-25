@@ -1,0 +1,47 @@
+.server-data {
+    padding: var(--spacing-md);
+}
+
+.server-info-section {
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.server-title {
+    font-size: 16px;
+    font-weight: bolder;
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+}
+
+.server-info-row {
+    margin-bottom: 8px;
+}
+
+.server-info-row:last-child {
+    margin-bottom: 0;
+}
+
+.server-info-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.server-info-label-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.server-info-label {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.server-info-value {
+    font-weight: 500;
+    color: var(--color-text-primary);
+    font-size: 13px;
+}

@@ -143,6 +143,7 @@ export const translations = {
       waterpurifier: '净水器',
       socketStatus: '插座状态',
       socketstatus: '插座状态',
+      pve: 'PVE监控',
     },
 
     // 卡片操作
@@ -182,6 +183,8 @@ export const translations = {
       socketStatus: '插座状态',
       socketsConfig: '插座配置',
       family: '人员状态',
+      pve: 'PVE监控',
+      server: '服务器监控',
     },
 
     // 配置字段
@@ -214,6 +217,8 @@ export const translations = {
       socketsConfig: '插座配置',
       entitiesConfig: '实体配置',
       personsConfig: '人员配置',
+      pveConfig: 'PVE配置',
+      serverConfig: '服务器配置',
     },
 
     version: {
@@ -447,8 +452,10 @@ export const translations = {
             tb: 'TB',
             gb: 'GB'
           }
-        }
-      }
+        },
+        uptime: '运行时间'
+      },
+      deviceStatus: '设备状态',
     },
 
     router: {
@@ -595,6 +602,10 @@ export const translations = {
       placeholderPositionTop: '例如: 50%',
       lightEffectImage: '灯光效果图片',
       placeholderLightEffectImage: '输入图片URL',
+      serverName: '服务器名称',
+      threads: '线程数量',
+      routerName: '路由器名称',
+      uptime: '运行时间',
       addButton: '添加',
       deleteButton: '删除',
       moveUpButton: '上移',
@@ -612,11 +623,9 @@ export const translations = {
       ppFilterLife: 'PPC复合滤芯寿命',
       roFilterLife: 'RO反渗透滤芯寿命',
       status: '状态',
-      cpuTemp: 'CPU温度',
       publicIp: '公网IP',
       memoryUsage: '内存使用率',
       diskUsage: '硬盘使用率',
-      uptime: '运行时间',
       uploadSpeed: '上传速度',
       downloadSpeed: '下载速度',
       volumeUsage: '存储池使用空间',
@@ -720,6 +729,20 @@ export const translations = {
       addGroup: '添加分组',
       deleteGroup: '删除分组',
       defaultGroupName: '默认分组',
+      nodeName: '节点名称',
+      cpuTemp: 'CPU温度',
+      vmCount: '虚拟机数量',
+      containerCount: '容器数量',
+      lastBoot: '最后启动时间',
+      vms: '虚拟机',
+      vmName: '虚拟机名称',
+      startOption: '启动选项',
+      stopOption: '停止选项',
+      restartOption: '重启选项',
+      shutdownOption: '关机选项',
+      powerCycleCount: '通电次数',
+      powerOnTime: '通电时间',
+      diskSize: '硬盘容量',
     },
     'fullscreen.enter': '进入全屏',
     'fullscreen.exit': '退出全屏',
@@ -800,6 +823,98 @@ export const translations = {
         switch: '开关',
         light: '灯光'
       }
+    },
+    server: {
+
+      deviceStatus: '设备状态',
+      storage: {
+        poolStatus: '存储池状态',
+        deviceStatus: '存储设备状态',
+        diskStatus: '硬盘状态',
+        m2Status: 'M.2 SSD状态'
+      },
+      labels: {
+        cpuUsage: 'CPU使用率',
+        memoryUsage: '内存使用率',
+        uploadSpeed: '上传速度',
+        downloadSpeed: '下载速度',
+        threads: '线程数量',
+        uptime: '运行时间',
+        status: '状态',
+        cpuTemp: 'CPU温度',
+        memory: '内存',
+        diskUsage: '硬盘使用率',
+        volumeUsage: '存储池使用空间',
+        
+      },
+      status: {
+        normal: '正常',
+        abnormal: '异常',
+        unknown: '未知',
+        on: '开启',
+        off: '关闭',
+      }
+    },
+    pve_server: {
+      loadError: 'PVE服务器加载失败',
+      loadErrorDesc: 'PVE服务器加载失败: ',
+      loadFailed: '加载失败',
+      checkConfig: '出现错误，请检查配置',
+      storage: {
+        poolStatus: '存储池状态',
+        deviceStatus: '存储设备状态',
+        diskStatus: '硬盘状态',
+        m2Status: 'M.2 SSD状态'
+      },
+      status: {
+        normal: '正常',
+        abnormal: '异常',
+        unknown: '未知',
+        on: '开启',
+        off: '关闭',
+        true: '开启',
+        false: '关闭',
+        running: '运行中',
+        stopped: '已停止'
+      },
+      labels: {
+        memory: '内存',
+        vmCount: '虚拟机数量',
+        containerCount: '容器数量',
+        cpuTemp: 'CPU温度',
+        status: '节点状态',
+        lastBoot: '启动时间',
+        powerOnTime: '通电时间',
+        powerCycleCount: '通电次数',
+        temperature: '温度',
+        publicIp: '公网IP',
+        onlineDevices: '在线设备',
+        connections: '连接数',
+        unit: {
+          speed: 'MB/s',
+          temp: '°C',
+          hours: '小时'
+        },
+        uptime: '运行时间'
+      },
+      vms: {
+        title: '虚拟机状态',
+        actions: {
+          start: '启动',
+          shutdown: '关机',
+          restart: '重启',
+          stop: '停止',
+          startWarning: '虚拟机已在运行中',
+          startSuccess: '正在启动虚拟机',
+          stopWarning: '虚拟机已经停止',
+          stopSuccess: '正在停止虚拟机',
+          restartWarning: '虚拟机已经停止，无法重启',
+          restartSuccess: '正在重启虚拟机',
+          shutdownWarning: '虚拟机已经停止，无法关机',
+          shutdownSuccess: '正在关闭虚拟机'
+        }
+      },
+      deviceStatus: '设备状态',
     },
   },
   en: {
@@ -979,6 +1094,7 @@ export const translations = {
       socketStatus: 'Socket Status',
       universal: 'Universal Card',
       family: 'Family',
+      pve: 'PVE Status',
     },
 
     // Configuration Fields
@@ -1008,6 +1124,9 @@ export const translations = {
       socketsConfig: 'Sockets Configuration',
       entitiesConfig: 'Entities Configuration',
       personsConfig: 'Persons Configuration',
+      pveConfig: 'PVE Configuration',
+      serverConfig: 'Server Configuration',
+      serverName: 'Server Name',
     },
 
     // WebDAV Related
@@ -1239,8 +1358,10 @@ export const translations = {
             tb: 'TB',
             gb: 'GB'
           }
-        }
-      }
+        },
+        uptime: '运行时间'
+      },
+      deviceStatus: '设备状态',
     },
 
     router: {
@@ -1402,8 +1523,9 @@ export const translations = {
       tdsOut: 'TDS Out',
       ppFilterLife: 'PP Filter Life',
       roFilterLife: 'RO Filter Life',
+      routerName: 'Router Name',
+      serverName: 'Server Name',
       status: 'Status',
-      cpuTemp: 'CPU Temp',
       publicIp: 'Public IP',
       memoryUsage: 'Memory Usage',
       diskUsage: 'Disk Usage',
@@ -1414,11 +1536,11 @@ export const translations = {
       volumeUsed: 'Volume Used',
       volumeFree: 'Volume Free',
       volumeUsedPercent: 'Volume Used Percent',
+      threads: 'Threads',
       volumeAvgTemp: 'Volume Avg Temp',
       deviceStatus: 'Device Status',
       diskStatus: 'Disk Status',
       volumes: 'Volumes',
-      cpuUsage: 'CPU Usage',
       drives: 'Drives',
       m2ssd: 'M.2 SSD',
       storagePoolName: 'Storage Pool Name',
@@ -1495,6 +1617,22 @@ export const translations = {
       addGroup: 'Add Group',
       deleteGroup: 'Delete Group',
       defaultGroupName: 'Default Group',
+      nodeName: 'Node Name',
+      cpuTemp: 'CPU Temperature',
+      cpuUsage: 'CPU Usage',
+      vmCount: 'VM Count',
+      containerCount: 'Container Count',
+      lastBoot: 'Last Boot Time',
+      vms: 'Virtual Machines',
+      vmName: 'VM Name',
+      startOption: 'Start Option',
+      stopOption: 'Stop Option',
+      restartOption: 'Restart Option',
+      shutdownOption: 'Shutdown Option',
+      powerCycleCount: 'Power Cycle Count',
+      powerOnTime: 'Power On Time',
+      diskSize: 'Disk Size',
+      mainInfo: 'Main Info',
     },
     'fullscreen.enter': 'Enter Fullscreen',
     'fullscreen.exit': 'Exit Fullscreen',
@@ -1589,5 +1727,100 @@ export const translations = {
         light: 'Light'
       }
     },
-  }
+    server: {
+
+      deviceStatus: 'Device Status',
+      threads: 'Threads',
+      storage: {
+        poolStatus: 'Storage Pool Status',
+        deviceStatus: 'Storage Device Status',
+        diskStatus: 'Disk Status',
+        m2Status: 'M.2 SSD Status'
+      },
+      labels: {
+        cpuUsage: 'CPU Usage',
+        threads: 'Threads',
+        memoryUsage: 'Memory Usage',
+        uploadSpeed: 'Upload Speed',
+        downloadSpeed: 'Download Speed',
+        uptime: 'Uptime',
+        status: 'Status',
+        cpuTemp: 'CPU Temperature',
+        memory: 'Memory',
+        diskUsage: 'Disk Usage',
+        volumeUsage: 'Volume Usage',
+        
+      },
+      status: {
+        normal: 'Normal',
+        abnormal: 'Abnormal',
+        unknown: 'Unknown',
+        on: 'On',
+        off: 'Off',
+      }
+    },
+    pve_server: {
+      loadError: 'PVE Server Load Failed',
+      loadErrorDesc: 'PVE Server Load Failed: ',
+      loadFailed: 'Load Failed',
+      checkConfig: 'Error occurred, please check the configuration',
+      storage: {
+        poolStatus: 'Storage Pool Status',
+        deviceStatus: 'Storage Device Status',
+        diskStatus: 'Disk Status',
+        m2Status: 'M.2 SSD Status'
+      },
+      status: {
+        normal: 'Normal',
+        abnormal: 'Abnormal',
+        unknown: 'Unknown',
+        on: 'On',
+        off: 'Off',
+        true: 'On',
+        false: 'Off',
+        running: 'Running',
+        stopped: 'Stopped'
+      },
+      labels: {
+        memory: 'Memory',
+        vmCount: 'VM Count',
+        containerCount: 'Container Count',
+        cpuTemp: 'CPU Temperature',
+        status: 'Status',
+        threads: 'Threads',
+        lastBoot: 'Last Boot',
+        powerOnTime: 'Power On Time',
+        powerCycleCount: 'Power Cycle Count',
+        temperature: 'Temperature',
+        publicIp: 'Public IP',
+        onlineDevices: 'Online Devices',
+        connections: 'Connections',
+        unit: {
+          speed: 'MB/s',
+          temp: '°C',
+          hours: 'Hours'
+        },
+        uptime: 'Uptime'
+      },
+      vms: {
+        title: 'VM Status',
+        actions: {
+          start: 'Start',
+          shutdown: 'Shutdown',
+          restart: 'Restart',
+          stop: 'Stop',
+          startWarning: 'VM is already running',
+          startSuccess: 'Starting VM',
+          stopWarning: 'VM is already stopped',
+          stopSuccess: 'Stopping VM',
+          restartWarning: 'VM is already stopped, cannot restart',
+          restartSuccess: 'Restarting VM',
+          shutdownWarning: 'VM is already stopped, cannot shutdown',
+          shutdownSuccess: 'Shutting down VM'
+        }
+      },
+      deviceStatus: 'Device Status',
+    }
+  },
+ 
 };

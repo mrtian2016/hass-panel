@@ -40,7 +40,8 @@ import SocketStatusCard from '../../components/SocketStatusCard';
 import MaxPlayerCard from '../../components/MaxPlayerCard';
 import UniversalCard from '../../components/UniversalCard';
 import FamilyCard from '../../components/FamilyCard';
-
+import ServerCard from '../../components/ServerCard';
+import PVECard from '../../components/PVECard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
@@ -466,6 +467,10 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         return <UniversalCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'FamilyCard':
         return <FamilyCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+      case 'PVECard':
+        return <PVECard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+      case 'ServerCard':
+        return <ServerCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       default:
         return null;
     }
@@ -580,9 +585,15 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 </button>
               )}
               {!isMobile && (
-                <button
+                <Popconfirm
+                  title="调整列数"
+                  description="确定要调整列数吗？"
+                  okText="确定"
+                  cancelText="取消"
+                  onConfirm={() => handleColumnsChange(getCurrentBreakpoint(width))}
+                > 
+                  <button
                   className="column-adjust"
-                  onClick={() => handleColumnsChange(getCurrentBreakpoint(width))}
                   title={`${t('columns')}: ${columnCount[getCurrentBreakpoint(width)]}`}
                 >
                   <Icon
@@ -594,6 +605,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                     {columnCount[getCurrentBreakpoint(width)]}
                   </span>
                 </button>
+                </Popconfirm>
               )}
 
               {!isMobile && false && (

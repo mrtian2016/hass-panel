@@ -1,5 +1,5 @@
 import { useLanguage } from '../../i18n/LanguageContext';
-import { Select, Input } from 'antd';
+import { AutoComplete, Input, Button } from 'antd';
 import { Icon } from '@iconify/react';
 import { getMdiIcons } from '../../utils/helper';
 import { configApi } from '../../utils/api';
@@ -22,7 +22,7 @@ function LightOverviewConfig({field, value,handleLightOverviewChange,getFiltered
                 </div>
                 <div className="room-field">
                   <label>{t('configField.selectIcon')}</label>
-                  <Select
+                  <AutoComplete
                     allowClear
                     value={room.icon}
                     onChange={(value) => handleLightOverviewChange(index, 'icon', value)}
@@ -32,20 +32,20 @@ function LightOverviewConfig({field, value,handleLightOverviewChange,getFiltered
                     style={{ width: '100%' }}
                   >
                     {getMdiIcons().map(icon => (
-                      <Select.Option key={icon.name} value={icon.name}>
+                      <AutoComplete.Option key={icon.name} value={icon.name}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <Icon icon={icon.name} width="20" />
                           <span>{icon.label}</span>
                         </div>
-                      </Select.Option>
+                      </AutoComplete.Option>
                     ))}
-                  </Select>
+                  </AutoComplete>
                 </div>
                 
                 
                 <div className="room-field">
                   <label>{t('configField.selectEntity')}</label>
-                  <Select
+                  <AutoComplete
                     allowClear
                     value={room.entity_id}
                     onChange={(value) => handleLightOverviewChange(index, 'entity_id', value)}
@@ -55,11 +55,11 @@ function LightOverviewConfig({field, value,handleLightOverviewChange,getFiltered
                     style={{ width: '100%' }}
                   >
                     {getFilteredEntities('light.*|switch.*').map(entity => (
-                      <Select.Option key={entity.id} value={entity.id}>
+                      <AutoComplete.Option key={entity.id} value={entity.id}>
                         {entity.name} ({entity.id})
-                      </Select.Option>
+                      </AutoComplete.Option>
                     ))}
-                  </Select>
+                  </AutoComplete>
                 </div>
 
                 <div className="room-field">
@@ -116,11 +116,12 @@ function LightOverviewConfig({field, value,handleLightOverviewChange,getFiltered
                   </div>
                 </div>
 
-                <button onClick={() => handleDeleteRoom(index)}>{t('configField.deleteButton')}</button>
+                <Button type="primary" style={{ width: '100px' }} danger onClick={() => handleDeleteRoom(index)}>{t('configField.deleteButton')}</Button>
               </div>
             ))}
           </div>
-          <button onClick={handleAddRoom}>{t('configField.addButton')}</button>
+            <Button type="primary" style={{ width: '100px', marginTop: '10px' }} onClick={handleAddRoom}>{t('configField.addButton')}</Button>
+         
         </div>
       );
 }

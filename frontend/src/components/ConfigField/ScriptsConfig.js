@@ -1,5 +1,5 @@
 import { useLanguage } from '../../i18n/LanguageContext';
-import { Input, Select } from 'antd';
+import { Input, AutoComplete, Button } from 'antd';
 import { getMdiIcons } from '../../utils/helper';
 import {Icon} from '@iconify/react';
 function ScriptsConfig({ field, value, onChange, getFilteredEntities }) {
@@ -26,7 +26,7 @@ function ScriptsConfig({ field, value, onChange, getFilteredEntities }) {
                 }}
                 placeholder={`${t('configField.scriptName')}`}
               />
-              <Select
+              <AutoComplete
                 allowClear
                 value={script.entity_id || null}
                 onChange={(selectedValue) => {
@@ -48,7 +48,7 @@ function ScriptsConfig({ field, value, onChange, getFilteredEntities }) {
                   label: entity.name + ' (' + entity.id + ')'
                 }))}
               />
-              <Select
+              <AutoComplete
                 allowClear
                 value={script.icon || null}
                 onChange={(selectedValue) => {
@@ -73,7 +73,10 @@ function ScriptsConfig({ field, value, onChange, getFilteredEntities }) {
                     )
                   }))}
               />
-              <button
+              <Button
+                type="primary"
+                danger
+                style={{ width: '100px' }}
                 onClick={() => {
                   const newScripts = [...value];
                   newScripts.splice(index, 1);
@@ -81,10 +84,12 @@ function ScriptsConfig({ field, value, onChange, getFilteredEntities }) {
                 }}
               >
                 {t('configField.deleteButton')}
-              </button>
+              </Button>
             </div>
           ))}
-          <button
+          <Button
+            type="primary"
+            style={{ width: '100px' }}
             onClick={() => {
               onChange([
                 ...(value || []),
@@ -97,7 +102,7 @@ function ScriptsConfig({ field, value, onChange, getFilteredEntities }) {
             }}
           >
             {t('configField.addButton')}
-          </button>
+          </Button>
         </div>
       </div>
     );

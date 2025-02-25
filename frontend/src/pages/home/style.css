@@ -437,7 +437,7 @@
   border-radius: var(--border-radius-medium);
 }
 
-.react-resizable-handle {
+.react-grid-item > .react-resizable-handle::after {
   display: none;
 }
 
@@ -548,7 +548,8 @@
   height: 20px;
   bottom: 0;
   right: 0;
-  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+');
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNzQwNDQ5MTkwNjI5IiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjQ0ODciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PHBhdGggZD0iTTkxNy41NjggMGMtNTguODggMC0xMDYuNDk2IDQ3LjY4LTEwNi40OTYgMTA2LjQzMnY3MDQuNjRIMTA2LjQzMmMtNTMuMTg0IDAtOTguMzA0IDM5LjI5Ni0xMDUuNTM2IDkyLjAzMkwwIDkxNy41NjhDMCA5NzYuMzIgNDcuNjggMTAyNCAxMDYuNDMyIDEwMjRoODExLjEzNmM1OC43NTIgMCAxMDYuNDMyLTQ3LjY4IDEwNi40MzItMTA2LjQzMlYxMDYuNDMyQzEwMjQgNDcuNjggOTc2LjMyIDAgOTE3LjU2OCAweiIgcC1pZD0iNDQ4OCI+PC9wYXRoPjwvc3ZnPg==') !important;
+  background-size: 10px !important;
   background-position: bottom right;
   padding: 0 3px 3px 0;
   background-repeat: no-repeat;
@@ -556,6 +557,12 @@
   cursor: se-resize;
   opacity: 0.5;
   transition: opacity 0.3s;
+}
+
+[data-theme='dark'] .layout.editing .react-resizable-handle {
+  background-size: 10px !important;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNzQwNDQ5MTkwNjI5IiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjQ0ODciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PHBhdGggZD0iTTkxNy41NjggMGMtNTguODggMC0xMDYuNDk2IDQ3LjY4LTEwNi40OTYgMTA2LjQzMnY3MDQuNjRIMTA2LjQzMmMtNTMuMTg0IDAtOTguMzA0IDM5LjI5Ni0xMDUuNTM2IDkyLjAzMkwwIDkxNy41NjhDMCA5NzYuMzIgNDcuNjggMTAyNCAxMDYuNDMyIDEwMjRoODExLjEzNmM1OC43NTIgMCAxMDYuNDMyLTQ3LjY4IDEwNi40MzItMTA2LjQzMlYxMDYuNDMyQzEwMjQgNDcuNjggOTc2LjMyIDAgOTE3LjU2OCAweiIgcC1pZD0iNDQ4OCIgZmlsbD0iI2ZmZmZmZiI+PC9wYXRoPjwvc3ZnPg==') !important;
+  opacity: 0.5;
 }
 
 .layout.editing .react-resizable-handle:hover {
@@ -875,6 +882,7 @@
   justify-content: center;
   height: 100vh;
   color: var(--color-text-secondary);
+  background-color: var(--color-background) !important;
 }
 
 .loading-state p {

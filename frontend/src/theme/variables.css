@@ -5,6 +5,7 @@
   --color-primary-dark: #FFA726;
   --color-secondary: #FFE082;
   --color-background: #FAFAFA;
+  --color-background-curtain-panel: #fff;
   --color-card-bg: #ffffff;
   --color-text-primary: #263238;
   --color-text-secondary: #546E7A;
@@ -33,7 +34,7 @@
 
 [data-theme="dark"] {
   /* 主色调 - 保持橙色但略微调整以适应深色背景 */
-  --color-primary: #FFB74D;
+  --color-primary: #FFA726; /* 橙色 */
   --color-primary-light: #FFD180;
   --color-primary-dark: #FFA726;
   
@@ -43,6 +44,7 @@
   /* 背景色 - 使用更深的黑色以增加对比度 */
   --color-background: #121212;
   --color-card-bg: #1E1E1E;
+  --color-background-curtain-panel: #666;
   
   /* 文本颜色 - 提高对比度 */
   --color-text-primary: #FFFFFF;

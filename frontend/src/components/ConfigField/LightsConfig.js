@@ -1,6 +1,6 @@
 import { useLanguage } from '../../i18n/LanguageContext';
 import {  getMdiIcons } from '../../utils/helper';
-import { Input, Select } from 'antd';
+import { Input, AutoComplete, Button } from 'antd';
 import {Icon} from '@iconify/react';
 
 function LightsConfig({ field, value, onChange, getFilteredEntities }) {
@@ -29,7 +29,7 @@ function LightsConfig({ field, value, onChange, getFilteredEntities }) {
                   }}
                   placeholder={t('configField.lightName')}
                 />
-                <Select
+                <AutoComplete
                   allowClear
                   value={light.entity_id || null}
                   onChange={(selectedValue) => {
@@ -53,7 +53,7 @@ function LightsConfig({ field, value, onChange, getFilteredEntities }) {
                     label: entity.name + ' (' + entity.id + ')'
                   }))}
                 />
-                <Select
+                <AutoComplete
                   allowClear
                   value={light.icon || null}
                   onChange={(selectedValue) => {
@@ -85,8 +85,8 @@ function LightsConfig({ field, value, onChange, getFilteredEntities }) {
               </div>
               <div className="light-item-actions">
                 <div className="order-buttons">
-                  <button
-                    className="order-button"
+                  <Button
+                    type="primary"
                     onClick={() => {
                       const entries = Object.entries(value || {});
                       if (index > 0) {
@@ -98,9 +98,9 @@ function LightsConfig({ field, value, onChange, getFilteredEntities }) {
                     disabled={index === 0}
                   >
                     ↑ 上移
-                  </button>
-                  <button
-                    className="order-button"
+                  </Button>
+                  <Button
+                    type="primary"
                     onClick={() => {
                       const entries = Object.entries(value || {});
                       if (index < entries.length - 1) {
@@ -112,10 +112,11 @@ function LightsConfig({ field, value, onChange, getFilteredEntities }) {
                     disabled={index === array.length - 1}
                   >
                     ↓ 下移
-                  </button>
+                  </Button>
                 </div>
-                <button
-                  className="delete-button"
+                <Button
+                  type="primary"
+                  danger
                   onClick={() => {
                     const currentValue = typeof value === 'object' ? value : {};
                     const newValue = { ...currentValue };
@@ -124,12 +125,13 @@ function LightsConfig({ field, value, onChange, getFilteredEntities }) {
                   }}
                 >
                   {t('configField.deleteButton')}
-                </button>
+                </Button>
               </div>
             </div>
           ))}
-          <button
-            className="add-button"
+          <Button
+            type="primary"
+            style={{ width: '100px' }}
             onClick={() => {
               const newKey = 'light_' + Date.now();
               const currentValue = typeof value === 'object' ? value : {};
@@ -145,7 +147,7 @@ function LightsConfig({ field, value, onChange, getFilteredEntities }) {
             }}
           >
             {t('configField.addButton')}
-          </button>
+          </Button>
         </div>
       </div>
     );

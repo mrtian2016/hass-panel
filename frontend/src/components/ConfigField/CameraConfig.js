@@ -1,5 +1,5 @@
 import { useLanguage } from '../../i18n/LanguageContext';   
-import { Input, Select, Radio } from 'antd';
+import { Input, AutoComplete, Radio, Button } from 'antd';
 import { useState, useEffect } from 'react';
 import { cameraApi } from '../../utils/api';
 
@@ -92,7 +92,7 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
                 }}
                 placeholder={t('configField.cameraName')}
               />
-              <Select
+              <AutoComplete
                 allowClear
                 value={camera.entity_id || null}
                 onChange={(selectedValue) => {
@@ -134,7 +134,7 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
               </Radio.Group>
 
               {camera.url_type === 'auto' ? (
-                <Select
+                <AutoComplete
                   allowClear
                   value={camera.stream_url || null}
                   onChange={(selectedValue) => handleStreamUrlChange(selectedValue, index, camera)}
@@ -182,7 +182,10 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
                 </>
               )}
               
-              <button
+              <Button
+                style={{ width: '100px' }}
+                type="primary"
+                danger
                 onClick={() => {
                   const newCameras = [...value];
                   newCameras.splice(index, 1);
@@ -190,10 +193,12 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
                 }}
               >
                 {t('configField.deleteButton')}
-              </button>
+              </Button>
             </div>
           ))}
-          <button
+          <Button
+            type="primary"
+            style={{ width: '100px' }}
             onClick={() => {
               onChange([
                 ...(value || []),
@@ -210,7 +215,7 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
             }}
           >
             {t('configField.addButton')}
-          </button>
+          </Button>
         </div>
       </div>
     );

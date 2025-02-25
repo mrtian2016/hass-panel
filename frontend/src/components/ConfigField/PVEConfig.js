@@ -1,49 +1,69 @@
-
 import { useLanguage } from '../../i18n/LanguageContext';
-import { Input, AutoComplete, Button } from 'antd';
+import { Input, AutoComplete,Button } from 'antd';
 
-function NasConfig({ field, value, onChange, getFilteredEntities }) {
+function PveConfig({ field, value, onChange, getFilteredEntities }) {
     const { t } = useLanguage();
-    const nasEntities = getFilteredEntities('sensor.*');
-    const nasMainFields = [
+    const pveEntities = getFilteredEntities('sensor.*');
+    const buttonEntities = getFilteredEntities('button.*');
+    const pveMainFields = [
       { key: 'cpuTemp', name: t('configField.cpuTemp') },
       { key: 'cpuUsage', name: t('configField.cpuUsage') },
-      { key: 'memoryUsage', name: t('configField.memoryUsage') },
       { key: 'uploadSpeed', name: t('configField.uploadSpeed') },
-      { key: 'downloadSpeed', name: t('configField.downloadSpeed') }
+      { key: 'downloadSpeed', name: t('configField.downloadSpeed') },
+      { key: 'memoryUsage', name: t('configField.memoryUsage') },
+      { key: 'vmCount', name: t('configField.vmCount') },
+      { key: 'containerCount', name: t('configField.containerCount') },
+      { key: 'status', name: t('configField.status') },
+      { key: 'lastBoot', name: t('configField.lastBoot') },
+
     ];
 
-    const volumeFields = [
+    const vmFields = [
       { key: 'status', name: t('configField.status') },
-      { key: 'usage', name: t('configField.volumeUsage') },
-      { key: 'total', name: t('configField.volumeTotal') },
-      { key: 'usagePercent', name: t('configField.volumeUsedPercent') },
-      { key: 'avgTemperature', name: t('configField.volumeAvgTemp') }
+      { key: 'cpuUsage', name: t('configField.cpuUsage') },
+      { key: 'memoryUsage', name: t('configField.memoryUsage') },
+      { key: 'lastBoot', name: t('configField.lastBoot') },
+      { key: 'startOption', name: t('configField.startOption'),type: 'button' },
+      { key: 'stopOption', name: t('configField.stopOption'),type: 'button' },
+      { key: 'restartOption', name: t('configField.restartOption'),type: 'button' },
+      { key: 'shutdownOption', name: t('configField.shutdownOption'),type: 'button' },
     ];
 
     const driveFields = [
       { key: 'status', name: t('configField.status') },
-      { key: 'temperature', name: t('configField.temperature') }
+      { key: 'diskUsage', name: t('configField.diskUsage') },
+      { key: 'temperature', name: t('configField.temperature') },
+      { key: 'powerCycleCount', name: t('configField.powerCycleCount') },
+      { key: 'powerOnTime', name: t('configField.powerOnTime') },
+      { key: 'diskSize', name: t('configField.diskSize') },
     ];
 
-    const m2ssdFields = [
-      { key: 'status', name: t('configField.status') },
-      { key: 'temperature', name: t('configField.temperature') }
-    ];
-    console.log(value);
     
     return (
       <div className="config-field">
         <label>{field.label}</label>
-        <div className="nas-config">
-          <div className="nas-section">
+        <div className="pve-config">
+          <div className="pve-section">
             <h4>{t('configField.mainInfo')}</h4>
-            {nasMainFields.map(nasField => {
-              const currentValue = value?.main?.[nasField.key] || {};
+            <div className="pve-field">
+              <span className="field-name">{t('configField.nodeName')}</span>
+              <Input
+                value={value?.nodeName || ''}
+                onChange={(e) => {
+                  onChange({
+                    ...value,
+                    nodeName: e.target.value
+                  });
+                }}
+                placeholder={t('configField.nodeName')}
+              />
+            </div>
+            {pveMainFields.map(pveField => {
+              const currentValue = value?.main?.[pveField.key] || {};
               
               return (
-                <div key={nasField.key} className="nas-field">
-                  <span className="field-name">{nasField.name}</span>
+                <div key={pveField.key} className="pve-field">
+                  <span className="field-name">{pveField.name}</span>
                   <AutoComplete
                     allowClear
                     value={currentValue.entity_id || null}
@@ -52,9 +72,9 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
                         ...value,
                         main: {
                           ...(value.main || {}),
-                          [nasField.key]: {
+                          [pveField.key]: {
                             entity_id: selectedValue,
-                            name: nasField.name
+                            name: pveField.name
                           }
                         }
                       });
@@ -65,7 +85,7 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
                     filterOption={(input, option) =>
                       (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                     }
-                    options={nasEntities.map(entity => ({
+                    options={pveEntities.map(entity => ({
                       value: entity.id,
                       label: entity.name + ' (' + entity.id + ')'
                     }))}
@@ -75,39 +95,39 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
             })}
           </div>
 
-          <div className="nas-section">
-            <h4>{t('configField.volumes')}</h4>
-            {(value?.volumes || []).map((volume, volumeIndex) => (
-              <div key={volumeIndex} className="volume-config">
+          <div className="pve-section">
+            <h4>{t('configField.vms')}</h4>
+            {(value?.vms || []).map((vm, vmIndex) => (
+              <div key={vmIndex} className="vm-config">
                 <Input
                   type="text"
-                  value={volume.name || null}
+                  value={vm.name || null}
                   onChange={(e) => {
-                    const newVolumes = [...(value?.volumes || [])];
-                    newVolumes[volumeIndex] = {
-                      ...volume,
+                    const newVm = [...(value?.vms || [])];
+                    newVm[vmIndex] = {
+                      ...vm,
                       name: e.target.value
                     };
                     onChange({
                       ...value,
-                      volumes: newVolumes
+                      vms: newVm
                     });
                   }}
-                  placeholder={`${t('configField.storagePoolName')}`}
+                  placeholder={`${t('configField.vmName')}`}
                 />
-                {volumeFields.map(field => {
-                  const currentValue = volume[field.key] || {};
+                {vmFields.map(field => {
+                  const currentValue = vm[field.key] || {};
                   
                   return (
-                    <div key={field.key} className="volume-field">
+                    <div key={field.key} className="vm-field">
                       <span className="field-name">{field.name}</span>
                       <AutoComplete
                         allowClear
                         value={currentValue.entity_id || null}
                         onChange={(selectedValue) => {
-                          const newVolumes = [...(value?.volumes || [])];
-                          newVolumes[volumeIndex] = {
-                            ...volume,
+                          const newVms = [...(value?.vms || [])];
+                          newVms[vmIndex] = {
+                            ...vm,
                             [field.key]: {
                               entity_id: selectedValue,
                               name: field.name
@@ -115,7 +135,7 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
                           };
                           onChange({
                             ...value,
-                            volumes: newVolumes
+                            vms: newVms
                           });
                         }}
                         showSearch
@@ -124,7 +144,10 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
                         filterOption={(input, option) =>
                           (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={nasEntities.map(entity => ({
+                        options={field.type === 'button' ? buttonEntities.map(entity => ({
+                          value: entity.id,
+                          label: entity.name + ' (' + entity.id + ')'
+                        })) : pveEntities.map(entity => ({
                           value: entity.id,
                           label: entity.name + ' (' + entity.id + ')'
                         }))}
@@ -133,15 +156,15 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
                   );
                 })}
                 <Button
-                  type="primary"
-                  style={{ width: '100px' }}
                   danger
+                  style={{ width: '100px' }}
+                  type="primary"
                   onClick={() => {
-                    const newVolumes = [...(value?.volumes || [])];
-                    newVolumes.splice(volumeIndex, 1);
+                    const newVms = [...(value?.vms || [])];
+                    newVms.splice(vmIndex, 1);
                     onChange({
                       ...value,
-                      volumes: newVolumes
+                      vms: newVms
                     });
                   }}
                 >
@@ -150,20 +173,23 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
               </div>
             ))}
             <Button
-              type="primary"
+              type="primary"  
               style={{ width: '100px' }}
               onClick={() => {
                 onChange({
                   ...value,
-                  volumes: [
-                    ...(value?.volumes || []),
+                  vms: [
+                    ...(value?.vms || []),
                     {
                       name: '',
                       status: {},
-                      usage: {},
-                      total: {},
-                      usagePercent: {},
-                      avgTemperature: {}
+                      cpuUsage: {},
+                      memoryUsage: {},
+                      lastBoot: {},
+                      startOption: {},
+                      stopOption: {},
+                      restartOption: {},
+                      shutdownOption: {}
                     }
                   ]
                 });
@@ -173,7 +199,7 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
             </Button>
           </div>
 
-          <div className="nas-section">
+          <div className="pve-section">
             <h4>{t('configField.drives')}</h4>
             {(value?.drives || []).map((drive, driveIndex) => (
               <div key={driveIndex} className="drive-config">
@@ -222,7 +248,7 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
                         filterOption={(input, option) =>
                           (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={nasEntities.map(entity => ({
+                        options={pveEntities.map(entity => ({
                           value: entity.id,
                           label: entity.name + ' (' + entity.id + ')'
                         }))}
@@ -231,9 +257,9 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
                   );
                 })}
                 <Button
-                  type="primary"
-                  style={{ width: '100px' }}
                   danger
+                  style={{ width: '100px' }}
+                  type="primary"
                   onClick={() => {
                     const newDrives = [...(value?.drives || [])];
                     newDrives.splice(driveIndex, 1);
@@ -267,104 +293,9 @@ function NasConfig({ field, value, onChange, getFilteredEntities }) {
               {t('configField.addButton')}
             </Button>
           </div>
-
-          <div className="nas-section">
-            <h4>{t('configField.m2ssd')}</h4>
-            {(value?.m2ssd || []).map((ssd, ssdIndex) => (
-              <div key={ssdIndex} className="m2ssd-config">
-                <Input
-                  type="text"
-                  value={ssd.name || null}
-                  onChange={(e) => {
-                    const newSsds = [...(value?.m2ssd || [])];
-                    newSsds[ssdIndex] = {
-                      ...ssd,
-                      name: e.target.value
-                    };
-                    onChange({
-                      ...value,
-                      m2ssd: newSsds
-                    });
-                  }}
-                  placeholder={`${t('configField.ssdName')}`}
-                />
-                {m2ssdFields.map(field => {
-                  const currentValue = ssd[field.key] || {};
-                  
-                  return (
-                    <div key={field.key} className="m2ssd-field">
-                      <span className="field-name">{field.name}</span>
-                      <AutoComplete
-                        allowClear
-                        value={currentValue.entity_id || null}
-                        onChange={(selectedValue) => {
-                          const newSsds = [...(value?.m2ssd || [])];
-                          newSsds[ssdIndex] = {
-                            ...ssd,
-                            [field.key]: {
-                              entity_id: selectedValue,
-                              name: field.name
-                            }
-                          };
-                          onChange({
-                            ...value,
-                            m2ssd: newSsds
-                          });
-                        }}
-                        showSearch
-                        placeholder={t('configField.selectEntity')}
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
-                        options={nasEntities.map(entity => ({
-                          value: entity.id,
-                          label: entity.name + ' (' + entity.id + ')'
-                        }))}
-                      />
-                    </div>
-                  );
-                })}
-                <Button
-                  type="primary"
-                  style={{ width: '100px' }}
-                  danger
-                  onClick={() => {
-                    const newSsds = [...(value?.m2ssd || [])];
-                    newSsds.splice(ssdIndex, 1);
-                    onChange({
-                      ...value,
-                      m2ssd: newSsds
-                    });
-                  }}
-                >
-                  {t('configField.deleteButton')}
-                </Button>
-              </div>
-            ))}
-            <Button
-              type="primary"
-              style={{ width: '100px' }}
-              onClick={() => {
-                onChange({
-                  ...value,
-                  m2ssd: [
-                    ...(value?.m2ssd || []),
-                    {
-                      name: '',
-                      status: {},
-                      temperature: {}
-                    }
-                  ]
-                });
-              }}
-            >
-              {t('configField.addButton')}
-            </Button>
-          </div>
         </div>
       </div>
     );
 }
 
-export default NasConfig;
+export default PveConfig;

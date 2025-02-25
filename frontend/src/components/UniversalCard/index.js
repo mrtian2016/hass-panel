@@ -140,7 +140,7 @@ function UniversalCard({ config }) {
                 >
                   <Icon width="24"
                     className={`entity-icon`}
-                    icon={entity.entity.attributes.icon} 
+                    icon={entity.entity?.attributes?.icon} 
                     color={getEntityColor(entity)} 
                   />
                   <div className="entity-info">

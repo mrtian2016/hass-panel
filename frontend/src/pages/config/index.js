@@ -31,6 +31,7 @@ import {
   mdiCog,
   mdiPowerSocket,
   mdiAccountGroup,
+  mdiServer,
 } from '@mdi/js';
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
@@ -209,6 +210,42 @@ const getCardTypes = (t) => ({
         key: 'syno_nas',
         label: t('fields.nasConfig'),
         type: 'nas-config',
+        default: {}
+      }
+    ]
+  },
+  PVECard: {
+    name: t('cards.pve'),
+    icon: mdiServer,
+    fields: [
+      {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.pve')
+      },
+      {
+        key: 'pve_server',
+        label: t('fields.pveConfig'),
+        type: 'pve-config',
+        default: {}
+      }
+    ]
+  },
+  ServerCard: {
+    name: t('cards.server'),
+    icon: mdiServer,
+    fields: [
+      {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.server')
+      },
+      {
+        key: 'server',
+        label: t('fields.serverConfig'),
+        type: 'server-config',
         default: {}
       }
     ]

@@ -17,65 +17,10 @@
   width: 100%;
 }
 
-.config-field input {
-  width: 100%;
-  max-width: 100%;
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-small);
-  background: var(--color-background);
-  color: var(--color-text-primary);
-  font-size: 13px;
-  transition: all 0.3s;
-  box-sizing: border-box;
-  word-break: break-all;
-}
-.ant-select-item-option {
-  font-size: 12px !important;
-}
-.ant-select-selection-item {
-  line-height: 24px !important;
-  font-size: 12px !important;
-}
 .config-field input:hover {
   border-color: var(--color-primary);
 }
 
-.config-field input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.1);
-}
-
-/* antd Input 组件样式覆盖 */
-.config-field .ant-input {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  word-break: break-all !important;
-  background-color: var(--color-background) !important;
-  border-color: var(--color-border) !important;
-  color: var(--color-text-primary) !important;
-}
-
-.config-field .ant-input:hover {
-  border-color: var(--color-primary) !important;
-}
-
-.config-field .ant-input:focus,
-.config-field .ant-input-focused {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.1) !important;
-}
-
-.config-field .ant-input::placeholder {
-  color: var(--color-text-secondary) !important;
-  opacity: 0.5;
-}
-
-.config-field .ant-input-disabled {
-  background-color: var(--color-background) !important;
-  opacity: 0.5;
-}
 
 .entity-list {
   display: flex;
@@ -93,15 +38,6 @@
   border-radius: var(--border-radius-small);
 }
 
-.entity-item button {
-  padding: 4px 8px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-error);
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-}
 
 /* 传感器配置样式 */
 .sensor-config-groups {
@@ -140,16 +76,6 @@
   width: 80px;
 }
 
-.sensor-config-item .ant-select {
-  flex: 1;
-  width: 100%;
-}
-
-.sensor-config-item .ant-select-dropdown {
-  width: auto !important;
-  min-width: 200px !important;
-  max-width: 300px !important;
-}
 
 
 /* 灯光配置样式 */
@@ -182,68 +108,6 @@
   gap: 12px;
 }
 
-.order-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.order-button {
-  padding: 4px 8px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-small);
-  background: var(--color-background);
-  color: var(--color-text-primary);
-  cursor: pointer;
-  transition: all 0.3s;
-  font-size: 13px;
-  min-width: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.order-button:hover:not(:disabled) {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: white;
-}
-
-.order-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.delete-button {
-  padding: 4px 12px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-error);
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-size: 13px;
-}
-
-.delete-button:hover {
-  background: var(--color-error-dark);
-}
-
-.add-button {
-  margin-top: 12px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-primary);
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-size: 13px;
-  align-self: flex-start;
-}
-
-.add-button:hover {
-  background: var(--color-primary-dark);
-}
 
 /* 摄像头配置样式 */
 .cameras-config {
@@ -262,10 +126,7 @@
   border-radius: var(--border-radius-small);
 }
 
-.camera-item > input,
-.camera-item > .ant-select {
-  margin-bottom: 8px;
-}
+
 
 /* 媒体播放器配置样式 */
 .media-players-config {
@@ -284,10 +145,6 @@
   border-radius: var(--border-radius-small);
 }
 
-.media-player-item > input,
-.media-player-item > .ant-select {
-  margin-bottom: 8px;
-}
 
 /* 窗帘配置样式 */
 .curtains-config {
@@ -306,10 +163,6 @@
   border-radius: var(--border-radius-small);
 }
 
-.curtain-item > input,
-.curtain-item > .ant-select {
-  margin-bottom: 8px;
-}
 
 /* 路由器配置样式 */
 .router-config {
@@ -330,13 +183,15 @@
 }
 
 /* NAS配置样式 */
-.nas-config {
+.nas-config,
+.pve-config {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.nas-section {
+.nas-section,
+.pve-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -356,6 +211,8 @@
 .nas-field,
 .volume-field,
 .drive-field,
+.pve-field,
+.vm-field,
 .m2ssd-field {
   display: grid;
   grid-template-columns: 160px 1fr;
@@ -365,6 +222,7 @@
 
 .volume-config,
 .drive-config,
+.vm-config,
 .m2ssd-config {
   display: flex;
   flex-direction: column;
@@ -378,6 +236,7 @@
 
 .volume-config input,
 .drive-config input,
+.vm-config input,
 .m2ssd-config input {
   margin-bottom: 12px;
 }
@@ -400,6 +259,8 @@
   .m2ssd-field,
   .waterpuri-field,
   .electricity-field,
+  .vm-field,
+  .pve-field,
   .room-field {
     grid-template-columns: 1fr;
     gap: 8px;
@@ -464,6 +325,8 @@
 
   .volume-config,
   .drive-config,
+  .vm-config,
+  .pve-config,
   .m2ssd-config {
     padding: 12px;
   }
@@ -473,17 +336,7 @@
     padding: 12px;
   }
 
-  /* 按钮样式优化 */
-  .config-field button,
-  .sensor-config-groups > button,
-  .lights-config > button,
-  .cameras-config > button,
-  .media-players-config > button,
-  .curtains-config > button,
-  .scripts-config > button {
-    padding: 8px 16px;
-    margin-top: 8px;
-  }
+
 
   /* 房间灯光概览配置样式优化 */
   .light-overview-config {
@@ -499,34 +352,6 @@
     width: 100%;
   }
 
-  /* 表单控件样式优化 */
-  .ant-select,
-  .ant-input,
-  input {
-    height: 36px;
-  }
-
-  .ant-select-selection-item {
-    line-height: 34px !important;
-  }
-
-  /* 优化下拉菜单在移动端的显示 */
-  .ant-select-dropdown {
-    width: calc(100vw - 32px) !important;
-    max-width: calc(100vw - 32px) !important;
-    box-sizing: border-box !important;
-    left: 16px !important;
-  }
-
-  .ant-select-item {
-    padding: 8px !important;
-  }
-
-  .ant-select-item-option-content {
-    white-space: normal !important;
-    word-break: break-all !important;
-    width: 100% !important;
-  }
 }
 
 /* 脚本配置样式 */
@@ -546,82 +371,7 @@
   border-radius: var(--border-radius-small);
 }
 
-.script-item > input,
-.script-item > .ant-select {
-  margin-bottom: 8px;
-}
 
-/* 通用按钮样式 */
-.config-field button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-primary);
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-  white-space: nowrap;
-  align-self: flex-start;
-}
-
-.config-field button:hover {
-  background: var(--color-primary-dark);
-}
-
-.config-field button[type="delete"],
-.entity-item button,
-.light-item button,
-.camera-item button,
-.media-player-item button,
-.curtain-item button,
-.sensor-config-group  button,
-.volume-config button,
-.drive-config button,
-.m2ssd-config button,
-.climate-feature button,
-.illuminance-config button,
-.light-overview-config button,
-.universal-config button,
-.script-item button {
-  background: var(--color-error);
-}
-
-.config-field button[type="delete"]:hover,
-.entity-item button:hover,
-.light-item button:hover,
-.camera-item button:hover,
-.media-player-item button:hover,
-.curtain-item button:hover,
-.sensor-config-group button:hover,
-.script-item button:hover,
-.volume-config button:hover,
-.drive-config button:hover,
-.m2ssd-config button:hover,
-.climate-feature button:hover,
-.illuminance-config button:hover,
-.light-overview-config button:hover,
-.universal-config button:hover {
-  background: var(--color-error-dark);
-}
-
-/* antd Select 组件样式覆盖 */
-.config-field .ant-select {
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-.config-field .ant-select-selector {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-.config-field .ant-select-selection-item {
-  width: 100% !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
-}
 
 /* 配置项标题和输入框布局 */
 .config-field-row {
@@ -642,83 +392,7 @@
   min-width: 0;
 }
 
-.config-field-row .ant-select,
-.config-field-row input {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-}
 
-/* 通用删除按钮样式 */
-.config-field button.delete-btn,
-.entity-item button,
-.light-item button,
-.camera-item button,
-.media-player-item button,
-.curtain-item button,
-.sensor-config-group button,
-.script-item button,
-.volume-config button,
-.drive-config button,
-.m2ssd-config button,
-.light-overview-config button,
-.climate-feature button,
-.illuminance-config button,
-.universal-config button {
-  padding: 8px 24px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-error);
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-  width: 100px;
-  text-align: center;
-  margin-top: 12px;
-}
-
-.config-field button.delete-btn:hover,
-.entity-item button:hover,
-.light-item button:hover,
-.camera-item button:hover,
-.media-player-item button:hover,
-.curtain-item button:hover,
-.sensor-config-group button:hover,
-.script-item button:hover,
-.volume-config button:hover,
-.drive-config button:hover,
-.m2ssd-config button:hover {
-  background: var(--color-error-dark);
-}
-
-/* 添加按钮样式 */
-.config-field button.add-btn,
-.sensor-config-groups > button,
-.lights-config > button,
-.cameras-config > button,
-.media-players-config > button,
-.curtains-config > button,
-.scripts-config > button {
-  padding: 8px 24px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-primary);
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-  align-self: flex-start;
-  margin-top: 12px;
-}
-
-.config-field button.add-btn:hover,
-.sensor-config-groups > button:hover,
-.lights-config > button:hover,
-.cameras-config > button:hover,
-.media-players-config > button:hover,
-.curtains-config > button:hover,
-.scripts-config > button:hover {
-  background: var(--color-primary-dark);
-}
 
 /* 净水器配置样式 */
 .waterpuri-config {
@@ -835,11 +509,6 @@
   border-radius: var(--border-radius-small);
 }
 
-.illuminance-item > input,
-.illuminance-item > .ant-select {
-  margin-bottom: 8px;
-}
-
 /* 房间灯光概览配置样式 */
 .light-overview-config {
   display: flex;
@@ -877,47 +546,6 @@
   font-size: 13px;
 }
 
-.room-field .ant-select,
-.room-field input {
-  width: 100%;
-}
-
-/* 删除按钮样式 */
-.light-room-item button {
-  padding: 8px 24px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-error);
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-  width: 100px;
-  text-align: center;
-  margin-top: 12px;
-  align-self: flex-start;
-}
-
-.light-room-item button:hover {
-  background: var(--color-error-dark);
-}
-
-/* 添加按钮样式 */
-.config-field > button {
-  padding: 8px 24px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-primary);
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-  width: 100px;
-  text-align: center;
-  margin-top: 12px;
-}
-
-.config-field > button:hover {
-  background: var(--color-primary-dark);
-}
 
 /* 上传字段样式 */
 .upload-field {
@@ -925,25 +553,8 @@
   width: 100%;
 }
 
-.upload-field .ant-input-group-addon {
-  padding: 0;
-  border: none;
-  background: none;
-}
 
-.upload-field .ant-input-group-addon label {
-  display: inline-block;
-  padding: 4px 11px;
-  color: var(--color-primary);
-  transition: all 0.3s;
-  margin: 0;
-  font-size: 12px;
-}
 
-.upload-field .ant-input-group-addon label:hover {
-  color: var(--color-primary-dark);
-  background: rgba(var(--color-primary-rgb), 0.1);
-}
 
 /* Universal Entities Config */
 .universal-entities-config {
@@ -965,9 +576,6 @@
   margin-bottom: var(--spacing-md);
 }
 
-.group-header .ant-input {
-  flex: 1;
-}
 
 .entities-list {
   display: flex;
@@ -986,35 +594,7 @@
   border: 1px solid var(--color-border);
 }
 
-.delete-button,
-.add-button,
-.add-group-button {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-small);
-  background: var(--color-background);
-  color: var(--color-text-primary);
-  cursor: pointer;
-  transition: all 0.3s;
-}
 
-.delete-button:hover {
-  color: var(--color-error);
-  border-color: var(--color-error);
-}
-
-.add-button,
-.add-group-button {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  width: fit-content;
-}
-
-.add-button:hover,
-.add-group-button:hover {
-  background: var(--color-primary);
-  color: white;
-}
 
 /* 响应式布局 */
 @media (max-width: 768px) {

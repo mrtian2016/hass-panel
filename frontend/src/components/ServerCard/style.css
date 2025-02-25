@@ -1,0 +1,503 @@
+
+
+.pve-vm-section {
+  background: var(--color-background-secondary);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.pve-section-header {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--color-text-primary);
+}
+
+.pve-vm-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.pve-vm-item {
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  flex: 0 1 calc(50% - 8px);
+  min-width: 250px;
+  
+  max-width: 350px;
+  margin-bottom: 0;
+}
+
+.pve-vm-item:last-child {
+  margin-bottom: 0;
+}
+
+.pve-vm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pve-vm-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-text-primary);
+}
+
+.pve-vm-name-icon {
+  color: var(--color-text-secondary);
+}
+
+.pve-vm-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.pve-vm-status-badge {
+  display: inline-block;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: var(--color-background-secondary);
+}
+
+.pve-vm-status-badge.on {
+  color: var(--color-error);
+}
+
+.pve-vm-status-badge.off {
+  color: var(--color-success);
+}
+
+.pve-vm-status-badge.unknown {
+  color: #faad14;
+}
+
+.pve-vm-usage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pve-vm-usage-progress {
+  width: 100%;
+}
+
+.pve-vm-resource-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.pve-vm-resource-label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.pve-vm-resource-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.pve-vm-temp {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-left: 16px;
+}
+
+.pve-usage-label {
+  margin-right: 4px;
+}
+
+.pve-usage-value {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.pve-vm-status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--color-background-secondary);
+}
+
+.pve-vm-status.running {
+  color: var(--color-success);
+}
+
+.pve-vm-status.stopped {
+  color: var(--color-error);
+}
+
+.pve-vm-status.unknown {
+  color: var(--color-warning);
+}
+
+.pve-vm-metrics {
+  display: flex;
+  gap: 16px;
+}
+
+.pve-vm-metric {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+
+.pve-volume-header {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin: var(--spacing-sm) 0 var(--spacing-xs);
+  padding-left: var(--spacing-xs);
+}
+
+.pve-drive-status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.pve-drive-temp {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  padding-left: var(--spacing-sm);
+  border-left: 1px solid var(--color-border);
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+}
+
+.pve-drive-temp:nth-last-child(1) {
+  width: 50px;
+}
+
+.pve-volume-item {
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin: 8px;
+}
+
+.pve-volume-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pve-volume-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pve-volume-status-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9em;
+}
+
+.pve-volume-status {
+  color: var(--color-success);
+}
+
+.pve-volume-temp {
+  color: var(--color-text-secondary);
+}
+
+.pve-volume-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pve-volume-details {
+  color: var(--color-text-secondary);
+  font-size: 0.9em;
+}
+
+.pve-volume-progress {
+  width: 100%;
+}
+
+.pve-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pve-progress-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.pve-used-space {
+  color: var(--color-primary);
+}
+
+.pve-status-divider {
+  color: var(--color-border);
+  margin: 0 8px;
+}
+
+.pve-drive-modal-content {
+  padding: 16px;
+}
+
+.pve-drive-section {
+  margin-bottom: 24px;
+}
+
+.pve-drive-section:last-child {
+  margin-bottom: 0;
+}
+
+.pve-drive-item {
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  flex: 0 1 calc(50% - 8px);
+  min-width: 250px;
+  max-width: 350px;
+  margin-bottom: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.pve-drive-item:last-child {
+  margin-bottom: 0;
+}
+
+.pve-drive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.pve-drive-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pve-drive-icon {
+  color: var(--color-text-secondary);
+}
+
+.pve-drive-name {
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-text-primary);
+}
+
+.pve-drive-size {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.pve-drive-status-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pve-drive-status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: var(--color-background-secondary);
+}
+
+.pve-drive-status.normal, .pve-drive-status.on {
+  color: var(--color-error);
+}
+
+.pve-drive-status.error, .pve-drive-status.off {
+  color: var(--color-success);
+}
+
+.pve-drive-status.unknown {
+  color: var(--color-warning);
+}
+
+.pve-drive-temperature {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.pve-drive-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+}
+
+.pve-drive-detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 4px;
+
+  line-height: 14px;
+}
+
+.pve-detail-label {
+  color: var(--color-text-secondary);
+}
+
+.pve-detail-value {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.pve-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.pve-header-right:hover {
+  background-color: var(--color-hover);
+}
+
+.pve-server-data {
+  padding: 16px;
+}
+
+
+
+/* 为中间信息区域添加样式 */
+.pve-server-info-section {
+  background: var(--color-background-secondary);
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+
+/* 优化虚拟机卡片样式 */
+.pve-vm-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pve-vm-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all 0.3s ease;
+}
+
+.pve-vm-action-btn:hover {
+  background-color: var(--color-hover);
+  color: var(--color-primary);
+}
+
+.pve-vm-action-btn.pve-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pve-vm-action-btn.pve-disabled:hover {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+}
+
+.pve-vm-usage-progress {
+  width: 100%;
+}
+
+.pve-progress-label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: var(--color-text-secondary);
+}
+
+/* 添加状态颜色样式 */
+.pve-status-on, .pve-status-true {
+  color: var(--color-error);
+}
+
+.pve-status-off, .pve-status-false {
+  
+  color: var(--color-success);
+}
+
+.pve-status-unknown {
+  color: var(--color-warning);
+}
+
+/* 美化进度条样式 */
+.ant-progress-bg {
+  border-radius: 4px;
+  height: 8px !important;
+}
+
+/* 在小屏幕上自动调整为单列 */
+@media (max-width: 768px) {
+  .pve-vm-item {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+  .pve-drive-item {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+/* 添加硬盘网格布局 */
+.pve-drive-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.pve-vm-uptime {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+

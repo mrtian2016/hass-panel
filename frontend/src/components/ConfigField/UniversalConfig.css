@@ -26,15 +26,7 @@
   width: 100%;
 }
 
-/* 删除按钮 */
-.delete-button {
-  background-color: var(--color-error-light) !important;
-  align-self: flex-end;
-}
-.delete-button:hover {
-  color: #fff !important;
-  background-color: var(--color-error-dark) !important;
-}
+
 
 .entity-field label {
   font-size: 14px;
@@ -60,23 +52,6 @@
 .order-buttons {
     display: flex;
     gap: 4px;
-}
-
-.order-button {
-    padding: 4px 8px;
-    background-color: #f0f0f0;
-    border: 1px solid #d9d9d9;
-    border-radius: 2px;
-    cursor: pointer;
-}
-
-.order-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.order-button:hover:not(:disabled) {
-    background-color: #e6e6e6;
 }
 
 .group-header {
