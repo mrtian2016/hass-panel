@@ -3,7 +3,6 @@ import Icon from '@mdi/react';
 import {
   mdiNas,
   mdiHarddisk,
-  mdiDotsHorizontal,
   mdiServer,
   mdiClock,
   mdiCpu64Bit,
