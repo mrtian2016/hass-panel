@@ -24,7 +24,6 @@ import { notification, Progress, message } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { safeParseFloat, safeGetState } from '../../utils/helper';
 import ServerInfoRow from '../ServerInfoRow';
-import { color } from 'echarts';
 function calculateDaysSince(dateTimeString) {
   if (!dateTimeString || dateTimeString === '-') return '-';
 
