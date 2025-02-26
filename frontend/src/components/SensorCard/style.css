@@ -58,7 +58,7 @@
   right: 0;
   height: 70px;
   border-radius: 0 0 20px 20px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* 响应式设计 */

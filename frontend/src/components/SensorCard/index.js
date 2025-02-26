@@ -58,7 +58,7 @@ function hexToRgba(hex, alpha = 1) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-function SensorChart({ entity_id, color }) {
+function SensorChart({ entity_id, color,unit }) {
   const { theme } = useTheme();
   const history = useHistory(entity_id);
   const [chartData, setChartData] = useState({
@@ -165,7 +165,18 @@ function SensorChart({ entity_id, color }) {
       }
     }],
     tooltip: {
-      show: false
+      show: true,
+      trigger: 'axis',
+      formatter: function(params) {
+        return `${params[0].name} : ${params[0].value} ${unit}`;
+      },
+      backgroundColor: 'rgba(0, 0, 0, 1)',
+      borderColor: 'rgba(0, 0, 0, 1)',
+      textStyle: {
+        color: '#fff'
+      },
+      padding: [2,5],
+      extraCssText: 'border-radius: 4px;'
     }
   };
 
@@ -274,7 +285,7 @@ function SensorCard({ config }) {
                 {getSensorValue(sensor)}
               </div>
               <div className="sensor-chart-placeholder">
-                <SensorChart entity_id={sensor.entity_id} color={sensor.color} />
+                <SensorChart entity_id={sensor.entity_id} color={sensor.color} unit={sensor.entity.attributes?.unit_of_measurement} />
               </div>
             </div>
           ))
