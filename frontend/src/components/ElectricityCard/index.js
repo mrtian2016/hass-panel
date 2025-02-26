@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BaseCard from '../BaseCard';
-import { mdiLightningBolt, mdiEye } from '@mdi/js';
+import { mdiEye } from '@mdi/js';
 import ReactECharts from 'echarts-for-react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './style.css';
@@ -13,23 +13,6 @@ function ElectricityCard({
   config,
 }) {
   const { t } = useLanguage();
-  // {
-  //   "summary": {
-  //     "yesterday": 13.09,
-  //     "last_month": 44.36,
-  //     "this_month": 244.42,
-  //     "this_year": 288.8
-  //   },
-  //   "daily": {
-  //     "2025-02-19": 13.09,
-  //     "2025-02-18": 12.47,
-  //     "2025-02-17": 12.5,
-  //     "2025-02-16": 14.2,
-  //     "2025-02-15": 14.62,
-  //     "2025-02-14": 13.03,
-  //     "2025-02-13": 11.7
-  //   }
-  // }
   const [summaryData, setSummaryData] = useState([]);
   const [chartData, setChartData] = useState({ dates: [], values: [] });
   const [todayUsage, setTodayUsage] = useState(0.0);
@@ -122,15 +105,16 @@ function ElectricityCard({
   const chartOption = {
     grid: {
       top: 0,
-      right: 0,
+      right: -5,
       bottom: 0,
-      left: 0,
+      left: -5,
       containLabel: false
     },
     xAxis: {
       type: 'category',
       data: chartData.dates,
       show: false,
+      boundaryGap: false,
       axisLine: {
         show: false
       },
@@ -206,22 +190,31 @@ function ElectricityCard({
     return entity.state;
   };
 
+  const getEntityIcon = (entityKey) => {
+    const entity = electricityEntities[entityKey]?.entity;
+    if (!entity || entity.error || entity.state === undefined || entity.state === null) {
+      return 'mdi:flash';
+    }
+    console.log(entity.attributes);
+    return entity.attributes.icon;
+  };
+
   // 替换 electricity-yearly-info 部分
   const yearlyInfoItems = [
     {
-      icon: mdiLightningBolt,
+      icon: getEntityIcon('voltage'),
       label: t('electricity.voltage'),
       value: getEntityValue('voltage'),
       unit: t('electricity.unit.volt')
     },
     {
-      icon: mdiLightningBolt,
+      icon: getEntityIcon('electric_current'),
       label: t('electricity.current'),
       value: getEntityValue('electric_current'),
       unit: t('electricity.unit.ampere')
     },
     {
-      icon: mdiLightningBolt,
+      icon: getEntityIcon('currentPower'),
       label: t('electricity.power'),
       value: getEntityValue('currentPower'),
       unit: t('electricity.unit.watt')
@@ -231,25 +224,25 @@ function ElectricityCard({
   // 替换 electricity-info-grid 部分
   const gridInfoItems = [
     {
-      icon: mdiLightningBolt,
+      icon: getEntityIcon('this_month'),
       label: t('electricity.monthUsage'),
       value: summaryData.this_month,
       unit: t('electricity.unit.degree')
     },
     {
-      icon: mdiLightningBolt,
+      icon: getEntityIcon('last_month'),
       label: t('electricity.lastMonthUsage'),
       value: summaryData.last_month,
       unit: t('electricity.unit.degree')
     },
     {
-      icon: mdiLightningBolt,
+      icon: getEntityIcon('todayUsage'),
       label: t('electricity.todayUsage'),
       value: getEntityValue('todayUsage', true) || todayUsage,
       unit: t('electricity.unit.degree')
     },
     {
-      icon: mdiLightningBolt,
+      icon: getEntityIcon('yesterdayUsage'),
       label: t('electricity.yesterdayUsage'),
       value: summaryData.yesterday,
       unit: t('electricity.unit.degree')

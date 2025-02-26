@@ -1,11 +1,11 @@
 import React from 'react';
-import Icon from '@mdi/react';
+import { Icon } from '@iconify/react';
 import PropTypes from 'prop-types';
 
 export const ElectricityInfoItem = ({ icon, label, value, unit }) => (
   <div className="electricity-info-item">
     <div className="info-label">
-      <Icon path={icon} size={0.8} />
+      <Icon icon={icon} width={20} height={20} />
       <span>{label}</span>
     </div>
     <div className="electricity-value">
