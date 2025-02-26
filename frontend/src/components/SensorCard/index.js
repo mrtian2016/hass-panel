@@ -260,7 +260,7 @@ function SensorCard({ config }) {
 
   // 获取传感器图标
   const getSensorIcon = (sensor) => {
-    return sensor.icon || sensor.entity?.attributes?.icon || 'mdi:help-circle-outline';
+    return sensor.entity?.attributes?.icon || 'mdi:help-circle-outline';
   };
 
   return (
