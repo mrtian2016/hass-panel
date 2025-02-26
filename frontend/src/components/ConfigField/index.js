@@ -12,7 +12,9 @@ import CameraConfig from './CameraConfig';
 import UniversalConfig from './UniversalConfig';
 import PVEConfig from './PVEConfig';
 import ServerConfig from './ServerConfig';
+import SensorGroup from './SensorGroup';
 import { configApi } from '../../utils/api';
+
 
 function ConfigField({ field, value, onChange }) {
   const { getAllEntities } = useHass();
@@ -191,103 +193,7 @@ function ConfigField({ field, value, onChange }) {
       );
 
     case 'sensor-group':
-      const sensorEntities = getFilteredEntities('sensor.*');
-      return (
-        <div className="config-field">
-          <label>{field.label}</label>
-          <div className="sensor-config-groups">
-            {(value || []).map((group, groupIndex) => (
-              <div key={group.id} className="sensor-config-group">
-                <Input
-                  type="text"
-                  value={group.name || null}
-                  onChange={(e) => {
-                    const newGroups = [...(value || [])];
-                    newGroups[groupIndex] = {
-                      ...group,
-                      name: e.target.value
-                    };
-                    onChange(newGroups);
-                  }}
-                  placeholder={t('configField.placeholderRoomName')}
-                />
-                <div className="sensor-config-list">
-                  {Object.entries(group.sensors || {}).map(([type, sensor]) => (
-                    <div key={type} className="sensor-config-item">
-                      <span className="sensor-config-type">{sensor.name}</span>
-                      <AutoComplete
-                        allowClear
-                        value={sensor.entity_id || null}
-                        onChange={(selectedValue) => {
-                          const newGroups = [...(value || [])];
-                          newGroups[groupIndex] = {
-                            ...group,
-                            sensors: {
-                              ...group.sensors,
-                              [type]: {
-                                ...sensor,
-                                entity_id: selectedValue
-                              }
-                            }
-                          };
-                          onChange(newGroups);
-                        }}
-                        showSearch
-                        placeholder={`${t('configField.selectEntityPlaceholder')}`}
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
-                        options={sensorEntities.map(entity => ({
-                          value: entity.id,
-                          label: entity.name + ' (' + entity.id + ')'
-                        }))}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <Button
-                  type="primary"
-                  danger
-                  onClick={() => {
-                    const newGroups = [...(value || [])];
-                    newGroups.splice(groupIndex, 1);
-                    onChange(newGroups);
-                  }}
-                >
-                  {t('configField.deleteButton')}
-                </Button>
-              </div>
-            ))}
-            <Button
-              type="primary"
-              onClick={() => {
-                onChange([
-                  ...(value || []),
-                  {
-                    id: 'ROOM_' + Date.now(),
-                    name: '',
-                    sensors: {
-                      temperature: {
-                        entity_id: '',
-                        name: t('configField.temperature'),
-                        icon: 'mdiThermometer'
-                      },
-                      humidity: {
-                        entity_id: '',
-                        name: t('configField.humidity'),
-                        icon: 'mdiWaterPercent'
-                      }
-                    }
-                  }
-                ]);
-              }}
-            >
-              {t('configField.addButton')}
-            </Button>
-          </div>
-        </div>
-      );
+      return <SensorGroup field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
 
     case 'lights-config':
       return <LightsConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />

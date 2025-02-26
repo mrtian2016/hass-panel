@@ -644,6 +644,8 @@ export const translations = {
       diskStatus: '硬盘状态',
       m2Status: 'M.2 SSD状态',
       volumes: '存储池',
+      sensorsConfig: '传感器配置',
+      sensorNamePlaceholder: '传感器名称',
       cpuUsage: 'CPU使用率',
       drives: '硬盘',
       m2ssd: 'M.2 SSD',
@@ -1511,6 +1513,9 @@ export const translations = {
       placeholderPositionTop: 'e.g: 50%',
       lightEffectImage: 'Light Effect Image',
       placeholderLightEffectImage: 'Enter Image URL',
+      sensorsConfig: 'Sensors Config',
+      sensorNamePlaceholder: 'Enter Sensor Name',
+      
       addButton: 'Add',
       deleteButton: 'Delete',
       moveUpButton: 'Move Up',

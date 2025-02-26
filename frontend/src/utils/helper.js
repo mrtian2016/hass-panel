@@ -204,38 +204,18 @@ export const getMdiIcons = (type = 'light') => {
 
   const sensorIcons = [
     // 温度传感器
-    'mdi:thermometer',
-    'mdi:thermometer-high',
-    'mdi:thermometer-low',
-    'mdi:thermometer-lines',
-    'mdi:thermometer-water',
-
-    // 湿度传感器
-    'mdi:water-percent',
     'mdi:humidity',
     'mdi:water',
 
-    // 光照传感器
-    'mdi:brightness-5',
-    'mdi:brightness-7',
-    'mdi:white-balance-sunny',
-    'mdi:weather-sunny',
-
-    // 运动传感器
-    'mdi:motion-sensor',
     'mdi:run',
     'mdi:walk',
     'mdi:human',
 
-    // 门窗传感器
-    'mdi:window-open',
-    'mdi:window-closed',
     'mdi:door-open',
     'mdi:door-closed',
 
     // 烟雾/气体传感器
     'mdi:smoke-detector',
-    'mdi:smoke',
     'mdi:gas-cylinder',
     'mdi:molecule-co2',
     'mdi:air-filter',
@@ -263,12 +243,8 @@ export const getMdiIcons = (type = 'light') => {
 
     // 压力传感器
     'mdi:gauge',
-    'mdi:speedometer',
     'mdi:compass',
 
-    // 通用传感器
-    'mdi:radiobox-marked',
-    'mdi:checkbox-marked-circle',
     'mdi:eye',
     'mdi:radar',
     'mdi:signal'

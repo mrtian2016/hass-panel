@@ -39,42 +39,6 @@
 }
 
 
-/* 传感器配置样式 */
-.sensor-config-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 100%;
-  width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
-.sensor-config-group {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.sensor-config-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.sensor-config-item {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  word-break: break-all;
-}
-
-.sensor-config-type {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  white-space: nowrap;
-  width: 80px;
-}
 
 
 
@@ -645,5 +609,59 @@
 
 .persons-config .add-btn:hover {
   opacity: 0.9;
+}
+
+/* 传感器组配置样式 */
+.sensors-config {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sensor-group-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 16px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+}
+
+.sensor-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.sensor-config-item {
+  display: grid;
+  grid-template-columns: 1fr 5fr 2fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+}
+
+.sensor-type-label {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .sensor-config-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .sensor-type-label {
+    margin-bottom: 4px;
+  }
 }
 

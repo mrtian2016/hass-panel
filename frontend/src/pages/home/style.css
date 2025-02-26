@@ -508,6 +508,13 @@
   -ms-user-select: none;
 }
 
+div {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 .layout.editing .react-grid-item > div {
   animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) infinite;
   transform-origin: center;
@@ -632,48 +639,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.edit-toggle:hover {
-  background: var(--color-background);
-}
 
-.edit-toggle:active {
-  transform: scale(0.95);
-}
-
-/* 编辑模式下的悬浮样式 */
-.edit-toggle.active {
-  position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 20px);
-  right: 20px;
-  z-index: 1000;
-  width: 56px;
-  height: 56px;
-  border-radius: 28px;
-  background: var(--color-primary);
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.edit-toggle.active svg {
-  color: white !important;
-}
-
-.edit-toggle.active:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  background: var(--color-primary);
-}
-
-.edit-toggle.active:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 767px) {
-  .edit-toggle.active {
-    bottom: calc(env(safe-area-inset-bottom) + 64px);
-    right: 16px;
-  }
-}
 
 .sidebar-toggle {
   width: 40px;

@@ -1,6 +1,6 @@
 .sensor-card {
   background: var(--color-card-bg);
-  border-radius: var(--border-radius-medium);
+  border-radius: var(--border-radius-large);
   margin-top: var(--spacing-lg);
   box-shadow: 0 2px 8px var(--color-shadow);
   box-sizing: border-box;
@@ -8,84 +8,70 @@
   overflow: visible;
 }
 
-.sensor-data {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-  margin: 0;
-  padding: var(--spacing-lg);
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  padding: var(--spacing-md);
 }
 
-.room-sensor {
+.sensor-tile {
   display: flex;
-  align-items: center;
-  padding: var(--spacing-sm);
+  flex-direction: column;
   background: var(--color-background);
-  border-radius: var(--border-radius-small);
-  box-sizing: border-box;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  cursor: default;
+  border-radius: 20px;
+  padding: var(--spacing-md);
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
 }
 
-.room-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  flex: 1;
-  flex-shrink: 0;
-  text-align: center;
-}
-
-.sensor-items {
+.sensor-tile-header {
   display: flex;
-  gap: var(--spacing-md);
-  flex: 2;
-  justify-content: flex-start;
-}
-
-.sensor-item {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content:space-around;
-
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-card-bg);
-  border-radius: var(--border-radius-small);
-  border: 1px solid var(--color-border);
-  flex: 1;
-  max-width: 110px;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  cursor: default;
-  
-}
-.sensor-icon {
-  flex: 0 1 auto;
-}
-.sensor-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0px;
-  flex: 1;
+  margin-bottom: var(--spacing-sm);
 }
 
-.sensor-info .label {
-  
-  font-size: 12px;
+.sensor-name {
+  font-size: 14px;
   color: var(--color-text-secondary);
-  text-align: center;
-  margin-bottom: 2px;
+  font-weight: 500;
 }
 
-.sensor-info .value {
-  font-size: 13px;
+.sensor-icon {
+  font-size: 20px;
+  color: var(--color-text-primary);
+}
+
+.sensor-value {
+  font-size: 28px;
   font-weight: 500;
   color: var(--color-text-primary);
-  white-space: nowrap;
-  min-width: 60px;
-  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.sensor-chart-placeholder {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .sensor-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sensor-tile {
+    min-height: 130px;
+  }
+  
+  .sensor-value {
+    font-size: 24px;
+  }
 }

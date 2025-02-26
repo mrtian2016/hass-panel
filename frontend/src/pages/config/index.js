@@ -120,24 +120,7 @@ const getCardTypes = (t) => ({
         key: 'sensors',
         label: t('fields.sensorsConfig'),
         type: 'sensor-group',
-        default: [
-          {
-            id: 'LIVING_ROOM',
-            name: '客厅',
-            sensors: {
-              temperature: {
-                entity_id: '',
-                name: t('sensor.types.temperature'),
-                icon: 'mdiThermometer'
-              },
-              humidity: {
-                entity_id: '',
-                name: t('sensor.types.humidity'),
-                icon: 'mdiWaterPercent'
-              }
-            }
-          }
-        ]
+        default: []
       }
     ]
   },
