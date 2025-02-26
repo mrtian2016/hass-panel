@@ -24,6 +24,7 @@ import { notification, Progress, message } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { safeParseFloat, safeGetState } from '../../utils/helper';
 import ServerInfoRow from '../ServerInfoRow';
+import { color } from 'echarts';
 function calculateDaysSince(dateTimeString) {
   if (!dateTimeString || dateTimeString === '-') return '-';
 
@@ -224,9 +225,11 @@ function PVECard({ config }) {
 
                 const vmCpuUsageValue = parseFloat(safeGetState(vmCpuUsage, '0')).toFixed(2);
                 const vmMemoryUsageValue = parseFloat(safeGetState(vmMemoryUsage, '0')).toFixed(2);
-                const statusText = safeGetState(vmStatus, t('pve_server.status.unknown')) === 'running' ?
+                const running_status   =['running', 'on', 'started', 'started_at']
+                const statusText = running_status.includes(safeGetState(vmStatus, '')) ?
                   t('pve_server.status.running') : t('pve_server.status.stopped');
-                const isVmRunning = safeGetState(vmStatus, '') === 'running';
+                const isVmRunning = Boolean(running_status.find(status => safeGetState(vmStatus, '') === status));
+                console.log(isVmRunning, 'vmStatus');
 
                 return (
                   <div key={index} className="pve-vm-item">
@@ -267,7 +270,7 @@ function PVECard({ config }) {
                       </div>
                     </div>
                     <div className="pve-vm-status-row">
-                      <div className={`pve-vm-status-badge ${safeGetState(vmStatus, 'unknown').toLowerCase()}`}>
+                      <div className={`pve-vm-status-badge`} style={{color: statusText === t('pve_server.status.running') ? 'var(--color-success)' : 'var(--color-error)'}}>
                         {statusText}
                       </div>
                       {isVmRunning && lastBoot && (
@@ -309,10 +312,11 @@ function PVECard({ config }) {
             </div>
           </div>
 
-          <div className="pve-drive-section">
-            <div className="pve-section-header">{t('pve_server.storage.diskStatus')}</div>
-            <div className="pve-drive-grid">
-              {config.pve_server?.drives?.map((drive, index) => {
+          {config.pve_server?.drives && (
+            <div className="pve-drive-section">
+              <div className="pve-section-header">{t('pve_server.storage.diskStatus')}</div>
+              <div className="pve-drive-grid">
+                {config.pve_server?.drives?.map((drive, index) => {
                 let driveStatus = null;
                 let driveTemp = null;
                 let drivePowerOnTime = null;
@@ -343,7 +347,7 @@ function PVECard({ config }) {
                   return null;
                 }
 
-                return (
+                return  (
                   <div key={index} className="pve-drive-item">
                     <div className="pve-drive-header">
                       <div className="pve-drive-title">
@@ -380,8 +384,9 @@ function PVECard({ config }) {
                   </div>
                 );
               })}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </Modal>
     </>

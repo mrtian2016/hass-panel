@@ -36,7 +36,7 @@ import {
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
 // import Modal from '../../components/Modal';
-import { message, Button, Space, Dropdown, Switch, Spin } from 'antd';
+import { message, Button, Space, Dropdown, Switch, Spin, Popconfirm } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
@@ -962,23 +962,27 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
                 >
                   {t('config.edit')}
                 </Button>
-                <Button
-                  size="small"
-                  type="text"
-                  danger
-                  icon={<Icon path={mdiDelete} size={0.8} />}
-                  onClick={() => handleDeleteCard(card.id)}
+                <Popconfirm
+                  title={t('config.deleteConfirm')}
+                  okText={t('config.confirm')}
+                  cancelText={t('config.cancel')}
+                  onConfirm={() => handleDeleteCard(card.id)}
                 >
-                  {t('config.delete')}
-                </Button>
+                  <Button
+                    size="small"
+                    type="text"
+                    danger
+                    icon={<Icon path={mdiDelete} size={0.8} />}
+                  >
+                    {t('config.delete')}
+                  </Button>
+                </Popconfirm>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="bottom-info">
-          <BottomInfo />
-        </div>
+        <BottomInfo />
       </div>
 
       {showAddModal && (

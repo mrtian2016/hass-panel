@@ -5,7 +5,7 @@ import { mdiClose, mdiCheck } from '@mdi/js';
 import ConfigField from '../ConfigField';
 import { useLanguage } from '../../i18n/LanguageContext';
 import LightOverviewCard from '../LightOverviewCard';
-
+import './style.css';
 function EditCardModal({ 
   visible, 
   onClose, 

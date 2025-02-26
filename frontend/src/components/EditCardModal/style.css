@@ -1,0 +1,21 @@
+.edit-card-content {
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: thin; /* Firefox 的滚动条样式 */
+    scrollbar-color: var(--color-primary) var(--color-background); /* Firefox 的滚动条颜色 */
+    padding-right: 16px; /* 为滚动条预留空间 */
+}
+.edit-card-content::-webkit-scrollbar {
+    width: 6px; /* 减小滚动条宽度 */
+    display: block; /* 确保滚动条显示 */
+}
+.edit-card-content::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary);
+    border-radius: 3px; /* 调整圆角 */
+    border: 1px solid var(--color-background); /* 减小边框 */
+    
+}
+.edit-card-content::-webkit-scrollbar-track {
+    background-color: var(--color-background);
+    border-radius: 3px; /* 调整圆角 */
+}

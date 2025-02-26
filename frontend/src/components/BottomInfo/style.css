@@ -1,5 +1,5 @@
 .bottom-buttons {
-    position: sticky;
+    position: fixed;
     bottom: 0;
     width: 100%;
     padding: 8px 24px;
@@ -8,6 +8,7 @@
     align-items: center;
     gap: 32px;
     z-index: 99;
+    background-color: var(--color-background);
     padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
     box-sizing: border-box;
   }

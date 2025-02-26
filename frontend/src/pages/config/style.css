@@ -10,6 +10,9 @@
   width: 100%;
   box-sizing: border-box;
 }
+.rc-virtual-list-scrollbar-thumb {
+  background-color: var(--color-primary) !important;
+}
 .config-container {
   width: 100%;
   max-width: 1200px;
@@ -245,9 +248,11 @@
   margin-bottom: 80px;
   width: 100%;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .config-card {
+  min-height: 220px;
   position: relative;
   background: var(--color-background);
   border-radius: 12px;
