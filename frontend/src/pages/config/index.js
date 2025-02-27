@@ -498,7 +498,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
   const [showVersionModal, setShowVersionModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const { t } = useLanguage();
-  const [isMobile] = useState(window.innerWidth < 768);
+  const isMobile = window.innerWidth < 768;
   const navigate = useNavigate();
   
   // 修改卡片状态的初始化
@@ -965,7 +965,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
           ))}
         </div>
 
-        <BottomInfo />
+      {!isMobile && <BottomInfo />}
       </div>
 
       {showAddModal && (

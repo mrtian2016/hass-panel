@@ -48,8 +48,13 @@ axiosInstance.interceptors.response.use(
 
 
 // 应用背景设置到body
-const applyBackgroundToBody = (globalConfig) => {
+export const applyBackgroundToBody = (globalConfig) => {
   if (!globalConfig) return;
+
+  // 检测当前主题模式
+  const isDarkMode = document.documentElement.classList.contains('dark') || 
+                     document.documentElement.getAttribute('data-theme') === 'dark' ||
+                     window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   // 设置背景颜色
   if (globalConfig.backgroundColor) {
@@ -58,9 +63,17 @@ const applyBackgroundToBody = (globalConfig) => {
     document.body.style.backgroundColor = '';
   }
 
+  // 根据主题模式选择背景图片
+  let backgroundImage = '';
+  if (isDarkMode && globalConfig.darkModeBackgroundImage) {
+    backgroundImage = globalConfig.darkModeBackgroundImage;
+  } else if (globalConfig.backgroundImage) {
+    backgroundImage = globalConfig.backgroundImage;
+  }
+
   // 设置背景图片
-  if (globalConfig.backgroundImage) {
-    document.body.style.backgroundImage = `url(${globalConfig.backgroundImage})`;
+  if (backgroundImage) {
+    document.body.style.backgroundImage = `url(${backgroundImage})`;
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundAttachment = 'fixed';
@@ -69,6 +82,31 @@ const applyBackgroundToBody = (globalConfig) => {
     document.body.style.backgroundSize = '';
     document.body.style.backgroundPosition = '';
     document.body.style.backgroundAttachment = '';
+  }
+  
+  // 添加主题变化监听器
+  if (!window.themeChangeListenerAdded) {
+    window.themeChangeListenerAdded = true;
+    
+    // 监听系统主题变化
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      applyBackgroundToBody(globalConfig);
+    });
+    
+    // 监听HTML类变化以检测主题切换
+    const observer = new MutationObserver(() => {
+      applyBackgroundToBody(globalConfig);
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme']
+    });
+    
+    // 监听自定义主题变化事件
+    document.addEventListener('themeChange', () => {
+      applyBackgroundToBody(globalConfig);
+    });
   }
 };
 
@@ -79,8 +117,10 @@ export const configApi = {
     try {
       const response = await axiosInstance.get('/user_config/config');
       const config = response.data;
-      // 获取配置时自动应用背景设置
+      
+      // 保存全局配置到window对象，以便在主题切换时使用
       if (config.globalConfig) {
+        window.globalConfigCache = config.globalConfig;
         applyBackgroundToBody(config.globalConfig);
       }
       
@@ -237,6 +277,7 @@ export const configApi = {
         globalConfig: {
           ...(config.globalConfig || {}),
           backgroundImage: '',  // 清除背景图
+          darkModeBackgroundImage: '', // 清除暗色模式背景图
           backgroundColor: ''   // 清除背景色
         }
       };

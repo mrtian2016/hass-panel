@@ -8,7 +8,7 @@
 [![一个基于 React 的智能家居控制面板]( https://i.imgur.com/PpbbnAS.png )](https://www.bilibili.com/video/BV1yxfaYHE5A/?share_source=copy_web&vd_source=3ef738469d1538347bdba19ea015dbd7)
 
 ## 预览图
-![预览图](https://i.imgur.com/ZV71KM8.jpeg)
+![预览图](https://i.imgur.com/ONjR4Fp.jpeg)
 
 ## 主要特性
 

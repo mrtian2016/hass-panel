@@ -1,8 +1,7 @@
 @import '../../theme/variables.css';
 
-.weather-card,
-.light-status-card,
-.sensor-card {
+/* 基础卡片样式 */
+.base-card {
   width: 100%;
   background: var(--color-card-bg);
   border-radius: var(--border-radius-medium);
@@ -10,9 +9,9 @@
   box-shadow: 0 2px 8px var(--color-shadow);
   box-sizing: border-box;
   overflow: hidden;
-  padding: 0;
 }
 
+/* 特定卡片样式覆盖 */
 .light-status-card,
 .sensor-card {
   padding: 0;
@@ -29,7 +28,6 @@
   justify-content: space-between;
   border-bottom: 1px solid var(--color-border);
 }
-
 
 .card-header {
   padding: 16px 20px;
@@ -49,7 +47,6 @@
   padding: 16px 20px;
 }
 
-
 .header {
   display: flex;
   gap: var(--spacing-sm);
@@ -58,11 +55,17 @@
   flex-wrap: wrap;
 }
 
-
+/* 统一按钮样式 */
 .pc-edit-toggle,
 .theme-toggle,
 .edit-toggle,
-.reset-layout {
+.reset-layout,
+.sidebar-toggle,
+.settings-toggle,
+.language-toggle,
+.config-toggle,
+.fullscreen-toggle,
+.column-adjust {
   width: 40px;
   height: 40px;
   border: none;
@@ -78,15 +81,29 @@
 
 .theme-toggle:hover,
 .edit-toggle:hover,
-.reset-layout:hover {
+.reset-layout:hover,
+.sidebar-toggle:hover,
+.settings-toggle:hover,
+.language-toggle:hover,
+.config-toggle:hover,
+.fullscreen-toggle:hover,
+.column-adjust:hover {
   background: var(--color-background);
 }
+
 .pc-edit-toggle:active,
 .theme-toggle:active,
 .edit-toggle:active,
-.reset-layout:active {
+.reset-layout:active,
+.sidebar-toggle:active,
+.settings-toggle:active,
+.language-toggle:active,
+.config-toggle:active,
+.fullscreen-toggle:active,
+.column-adjust:active {
   transform: scale(0.95);
 }
+
 .pc-edit-toggle.active,
 .edit-toggle.active {
   background: var(--color-primary);
@@ -188,7 +205,6 @@
   padding: var(--spacing-md);
 }
 
-
 .page-container {
   padding: 20px;
   min-height: 100vh;
@@ -230,10 +246,47 @@
   width: 100% !important;
   height: 100% !important;
   margin: 0 !important;
-  background: var(--color-card-bg);
   border-radius: var(--border-radius-medium);
-  box-shadow: 0 2px 8px var(--color-shadow);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   overflow: visible;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+}
+
+.react-grid-item > div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.react-grid-item > div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='dark'] .react-grid-item > div {
+  background: rgba(20, 20, 20, 0.6);
+  border: 1px solid rgba(100, 100, 100, 0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .react-grid-item > div::before {
+  background: linear-gradient(180deg, rgba(100, 100, 100, 0.2), rgba(50, 50, 50, 0));
+}
+
+[data-theme='dark'] .react-grid-item > div:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 /* 响应式布局调整 */
@@ -254,12 +307,7 @@
 
   .react-grid-item > div {
     pointer-events: auto !important;
-  }
-
-  /* 移动端卡片样式优化 */
-  .react-grid-item > div {
     margin: 8px 0 !important;
-    border-radius: calc(var(--border-radius-medium) - 4px);
   }
 
   /* 移动端编辑模式样式 */
@@ -398,15 +446,19 @@
   display: none;
 }
 
+/* 可滚动容器统一样式 */
 .sensor-data,
 .media-players,
 .light-buttons,
 .curtains-section,
 .router-info,
-.climate-controls {
-  overflow: visible;
+.climate-controls,
+.content,
+.adm-modal-content,
+.react-grid-item > div {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overflow: visible;
 }
 
 .sensor-data::-webkit-scrollbar,
@@ -458,7 +510,6 @@
 }
 
 .base-card > div:not(.card-header) {
-  /* flex: 1; */
   overflow: visible;
 }
 
@@ -643,8 +694,6 @@ div {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
-
 .sidebar-toggle {
   width: 40px;
   height: 40px;
@@ -666,7 +715,6 @@ div {
 .sidebar-toggle:active {
   transform: scale(0.95);
 }
-
 
 .settings-toggle {
   width: 40px;

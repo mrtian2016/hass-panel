@@ -195,26 +195,25 @@ function ElectricityCard({
     if (!entity || entity.error || entity.state === undefined || entity.state === null) {
       return 'mdi:flash';
     }
-    console.log(entity.attributes);
     return entity.attributes.icon;
   };
 
   // 替换 electricity-yearly-info 部分
   const yearlyInfoItems = [
     {
-      icon: getEntityIcon('voltage'),
+      icon: 'mdi:sine-wave',
       label: t('electricity.voltage'),
       value: getEntityValue('voltage'),
       unit: t('electricity.unit.volt')
     },
     {
-      icon: getEntityIcon('electric_current'),
+      icon: 'mdi:current-ac',
       label: t('electricity.current'),
       value: getEntityValue('electric_current'),
       unit: t('electricity.unit.ampere')
     },
     {
-      icon: getEntityIcon('currentPower'),
+      icon: 'mdi:flash',
       label: t('electricity.power'),
       value: getEntityValue('currentPower'),
       unit: t('electricity.unit.watt')

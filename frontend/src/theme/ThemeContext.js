@@ -15,6 +15,19 @@ export function ThemeProvider({ children }) {
     // 如果是系统主题，则应用系统的实际主题（dark 或 light）
     const actualTheme = themeValue === 'system' ? getSystemTheme() : themeValue;
     document.documentElement.setAttribute('data-theme', actualTheme);
+    
+    // 添加或移除 dark 类，用于 CSS 选择器和背景图片切换
+    if (actualTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
+    // 触发自定义事件，通知背景图片需要更新
+    const themeChangeEvent = new CustomEvent('themeChange', { 
+      detail: { theme: actualTheme } 
+    });
+    document.dispatchEvent(themeChangeEvent);
   }, [getSystemTheme]);
 
   useEffect(() => {

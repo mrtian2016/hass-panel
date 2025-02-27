@@ -45,7 +45,7 @@ import ServerCard from '../../components/ServerCard';
 import PVECard from '../../components/PVECard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
-import { configApi } from '../../utils/api';
+import { configApi,applyBackgroundToBody } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 
 // 获取当前断点
@@ -161,16 +161,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         }
 
         if (config.globalConfig) {
-          // 应用背景设置
-          if (config.globalConfig.backgroundColor) {
-            document.body.style.backgroundColor = config.globalConfig.backgroundColor;
-          }
-          if (config.globalConfig.backgroundImage) {
-            document.body.style.backgroundImage = `url(${config.globalConfig.backgroundImage})`;
-            document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundPosition = 'center';
-            document.body.style.backgroundAttachment = 'fixed';
-          }
+          applyBackgroundToBody(config.globalConfig);
         }
     
         // 保存完整配置

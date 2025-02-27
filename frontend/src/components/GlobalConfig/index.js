@@ -41,6 +41,7 @@ function GlobalConfig({ setShowGlobalConfig }) {
     const [globalConfig, setGlobalConfig] = useState({
         backgroundColor: '',
         backgroundImage: '',
+        darkModeBackgroundImage: '',
         betaVersion: false
     });
 
@@ -57,6 +58,8 @@ function GlobalConfig({ setShowGlobalConfig }) {
 
     const { t } = useLanguage();
     const fileInputRef = useRef(null);
+    const darkModeFileInputRef = useRef(null);
+
     return (
         <>
             <div className="global-config-modal-overlay" onClick={() => setShowGlobalConfig(false)} />
@@ -108,8 +111,56 @@ function GlobalConfig({ setShowGlobalConfig }) {
                                 {t('config.reset')}
                             </button>
                         </div>
-                        <div className="hint">{t('config.backgroundImageHint')}</div>
                     </div>
+                    
+                    <div className="global-config-form-item">
+                        <label>{t('config.darkModeBackgroundImage')}</label>
+                        <div className="image-input-group">
+                            <input
+                                type="text"
+                                value={globalConfig.darkModeBackgroundImage}
+                                onChange={(e) => setGlobalConfig({
+                                    ...globalConfig,
+                                    darkModeBackgroundImage: e.target.value
+                                })}
+                                placeholder={t('config.darkModeBackgroundImagePlaceholder')}
+                            />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={async (e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        const filePath = await configApi.uploadImage(file);
+                                        setGlobalConfig({
+                                            ...globalConfig,
+                                            darkModeBackgroundImage: filePath.file_path
+                                        });
+                                    }
+                                }}
+                                ref={(el) => (darkModeFileInputRef.current = el)}
+                            />
+                            <button
+                                className="upload-button"
+                                onClick={() => darkModeFileInputRef.current.click()}
+                            >
+                                {t('fields.upload')}
+                            </button>
+                            <button
+                                className="reset-button"
+                                onClick={() => setGlobalConfig({
+                                    ...globalConfig,
+                                    darkModeBackgroundImage: ''
+                                })}
+                            >
+                                {t('config.reset')}
+                            </button>
+                        </div>
+                    </div>
+                    
+                  
+                    
                     <div className="global-config-form-item">
                         <label>{t('config.betaVersion')}</label>
                         <div className="switch-group">
@@ -131,6 +182,7 @@ function GlobalConfig({ setShowGlobalConfig }) {
                                 setGlobalConfig({
                                     backgroundColor: '',
                                     backgroundImage: '',
+                                    darkModeBackgroundImage: '',
                                     betaVersion: false
                                 });
                             }}

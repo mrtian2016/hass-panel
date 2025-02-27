@@ -228,7 +228,7 @@ function PVECard({ config }) {
                 const statusText = running_status.includes(safeGetState(vmStatus, '')) ?
                   t('pve_server.status.running') : t('pve_server.status.stopped');
                 const isVmRunning = Boolean(running_status.find(status => safeGetState(vmStatus, '') === status));
-                console.log(isVmRunning, 'vmStatus');
+              
 
                 return (
                   <div key={index} className="pve-vm-item">

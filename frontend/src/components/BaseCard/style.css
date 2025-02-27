@@ -1,17 +1,4 @@
-.base-card {
-  width: 100%;
-  background: var(--color-card-bg);
-  border-radius: var(--border-radius-medium);
-  margin-top: var(--spacing-lg);
-  box-shadow: 0 2px 8px var(--color-shadow);
-  box-sizing: border-box;
-  padding: 0;
-  overflow: hidden;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
+
 .base-card:hover {
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
 }
