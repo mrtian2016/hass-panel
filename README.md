@@ -12,7 +12,7 @@
 
 ## 交流群
 
-<img src="https://i.imgur.com/8Fp7Csx.jpeg" width="300" alt="交流群" />
+<img src="https://i.imgur.com/ct6Tu5R.jpeg" width="300" alt="交流群" />
 
 ## 主要特性
 
@@ -154,6 +154,9 @@ npm run build
 
 如果您觉得这个项目对您有帮助，欢迎赞助支持！
 
-<img src="https://i.imgur.com/qYhxNZx.jpeg" width="300" alt="赞助二维码" />
+| 微信赞赏码 | 支付宝赞赏码 |
+|--------|--------|
+| ![微信赞赏码](https://i.imgur.com/f3Fxtsc.png) | ![支付宝赞赏码](https://i.imgur.com/bdNzzyW.png) |
+
 
 

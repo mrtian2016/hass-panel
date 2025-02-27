@@ -91,14 +91,15 @@
 
 ## 交流群
 
-<img src="https://i.imgur.com/8Fp7Csx.jpeg" width="300" alt="交流群" />
+<img src="https://i.imgur.com/ct6Tu5R.jpeg" width="300" alt="交流群" />
 
 ## 赞助
 
 如果您觉得这个项目对您有帮助，欢迎赞助支持！
 
-<img src="https://i.imgur.com/qYhxNZx.jpeg" width="300" alt="赞助二维码" />
-
+| 微信赞赏码 | 支付宝赞赏码 |
+|--------|--------|
+| ![微信赞赏码](https://i.imgur.com/f3Fxtsc.png) | ![支付宝赞赏码](https://i.imgur.com/bdNzzyW.png) |
 ## 许可证
 
 本项目采用 GNU Affero General Public License v3.0 (AGPL-3.0) 许可证。详细信息请查看[完整许可证文本](https://www.gnu.org/licenses/agpl-3.0.zh-cn.html)。 

@@ -281,7 +281,11 @@
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>');
     background-size: contain;
     background-repeat: no-repeat;
+    z-index: 10;
     opacity: 0.5;
+  }
+  [data-theme='dark']  .layout.editing .card-header::after {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>');
   }
 
   /* 拖拽时的样式 */
@@ -948,4 +952,85 @@ div {
 .page-container.fullscreen {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+/* 主题菜单样式 */
+.theme-menu-container {
+  position: relative;
+  z-index: 1001;
+}
+
+.theme-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background-color: var(--color-card-bg);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  padding: 10px;
+  margin-top: 8px;
+  min-width: 150px;
+  animation: fadeIn 0.2s ease-in-out;
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(10px);
+}
+
+[data-theme='dark'] .theme-menu {
+  background-color: rgba(30, 30, 30, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+  text-align: left;
+  margin-bottom: 4px;
+}
+
+.theme-option:last-child {
+  margin-bottom: 0;
+}
+
+.theme-option:hover {
+  background-color: var(--color-background-hover);
+  transform: translateX(2px);
+}
+
+.theme-option.active {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+[data-theme='dark'] .theme-option.active {
+  background-color: rgba(var(--color-primary-rgb), 0.2);
+}
+
+.theme-option svg {
+  flex-shrink: 0;
+}
+
+.theme-option span {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

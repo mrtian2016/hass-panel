@@ -39,6 +39,9 @@
   transition: transform 0.2s;
   padding: 10px 0;
 }
+[data-theme="dark"] .family-person {
+  background: rgba(60,60,60,0.3) !important;
+}
 
 /* 日间模式 */
 :root {

@@ -12,7 +12,7 @@ A React-based smart home control panel that uses the Home Assistant Websocket AP
 
 ## Discussion Group
 
-<img src="https://i.imgur.com/8Fp7Csx.jpeg" width="300" alt="Discussion Group" />
+<img src="https://i.imgur.com/ct6Tu5R.jpeg" width="300" alt="Discussion Group" />
 
 ## Key Features
 
@@ -152,4 +152,6 @@ For more details, see the [full license text](https://www.gnu.org/licenses/agpl-
 
 If you find this project helpful, feel free to sponsor!
 
-<img src="https://i.imgur.com/qYhxNZx.jpeg" width="300" alt="Sponsor QR Code" /> 
+| WeChat Donation Code | Alipay Donation Code |
+|--------|--------|
+| ![WeChat Donation Code](https://i.imgur.com/f3Fxtsc.png) | ![Alipay Donation Code](https://i.imgur.com/bdNzzyW.png) |

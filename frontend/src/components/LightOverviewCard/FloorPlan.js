@@ -17,7 +17,7 @@ function FloorPlan({ lights }) {
   }
 
   const isLightEntity = (entityId) => {
-    return entityId?.startsWith('light.') || entityId?.startsWith('switch.');
+    return entityId?.startsWith('light.');
   };
 
   const handlePressStart = (light) => {
@@ -71,7 +71,7 @@ function FloorPlan({ lights }) {
                 ...light.position
               }}
               onClick={() => light.entity?.service.toggle()}
-              onMouseDown={() => isLight && handlePressStart(light)}
+              onMouseDown={() => isLight ? handlePressStart(light) : undefined}
               onMouseUp={isLight ? handlePressEnd : undefined}
               onMouseLeave={isLight ? handlePressEnd : undefined}
               onTouchStart={(e) => isLight && handleTouchStart(light, e)}

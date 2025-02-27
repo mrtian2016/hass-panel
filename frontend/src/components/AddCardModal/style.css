@@ -19,7 +19,7 @@
   border-radius: var(--border-radius-medium);
   width: 90%;
   max-width: 500px;
-  max-height: 90vh;
+  max-height: 80vh;
   overflow-y: auto;
   animation: modalFadeIn 0.3s ease;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 // import { PullToRefresh } from 'antd-mobile';
 import Icon from '@mdi/react';
 import {
@@ -14,6 +14,7 @@ import {
   mdiFullscreen,
   mdiFullscreenExit,
   mdiCog,
+  mdiMonitor,
 } from '@mdi/js';
 import { useTheme } from '../../theme/ThemeContext';
 import { Responsive } from 'react-grid-layout';
@@ -61,7 +62,7 @@ const getColumnLayoutIcon = (columns) => {
 
 
 function Home({ sidebarVisible, setSidebarVisible }) {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setSpecificTheme } = useTheme();
   const { t, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
 
@@ -85,6 +86,23 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
   // 添加当前配置状态
   const [currentConfig, setCurrentConfig] = useState(null);
+
+  // 添加主题菜单状态
+  const [themeMenuVisible, setThemeMenuVisible] = useState(false);
+
+  // 获取主题图标
+  const getThemeIcon = () => {
+    switch (theme) {
+      case 'light':
+        return mdiWhiteBalanceSunny;
+      case 'dark':
+        return mdiWeatherNight;
+      case 'system':
+        return mdiMonitor;
+      default:
+        return mdiWhiteBalanceSunny;
+    }
+  };
 
   // 监听窗口大小变化
   useEffect(() => {
@@ -218,12 +236,12 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   });
 
   // 添加未保存更改状态
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  // const [ setHasUnsavedChanges] = useState(false);
 
   // 处理布局变化
   const handleLayoutChange = (layout, layouts) => {
     setCurrentLayouts(layouts);
-    setHasUnsavedChanges(true);
+    // setHasUnsavedChanges(true);
   };
 
   // 修改保存布局函数
@@ -252,7 +270,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       // 更新本地状态
       setCurrentConfig(newConfig);
       setIsEditing(false);
-      setHasUnsavedChanges(false);
+      // setHasUnsavedChanges(false);
       message.success(t('config.saveSuccess'));
     } catch (error) {
       console.error('保存布局失败:', error);
@@ -425,6 +443,23 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     }
   };
 
+  // 关闭主题菜单的处理函数
+  const handleClickOutside = useCallback((event) => {
+    if (themeMenuVisible && !event.target.closest('.theme-menu-container')) {
+      setThemeMenuVisible(false);
+    }
+  }, [themeMenuVisible]);
+
+  // 添加点击外部关闭菜单的事件监听
+  useEffect(() => {
+    if (themeMenuVisible) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [themeMenuVisible, handleClickOutside]);
+
   const renderCard = (card) => {
     switch (card.type) {
       case 'TimeCard':
@@ -499,17 +534,54 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         ) : (
           <>
             <div className={`header ${isFullscreen ? 'hidden' : ''}`}>
-              <button
-                className="theme-toggle"
-                onClick={toggleTheme}
-                title={t('theme.' + (theme === 'light' ? 'light' : 'dark'))}
-              >
-                <Icon
-                  path={theme === 'light' ? mdiWeatherNight : mdiWhiteBalanceSunny}
-                  size={1}
-                  color="var(--color-text-primary)"
-                />
-              </button>
+              <div className="theme-menu-container">
+                <button
+                  className="theme-toggle"
+                  onClick={() => setThemeMenuVisible(!themeMenuVisible)}
+                  title={t('theme.' + theme)}
+                >
+                  <Icon
+                    path={getThemeIcon()}
+                    size={1}
+                    color="var(--color-text-primary)"
+                  />
+                </button>
+                
+                {themeMenuVisible && (
+                  <div className="theme-menu">
+                    <button 
+                      className={`theme-option ${theme === 'light' ? 'active' : ''}`}
+                      onClick={() => {
+                        setSpecificTheme('light');
+                        setThemeMenuVisible(false);
+                      }}
+                    >
+                      <Icon path={mdiWhiteBalanceSunny} size={0.8} />
+                      <span>{t('theme.light')}</span>
+                    </button>
+                    <button 
+                      className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
+                      onClick={() => {
+                        setSpecificTheme('dark');
+                        setThemeMenuVisible(false);
+                      }}
+                    >
+                      <Icon path={mdiWeatherNight} size={0.8} />
+                      <span>{t('theme.dark')}</span>
+                    </button>
+                    <button 
+                      className={`theme-option ${theme === 'system' ? 'active' : ''}`}
+                      onClick={() => {
+                        setSpecificTheme('system');
+                        setThemeMenuVisible(false);
+                      }}
+                    >
+                      <Icon path={mdiMonitor} size={0.8} />
+                      <span>{t('theme.system')}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
 
               <button
                 className="language-toggle"
@@ -668,7 +740,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             </Responsive>
 
             {/* 添加保存按钮 */}
-            {hasUnsavedChanges && isEditing && (
+            { isEditing && (
               <button
                 className="save-button has-changes"
                 onClick={handleSaveLayout}

@@ -421,9 +421,8 @@
 }
 
 .climate-feature {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 5fr 1fr;
   gap: 12px;
   padding: 12px;
   background: var(--color-card-bg);
@@ -432,15 +431,11 @@
 }
 
 .feature-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
   gap: 12px;
 }
 
-.feature-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
 
 .feature-selects {
   display: flex;

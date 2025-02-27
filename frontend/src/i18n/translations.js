@@ -36,8 +36,9 @@ export const translations = {
       }
     },
     theme: {
-      light: '切换到暗色模式',
-      dark: '切换到亮色模式'
+      light: '亮色模式',
+      dark: '暗色模式',
+      system: '跟随系统'
     },
     
     // 空状态
@@ -958,8 +959,9 @@ export const translations = {
       }
     },
     theme: {
-      light: 'Switch to Dark Mode',
-      dark: 'Switch to Light Mode'
+      light: 'Dark Mode',
+      dark: 'Light Mode',
+      system: 'Follow System'
     },
     
     // Empty State
