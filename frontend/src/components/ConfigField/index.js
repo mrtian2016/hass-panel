@@ -124,13 +124,14 @@ function ConfigField({ field, value, onChange }) {
               placeholder={t('configField.selectEntity')}
               optionFilterProp="children"
               style={{ width: '100%' }}
-            >
-              {entities.map(entity => (
-                <AutoComplete.Option key={entity.id} value={entity.id}>
-                  {entity.name} ({entity.id})
-                </AutoComplete.Option>
-              ))}
-            </AutoComplete>
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={entities.map(entity => ({
+                value: entity.id,
+                label: entity.name + ' (' + entity.id + ')'
+              }))}
+            />
           </div>
         </div>
       );
