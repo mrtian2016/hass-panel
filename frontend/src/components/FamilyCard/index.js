@@ -5,7 +5,6 @@ import { useEntity } from '@hakit/core';
 import Icon from '@mdi/react';
 import { useTheme } from '../../theme/ThemeContext';
 import './style.css';
-import MapCardModal from '../MapCardModal';
 function FamilyCard({ config, visible = true, titleVisible = true }) {
   const hassUrl = localStorage.getItem('hass_url');
   
@@ -61,9 +60,7 @@ function FamilyCard({ config, visible = true, titleVisible = true }) {
           {config.persons?.map(renderPerson)}
         </div>
       </div>
-      <MapCardModal
-        visible={false}
-      />
+     
     </BaseCard>
   );
 }

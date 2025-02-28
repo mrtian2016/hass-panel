@@ -74,7 +74,7 @@ function ElectricityCard({
   const electricityEntities = Object.entries(config.electricity).reduce((acc, [key, config]) => {
     try {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const entity = useEntity(config.entity_id);
+      const entity = useEntity(config.entity_id || "", {returnNullIfNotFound: true});
       acc[key] = {
         ...config,
         entity,
@@ -185,7 +185,7 @@ function ElectricityCard({
   const getEntityValue = (entityKey,returnBooleanIfNotFound = false) => {
     const entity = electricityEntities[entityKey]?.entity;
     if (!entity || entity.error || entity.state === undefined || entity.state === null) {
-      return returnBooleanIfNotFound ? false : '- -';
+      return returnBooleanIfNotFound ? false : '';
     }
     return entity.state;
   };
@@ -274,15 +274,15 @@ function ElectricityCard({
         </div>}
 
         <div className="electricity-yearly-info">
-          {yearlyInfoItems.map((item, index) => (
-            <ElectricityInfoItem key={index} {...item} />
-          ))}
+          {yearlyInfoItems.map((item, index) =>{
+            return item.value ? null : <ElectricityInfoItem key={index} {...item} />
+          })}
         </div>
 
         <div className="electricity-info-grid">
-          {gridInfoItems.map((item, index) => (
-            <ElectricityInfoItem key={index} {...item} />
-          ))}
+          {gridInfoItems.map((item, index) =>{
+            return item.value ? null : <ElectricityInfoItem key={index} {...item} />
+          })}
         </div>
       </div>
     </BaseCard>

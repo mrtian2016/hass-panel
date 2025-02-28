@@ -16,8 +16,6 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  background: var(--color-background);
-  border-radius: var(--border-radius-small);
   overflow: hidden;
 }
 

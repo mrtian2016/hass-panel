@@ -5,7 +5,7 @@
 一个基于React的智能家居控制面板，它使用Home Assistant的Websocket API，并支持作为Home Assistant操作系统(HAOS)的插件部署。
 
 ## 视频预览
-[![一个基于 React 的智能家居控制面板]( https://i.imgur.com/PpbbnAS.png )](https://www.bilibili.com/video/BV1yxfaYHE5A/?share_source=copy_web&vd_source=3ef738469d1538347bdba19ea015dbd7)
+[![一个基于 React 的智能家居控制面板]( https://i.imgur.com/Kl6fPUi.jpeg )](https://www.bilibili.com/video/BV1yxfaYHE5A/?share_source=copy_web&vd_source=3ef738469d1538347bdba19ea015dbd7)
 
 ## 预览图
 ![预览图](https://i.imgur.com/ONjR4Fp.jpeg)
@@ -19,7 +19,7 @@
 - 📱 响应式设计，支持移动端和桌面端
 - 🔧 高度可配置，自由拖拽布局
 - 🚀 PWA支持，可安装到桌面
-- 🎨 美观的用户界面，支持暗色模式
+- 🎨 美观的用户界面，支持暗色模式和自动主题切换
 - 👥 多用户管理系统，支持JWT认证
 - 🔐 安全的密码加密存储
 - 🎥 强大的摄像头支持，包括WebRTC/ONVIF/RTSP
@@ -32,6 +32,9 @@
   - 场景控制
   - 用电量统计
   - 插座控制
+  - 服务器监控
+  - PVE监控
+  - 通用实体卡片
   - 更多设备支持中...
 
 ## 安装部署
@@ -89,6 +92,9 @@ docker run \
 16. 光照传感器卡片 (IlluminanceCard)
 17. 快捷指令面板 (ScriptPanel)
 18. 插座状态卡片 (SocketCard)
+19. 通用实体卡片 (UniversalCard)
+20. PVE监控卡片 (PVECard)
+21. 服务器监控卡片 (ServerCard)
 
 ### 卡片管理
 
@@ -96,7 +102,7 @@ docker run \
 - 支持拖拽排序
 - 支持自定义大小(桌面端)
 - 支持添加/编辑/删除卡片
-- 支持自定义布局(3-8列)
+- 支持自定义布局(3-10列)
 - 支持响应式布局
 
 ## 开发

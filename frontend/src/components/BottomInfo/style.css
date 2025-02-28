@@ -1,7 +1,8 @@
 .bottom-buttons {
     position: fixed;
     bottom: 0;
-    width: 100%;
+    right: 0;
+    left: 0;
     padding: 8px 24px;
     display: flex;
     justify-content: center;
