@@ -2,7 +2,11 @@
 
 English | [简体中文](README.md)
 
-A React-based smart home control panel that uses the Home Assistant Websocket API and supports deployment as a Home Assistant OS (HAOS) addon.
+> The Simplest Home Assistant Control Panel Ever | React-based | One-click HAOS Deployment | No Programming Experience Required | Ready to Use Out of the Box
+
+
+
+🌐 [Official Website](https://hass-panel.com) | 📖 [Documentation](https://hass-panel.com/guide/install.html)
 
 ## Video Preview
 [![A React-based Smart Home Control Panel]( https://i.imgur.com/PpbbnAS.png )](https://www.bilibili.com/video/BV1yxfaYHE5A/?share_source=copy_web&vd_source=3ef738469d1538347bdba19ea015dbd7)
@@ -19,10 +23,17 @@ A React-based smart home control panel that uses the Home Assistant Websocket AP
 - 📱 Responsive design, supports both mobile and desktop
 - 🔧 Highly configurable with drag-and-drop layout
 - 🚀 PWA support, can be installed on desktop
-- 🎨 Beautiful user interface with dark mode support
+- 🎨 Beautiful user interface:
+  - Light/Dark/System-follow theme modes
+  - Frosted glass effect card design
+  - Theme-colored scrollbar
+  - Optimized mobile view
 - 👥 Multi-user management system with JWT authentication
 - 🔐 Secure password encryption storage
-- 🎥 Powerful camera support, including WebRTC/ONVIF/RTSP
+- 🎥 Powerful camera support:
+  - WebRTC/ONVIF/RTSP protocol support
+  - HLS stream auto-detection and switching
+  - Optimized video stream playback
 - 🔌 Rich device support:
   - Light control
   - AC control
@@ -32,6 +43,9 @@ A React-based smart home control panel that uses the Home Assistant Websocket AP
   - Scene control
   - Power consumption statistics
   - Socket control
+  - Server monitoring
+  - PVE virtual machine monitoring
+  - Universal entity card (supports custom configuration and grouping)
   - More devices coming soon...
 
 ## Installation
@@ -41,6 +55,8 @@ Starting from version v1.3.2:
 - The system uses SQLite database for configuration storage
 - Initial system setup is required for first-time use
 - Camera functionality requires proper ONVIF/RTSP address configuration
+
+For detailed installation and configuration instructions, please visit the [official documentation](https://hass-panel.com/guide/install.html).
 
 ### Docker Method (Stable)
 ```bash
@@ -68,35 +84,41 @@ Or manually add:
 
 ## Feature Configuration
 
+For detailed feature configuration and usage instructions, please visit the [documentation](https://hass-panel.com/guide/install.html).
+
 ### Supported Card Types
 
-1. Time Card
-2. Weather Card
-3. Light Status Card
-4. Light Overview Card
-5. Sensor Card
-6. Media Player Card
-7. Max Player Card
-8. Curtain Card
-9. Electricity Card
-10. Router Card
-11. NAS Card
-12. Camera Card
-13. Climate Card
-14. Motion Card
-15. Water Purifier Card
-16. Illuminance Card
-17. Script Panel
-18. Socket Card
+1. Time Card (TimeCard)
+2. Weather Card (WeatherCard) - Supports AQI internationalization and wind direction
+3. Light Status Card (LightStatusCard)
+4. Light Overview Card (LightOverviewCard)
+5. Sensor Card (SensorCard)
+6. Media Player Card (MediaPlayerCard)
+7. Max Player Card (MaxPlayerCard)
+8. Curtain Card (CurtainCard)
+9. Electricity Card (ElectricityCard) - Optimized voltage, current and power display
+10. Router Card (RouterCard) - Supports runtime display
+11. NAS Card (NASCard) - Improved storage information display
+12. Camera Card (CameraCard) - Supports multiple video stream protocols
+13. Climate Card (ClimateCard)
+14. Motion Card (MotionCard)
+15. Water Purifier Card (WaterPurifierCard)
+16. Illuminance Card (IlluminanceCard)
+17. Script Panel (ScriptPanel)
+18. Socket Card (SocketCard)
+19. Universal Entity Card (UniversalCard) - Supports custom entity configuration and grouping
+20. PVE Card (PVECard) - Virtual machine monitoring
+21. Server Card (ServerCard)
 
 ### Card Management
 
 - Support show/hide control
 - Support drag-and-drop sorting
 - Support custom size (desktop)
-- Support add/edit/delete cards
-- Support custom layout (3-8 columns)
+- Support add/edit/delete cards (with confirmation protection)
+- Support custom layout (3-10 columns)
 - Support responsive layout
+- Support entity smart search and auto-completion
 
 ## Development
 
@@ -110,6 +132,23 @@ npm start
 # Build production version
 npm run build
 ```
+
+## Latest Version (v1.3.3)
+
+### 🌟 Major Updates
+- Theme system fully upgraded with "Follow System" option
+- New frosted glass effect card design
+- Added universal card component with custom configuration
+- Added PVE and server monitoring functionality
+- Enhanced camera features with multiple stream support
+
+### 🔧 Technical Optimizations
+- SQLite database connection pool optimization
+- Component upgrades and refactoring
+- Performance improvements and bug fixes
+- Enhanced multilingual support
+
+For detailed changelog, please check [Releases](https://github.com/mrtian2016/hass-panel/releases)
 
 ## FAQ
 
