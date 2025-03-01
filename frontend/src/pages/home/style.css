@@ -383,12 +383,7 @@
   -ms-overflow-style: none;
 }
 
-.cameras-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
-  margin-bottom: 16px;
-}
+
 
 .curtain-card-wrapper {
   margin-top: var(--spacing-lg);
@@ -423,19 +418,7 @@
   }
 }
 
-@media (min-width: 768px) {
-  .weather-card,
-  .camera-section {
-    grid-column: span 2;
-  }
-}
 
-@media (min-width: 1200px) {
-  .weather-card,
-  .camera-section {
-    grid-column: span 3;
-  }
-}
 
 .adm-modal-content {
   scrollbar-width: none;

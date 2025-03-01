@@ -1,7 +1,7 @@
 @import '../../theme/variables.css';
 .mini-player-card {
   width: 100%;
-  background: var(--color-card-bg);
+  background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-medium);
   margin-top: var(--spacing-lg);
   box-shadow: 0 2px 8px var(--color-shadow);
@@ -21,7 +21,7 @@
   flex-direction: column;
   gap: var(--spacing-xs);
   padding: var(--spacing-md);
-  background: var(--color-background);
+  background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-small);
   position: relative;
   overflow: hidden;

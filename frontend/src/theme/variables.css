@@ -5,6 +5,7 @@
   --color-primary-dark: #FFA726;
   --color-secondary: #FFE082;
   --color-background: #FAFAFA;
+  --color-card-bg-transparent: rgba(250, 250, 250, 0.3);
   --color-background-curtain-panel: #fff;
   --color-card-bg: #ffffff;
   --color-text-primary: #263238;
@@ -43,6 +44,7 @@
   
   /* 背景色 - 使用更深的黑色以增加对比度 */
   --color-background: #121212;
+  --color-card-bg-transparent: rgba(18, 18, 18, 0.3);
   --color-card-bg: #1E1E1E;
   --color-background-curtain-panel: #666;
   

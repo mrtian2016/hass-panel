@@ -34,6 +34,7 @@ function ElectricityCard({
         ]);
         if (statisticsData.code === 200) {
           setSummaryData(statisticsData.data.summary);
+          console.log(statisticsData.data);
           setChartData({
             dates: Object.keys(statisticsData.data.daily),
             values: Object.values(statisticsData.data.daily),
@@ -275,13 +276,13 @@ function ElectricityCard({
 
         <div className="electricity-yearly-info">
           {yearlyInfoItems.map((item, index) =>{
-            return item.value ? null : <ElectricityInfoItem key={index} {...item} />
+            return item.value ?  <ElectricityInfoItem key={index} {...item} /> : null
           })}
         </div>
 
         <div className="electricity-info-grid">
           {gridInfoItems.map((item, index) =>{
-            return item.value ? null : <ElectricityInfoItem key={index} {...item} />
+            return item.value ?  <ElectricityInfoItem key={index} {...item} /> : null
           })}
         </div>
       </div>

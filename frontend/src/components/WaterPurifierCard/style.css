@@ -9,7 +9,7 @@
   font-size: 0.9em;
   color: var(--color-text-secondary);
   padding: 4px 12px;
-  background: var(--color-background);
+  background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-small);
 }
 
@@ -78,7 +78,7 @@
   flex-direction: column;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
-  background: var(--color-background);
+  background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-small);
 }
 

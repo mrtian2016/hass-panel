@@ -3,6 +3,7 @@
   border-radius: var(--border-radius-small);
   overflow: hidden;
   height: 100%;
+  width: 100%;
   transition: transform 0.3s ease;
 }
 

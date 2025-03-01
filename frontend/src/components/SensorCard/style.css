@@ -1,5 +1,5 @@
 .sensor-card {
-  background: var(--color-card-bg);
+  background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-large);
   margin-top: var(--spacing-lg);
   box-shadow: 0 2px 8px var(--color-shadow);
@@ -18,7 +18,7 @@
 .sensor-tile {
   display: flex;
   flex-direction: column;
-  background: var(--color-background);
+  background: var(--color-card-bg-transparent);
   border-radius: 20px;
   padding: var(--spacing-md);
   position: relative;
