@@ -133,7 +133,7 @@ npm start
 npm run build
 ```
 
-## Latest Version (v1.3.5.1)
+## Latest Version (v1.3.5.2)
 
 ### 🌟 Major Updates
 - Theme system fully upgraded with "Follow System" option
