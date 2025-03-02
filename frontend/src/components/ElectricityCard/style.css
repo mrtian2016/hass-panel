@@ -102,7 +102,8 @@
 }
 
 .electricity-yearly-info {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   justify-content: space-between;
   gap: var(--spacing-lg);
   margin: var(--spacing-lg) 0;
@@ -112,11 +113,7 @@
   width: 100%;
 }
 
-.electricity-yearly-info .electricity-info-item {
-  flex: 1;
-  min-width: calc(33.33% - var(--spacing-lg));
-  max-width: 100%;
-}
+
 
 .yearly-item {
   flex: 1;
@@ -151,7 +148,6 @@
   
   .electricity-info-grid {
     gap: var(--spacing-md);
-    grid-template-columns: 1fr;
   }
   
   .electricity-main-value .value {

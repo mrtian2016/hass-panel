@@ -16,7 +16,6 @@ body {
 
 .content {
   flex: 1;
-  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   padding-bottom: calc(50px + env(safe-area-inset-bottom));
 }

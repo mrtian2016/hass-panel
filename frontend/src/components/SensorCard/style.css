@@ -63,9 +63,7 @@
 
 /* 响应式设计 */
 @media (max-width: 480px) {
-  .sensor-grid {
-    grid-template-columns: 1fr;
-  }
+ 
   
   .sensor-tile {
     min-height: 130px;
