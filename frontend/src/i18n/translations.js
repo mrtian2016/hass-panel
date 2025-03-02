@@ -7,12 +7,15 @@ export const translations = {
     edit: '编辑布局',
     done: '完成编辑',
     reset: '重置布局',
-    columns: '列数',
     showCard: '显示卡片',
     hideCard: '隐藏卡片',
     language: {
       toggle: '切换语言',
       current: 'Zh'
+    },
+    layout: {
+      saveSuccess: '布局保存成功',
+      saveFailed: '布局保存失败',
     },
     weekday: {
       'Monday': '星期一',
@@ -80,6 +83,9 @@ export const translations = {
       saveFailed: '保存失败',
       enterValue: '请输入',
       selectEntity: '选择实体',
+      saving: '保存中...',
+      resetSuccess: '重置成功',
+      resetFailed: '重置失败',
       roomName: '房间名称',
       enterRoomName: '输入房间名称',
       lightEntity: '灯光实体',
@@ -773,7 +779,8 @@ export const translations = {
       passwordRequired: '请输入密码',
       success: '登录成功',
       failed: '登录失败',
-      error: '登录失败: '
+      error: '登录失败',
+      rememberPassword: '记住密码'
     },
     initialize: {
       title: '系统初始化',
@@ -932,14 +939,16 @@ export const translations = {
     edit: 'Edit Layout',
     done: 'Done',
     reset: 'Reset Layout', 
-    columns: 'Columns',
     showCard: 'Show Card',
     hideCard: 'Hide Card',
     language: {
       toggle: 'Switch Language',
       current: 'En'
     },
-   
+    layout: {
+      saveSuccess: 'Layout saved successfully',
+      saveFailed: 'Layout save failed',
+    },
     weekday: {
       'Monday': 'Monday',
       'Tuesday': 'Tuesday',
@@ -983,6 +992,7 @@ export const translations = {
 
     // Config Page
     config: {
+      saving: 'Saving...',
       edit: 'Edit',
       preview: 'Preview',
       cancel: 'Cancel',
@@ -1002,6 +1012,7 @@ export const translations = {
       confirmDelete: 'Confirm Delete?',
       deleteSuccess: 'Deleted Successfully',
       saveSuccess: 'Saved Successfully',
+      resetSuccess: 'Reset Successfully',
       saveFailed: 'Save Failed',
       enterValue: 'Please enter',
       selectEntity: 'Select entity',
@@ -1685,7 +1696,8 @@ export const translations = {
       passwordRequired: 'Please input your password',
       success: 'Login successful',
       failed: 'Login failed',
-      error: 'Login failed: '
+      error: 'Login failed ',
+      rememberPassword: 'Remember password',
     },
     initialize: {
       title: 'System Initialization',

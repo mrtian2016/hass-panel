@@ -1,4 +1,4 @@
-import React, {  useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../theme/ThemeContext';
@@ -9,16 +9,47 @@ import {
     mdiGoogleTranslate, 
     mdiWeatherNight,
     mdiWhiteBalanceSunny,
-    mdiHomeAutomation
+    mdiHomeAutomation,
+    mdiMonitor
 } from '@mdi/js';
 import './style.css';
 import { hashPassword } from '../../utils/helper';
 import { systemApi } from '../../utils/api';
+
 function InitializePage() {
     const [form] = Form.useForm();
     const navigate = useNavigate();
-    const { theme, toggleTheme } = useTheme();
+    const { theme, setSpecificTheme } = useTheme();
     const { t, toggleLanguage } = useLanguage();
+    const [themeMenuVisible, setThemeMenuVisible] = useState(false);
+
+    const getThemeIcon = () => {
+        switch (theme) {
+            case 'light':
+                return mdiWhiteBalanceSunny;
+            case 'dark':
+                return mdiWeatherNight;
+            case 'system':
+                return mdiMonitor;
+            default:
+                return mdiWhiteBalanceSunny;
+        }
+    };
+
+    const handleClickOutside = useCallback((event) => {
+        if (themeMenuVisible && !event.target.closest('.theme-menu-container')) {
+            setThemeMenuVisible(false);
+        }
+    }, [themeMenuVisible]);
+
+    useEffect(() => {
+        if (themeMenuVisible) {
+            document.addEventListener('click', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [themeMenuVisible, handleClickOutside]);
 
     const checkAuth = useCallback(async () => {
         if (!localStorage.getItem('hass_panel_token')) {
@@ -219,17 +250,54 @@ function InitializePage() {
                 </Form>
 
                 <div className="initialize-footer">
-                    <button
-                        className="icon-button"
-                        onClick={toggleTheme}
-                        title={t('theme.' + (theme === 'light' ? 'light' : 'dark'))}
-                    >
-                        <Icon
-                            path={theme === 'light' ? mdiWeatherNight : mdiWhiteBalanceSunny}
-                            size={1}
-                            color="var(--color-text-primary)"
-                        />
-                    </button>
+                    <div className="theme-menu-container">
+                        <button
+                            className="icon-button"
+                            onClick={() => setThemeMenuVisible(!themeMenuVisible)}
+                            title={t('theme.' + theme)}
+                        >
+                            <Icon
+                                path={getThemeIcon()}
+                                size={1}
+                                color="var(--color-text-primary)"
+                            />
+                        </button>
+
+                        {themeMenuVisible && (
+                            <div className="theme-menu">
+                                <button
+                                    className={`theme-option ${theme === 'light' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setSpecificTheme('light');
+                                        setThemeMenuVisible(false);
+                                    }}
+                                >
+                                    <Icon path={mdiWhiteBalanceSunny} size={0.8} />
+                                    <span>{t('theme.light')}</span>
+                                </button>
+                                <button
+                                    className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setSpecificTheme('dark');
+                                        setThemeMenuVisible(false);
+                                    }}
+                                >
+                                    <Icon path={mdiWeatherNight} size={0.8} />
+                                    <span>{t('theme.dark')}</span>
+                                </button>
+                                <button
+                                    className={`theme-option ${theme === 'system' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setSpecificTheme('system');
+                                        setThemeMenuVisible(false);
+                                    }}
+                                >
+                                    <Icon path={mdiMonitor} size={0.8} />
+                                    <span>{t('theme.system')}</span>
+                                </button>
+                            </div>
+                        )}
+                    </div>
                     <button
                         className="icon-button"
                         onClick={toggleLanguage}

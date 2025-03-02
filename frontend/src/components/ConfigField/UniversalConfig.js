@@ -1,12 +1,14 @@
 import { useLanguage } from '../../i18n/LanguageContext';
-import { AutoComplete, Input, Button } from 'antd';
+import { Input, Button, Select } from 'antd';
 import './UniversalConfig.css';
-function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
+function UniversalConfig({ field, value, onChange, allEntities }) {
     const { t } = useLanguage();
-    const switchEntities = getFilteredEntities('switch.*');
-    const lightEntities = getFilteredEntities('light.*');
-    const sensorEntities = getFilteredEntities('sensor.*');
-    const allEntities = [...switchEntities, ...lightEntities, ...sensorEntities];
+    console.log(allEntities);
+    const universalEntities = Object.entries(allEntities)
+    .map(([entityId, entity]) => ({
+      id: entityId,
+      name: entity.attributes.friendly_name || entityId
+    }));
 
 
     return (
@@ -97,7 +99,7 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
 
                                     <div className="entity-select-field">
                                         <label>{t('configField.selectEntity')}</label>
-                                        <AutoComplete
+                                        <Select
                                             allowClear
                                             value={entity.entity_id}
                                             onChange={(newEntityId) => {
@@ -117,11 +119,14 @@ function UniversalConfig({ field, value, onChange, getFilteredEntities }) {
                                             placeholder={t('configField.selectEntity')}
                                             optionFilterProp="children"
                                             filterOption={(input, option) =>
-                                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                            {
+                                                return option.label.toLowerCase().includes(input.toLowerCase());
+
                                             }
-                                            options={allEntities.map((entity) => ({
+                                              }
+                                            options={universalEntities.map((entity) => ({
                                                 value: entity.id,
-                                                label: `${entity.name} (${entity.id})`
+                                                label: entity.name + ' (' + entity.id + ')'
                                             }))}
                                         />
                                     </div>

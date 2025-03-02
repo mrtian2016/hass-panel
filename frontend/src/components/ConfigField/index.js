@@ -627,7 +627,7 @@ function ConfigField({ field, value, onChange }) {
       );
 
     case 'universal-entities':
-      return <UniversalConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
+      return <UniversalConfig field={field} value={value} onChange={onChange} allEntities={allEntities} />
 
     case 'persons-config':
       const personEntities = getFilteredEntities('person.*');

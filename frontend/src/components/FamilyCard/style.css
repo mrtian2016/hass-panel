@@ -132,9 +132,14 @@
 
 @media (max-width: 480px) {
   .family-members {
-    grid-template-columns: 1fr;
-    max-width: 200px;
+    grid-template-columns: repeat(2, 1fr);
+    /* max-width: 200px; */
     margin: 0 auto;
+  }
+  
+  .members-1 {
+    grid-template-columns: 1fr;
+    max-width: 100%;
   }
   
   .family-person {

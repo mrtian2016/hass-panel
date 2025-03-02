@@ -10,7 +10,7 @@ function FamilyCard({ config, visible = true, titleVisible = true }) {
   
   const { theme } = useTheme();
 
-  const renderPerson = (person) => {
+  const renderPerson = (person, index) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const entity = useEntity(person.entity_id);
     const isHome = entity?.state === 'home';
@@ -19,7 +19,7 @@ function FamilyCard({ config, visible = true, titleVisible = true }) {
       : null;
 
     return (
-      <div className="family-person" key={person.entity_id}>
+      <div className="family-person" key={`${person.entity_id}-${index}`}>
         <div className="person-avatar">
           {personIcon ? (
             <img src={personIcon} alt={person.name} />
@@ -57,7 +57,7 @@ function FamilyCard({ config, visible = true, titleVisible = true }) {
     >
       <div className="family-members-container">
         <div className={`family-members members-${config.persons?.length || 0}`}>
-          {config.persons?.map(renderPerson)}
+          {config.persons?.map((person, index) => renderPerson(person, index))}
         </div>
       </div>
      

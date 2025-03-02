@@ -53,6 +53,7 @@
   justify-content: flex-end;
   padding: var(--spacing-sm);
   flex-wrap: wrap;
+  margin-right: 20px;
 }
 
 /* 统一按钮样式 */
@@ -190,10 +191,12 @@
 
 .content {
   width: 100%;
-  max-width: calc(100vw - 240px);
   margin: 0 auto;
   height: 100%;
   overflow: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: 1600px; /* 限制最大宽度，使内容居中 */
 }
 
 .adm-modal-content {
@@ -206,31 +209,21 @@
 }
 
 .page-container {
-  padding: 20px;
   min-height: 100vh;
   box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: scroll;
   height: 100vh;
-  padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  
   scrollbar-width: none;
   transition: margin-left 0.3s ease;
-}
-
-.content {
-  width: 100%;
-  max-width: calc(100vw - 240px);
-  margin: 0 auto;
-  height: 100%;
-  overflow: visible;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 .layout {
   position: relative;
   width: 100% !important;
   margin: 0 auto;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom));
 }
 
 .react-grid-item {
@@ -292,7 +285,6 @@
 /* 响应式布局调整 */
 @media (max-width: 767px) {
   .page-container {
-    padding: 16px;
     -webkit-overflow-scrolling: touch;
   }
   
@@ -354,8 +346,8 @@
 
 @media (min-width: 768px) {
   .page-container {
-    margin-left: var(--sidebar-width, 160px);
-    padding: 20px;
+  
+    margin-left: 0;
   }
   
   .page-container.sidebar-hidden {
@@ -382,8 +374,6 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-
-
 
 .curtain-card-wrapper {
   margin-top: var(--spacing-lg);
@@ -417,8 +407,6 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
-
 
 .adm-modal-content {
   scrollbar-width: none;
@@ -620,46 +608,7 @@ div {
 }
 
 .layout.editing .react-grid-item.resizing > div {
-  animation: none;
-  box-shadow: 0 4px 16px var(--color-shadow);
-}
-
-.column-adjust {
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: var(--border-radius-small);
-  background: var(--color-card-bg);
-  box-shadow: 0 2px 8px var(--color-shadow);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-  position: relative;
-}
-
-.column-adjust:hover {
-  background: var(--color-background);
-}
-
-.column-adjust:active {
-  transform: scale(0.95);
-}
-
-.column-count {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  font-size: 10px;
-  background: var(--color-primary);
-  color: white;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 0 0 2px var(--color-primary);
 }
 
 /* 编辑按钮基础样式 */
@@ -961,7 +910,6 @@ div {
 }
 
 .page-container.fullscreen .content {
-  padding: 20px;
   flex: 1;
   overflow: auto;
   background: inherit;
@@ -1063,5 +1011,11 @@ div {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 1600px) {
+  .content {
+    width: 100%;
   }
 }

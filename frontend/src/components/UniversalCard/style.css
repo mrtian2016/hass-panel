@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   padding: var(--spacing-sm);
-  background: var(--color-background);
+  background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-small);
   gap: var(--spacing-md);
 }
@@ -36,12 +36,10 @@
   align-items: center;
   justify-content: space-around;
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-card-bg);
+  background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-small);
   border: 1px solid var(--color-border);
   flex: 1;
-  max-width: 110px;
-  min-width: 100px;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;

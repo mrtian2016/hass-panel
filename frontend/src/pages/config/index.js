@@ -534,143 +534,16 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
 
 
 
-  // 修改计算布局函数
-  const calculateLayouts = (cards, currentLayouts = null) => {
-    // 分别创建移动端和桌面端的布局
-    const layouts = {
-      mobile: {
-        sm: []
-      },
-      desktop: {
-        lg: [],
-        md: []
-      }
-    };
-
-    // 基础布局参数
-    const baseParams = {
-      lg: { cols: 3, cardWidth: 1 },
-      md: { cols: 2, cardWidth: 1 },
-      sm: { cols: 1, cardWidth: 1 }
-    };
-
-    // 添加卡片高度配置
-    const cardHeights = {
-      TimeCard: { lg: 10, md: 10, sm: 10 },
-      WeatherCard: { lg: 20, md: 20, sm: 20 },
-      LightStatusCard: { lg: 24, md: 24, sm: 24 },
-      LightOverviewCard: { lg: 22, md: 22, sm: 22 },
-      SensorCard: { lg: 16, md: 16, sm: 16 },
-      RouterCard: { lg: 26, md: 26, sm: 26 },
-      NASCard: { lg: 36, md: 36, sm: 36 },
-      MediaPlayerCard: { lg: 30, md: 30, sm: 30 },
-      MaxPlayerCard: { lg: 30, md: 30, sm: 30 },
-      CurtainCard: { lg: 30, md: 30, sm: 30 },
-      ElectricityCard: { lg: 24, md: 24, sm: 24 },
-      ScriptPanel: { lg: 14, md: 14, sm: 14 },
-      WaterPurifierCard: { lg: 24, md: 24, sm: 24 },
-      IlluminanceCard: { lg: 16, md: 16, sm: 16 },
-      CameraCard: { lg: 20, md: 20, sm: 20 },
-      ClimateCard: { lg: 28, md: 28, sm: 28 },
-      MotionCard: { lg: 20, md: 20, sm: 20 },
-      SocketStatusCard: { lg: 24, md: 24, sm: 24 },
-    };
-
-    // 计算每个卡片的位置
-    cards.forEach((card) => {
-      const cardId = card.id.toString();
-      const height = cardHeights[card.type] || { lg: 10, md: 10, sm: 10 };
-
-      // 处理移动端布局
-      const existingMobileLayout = currentLayouts?.mobile?.sm?.find(item => item.i === cardId);
-      if (existingMobileLayout) {
-        // 完全保留现有布局，只更新卡片类型
-        layouts.mobile.sm.push({
-          ...existingMobileLayout,
-          card_type: card.type
-        });
-      } else {
-        // 为新卡片计算位置
-        const { cols } = baseParams.sm;
-        const currentItems = layouts.mobile.sm;
-        let maxY = 0;
-
-        // 找到当前最大的Y值
-        currentItems.forEach(item => {
-          const itemBottom = item.y + item.h;
-          if (itemBottom > maxY) {
-            maxY = itemBottom;
-          }
-        });
-
-        // 计算新卡片的位置
-        const col = currentItems.length % cols;
-        layouts.mobile.sm.push({
-          card_type: card.type,
-          i: cardId,
-          x: col,
-          y: maxY,
-          w: baseParams.sm.cardWidth,
-          h: height.sm
-        });
-      }
-
-      // 处理桌面端布局
-      ['lg', 'md'].forEach(breakpoint => {
-        const existingDesktopLayout = currentLayouts?.desktop?.[breakpoint]?.find(item => item.i === cardId);
-        if (existingDesktopLayout) {
-          // 完全保留现有布局，只更新卡片类型
-          layouts.desktop[breakpoint].push({
-            ...existingDesktopLayout,
-            card_type: card.type
-          });
-        } else {
-          // 为新卡片计算位置
-          const { cols } = baseParams[breakpoint];
-          const currentItems = layouts.desktop[breakpoint];
-          let maxY = 0;
-
-          // 找到当前最大的Y值
-          currentItems.forEach(item => {
-            const itemBottom = item.y + item.h;
-            if (itemBottom > maxY) {
-              maxY = itemBottom;
-            }
-          });
-
-          // 计算新卡片的位置
-          const col = currentItems.length % cols;
-          layouts.desktop[breakpoint].push({
-            card_type: card.type,
-            i: cardId,
-            x: col,
-            y: maxY,
-            w: baseParams[breakpoint].cardWidth,
-            h: height[breakpoint]
-          });
-        }
-      });
-    });
-
-    return layouts;
-  };
-
   // 修改保存函数
   const handleSave = async () => {
     try {
-      // 从后端获取当前配置以保留现有布局
-      const response = await configApi.getConfig();
-      const currentConfig = response.data;
-      // 计算布局，传入当前布局以保留已有卡片的位置
-      const newLayouts = calculateLayouts(cards, currentConfig.layouts);
-      
-      // 保存到后端
+      message.loading(t('config.saving'));
+      // 只保存卡片配置到后端，不再同时保存布局
       await configApi.saveConfig({
         cards,
-        layouts: newLayouts,
-        defaultLayouts: newLayouts
+        // 不再包含布局信息
       });
-
+      message.destroy();
       setHasUnsavedChanges(false);
       message.success(t('config.saveSuccess'));
     } catch (error) {
@@ -692,10 +565,10 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
           throw new Error('无效的配置文件格式');
         }
 
-        // 保存到后端
+        // 保存到后端，但只保存卡片配置，不保存布局
         await configApi.saveConfig({
-          ...importedConfig,
-          layouts: importedConfig.layouts || calculateLayouts(importedConfig.cards)
+          cards: importedConfig.cards,
+          // 不再包含布局信息
         });
         
         // 更新本地状态
@@ -723,8 +596,14 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
       const response = await configApi.getConfig();
       const config = response.data;
       
+      // 导出时只包含卡片配置，不包含布局配置
+      const exportConfig = {
+        cards: config.cards,
+        globalConfig: config.globalConfig
+      };
+      
       // 创建下载
-      const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(exportConfig, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

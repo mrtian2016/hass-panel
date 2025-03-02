@@ -9,7 +9,36 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box;
+  position: relative;
 }
+
+/* 添加背景装饰元素 */
+.config-page::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, var(--color-primary) 0%, transparent 20%),
+              radial-gradient(circle at 70% 60%, var(--color-primary) 0%, transparent 20%),
+              radial-gradient(circle at 40% 80%, var(--color-primary) 0%, transparent 15%),
+              radial-gradient(circle at 80% 10%, var(--color-primary) 0%, transparent 15%);
+  opacity: 0.1;
+  z-index: -1;
+  pointer-events: none;
+  animation: backgroundMove 60s linear infinite;
+}
+
+@keyframes backgroundMove {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .rc-virtual-list-scrollbar-thumb {
   background-color: var(--color-primary) !important;
 }
@@ -248,27 +277,100 @@
   margin-bottom: 80px;
   width: 100%;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
 .config-card {
   min-height: 220px;
   position: relative;
-  background: var(--color-background);
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s;
   cursor: pointer;
   padding: 20px;
-  border: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: 16px;
+  /* 默认样式（无毛玻璃效果时的后备方案） */
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
 }
 
 .config-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 支持backdrop-filter的浏览器应用毛玻璃效果 */
+@supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+  .config-card {
+    background: rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 悬停状态增强 */
+  .config-card:hover {
+    background: rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* 暗色模式下的毛玻璃效果 */
+  @media (prefers-color-scheme: dark) {
+    .config-card {
+      background: rgba(30, 30, 30, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .config-card:hover {
+      background: rgba(30, 30, 30, 0.35);
+    }
+  }
+}
+
+/* 为卡片添加微妙的光泽效果 */
+.config-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.02)
+  );
+  border-radius: 12px 12px 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 添加底部阴影效果 */
+.config-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.05),
+    transparent
+  );
+  border-radius: 0 0 12px 12px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 确保卡片内容在光泽效果之上 */
+.card-header, .card-switches, .card-actions {
+  position: relative;
+  z-index: 2;
 }
 
 .card-header {
@@ -289,6 +391,7 @@
   flex-shrink: 0;
 }
 
+/* 调整卡片标题颜色，确保在毛玻璃背景上可见 */
 .card-title {
   margin: 0;
   font-size: 16px;
@@ -298,6 +401,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .card-switches {
@@ -308,12 +412,14 @@
   border-top: 1px solid var(--color-border);
 }
 
+/* 调整开关项文本颜色 */
 .switch-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
   color: var(--color-text);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
 /* 自定义 Switch 样式 */
@@ -341,8 +447,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
+  background: var(--color-card-bg-transparent);
+  border: 1px solid var(--color-card-bg-transparent);
   color: var(--color-text);
 }
 

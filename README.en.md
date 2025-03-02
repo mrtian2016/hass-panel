@@ -116,7 +116,7 @@ For detailed feature configuration and usage instructions, please visit the [doc
 - Support drag-and-drop sorting
 - Support custom size (desktop)
 - Support add/edit/delete cards (with confirmation protection)
-- Support custom layout (3-10 columns)
+- Support custom layout
 - Support responsive layout
 - Support entity smart search and auto-completion
 

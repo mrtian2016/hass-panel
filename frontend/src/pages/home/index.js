@@ -7,7 +7,6 @@ import {
   mdiCheck,
   mdiPencil,
   mdiRefresh,
-  mdiViewColumn,
   mdiMenu,
   mdiViewDashboard,
   mdiGoogleTranslate,
@@ -45,20 +44,8 @@ import ServerCard from '../../components/ServerCard';
 import PVECard from '../../components/PVECard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
-import { configApi,applyBackgroundToBody } from '../../utils/api';
+import { configApi, applyBackgroundToBody } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
-
-// 获取当前断点
-const getCurrentBreakpoint = (width) => {
-  if (width >= 1200) return 'lg';
-  if (width >= 768) return 'md';
-  return 'sm';
-};
-
-// 获取列布局图标
-const getColumnLayoutIcon = (columns) => {
-  return mdiViewColumn;
-};
 
 
 function Home({ sidebarVisible, setSidebarVisible }) {
@@ -77,15 +64,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [touchStartY, setTouchStartY] = useState(0);
   const [touchStartX, setTouchStartX] = useState(0);
-  const [columnCount, setColumnCount] = useState(() => {
-    const savedColumns = localStorage.getItem('dashboard-columns');
-    return savedColumns ? JSON.parse(savedColumns) : { lg: 3, md: 3, sm: 1 };
-  });
-  const maxColumnCount = 10;
-  const minColumnCount = 1;
-
-  // 添加当前配置状态
-  const [currentConfig, setCurrentConfig] = useState(null);
+  const [columnCount, setColumnCount] = useState({ lg: 30, md: 30, sm: 1 });
 
   // 添加主题菜单状态
   const [themeMenuVisible, setThemeMenuVisible] = useState(false);
@@ -104,6 +83,114 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     }
   };
 
+  // 添加一个函数，验证布局是否包含所有可见卡片
+  const isLayoutValid = useCallback((layouts, cards) => {
+    const visibleCardIds = cards
+      .filter(card => card.visible !== false)
+      .map(card => card.id.toString());
+
+    // 检查每个断点的布局
+    for (const breakpoint of Object.keys(layouts)) {
+      // 确保布局存在且不为空
+      if (!layouts[breakpoint] || layouts[breakpoint].length === 0) {
+        return false;
+      }
+
+      // 获取布局中的所有卡片ID
+      const layoutItemIds = layouts[breakpoint].map(item => item.i);
+
+      // 检查所有可见卡片是否都在布局中
+      for (const cardId of visibleCardIds) {
+        if (!layoutItemIds.includes(cardId)) {
+          return false;
+        }
+      }
+
+      // 检查布局中是否包含不存在的卡片
+      for (const itemId of layoutItemIds) {
+        if (!visibleCardIds.includes(itemId)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }, []);
+  // 添加一个函数，计算默认布局
+  const calculateDefaultLayouts = useCallback((cards) => {
+    // 基础布局参数
+    const baseParams = {
+      lg: { cols: 30, cardWidth: 6 },  // 从5改为4，使卡片更窄，可以在一行放置更多卡片
+      md: { cols: 30, cardWidth: 6 },
+      sm: { cols: 1, cardWidth: 1 }
+    };
+
+    // 添加卡片高度配置
+    const cardHeights = {
+      TimeCard: { lg: 10, md: 10, sm: 10 },
+      WeatherCard: { lg: 20, md: 20, sm: 20 },
+      LightStatusCard: { lg: 24, md: 24, sm: 24 },
+      LightOverviewCard: { lg: 22, md: 22, sm: 22 },
+      SensorCard: { lg: 16, md: 16, sm: 16 },
+      RouterCard: { lg: 26, md: 26, sm: 26 },
+      NASCard: { lg: 36, md: 36, sm: 36 },
+      MediaPlayerCard: { lg: 30, md: 30, sm: 30 },
+      MaxPlayerCard: { lg: 30, md: 30, sm: 30 },
+      CurtainCard: { lg: 30, md: 30, sm: 30 },
+      ElectricityCard: { lg: 24, md: 24, sm: 24 },
+      ScriptPanel: { lg: 14, md: 14, sm: 14 },
+      WaterPurifierCard: { lg: 24, md: 24, sm: 24 },
+      IlluminanceCard: { lg: 16, md: 16, sm: 16 },
+      CameraCard: { lg: 20, md: 20, sm: 20 },
+      ClimateCard: { lg: 28, md: 28, sm: 28 },
+      MotionCard: { lg: 20, md: 20, sm: 20 },
+      SocketStatusCard: { lg: 24, md: 24, sm: 24 },
+    };
+
+    // 创建布局对象
+    const layouts = {
+      lg: [],
+      md: [],
+      sm: []
+    };
+
+    // 计算每个卡片的位置
+    cards.filter(card => card.visible !== false).forEach((card, index) => {
+      const cardId = card.id.toString();
+      const height = cardHeights[card.type] || { lg: 10, md: 10, sm: 10 };
+
+      // 为每个断点计算布局
+      Object.keys(layouts).forEach(breakpoint => {
+        const { cardWidth } = baseParams[breakpoint];
+        
+        // 计算卡片位置
+        let col, row;
+        
+        if (breakpoint === 'sm') {
+          // 移动端保持单列布局
+          col = 0;
+          row = index;
+        } else {
+          // 非移动端使用多列布局
+          // 在30列布局中，
+          col = (index % 5) * 6 
+          row = Math.floor(index / 5);
+        }
+
+        layouts[breakpoint].push({
+          card_type: card.type,
+          i: cardId,
+          x: col,
+          y: row * 10, // 简单的行间距
+          w: cardWidth,
+          h: height[breakpoint]
+        });
+      });
+    });
+
+    return layouts;
+  }, []);
+
   // 监听窗口大小变化
   useEffect(() => {
     function handleResize() {
@@ -112,60 +199,148 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       setWidth(newWidth);
       setIsMobile(newIsMobile);
 
-      // // 根据设备类型加载对应的布局
-      // configApi.getConfig().then(config => {
-      //   if (config.layouts) {
-      //     setCurrentLayouts(newIsMobile ? config.layouts.mobile : config.layouts.desktop);
-      //   }
-      // }).catch(error => {
-      //   console.error('加载布局配置失败:', error);
-      // });
+      // 如果设备类型发生变化（从移动端到桌面端或反之），重新加载对应的布局
+      if (newIsMobile !== isMobile) {
+        const layoutKey = newIsMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+        const savedLayouts = localStorage.getItem(layoutKey);
+
+        if (savedLayouts) {
+          try {
+            const parsedLayouts = JSON.parse(savedLayouts);
+            if (Object.keys(parsedLayouts).length > 0) {
+              setCurrentLayouts(parsedLayouts);
+            } else if (cards.length > 0) {
+              // 如果没有保存的布局但有卡片，生成新布局
+              const newLayouts = calculateDefaultLayouts(cards);
+              setCurrentLayouts(newLayouts);
+              localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
+            }
+          } catch (error) {
+            console.error('加载布局失败:', error);
+            // 如果加载失败且有卡片，生成新布局
+            if (cards.length > 0) {
+              const newLayouts = calculateDefaultLayouts(cards);
+              setCurrentLayouts(newLayouts);
+              localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
+            }
+          }
+        } else if (cards.length > 0) {
+          // 如果没有保存的布局但有卡片，生成新布局
+          const newLayouts = calculateDefaultLayouts(cards);
+          setCurrentLayouts(newLayouts);
+          localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
+        }
+        
+        // 设置列数
+        if (newIsMobile) {
+          setColumnCount({ lg: 1, md: 1, sm: 1 });
+        } else {
+          setColumnCount({ lg: 30, md: 30, sm: 1 });
+        }
+      }
     }
 
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [cards, isMobile, calculateDefaultLayouts]);
+  // 添加一个函数，合并现有布局和新计算的布局
+  const mergeLayouts = useCallback((defaultLayouts, currentLayouts, cardIds) => {
+    const result = {};
 
-  // 加载配置数据
+    // 为每个断点处理布局
+    for (const breakpoint of Object.keys(defaultLayouts)) {
+      result[breakpoint] = [];
+
+      // 保留现有卡片的布局
+      cardIds.forEach(cardId => {
+        // 查找现有布局中的项
+        const existingItem = currentLayouts[breakpoint]?.find(item => item.i === cardId);
+        if (existingItem) {
+          // 如果存在，使用现有布局
+          result[breakpoint].push(existingItem);
+        } else {
+          // 否则使用默认布局中的对应项
+          const defaultItem = defaultLayouts[breakpoint].find(item => item.i === cardId);
+          if (defaultItem) {
+            result[breakpoint].push(defaultItem);
+          }
+        }
+      });
+
+      // 确保所有卡片都在结果中
+      for (const defaultItem of defaultLayouts[breakpoint]) {
+        if (!result[breakpoint].some(item => item.i === defaultItem.i)) {
+          result[breakpoint].push(defaultItem);
+        }
+      }
+
+      // 移除不存在的卡片
+      result[breakpoint] = result[breakpoint].filter(item => cardIds.includes(item.i));
+    }
+
+    return result;
+  }, []);
+  // 修改加载配置数据的 useEffect
   useEffect(() => {
     const loadConfig = async () => {
       try {
         setLoading(true);
 
-        // 尝试从后端获取配置
+        // 尝试从后端获取卡片配置
         let response = await configApi.getConfig();
         if (response.code !== 200) {
           return
         }
         let config = response.data;
+
         // 设置卡片配置
         if (config.cards) {
-          setCards(config.cards.map(card => ({
+          const updatedCards = config.cards.map(card => ({
             ...card,
             visible: card.visible !== false,
             titleVisible: card.titleVisible !== false
-          })));
-        }
+          }));
+          setCards(updatedCards);
 
-        // 设置布局配置
-        if (config.layouts && Object.keys(config.layouts).length > 0) {
-          setCurrentLayouts(isMobile ? config.layouts.mobile : config.layouts.desktop);
-        } else {
-          // 如果没有布局配置，设置一个默认的空布局
-          setCurrentLayouts({
-            lg: [],
-            md: [],
-            sm: []
-          });
+          // 设置布局配置（从本地存储加载）
+          const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+          const savedLayouts = localStorage.getItem(layoutKey);
+
+          let loadedLayouts;
+          if (savedLayouts) {
+            try {
+              loadedLayouts = JSON.parse(savedLayouts);
+              // 验证布局是否完整
+              if (!isLayoutValid(loadedLayouts, updatedCards)) {
+                // 布局不完整，需要合并默认布局
+                const defaultLayouts = calculateDefaultLayouts(updatedCards);
+                loadedLayouts = mergeLayouts(
+                  defaultLayouts,
+                  loadedLayouts,
+                  updatedCards.filter(card => card.visible !== false).map(card => card.id.toString())
+                );
+                // 保存更新后的布局
+                localStorage.setItem(layoutKey, JSON.stringify(loadedLayouts));
+              }
+            } catch (error) {
+              console.error('解析本地布局失败:', error);
+              loadedLayouts = calculateDefaultLayouts(updatedCards);
+              localStorage.setItem(layoutKey, JSON.stringify(loadedLayouts));
+            }
+          } else {
+            // 没有本地布局，计算默认布局
+            loadedLayouts = calculateDefaultLayouts(updatedCards);
+            localStorage.setItem(layoutKey, JSON.stringify(loadedLayouts));
+          }
+
+          setCurrentLayouts(loadedLayouts);
         }
 
         if (config.globalConfig) {
           applyBackgroundToBody(config.globalConfig);
         }
-    
-        // 保存完整配置
-        setCurrentConfig(config);
+
 
       } catch (error) {
         console.error('加载配置失败:', error);
@@ -176,7 +351,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     };
 
     loadConfig();
-  }, [isMobile]);
+  }, [isMobile, calculateDefaultLayouts, mergeLayouts, isLayoutValid]); // 恢复 isMobile 依赖，因为移动设备和桌面设备的布局不同
+
 
   // const handleRefresh = () => {
   //   console.log('Refresh triggered');
@@ -232,118 +408,47 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   // 处理布局变化
   const handleLayoutChange = (layout, layouts) => {
     setCurrentLayouts(layouts);
-    // setHasUnsavedChanges(true);
+
+    // 保存布局到本地存储
+    const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+    localStorage.setItem(layoutKey, JSON.stringify(layouts));
   };
 
   // 修改保存布局函数
-  const handleSaveLayout = async () => {
+  const handleSaveLayout = () => {
     try {
-      if (!currentConfig) {
-        message.error('配置数据不完整，请刷新页面重试');
-        return;
-      }
-
-      // 更新布局配置
-      const newLayouts = {
-        ...currentConfig.layouts,
-        [isMobile ? 'mobile' : 'desktop']: currentLayouts
-      };
-
-      // 准备新的配置
-      const newConfig = {
-        ...currentConfig,
-        layouts: newLayouts
-      };
-
-      // 保存更新后的配置
-      await configApi.saveConfig(newConfig);
+      // 保存布局到本地存储
+      const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+      localStorage.setItem(layoutKey, JSON.stringify(currentLayouts));
       
-      // 更新本地状态
-      setCurrentConfig(newConfig);
+      // 不再保存列数到本地存储
+      
       setIsEditing(false);
-      // setHasUnsavedChanges(false);
-      message.success(t('config.saveSuccess'));
+      message.success(t('layout.saveSuccess'));
     } catch (error) {
       console.error('保存布局失败:', error);
-      message.error(t('config.saveFailed'));
+      message.error(t('layout.saveFailed'));
     }
   };
 
   // 修改重置布局功能
-  const handleResetLayout = async () => {
-
+  const handleResetLayout = () => {
     try {
-      if (!currentConfig?.defaultLayouts) {
-        message.error('默认布局数据不存在');
-        return;
-      }
+      // 不再从后端获取默认布局，而是重新计算
+      const newLayouts = calculateDefaultLayouts(cards);
+      setCurrentLayouts(newLayouts);
 
-      const defaultLayout = isMobile ?
-        currentConfig.defaultLayouts.mobile :
-        currentConfig.defaultLayouts.desktop;
+      // 保存到本地存储
+      const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+      localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
 
-      setCurrentLayouts(defaultLayout);
-
-      // 更新布局配置
-      const newLayouts = {
-        ...currentConfig.layouts,
-        [isMobile ? 'mobile' : 'desktop']: defaultLayout
-      };
-
-      // 准备新的配置
-      const newConfig = {
-        ...currentConfig,
-        layouts: newLayouts
-      };
-
-      // 保存更新后的配置
-      await configApi.saveConfig(newConfig);
-      
-      // 更新本地状态
-      setCurrentConfig(newConfig);
       setIsEditing(false);
+      message.success(t('config.resetSuccess'));
     } catch (error) {
       console.error('重置布局失败:', error);
       message.error('重置布局失败');
     }
   };
-
-  // 监听窗口大小变化
-  useEffect(() => {
-    function handleResize() {
-      const isMobile = window.innerWidth < 768;
-      // 根据侧边栏状态动态计算宽度
-      // const sidebarWidth = 0 //isMobile ? 0 : (sidebarVisible ? 200 : 0);
-      const containerPadding = isMobile ? 32 : 40;
-      // const availableWidth = window.innerWidth - sidebarWidth - containerPadding;
-      const availableWidth = window.innerWidth - containerPadding;
-      setWidth(availableWidth);
-
-      // 获取保存的列数设置
-      const savedColumns = localStorage.getItem('dashboard-columns');
-      const currentColumns = savedColumns ? JSON.parse(savedColumns) : { lg: 3, md: 3, sm: 1 };
-
-      if (isMobile) {
-        // 移动端强制使用1列
-        const newColumnCount = { ...currentColumns, lg: 1, md: 1, sm: 1 };
-        setColumnCount(newColumnCount);
-        localStorage.setItem('dashboard-columns', JSON.stringify(newColumnCount));
-      } else if (!savedColumns) {
-        // 非移动端且没有保存的设置时，使用默认值
-        setColumnCount({ lg: 3, md: 3, sm: 1 });
-        localStorage.setItem('dashboard-columns', JSON.stringify({ lg: 3, md: 3, sm: 1 }));
-      } else {
-        // 非移动端且有保存的设置时，使用保存的值
-        setColumnCount(currentColumns);
-      }
-
-      setIsMobile(isMobile);
-    }
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [sidebarVisible]); // 添加 sidebarVisible 作为依赖
 
   // 处理触摸事件
   useEffect(() => {
@@ -358,19 +463,6 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       return () => document.removeEventListener('touchmove', preventScroll);
     }
   }, [isMobile, isDragging]);
-
-  // 处理列数变化
-  const handleColumnsChange = (breakpoint) => {
-    if (isMobile) {
-      return;
-    }
-    const newColumnCount = {
-      ...columnCount,
-      [breakpoint]: columnCount[breakpoint] >= maxColumnCount ? minColumnCount : columnCount[breakpoint] + 1
-    };
-    setColumnCount(newColumnCount);
-    localStorage.setItem('dashboard-columns', JSON.stringify(newColumnCount));
-  };
 
   // 添加全屏相关的事件处理
   useEffect(() => {
@@ -388,7 +480,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
     setSidebarVisible(false);
-    
+
     // 保持背景图设置
     const applyBackground = async () => {
       try {
@@ -408,7 +500,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         console.error('应用背景设置失败:', error);
       }
     };
-    
+
     // 延迟一下应用背景，确保在全屏切换后应用
     setTimeout(applyBackground, 100);
   };
@@ -503,8 +595,68 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   };
 
 
+
+  // 添加一个计算默认布局的函数
+
+
+  // 添加一个函数，用于确保布局中包含所有卡片
+  const updateLayoutsForCards = useCallback(() => {
+    const visibleCards = cards.filter(card => card.visible !== false);
+    const cardIds = visibleCards.map(card => card.id.toString());
+
+    // 检查当前布局是否包含所有卡片
+    const allBreakpoints = ['lg', 'md', 'sm'];
+    let needsUpdate = false;
+
+    // 为每个断点检查布局
+    for (const breakpoint of allBreakpoints) {
+      if (!currentLayouts[breakpoint]) {
+        needsUpdate = true;
+        break;
+      }
+
+      // 确认所有可见卡片都在布局中
+      const layoutItemIds = currentLayouts[breakpoint].map(item => item.i);
+      for (const cardId of cardIds) {
+        if (!layoutItemIds.includes(cardId)) {
+          needsUpdate = true;
+          break;
+        }
+      }
+
+      // 移除布局中不存在的卡片
+      const hasExtraItems = currentLayouts[breakpoint].some(item => !cardIds.includes(item.i));
+      if (hasExtraItems) {
+        needsUpdate = true;
+      }
+
+      if (needsUpdate) break;
+    }
+
+    // 如果需要更新布局，重新计算并保存
+    if (needsUpdate) {
+      const newLayouts = mergeLayouts(calculateDefaultLayouts(visibleCards), currentLayouts, cardIds);
+      setCurrentLayouts(newLayouts);
+
+      // 保存新布局到本地
+      const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+      localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
+    }
+  }, [currentLayouts, cards, isMobile, calculateDefaultLayouts, setCurrentLayouts, mergeLayouts]);
+
+  // 添加一个函数，验证布局是否包含所有可见卡片
+
+
+  // 添加对cards变化的监听
+  useEffect(() => {
+    // 当卡片列表发生变化时，检查并更新布局
+    if (cards.length > 0 && !loading) {
+      updateLayoutsForCards();
+    }
+  }, [cards, loading, updateLayoutsForCards]);
+
   return (
-    <div 
+    <div
       className={`page-container ${!sidebarVisible ? 'sidebar-hidden' : ''} ${isFullscreen ? 'fullscreen' : ''}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -537,10 +689,10 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                     color="var(--color-text-primary)"
                   />
                 </button>
-                
+
                 {themeMenuVisible && (
                   <div className="theme-menu">
-                    <button 
+                    <button
                       className={`theme-option ${theme === 'light' ? 'active' : ''}`}
                       onClick={() => {
                         setSpecificTheme('light');
@@ -550,7 +702,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                       <Icon path={mdiWhiteBalanceSunny} size={0.8} />
                       <span>{t('theme.light')}</span>
                     </button>
-                    <button 
+                    <button
                       className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
                       onClick={() => {
                         setSpecificTheme('dark');
@@ -560,7 +712,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                       <Icon path={mdiWeatherNight} size={0.8} />
                       <span>{t('theme.dark')}</span>
                     </button>
-                    <button 
+                    <button
                       className={`theme-option ${theme === 'system' ? 'active' : ''}`}
                       onClick={() => {
                         setSpecificTheme('system');
@@ -612,25 +764,25 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 </button>
               )}
               {isEditing && (
-                  <Popconfirm
+                <Popconfirm
                   title="重置布局"
                   description="确定要重置布局吗？"
                   okText="确定"
                   cancelText="取消"
                   onConfirm={() => handleResetLayout()}
                 >
-                   <button
-                  className="reset-layout"
-                  title={t('reset')}
-                >
-                  <Icon
-                    path={mdiRefresh}
-                    size={1}
-                    color="var(--color-text-primary)"
-                  />
-                </button>
+                  <button
+                    className="reset-layout"
+                    title={t('reset')}
+                  >
+                    <Icon
+                      path={mdiRefresh}
+                      size={1}
+                      color="var(--color-text-primary)"
+                    />
+                  </button>
                 </Popconfirm>
-               
+
               )}
               {isEditing && !isMobile && (
                 <button
@@ -646,29 +798,6 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                     color="var(--color-text-primary)"
                   />
                 </button>
-              )}
-              {!isMobile && (
-                <Popconfirm
-                  title="调整列数"
-                  description="确定要调整列数吗？"
-                  okText="确定"
-                  cancelText="取消"
-                  onConfirm={() => handleColumnsChange(getCurrentBreakpoint(width))}
-                > 
-                  <button
-                  className="column-adjust"
-                  title={`${t('columns')}: ${columnCount[getCurrentBreakpoint(width)]}`}
-                >
-                  <Icon
-                    path={getColumnLayoutIcon(columnCount[getCurrentBreakpoint(width)])}
-                    size={1}
-                    color="var(--color-text-primary)"
-                  />
-                  <span className="column-count">
-                    {columnCount[getCurrentBreakpoint(width)]}
-                  </span>
-                </button>
-                </Popconfirm>
               )}
 
               {!isMobile && false && (
@@ -708,7 +837,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               rowHeight={5}
               width={width}
               margin={[16, 16]}
-              containerPadding={[0, 0]}
+              containerPadding={isMobile ? [16, 16] : [20, 20]}
               isDraggable={isEditing}
               isResizable={isEditing}
               draggableHandle={isMobile ? ".card-header" : undefined}
@@ -731,7 +860,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
             </Responsive>
 
             {/* 添加保存按钮 */}
-            { isEditing && (
+            {isEditing && (
               <button
                 className="save-button has-changes"
                 onClick={handleSaveLayout}
