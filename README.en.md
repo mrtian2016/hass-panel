@@ -12,6 +12,7 @@ English | [简体中文](README.md)
 [![A React-based Smart Home Control Panel]( https://i.imgur.com/PpbbnAS.png )](https://www.bilibili.com/video/BV1yxfaYHE5A/?share_source=copy_web&vd_source=3ef738469d1538347bdba19ea015dbd7)
 
 ## Preview Image
+![Preview](https://i.imgur.com/3bkRnE7.jpeg)
 ![Preview](https://i.imgur.com/ONjR4Fp.jpeg)
 
 ## Discussion Group
