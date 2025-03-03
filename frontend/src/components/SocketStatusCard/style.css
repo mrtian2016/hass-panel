@@ -6,7 +6,7 @@
 
 .socket-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(calc(100%/3 - 10px), 120px), 1fr));
   gap: 15px;
   padding: 16px;
   justify-content: center;

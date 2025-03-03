@@ -39,6 +39,28 @@ function EditCardModal({
     if (card?.type === 'LightOverviewCard') {
       setPreviewConfig(newConfig);
     }
+    // 如果编辑了已经存在的卡片 那么就删掉本地的布局，因为结构可能已经变化 卡片高度需要重新计算了
+    if (card?.id) {
+      // 获取移动端和桌面端的布局
+      const mobileLayouts = JSON.parse(localStorage.getItem('mobile-dashboard-layouts') || '{}');
+      const desktopLayouts = JSON.parse(localStorage.getItem('desktop-dashboard-layouts') || '{}');
+
+      // 遍历所有断点（lg、md、sm等）
+      ['lg', 'md', 'sm'].forEach(breakpoint => {
+        // 移动端布局
+        if (mobileLayouts[breakpoint]) {
+          mobileLayouts[breakpoint] = mobileLayouts[breakpoint].filter(item => item.i !== card.id.toString());
+        }
+        // 桌面端布局
+        if (desktopLayouts[breakpoint]) {
+          desktopLayouts[breakpoint] = desktopLayouts[breakpoint].filter(item => item.i !== card.id.toString());
+        }
+      });
+
+      // 保存更新后的布局
+      localStorage.setItem('mobile-dashboard-layouts', JSON.stringify(mobileLayouts));
+      localStorage.setItem('desktop-dashboard-layouts', JSON.stringify(desktopLayouts));
+    }
   };
 
   const handleSave = () => {

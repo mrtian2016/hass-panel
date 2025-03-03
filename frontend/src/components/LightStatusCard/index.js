@@ -49,9 +49,19 @@ function LightStatusCard({ config }) {
 
   const activeLights = Object.values(lightEntities).filter(light => light.entity.state === 'on').length;
   const totalLights = Object.keys(lightEntities).length;
+  const allLightsOn = activeLights === totalLights;
+  const allLightsOff = activeLights === 0;
 
   const toggleLight = (entity) => {
     entity.service.toggle()
+  };
+
+  const turnAllLights = (action) => {
+    Object.values(lightEntities).forEach(light => {
+      if (light.isLight) {
+        light.entity.service[action]();
+      }
+    });
   };
 
   const handlePressStart = (light) => {
@@ -91,9 +101,44 @@ function LightStatusCard({ config }) {
           />
           {config.title || t('cardTitles.lightStatus')}
         </h3>
-        <span className="light-summary">
-          {t('lightStatus.activeLights').replace('%1', activeLights).replace('%2', totalLights)}
-        </span>
+        <div className="header-controls">
+          <span className="light-summary">
+            {t('lightStatus.activeLights').replace('%1', activeLights).replace('%2', totalLights)}
+          </span>
+         
+          <button
+            className={`control-button ${allLightsOff ? 'disabled' : ''}`}
+            onClick={() => !allLightsOff && turnAllLights('turn_off')}
+            title={allLightsOff ? t('lightStatus.allLightsOff') : t('lightStatus.turnAllOff')}
+            disabled={allLightsOff}
+          >
+            <Icon
+              icon="mdi:lightbulb-group-off"
+              width={20}
+              height={20}
+              color={allLightsOff
+                ? (theme === 'dark' ? '#666666' : '#CCCCCC')
+                : (theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D')
+              }
+            />
+          </button>
+           <button
+            className={`control-button ${allLightsOn ? 'disabled' : ''}`}
+            onClick={() => !allLightsOn && turnAllLights('turn_on')}
+            title={allLightsOn ? t('lightStatus.allLightsOn') : t('lightStatus.turnAllOn')}
+            disabled={allLightsOn}
+          >
+            <Icon
+              icon="mdi:lightbulb-group"
+              width={20}
+              height={20}
+              color={allLightsOn 
+                ? (theme === 'dark' ? '#666666' : '#CCCCCC')
+                : (theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D')
+              }
+            />
+          </button>
+        </div>
       </div>}
       <div className="light-buttons">
         {Object.entries(lightEntities).map(([key, light]) => (

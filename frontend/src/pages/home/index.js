@@ -161,37 +161,46 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     // 计算每个卡片的位置
     cards.filter(card => card.visible !== false).forEach((card, index) => {
       const cardId = card.id.toString();
-      console.log(card.type);
       const card_config = card.config;
-      console.log(card_config);
       let card_height = cardHeights[card.type] || 300;
       switch(card.type){
         case 'MediaPlayerCard':
-          card_height = card_config.mediaPlayers.length * 180 + header_height || 500;
+          card_height = card_config.mediaPlayers.length * 180 + header_height;
           break;
         case 'ClimateCard':
           card_height =  Object.keys(card_config.features).length > 1 ? 700 : 610;
           break;
         case 'CameraCard':
-          card_height = card_config.cameras.length * 170 + 30 + header_height || 500;
+          card_height = card_config.cameras.length * 170 + 30 + header_height;
           break;
         case 'CurtainCard':
-          card_height = card_config.curtains.length * 200 + header_height || 500;
+          card_height = card_config.curtains.length * 200 + header_height;
           break;
         case 'IlluminanceCard':
-          card_height = card_config.sensors.length * 75 + header_height || 500;
+          card_height = card_config.sensors.length * 75 + header_height;
           break;
         case 'LightStatusCard':
+        case 'SocketStatusCard':
           const light_count = Object.keys(card_config.lights).length;
           // 每行最多三个 算出需要多少行
           const row_count = Math.ceil(light_count / 3);
           // 小等于于两个的时候 直接给300
-          card_height = row_count <= 1 ? 210 : row_count * 140 + header_height || 500;
+          card_height = row_count <= 1 ? 210 : row_count * 140 + header_height;
+          break;
+        case 'FamilyCard':
+          // 每行最多三个
+          const person_count = Object.keys(card_config.persons).length;
+          const person_row_count = Math.ceil(person_count / 3);
+          card_height = person_row_count * 160 + header_height;
+          break;
+        case 'ScriptPanel':
+          const script_count = card_config.scripts.length;
+          const script_row_count = Math.ceil(script_count / 2);
+          card_height = script_row_count === 1 ? 160: script_row_count * 75 + header_height;
           break;
         default:
           card_height = cardHeights[card.type] || 300;
       }
-      console.log(card_height);
       // 为每个断点计算布局
       Object.keys(layouts).forEach(breakpoint => {
         const { cardWidth } = baseParams[breakpoint];

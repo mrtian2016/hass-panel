@@ -35,7 +35,7 @@
   align-items: center;
   gap: 8px;
   border-radius: 12px;
-  background: var(--color-mode) !important;
+  background: var(--color-card-bg-transparent) !important;
   transition: transform 0.2s;
   padding: 10px 0;
 }
