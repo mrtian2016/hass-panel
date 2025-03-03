@@ -15,6 +15,7 @@ import ServerConfig from './ServerConfig';
 import SensorGroup from './SensorGroup';
 import ClimateFeaturesConfig from './ClimateFeaturesConfig';
 import { configApi } from '../../utils/api';
+import DailyQuoteConfig from './DailyQuoteConfig';
 
 
 function ConfigField({ field, value, onChange }) {
@@ -693,6 +694,9 @@ function ConfigField({ field, value, onChange }) {
           </Button>
         </div>
       );
+
+    case 'quotes-config':
+      return <DailyQuoteConfig field={field} value={value} onChange={onChange} />
 
     default:
       return null;

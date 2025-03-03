@@ -3,7 +3,6 @@ import { Input, Button, Select } from 'antd';
 import './UniversalConfig.css';
 function UniversalConfig({ field, value, onChange, allEntities }) {
     const { t } = useLanguage();
-    console.log(allEntities);
     const universalEntities = Object.entries(allEntities)
     .map(([entityId, entity]) => ({
       id: entityId,

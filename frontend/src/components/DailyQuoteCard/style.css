@@ -1,0 +1,42 @@
+:root {
+  --quote-gradient: linear-gradient(45deg, #00c6ff, #ff00dd);
+}
+
+[data-theme="dark"] {
+  --quote-gradient: linear-gradient(45deg, #00ffea, #ff47d1);
+}
+
+.daily-quote-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 150px;
+  text-align: center;
+}
+
+.quote-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.quote-text {
+  font-size: 1.5em;
+  line-height: 2;
+  font-weight: 800;
+  margin-bottom: 16px;
+  background: var(--quote-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-style: italic;
+}
+
+.quote-author {
+  font-size: 1em;
+  color: var(--color-text-secondary);
+  text-align: right;
+  padding-right: 20px;
+} 

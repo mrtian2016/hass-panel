@@ -21,7 +21,6 @@ function IlluminanceCard({ config, titleVisible }) {
         {sensors.map((sensor) => {
           // eslint-disable-next-line react-hooks/rules-of-hooks
           const entity = useEntity(sensor.entity_id, {returnNullIfNotFound: true});
-          console.log(entity);
           if (!entity) {
             return (
               <div key={sensor.entity_id} className="illuminance-sensor">

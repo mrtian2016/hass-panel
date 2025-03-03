@@ -156,6 +156,7 @@ export const translations = {
       socketStatus: '插座状态',
       socketstatus: '插座状态',
       pve: 'PVE监控',
+      quotes: '每日一言',
     },
 
     // 卡片操作
@@ -197,6 +198,10 @@ export const translations = {
       family: '人员状态',
       pve: 'PVE监控',
       server: '服务器监控',
+      quotes: '每日一言',
+      dailyQuote: '每日一言',
+      dailyquote: '每日一言',
+      
     },
 
     // 配置字段
@@ -231,6 +236,7 @@ export const translations = {
       personsConfig: '人员配置',
       pveConfig: 'PVE配置',
       serverConfig: '服务器配置',
+      quotesConfig: '每日一言配置',
     },
 
     version: {
@@ -757,6 +763,13 @@ export const translations = {
       powerCycleCount: '通电次数',
       powerOnTime: '通电时间',
       diskSize: '硬盘容量',
+      quoteSource: '内容来源',
+      apiSource: 'API 来源',
+      quoteContent: '显示内容',
+      enterQuote: '请输入要显示的内容',
+      apiEndpoint: '选择 API',
+      quoteAuthor: '署名',
+      enterAuthor: '请输入署名',
     },
     'fullscreen.enter': '进入全屏',
     'fullscreen.exit': '退出全屏',
@@ -1080,6 +1093,7 @@ export const translations = {
       socketsConfig: 'Sockets Configuration',
       socketStatus: 'Socket Status',
       universal: 'Universal Card',
+      quotes: 'Daily Quote',
     },
 
     // Card Actions
@@ -1120,6 +1134,8 @@ export const translations = {
       universal: 'Universal Card',
       family: 'Family',
       pve: 'PVE Status',
+      quotes: 'Daily Quote',
+      dailyquote: 'Daily Quote',
     },
 
     // Configuration Fields
@@ -1152,6 +1168,7 @@ export const translations = {
       pveConfig: 'PVE Configuration',
       serverConfig: 'Server Configuration',
       serverName: 'Server Name',
+      quotesConfig: 'Quotes Configuration',
     },
 
     // WebDAV Related
@@ -1661,6 +1678,13 @@ export const translations = {
       powerOnTime: 'Power On Time',
       diskSize: 'Disk Size',
       mainInfo: 'Main Info',
+      quoteSource: 'Quote Source',
+      apiSource: 'API Source',
+      quoteContent: 'Quote Content',
+      enterQuote: 'Enter quote content',
+      apiEndpoint: 'Select API',
+      quoteAuthor: 'Author',
+      enterAuthor: 'Enter author name',
     },
     'fullscreen.enter': 'Enter Fullscreen',
     'fullscreen.exit': 'Exit Fullscreen',

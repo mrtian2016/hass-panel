@@ -32,6 +32,7 @@ import {
   mdiPowerSocket,
   mdiAccountGroup,
   mdiServer,
+  mdiFormatQuoteClose,
 } from '@mdi/js';
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
@@ -486,6 +487,24 @@ const getCardTypes = (t) => ({
       }
     ]
   },
+  DailyQuoteCard: {
+    name: t('cards.dailyQuote'),
+    icon: mdiFormatQuoteClose,
+    fields: [
+      {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.dailyQuote')
+      },
+      {
+        key: 'quotes',
+        label: t('fields.quotesConfig'),
+        type: 'quotes-config',
+        default: []
+      }
+    ]
+  }
 });
 
 

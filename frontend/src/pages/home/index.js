@@ -42,6 +42,7 @@ import UniversalCard from '../../components/UniversalCard';
 import FamilyCard from '../../components/FamilyCard';
 import ServerCard from '../../components/ServerCard';
 import PVECard from '../../components/PVECard';
+import DailyQuoteCard from '../../components/DailyQuoteCard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi, applyBackgroundToBody } from '../../utils/api';
@@ -632,6 +633,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         return <PVECard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'ServerCard':
         return <ServerCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+      case 'DailyQuoteCard':
+        return <DailyQuoteCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       default:
         return null;
     }
