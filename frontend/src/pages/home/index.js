@@ -164,51 +164,61 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       const cardId = card.id.toString();
       const card_config = card.config;
       let card_height = cardHeights[card.type] || 300;
-      switch(card.type){
-        case 'MediaPlayerCard':
-          card_height = card_config.mediaPlayers.length * 180 + header_height;
-          break;
-        case 'ClimateCard':
-          card_height =  Object.keys(card_config.features).length > 1 ? 700 : 610;
-          break;
-        case 'CameraCard':
-          card_height = card_config.cameras.length * 170 + 30 + header_height;
-          break;
-        case 'CurtainCard':
-          card_height = card_config.curtains.length * 200 + header_height;
-          break;
-        case 'IlluminanceCard':
-          card_height = card_config.sensors.length * 75 + header_height;
-          break;
-        case 'LightStatusCard':
-        case 'SocketStatusCard':
-          const light_count = Object.keys(card_config.lights).length;
-          // 每行最多三个 算出需要多少行
-          const row_count = Math.ceil(light_count / 3);
-          // 小等于于两个的时候 直接给300
-          card_height = row_count <= 1 ? 210 : row_count * 140 + header_height;
-          break;
-        case 'FamilyCard':
-          // 每行最多三个
-          const person_count = Object.keys(card_config.persons).length;
-          const person_row_count = Math.ceil(person_count / 3);
-          card_height = person_row_count * 160 + header_height;
-          break;
-        case 'ScriptPanel':
-          const script_count = card_config.scripts.length;
-          const script_row_count = Math.ceil(script_count / 2);
-          card_height = script_row_count === 1 ? 160: script_row_count * 75 + header_height;
-          break;
-        default:
-          card_height = cardHeights[card.type] || 300;
+      try {
+        switch (card.type) {
+          case 'MediaPlayerCard':
+            card_height = card_config.mediaPlayers.length * 180 + header_height;
+            break;
+          case 'ClimateCard':
+            card_height = Object.keys(card_config.features).length > 1 ? 700 : 610;
+            break;
+          case 'CameraCard':
+            card_height = card_config.cameras.length * 170 + 30 + header_height;
+            break;
+          case 'CurtainCard':
+            card_height = card_config.curtains.length * 200 + header_height;
+            break;
+          case 'IlluminanceCard':
+            card_height = card_config.sensors.length * 75 + header_height;
+            break;
+          case 'LightStatusCard':
+            const light_count = Object.keys(card_config.lights).length;
+            // 每行最多三个 算出需要多少行
+            const row_count = Math.ceil(light_count / 3);
+            // 小等于于两个的时候 直接给300
+            card_height = row_count <= 1 ? 210 : row_count * 140 + header_height;
+            break;
+          case 'SocketStatusCard':
+            const socket_count = Object.keys(card_config.sockets).length;
+            // 每行最多三个 算出需要多少行
+            const socket_row_count = Math.ceil(socket_count / 3);
+            // 小等于于两个的时候 直接给300
+            card_height = socket_row_count <= 1 ? 210 : socket_row_count * 140 + header_height;
+            break;
+          case 'FamilyCard':
+            // 每行最多三个
+            const person_count = Object.keys(card_config.persons).length;
+            const person_row_count = Math.ceil(person_count / 3);
+            card_height = person_row_count * 160 + header_height;
+            break;
+          case 'ScriptPanel':
+            const script_count = card_config.scripts.length;
+            const script_row_count = Math.ceil(script_count / 2);
+            card_height = script_row_count === 1 ? 160 : script_row_count * 75 + header_height;
+            break;
+          default:
+            card_height = cardHeights[card.type] || 300;
+        }
+      } catch (error) {
+        console.error('计算卡片高度失败:', error);
       }
       // 为每个断点计算布局
       Object.keys(layouts).forEach(breakpoint => {
         const { cardWidth } = baseParams[breakpoint];
-        
+
         // 计算卡片位置
         let col, row;
-        
+
         if (breakpoint === 'sm') {
           // 移动端保持单列布局
           col = 0;
@@ -216,7 +226,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         } else {
           // 非移动端使用多列布局
           // 在30列布局中，
-          col = (index % 5) * 6 
+          col = (index % 5) * 6
           row = Math.floor(index / 5);
         }
 
@@ -273,7 +283,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
           setCurrentLayouts(newLayouts);
           localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
         }
-        
+
         // 设置列数
         if (newIsMobile) {
           setColumnCount({ lg: 1, md: 1, sm: 1 });
@@ -463,9 +473,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       // 保存布局到本地存储
       const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
       localStorage.setItem(layoutKey, JSON.stringify(currentLayouts));
-      
+
       // 不再保存列数到本地存储
-      
+
       setIsEditing(false);
       message.success(t('layout.saveSuccess'));
     } catch (error) {
@@ -882,7 +892,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               cols={columnCount}
               rowHeight={1}
               width={width}
-              margin={[0,0]}
+              margin={[0, 0]}
               containerPadding={isMobile ? [16, 16] : [20, 20]}
               isDraggable={isEditing}
               isResizable={isEditing}
