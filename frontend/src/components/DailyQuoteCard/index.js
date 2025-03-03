@@ -57,7 +57,7 @@ function DailyQuoteCard({ config }) {
                     if (isValidCache(cachedData)) {
                         setQuote(cachedData.quote);
                     } else {
-                        const response = await fetch('/api/daily_quote?api=' + config.quotes.apiEndpoint);
+                        const response = await fetch('./api/daily_quote?api=' + config.quotes.apiEndpoint);
                         const data = await response.json();
 
                         // 根据不同API格式处理数据
