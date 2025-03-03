@@ -1,8 +1,9 @@
+import json
 from fastapi import APIRouter, HTTPException
-import httpx
+import aiohttp
 from typing import Optional
 from urllib.parse import unquote
-
+from loguru import logger
 router = APIRouter()
 
 API_ENDPOINTS = {
@@ -42,24 +43,24 @@ async def get_daily_quote(api: Optional[str] = None):
         raise HTTPException(status_code=403, detail="API type not allowed")
     
     api_config = API_ENDPOINTS[api]
+    logger.info(f"获取每日一句: {api_config['name']}")
     
     try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.request(
+        async with aiohttp.ClientSession() as session:
+            async with session.request(
                 method=api_config['method'],
                 url=api_config['url'],
-                headers=api_config['headers']
-            )
+                headers=api_config['headers'],
+                timeout=aiohttp.ClientTimeout(total=100)
+            ) as response:
+                # 确保响应成功
+                # text/html;
+                if response.content_type == 'text/html':
+                    return json.loads(await response.text())
+                else:
+                    return await response.json()
             
-            # 确保响应成功
-            response.raise_for_status()
-            
-            return response.json()
-            
-    except httpx.TimeoutException:
-        raise HTTPException(status_code=504, detail="Request timeout")
-    except httpx.HTTPStatusError as e:
-        raise HTTPException(status_code=e.response.status_code, detail=str(e))
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
