@@ -49,6 +49,7 @@ axiosInstance.interceptors.response.use(
 
 // 应用背景设置到body
 export const applyBackgroundToBody = (globalConfig) => {
+  console.log('applyBackgroundToBody', globalConfig);
   if (!globalConfig) return;
 
   // 检测当前主题模式
@@ -119,9 +120,11 @@ export const configApi = {
       const config = response.data;
       
       // 保存全局配置到window对象，以便在主题切换时使用
-      if (config.globalConfig) {
-        window.globalConfigCache = config.globalConfig;
-        applyBackgroundToBody(config.globalConfig);
+      console.log('getConfig', config);
+      if (config.data.globalConfig) {
+        console.log('getConfig', config.data.globalConfig);
+        window.globalConfigCache = config.data.globalConfig;
+        applyBackgroundToBody(config.data.globalConfig);
       }
       
       return config;
@@ -133,6 +136,7 @@ export const configApi = {
   // 保存配置
   saveConfig: async (config) => {
     try {
+      console.log('saveConfig', config);
       const response = await axiosInstance.post('/user_config/config', config);
       
       // 保存配置时自动应用背景设置

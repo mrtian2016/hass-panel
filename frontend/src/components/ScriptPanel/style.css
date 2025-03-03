@@ -17,7 +17,7 @@
   padding: var(--spacing-md);
   border: none;
   border-radius: var(--border-radius-small);
-  background: var(--color-background);
+  background: var(--color-card-bg-transparent);
   cursor: pointer;
   transition: all 0.3s;
   color: var(--color-text-primary);

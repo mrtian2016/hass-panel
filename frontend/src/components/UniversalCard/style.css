@@ -10,8 +10,8 @@
   display: flex;
   flex-direction: column;
   padding: var(--spacing-sm);
-  background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-small);
+  background: var(--color-card-bg-transparent);
   gap: var(--spacing-md);
 }
 
@@ -24,21 +24,20 @@
   text-align: center;
 }
 
-.entity-items {
+.card-entity-items {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: var(--spacing-md);
   width: 100%;
 }
 
-.entity-item {
+.card-entity-item {
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--color-card-bg-transparent);
   border-radius: var(--border-radius-small);
-  border: 1px solid var(--color-border);
   flex: 1;
   user-select: none;
   -webkit-user-select: none;
@@ -46,22 +45,22 @@
   transition: all 0.3s ease;
 }
 
-.entity-item.status-on {
+.card-entity-item.status-on {
   background: var(--color-primary);
   border-color: var(--color-primary);
 }
 
-.entity-item.status-on .entity-icon,
-.entity-item.status-on .entity-info .label,
-.entity-item.status-on .entity-info .value {
+.card-entity-item.status-on .entity-icon,
+.card-entity-item.status-on .entity-info .label,
+.card-entity-item.status-on .entity-info .value {
   color: white;
 }
 
-.entity-item.status-error {
+.card-entity-item.status-error {
   border-color: var(--color-error);
 }
 
-.entity-item.status-error .entity-info .value {
+.card-entity-item.status-error .entity-info .value {
   color: var(--color-error);
 }
 
@@ -94,11 +93,11 @@
 }
 
 /* 可点击实体的样式 */
-.entity-item[onclick] {
+.card-entity-item[onclick] {
   cursor: pointer;
 }
 
-.entity-item[onclick]:hover {
+.card-entity-item[onclick]:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 8px var(--color-shadow);
 }
@@ -114,12 +113,12 @@
     margin-bottom: var(--spacing-sm);
   }
 
-  .entity-items {
+  .card-entity-items {
     width: 100%;
     justify-content: center;
   }
 
-  .entity-item {
+  .card-entity-item {
     min-width: 90px;
   }
 }

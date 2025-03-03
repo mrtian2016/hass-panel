@@ -56,8 +56,8 @@
 }
 
 .climate-circle {
-  width: 240px;
-  height: 240px;
+  width: 85%;
+  aspect-ratio: 1 / 1;
   margin: var(--spacing-xl) auto;
   border-radius: 50%;
   border: 2px solid var(--color-border);

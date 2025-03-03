@@ -129,11 +129,11 @@ function UniversalCard({ config }) {
         {loadedEntityGroups.map(group => (
           <div key={group.id} className="entity-group">
             <div className="group-name">{group.name}</div>
-            <div className="entity-items">
+            <div className="card-entity-items">
               {Object.entries(group.entities).map(([id, entity]) => (
                 <div 
                   key={id} 
-                  className={`entity-item`}
+                  className={`card-entity-item`}
                   onClick={() => handleEntityClick(entity)}
                 >
                   <Icon width="24"

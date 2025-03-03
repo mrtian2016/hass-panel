@@ -26,6 +26,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-grid-layout": "^1.5.0",
+    "react-measure": "^2.5.2",
     "react-player": "^2.16.0",
     "react-resizable": "^3.0.5",
     "react-responsive": "^10.0.0",

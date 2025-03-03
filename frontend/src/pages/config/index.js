@@ -506,7 +506,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
   const [editingCard, setEditingCard] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showGlobalConfig, setShowGlobalConfig] = useState(false);
-  
+  const [globalConfig, setGlobalConfig] = useState(null);
 
   // 修改加载配置数据的 useEffect
   useEffect(() => {
@@ -521,6 +521,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
             visible: card.visible !== false,
             titleVisible: card.titleVisible !== false
           })));
+          setGlobalConfig(config.globalConfig);
         }
       } catch (error) {
         console.error('加载配置失败:', error);
@@ -540,6 +541,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
       message.loading(t('config.saving'));
       // 只保存卡片配置到后端，不再同时保存布局
       await configApi.saveConfig({
+        globalConfig,
         cards,
         // 不再包含布局信息
       });
@@ -577,6 +579,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
           visible: card.visible !== false,
           titleVisible: card.titleVisible !== false
         })));
+        
         
         setHasUnsavedChanges(false);
         message.success(t('config.importSuccess'));

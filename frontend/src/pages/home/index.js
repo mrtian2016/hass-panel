@@ -124,28 +124,32 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       md: { cols: 30, cardWidth: 6 },
       sm: { cols: 1, cardWidth: 1 }
     };
-
     // 添加卡片高度配置
     const cardHeights = {
-      TimeCard: { lg: 10, md: 10, sm: 10 },
-      WeatherCard: { lg: 20, md: 20, sm: 20 },
-      LightStatusCard: { lg: 24, md: 24, sm: 24 },
-      LightOverviewCard: { lg: 22, md: 22, sm: 22 },
-      SensorCard: { lg: 16, md: 16, sm: 16 },
-      RouterCard: { lg: 26, md: 26, sm: 26 },
-      NASCard: { lg: 36, md: 36, sm: 36 },
-      MediaPlayerCard: { lg: 30, md: 30, sm: 30 },
-      MaxPlayerCard: { lg: 30, md: 30, sm: 30 },
-      CurtainCard: { lg: 30, md: 30, sm: 30 },
-      ElectricityCard: { lg: 24, md: 24, sm: 24 },
-      ScriptPanel: { lg: 14, md: 14, sm: 14 },
-      WaterPurifierCard: { lg: 24, md: 24, sm: 24 },
-      IlluminanceCard: { lg: 16, md: 16, sm: 16 },
-      CameraCard: { lg: 20, md: 20, sm: 20 },
-      ClimateCard: { lg: 28, md: 28, sm: 28 },
-      MotionCard: { lg: 20, md: 20, sm: 20 },
-      SocketStatusCard: { lg: 24, md: 24, sm: 24 },
+      TimeCard: 220,
+      WeatherCard: 380,
+      LightStatusCard: 500,
+      LightOverviewCard: 440,
+      SensorCard: 500,
+      RouterCard: 500,
+      NASCard: 600,
+      MediaPlayerCard: 500,
+      MaxPlayerCard: 600,
+      CurtainCard: 500,
+      ElectricityCard: 500,
+      ScriptPanel: 500,
+      WaterPurifierCard: 460,
+      IlluminanceCard: 500,
+      CameraCard: 430,
+      ClimateCard: 700,
+      MotionCard: 400,
+      SocketStatusCard: 500,
+      PVECard: 500,
+      UniversalCard: 300,
+      FamilyCard: 500,
+      ServerCard: 500,
     };
+
 
     // 创建布局对象
     const layouts = {
@@ -153,12 +157,41 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       md: [],
       sm: []
     };
-
+    const header_height = 57;
     // 计算每个卡片的位置
     cards.filter(card => card.visible !== false).forEach((card, index) => {
       const cardId = card.id.toString();
-      const height = cardHeights[card.type] || { lg: 10, md: 10, sm: 10 };
-
+      console.log(card.type);
+      const card_config = card.config;
+      console.log(card_config);
+      let card_height = cardHeights[card.type] || 300;
+      switch(card.type){
+        case 'MediaPlayerCard':
+          card_height = card_config.mediaPlayers.length * 180 + header_height || 500;
+          break;
+        case 'ClimateCard':
+          card_height =  Object.keys(card_config.features).length > 1 ? 700 : 610;
+          break;
+        case 'CameraCard':
+          card_height = card_config.cameras.length * 170 + 30 + header_height || 500;
+          break;
+        case 'CurtainCard':
+          card_height = card_config.curtains.length * 200 + header_height || 500;
+          break;
+        case 'IlluminanceCard':
+          card_height = card_config.sensors.length * 75 + header_height || 500;
+          break;
+        case 'LightStatusCard':
+          const light_count = Object.keys(card_config.lights).length;
+          // 每行最多三个 算出需要多少行
+          const row_count = Math.ceil(light_count / 3);
+          // 小等于于两个的时候 直接给300
+          card_height = row_count <= 1 ? 210 : row_count * 140 + header_height || 500;
+          break;
+        default:
+          card_height = cardHeights[card.type] || 300;
+      }
+      console.log(card_height);
       // 为每个断点计算布局
       Object.keys(layouts).forEach(breakpoint => {
         const { cardWidth } = baseParams[breakpoint];
@@ -183,7 +216,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
           x: col,
           y: row * 10, // 简单的行间距
           w: cardWidth,
-          h: height[breakpoint]
+          h: card_height
         });
       });
     });
@@ -436,6 +469,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     try {
       // 不再从后端获取默认布局，而是重新计算
       const newLayouts = calculateDefaultLayouts(cards);
+
       setCurrentLayouts(newLayouts);
 
       // 保存到本地存储
@@ -834,9 +868,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               layouts={currentLayouts}
               breakpoints={{ lg: 1200, md: 768, sm: 480 }}
               cols={columnCount}
-              rowHeight={5}
+              rowHeight={1}
               width={width}
-              margin={[16, 16]}
+              margin={[0,0]}
               containerPadding={isMobile ? [16, 16] : [20, 20]}
               isDraggable={isEditing}
               isResizable={isEditing}
