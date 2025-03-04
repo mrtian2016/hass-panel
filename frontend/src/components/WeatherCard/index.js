@@ -114,7 +114,7 @@ function WeatherCard({config}) {
         duration: 3,
       });
     }
-    return <BaseCard title={t('weather.loadError')} icon={mdiMapMarker} iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#87CEEB'} >
+    return <BaseCard title={t('weather.loadError')} icon={mdiMapMarker} >
       <div>{t('weather.loadError')}</div>
     </BaseCard> ;
   }
@@ -204,7 +204,6 @@ function WeatherCard({config}) {
     <BaseCard
       title={config.title || t('cardTitles.weather')}
       icon={mdiMapMarker}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#87CEEB'}
       titleVisible={titleVisible}
     >
       <div className="current-weather">

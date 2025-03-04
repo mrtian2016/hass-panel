@@ -5,11 +5,9 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import { notification } from 'antd';
 import BaseCard from '../BaseCard';
 import './style.css';
-import { useTheme } from '../../theme/ThemeContext';
 import {Icon} from '@iconify/react';
 function ScriptPanel({ config }) {
   const titleVisible = config.titleVisible;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const { callService } = useHass();
 
@@ -37,8 +35,7 @@ function ScriptPanel({ config }) {
     <BaseCard 
       title={config.title || t('cardTitles.scriptpanel')} 
       icon={<Command size={24} />} 
-      className="script-panel" 
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
+      className="script-panel"
       titleVisible={titleVisible}
     >
       <div className="script-buttons">

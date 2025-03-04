@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import BaseCard from '../BaseCard';
 import Icon from '@mdi/react';
 // import { useHass } from '@hakit/core';
-import { useTheme } from '../../theme/ThemeContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { 
   mdiThermometer, 
@@ -42,7 +41,6 @@ function ClimateCard({
   config,
   titleVisible
 }) {
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const climate = useEntity(config?.entity_id || '', {returnNullIfNotFound: true});
 
@@ -69,7 +67,6 @@ function ClimateCard({
     return <BaseCard 
       title={config.name || t('cardTitles.climate')} 
       icon={mdiAirConditioner} 
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#64B5F6'} 
     >
       {t('climate.loadFailed')}
     </BaseCard>;
@@ -201,7 +198,6 @@ function ClimateCard({
       title={config.name || t('cardTitles.climate')}
       titleVisible={titleVisible}
       icon={mdiAirConditioner}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#64B5F6'}
       headerRight={
         <button 
           className={`power-button ${!isOn ? 'off' : ''}`} 

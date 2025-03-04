@@ -33,7 +33,6 @@ function WaterPurifierCard({ config }) {
     <BaseCard
       title={config.title || t('cardTitles.waterpurifier')}
       icon={mdiWaterPump}
-      iconColor="var(--color-primary)"
       titleVisible={titleVisible}
       headerRight={
         <div className="device-status">

@@ -493,9 +493,7 @@ class HomeAssistantAPI:
         # 获取今天的历史数据
         history = await self.get_history(entity_id, today_start.isoformat(), now.isoformat())
         if not history or not history[0]:
-            return {
-                "total": 0
-            }
+            return 0
         
         # 预处理数据点
         data_points = []
@@ -509,9 +507,7 @@ class HomeAssistantAPI:
                     continue
         
         if not data_points:
-            return {
-                "total": 0  
-            }
+            return 0
             
         # 按时间排序
         data_points.sort()

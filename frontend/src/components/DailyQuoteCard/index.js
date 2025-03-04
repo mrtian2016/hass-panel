@@ -142,7 +142,6 @@ function DailyQuoteCard({ config }) {
             title={config.title || "每日一言"}
             titleVisible={config.titleVisible}
             icon={mdiFormatQuoteClose}
-            iconColor="var(--color-text-primary)"
         >
             <div className="daily-quote-content">
                 {loading ? (

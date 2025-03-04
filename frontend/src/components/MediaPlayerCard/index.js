@@ -4,7 +4,6 @@ import {
   mdiPlayCircle,
 } from '@mdi/js';
 // import { useService } from '@hakit/core';
-import { useTheme } from '../../theme/ThemeContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import './style.css';
@@ -13,7 +12,6 @@ import MiniPlayerCard from '../MiniPlayerCard';
 function MediaPlayerCard({ config }) {
   
   const titleVisible = config.titleVisible;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
   // 检查配置是否存在
@@ -22,7 +20,6 @@ function MediaPlayerCard({ config }) {
       <BaseCard
         title={config.title || t('cardTitles.mediaplayer')}
         icon={mdiPlayCircle}
-        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#81C784'}
       >
         <div className="media-players">
           {t('mediaPlayer.configIncomplete')}
@@ -119,7 +116,6 @@ function MediaPlayerCard({ config }) {
     <BaseCard
       title={config.title || t('cardTitles.mediaplayer')}
       icon={mdiPlayCircle}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#81C784'}
       titleVisible={titleVisible}
     >
   

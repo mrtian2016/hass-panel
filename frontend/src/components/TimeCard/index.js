@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { mdiClockOutline } from '@mdi/js';
-import { useTheme } from '../../theme/ThemeContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import dayjs from 'dayjs';
@@ -9,7 +8,6 @@ import './style.css';
 
 function TimeCard({config}) {
   const { timeFormat, dateFormat, title, titleVisible } = config;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const [currentTime, setCurrentTime] = useState(dayjs());
   const [lunarDate, setLunarDate] = useState('');
@@ -39,7 +37,6 @@ function TimeCard({config}) {
       title={title || t('cardTitles.time')}
       titleVisible={titleVisible}
       icon={mdiClockOutline}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D'}
     >
       <div className="time-content">
         <div className="time">

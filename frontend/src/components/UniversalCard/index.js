@@ -3,7 +3,6 @@ import {Icon} from '@iconify/react';
 import { 
   mdiWidgets
 } from '@mdi/js';
-import { useTheme } from '../../theme/ThemeContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import './style.css';
@@ -14,7 +13,6 @@ import { notification } from 'antd';
 
 function UniversalCard({ config }) {
   const titleVisible = config.titleVisible;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
 
@@ -24,7 +22,6 @@ function UniversalCard({ config }) {
       <BaseCard
         title={config.title}
         icon={"mdi:thermometer"}
-        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
       >
         <div className="universal-data">
           {t('universal.configIncomplete')}
@@ -122,7 +119,6 @@ function UniversalCard({ config }) {
     <BaseCard
       title={config.title || t('cardTitles.universal')}
       icon={mdiWidgets}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
       titleVisible={titleVisible}
     >
       <div className="universal-data">

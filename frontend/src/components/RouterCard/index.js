@@ -7,7 +7,6 @@ import {
   mdiEthernet,
   mdiIpNetwork,
 } from '@mdi/js';
-import { useTheme } from '../../theme/ThemeContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import './style.css';
@@ -17,7 +16,6 @@ import ServerInfoRow from '../ServerInfoRow';
 
 function RouterCard({ config }) {
   const titleVisible = config.titleVisible;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const routerEntities = Object.entries(config.router).map(([key, feature]) => ({
     key,
@@ -75,7 +73,6 @@ function RouterCard({ config }) {
     <BaseCard
       title={config.title || t('cardTitles.router')}
       icon={mdiRouterNetwork}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
       titleVisible={titleVisible}
     >
       <ServerInfoRow cpuUsage={cpuUsage} memoryUsage={memoryUsage} uploadSpeed={wanUploadSpeed} downloadSpeed={wanDownloadSpeed} title={config.router?.routerName} serverInfoItems={serverInfoItems} />

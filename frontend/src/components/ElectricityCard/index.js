@@ -17,8 +17,6 @@ function ElectricityCard({
   const [chartData, setChartData] = useState({ dates: [], values: [] });
   const [todayUsage, setTodayUsage] = useState(0.0);
 
-
-
   const debugMode = localStorage.getItem('debugMode') === 'true';
 
 
@@ -226,25 +224,25 @@ function ElectricityCard({
     {
       icon: getEntityIcon('this_month'),
       label: t('electricity.monthUsage'),
-      value: summaryData.this_month,
+      value: summaryData?.this_month || '',
       unit: t('electricity.unit.degree')
     },
     {
       icon: getEntityIcon('last_month'),
       label: t('electricity.lastMonthUsage'),
-      value: summaryData.last_month,
+      value: summaryData?.last_month || '',
       unit: t('electricity.unit.degree')
     },
     {
       icon: getEntityIcon('todayUsage'),
       label: t('electricity.todayUsage'),
-      value: getEntityValue('todayUsage', true) || todayUsage,
+      value: getEntityValue('todayUsage', true) || todayUsage || '',
       unit: t('electricity.unit.degree')
     },
     {
       icon: getEntityIcon('yesterdayUsage'),
       label: t('electricity.yesterdayUsage'),
-      value: summaryData.yesterday,
+      value: summaryData?.yesterday || '',
       unit: t('electricity.unit.degree')
     }
   ];
@@ -258,13 +256,6 @@ function ElectricityCard({
       className="electricity-usage-card"
     >
       <div className="electricity-content">
-        {/* <div className="electricity-main-value">
-          <span className="label">过去7天用电量</span>
-          <span className="value">{electricityEntities.todayUsage.entity.state || '0'}</span>
-          <span className="unit">kWh</span>
-
-        </div> */}
-
      
         
         {chartData.dates.length > 0 && <div className="electricity-chart">
@@ -275,15 +266,19 @@ function ElectricityCard({
         </div>}
 
         <div className="electricity-yearly-info">
-          {yearlyInfoItems.map((item, index) =>{
-            return item.value ?  <ElectricityInfoItem key={index} {...item} /> : null
-          })}
+          {yearlyInfoItems
+            .filter(item => item.value)
+            .map((item, index) => (
+              <ElectricityInfoItem key={`yearly-${index}`} {...item} />
+            ))}
         </div>
 
         <div className="electricity-info-grid">
-          {gridInfoItems.map((item, index) =>{
-            return item.value ?  <ElectricityInfoItem key={index} {...item} /> : null
-          })}
+          {gridInfoItems
+            .filter(item => item.value)
+            .map((item, index) => (
+              <ElectricityInfoItem key={`info-${index}`} {...item} />
+            ))}
         </div>
       </div>
     </BaseCard>

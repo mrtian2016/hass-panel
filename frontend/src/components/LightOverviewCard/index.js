@@ -1,6 +1,5 @@
 import React from 'react';
 import { mdiHomeFloorG } from '@mdi/js';
-import { useTheme } from '../../theme/ThemeContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import FloorPlan from './FloorPlan';
@@ -9,7 +8,6 @@ import { useEntity } from '@hakit/core';
 import { notification } from 'antd';
 
 function LightOverviewCard({ config }) {
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
 
@@ -53,7 +51,6 @@ function LightOverviewCard({ config }) {
     <BaseCard
       title={config.title || t('cardTitles.lightOverview')}
       icon={mdiHomeFloorG}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D'}
       titleVisible={config.titleVisible}
     >
       <div className="light-overview">

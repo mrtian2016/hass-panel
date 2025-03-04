@@ -192,7 +192,6 @@ function SensorChart({ entity_id, color,unit }) {
 
 function SensorCard({ config }) {
   const titleVisible = config.titleVisible;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const debugMode = localStorage.getItem('debugMode') === 'true';
   
@@ -202,7 +201,6 @@ function SensorCard({ config }) {
       <BaseCard
         title={config.title}
         icon={mdiThermometer}
-        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
       >
         <div className="sensor-data">
           {t('sensor.configIncomplete')}
@@ -267,7 +265,6 @@ function SensorCard({ config }) {
     <BaseCard
       title={config.title || t('cardTitles.sensor')}
       icon={mdiThermometer}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
       titleVisible={titleVisible}
     >
       <div className="sensor-grid">

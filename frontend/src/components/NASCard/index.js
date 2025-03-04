@@ -5,7 +5,6 @@ import {
   mdiHarddisk,
   mdiDotsHorizontal
 } from '@mdi/js';
-import { useTheme } from '../../theme/ThemeContext';
 import BaseCard from '../BaseCard';
 import Modal from '../Modal';
 import './style.css';
@@ -17,7 +16,6 @@ import ServerInfoCommon from '../ServerInfoCommon';
 
 function NASCard({ config }) {
   const titleVisible = config.titleVisible;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const [showDriveModal, setShowDriveModal] = useState(false);
   const debugMode = localStorage.getItem('debugMode') === 'true';
@@ -48,7 +46,6 @@ function NASCard({ config }) {
       <BaseCard 
         title={t('cardTitles.nas')} 
         icon={mdiNas} 
-        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
       >
         {t('nas.checkConfig')}, {error.message}
       </BaseCard>
@@ -65,7 +62,6 @@ function NASCard({ config }) {
       <BaseCard
         title={config.title || t('cardTitles.nas')}
         icon={mdiNas}
-        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
         titleVisible={titleVisible}
         headerRight={
           <div className="header-right" onClick={() => setShowDriveModal(true)} style={{ cursor: 'pointer' }}>

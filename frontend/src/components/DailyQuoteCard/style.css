@@ -1,9 +1,11 @@
 :root {
   --quote-gradient: linear-gradient(45deg, #00c6ff, #ff00dd);
+  --author-gradient: linear-gradient(45deg, #66d8ff, #ff66e5);
 }
 
 [data-theme="dark"] {
   --quote-gradient: linear-gradient(45deg, #00ffea, #ff47d1);
+  --author-gradient: linear-gradient(45deg, #66fff1, #ff8ae2);
 }
 
 .daily-quote-content {
@@ -35,8 +37,11 @@
 }
 
 .quote-author {
-  font-size: 1em;
-  color: var(--color-text-secondary);
+  font-size: 1.2em;
+  background: var(--author-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   text-align: right;
   padding-right: 20px;
 } 

@@ -7,8 +7,7 @@ import {
   mdiClock,
   mdiCpu64Bit,
   mdiTemperatureCelsius
-} from '@mdi/js';
-import { useTheme } from '../../theme/ThemeContext';
+} from '@mdi/js'; 
 import BaseCard from '../BaseCard';
 import Modal from '../Modal';
 import './style.css';
@@ -72,7 +71,6 @@ function calculateDaysSince(dateTimeString) {
 
 function PVECard({ config }) {
   const titleVisible = config.titleVisible;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const [showDriveModal, setShowDriveModal] = useState(false);
   const debugMode = localStorage.getItem('debugMode') === 'true';
@@ -103,7 +101,6 @@ function PVECard({ config }) {
       <BaseCard
         title={t('cardTitles.server')}
         icon={mdiNas}
-        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4FC3F7'}
       >
         {t('server.checkConfig')}, {error.message}
       </BaseCard>
@@ -139,7 +136,6 @@ function PVECard({ config }) {
       <BaseCard
         title={config.title || t('cardTitles.server')}
         icon={mdiServer}
-        iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#333'}
         titleVisible={titleVisible}
         
       >

@@ -1,12 +1,10 @@
 import React from 'react';
 import Icon from '@mdi/react';
 import './style.css';
-
 function BaseCard({ 
   title, 
   titleVisible,
   icon, 
-  iconColor, 
   children, 
   className = '', 
   headerRight = null,
@@ -23,13 +21,11 @@ function BaseCard({
                 style: { 
                   marginRight: '8px',
                   verticalAlign: 'bottom',
-                  color: iconColor
                 }
               }) :
               <Icon 
                 path={icon} 
                 size={1} 
-                color={iconColor}
                 style={{ marginRight: '8px', verticalAlign: 'bottom' }} 
               />
           )}

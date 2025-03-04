@@ -14,7 +14,6 @@ function IlluminanceCard({ config, titleVisible }) {
     <BaseCard
       title={config.title || t('cardTitles.illuminance')}
       icon={mdiWhiteBalanceSunny}
-      iconColor="var(--color-warning)"
       titleVisible={titleVisible}
     >
       <div className="illuminance-sensors">

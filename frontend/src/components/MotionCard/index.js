@@ -1,7 +1,6 @@
 import React from 'react';
 // import Icon from '@mdi/react';
 import { mdiMotionSensor } from '@mdi/js';
-import { useTheme } from '../../theme/ThemeContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import { useHistory, useLogs } from '@hakit/core';
@@ -9,7 +8,6 @@ import './style.css';
 
 function MotionCard({ config }) {
   const titleVisible = config.titleVisible;
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const motionLogs = useLogs(config.motion_entity_id || '');
   const luxHistory = useHistory(config.lux_entity_id || '');
@@ -53,7 +51,6 @@ function MotionCard({ config }) {
       title={config.title || t('cardTitles.motion')}
       icon={mdiMotionSensor}
       titleVisible={titleVisible}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#4CAF50'}
     >
       <div className="motion-history">
         <div className="today-section">

@@ -600,51 +600,51 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   const renderCard = (card) => {
     switch (card.type) {
       case 'TimeCard':
-        return <TimeCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <TimeCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'WeatherCard':
-        return <WeatherCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <WeatherCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'LightStatusCard':
-        return <LightStatusCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <LightStatusCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'SensorCard':
-        return <SensorCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <SensorCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'MediaPlayerCard':
-        return <MediaPlayerCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <MediaPlayerCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'CurtainCard':
-        return <CurtainCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <CurtainCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'ElectricityCard':
-        return <ElectricityCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <ElectricityCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'ScriptPanel':
-        return <ScriptPanel config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <ScriptPanel key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'WaterPurifierCard':
         return <WaterPurifierCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'IlluminanceCard':
-        return <IlluminanceCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <IlluminanceCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'RouterCard':
-        return <RouterCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <RouterCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'NASCard':
-        return <NASCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <NASCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'CameraCard':
-        return <CameraSection config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <CameraSection key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'ClimateCard':
-        return <ClimateCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <ClimateCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'MotionCard':
-        return <MotionCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <MotionCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'LightOverviewCard':
-        return <LightOverviewCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <LightOverviewCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'SocketStatusCard':
-        return <SocketStatusCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <SocketStatusCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'MaxPlayerCard':
-        return <MaxPlayerCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <MaxPlayerCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'UniversalCard':
-        return <UniversalCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <UniversalCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'FamilyCard':
-        return <FamilyCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <FamilyCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'PVECard':
-        return <PVECard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <PVECard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'ServerCard':
-        return <ServerCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <ServerCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       case 'DailyQuoteCard':
-        return <DailyQuoteCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
+        return <DailyQuoteCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
       default:
         return null;
     }

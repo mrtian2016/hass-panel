@@ -1,7 +1,6 @@
 import React from 'react';
 import { useIcon } from '@hakit/core';
 import { useEntity } from '@hakit/core';
-import { notification } from 'antd';
 import { useLanguage } from '../../i18n/LanguageContext';
 
 function MdiArrowCollapseHorizontal() {
@@ -22,17 +21,7 @@ function MdiStop() {
 function CurtainItem({ entity_id, name }) {
   const { t } = useLanguage();
   const curtain = useEntity(entity_id || '', {returnNullIfNotFound: true});
-  const debugMode = localStorage.getItem('debugMode') === 'true';
   if (!curtain) {
-    if (debugMode) {
-      notification.error({
-        message: t('curtain.loadError'),
-        description: `${t('curtain.loadErrorDesc')} ${entity_id}`,
-        placement: 'topRight',
-        duration: 3,
-        key: 'CurtainItem',
-      });
-    }
     return <div>{t('curtain.loadFailed')}</div>
   }
   

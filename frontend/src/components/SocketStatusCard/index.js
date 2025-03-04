@@ -55,7 +55,6 @@ function SocketStatusCard({ config }) {
         height={24}
         style={{ marginRight: '8px', verticalAlign: 'bottom' }} 
       />}
-      iconColor={theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D'}
       
     >
       <div className="socket-buttons">
