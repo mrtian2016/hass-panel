@@ -12,7 +12,6 @@
   padding: var(--spacing-sm);
   border-radius: var(--border-radius-small);
   background: var(--color-card-bg-transparent);
-  gap: var(--spacing-md);
 }
 
 .group-name {
@@ -22,6 +21,7 @@
   flex: 1;
   flex-shrink: 0;
   text-align: center;
+  margin-bottom: var(--spacing-md);
 }
 
 .card-entity-items {

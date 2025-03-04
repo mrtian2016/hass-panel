@@ -611,6 +611,69 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
     }
   };
 
+  // 添加导入布局的处理函数
+  const handleImportLayout = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const content = await file.text();
+        const importedLayout = JSON.parse(content);
+        
+        // 验证导入的布局
+        if (!importedLayout.layouts) {
+          throw new Error('无效的布局文件格式');
+        }
+
+        // 分别保存移动端和桌面端布局
+        localStorage.setItem('mobile-dashboard-layouts', JSON.stringify(importedLayout.layouts));
+        localStorage.setItem('desktop-dashboard-layouts', JSON.stringify(importedLayout.layouts));
+        
+        message.success(t('config.layoutImportSuccess'));
+      } catch (error) {
+        console.error('导入布局失败:', error);
+        message.error(t('config.layoutImportFailed'));
+      }
+      // 清除文件输入
+      event.target.value = '';
+    }
+  };
+
+  // 添加导出布局的处理函数
+  const handleExportLayout = () => {
+    try {
+      // 获取桌面端和移动端布局
+      const desktopLayouts = localStorage.getItem('desktop-dashboard-layouts');
+      const mobileLayouts = localStorage.getItem('mobile-dashboard-layouts');
+      
+      if (!desktopLayouts && !mobileLayouts) {
+        throw new Error('没有找到布局配置');
+      }
+
+      // 优先使用桌面端布局，如果没有则使用移动端布局
+      const layouts = desktopLayouts ? JSON.parse(desktopLayouts) : JSON.parse(mobileLayouts);
+      
+      // 创建导出对象
+      const exportData = {
+        layouts: layouts
+      };
+      
+      // 创建下载
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `hass-panel-layout-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      message.success(t('config.layoutExportSuccess'));
+    } catch (error) {
+      console.error('导出布局失败:', error);
+      message.error(t('config.layoutExportFailed'));
+    }
+  };
+
   // 修改导出函数
   const handleExport = async () => {
     try {
@@ -764,6 +827,18 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
       onClick: handleExport
     },
     {
+      key: 'importLayout',
+      label: t('config.importLayout'),
+      icon: <Icon path={mdiImport} size={0.8} />,
+      onClick: () => document.getElementById('layoutFileInput').click()
+    },
+    {
+      key: 'exportLayout',
+      label: t('config.exportLayout'),
+      icon: <Icon path={mdiExport} size={0.8} />,
+      onClick: handleExportLayout
+    },
+    {
       key: 'versions',
       label: t('config.versionList'),
       icon: <Icon path={mdiFileFind} size={0.8} />,
@@ -798,6 +873,13 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
               type="file"
               ref={fileInputRef}
               onChange={handleImport}
+              accept=".json"
+              style={{ display: 'none' }}
+            />
+            <input
+              type="file"
+              id="layoutFileInput"
+              onChange={handleImportLayout}
               accept=".json"
               style={{ display: 'none' }}
             />

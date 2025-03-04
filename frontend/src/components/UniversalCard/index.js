@@ -124,7 +124,7 @@ function UniversalCard({ config }) {
       <div className="universal-data">
         {loadedEntityGroups.map(group => (
           <div key={group.id} className="entity-group">
-            <div className="group-name">{group.name}</div>
+            {group.name && <div className="group-name">{group.name}</div>}
             <div className="card-entity-items">
               {Object.entries(group.entities).map(([id, entity]) => (
                 <div 
