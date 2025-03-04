@@ -110,6 +110,7 @@ For detailed feature configuration and usage instructions, please visit the [doc
 19. Universal Entity Card (UniversalCard) - Supports custom entity configuration and grouping
 20. PVE Card (PVECard) - Virtual machine monitoring
 21. Server Card (ServerCard)
+22. Daily Quote Card (DailyQuoteCard)
 
 ### Card Management
 
@@ -134,20 +135,6 @@ npm start
 npm run build
 ```
 
-## Latest Version (v1.3.5.2)
-
-### 🌟 Major Updates
-- Theme system fully upgraded with "Follow System" option
-- New frosted glass effect card design
-- Added universal card component with custom configuration
-- Added PVE and server monitoring functionality
-- Enhanced camera features with multiple stream support
-
-### 🔧 Technical Optimizations
-- SQLite database connection pool optimization
-- Component upgrades and refactoring
-- Performance improvements and bug fixes
-- Enhanced multilingual support
 
 For detailed changelog, please check [Releases](https://github.com/mrtian2016/hass-panel/releases)
 

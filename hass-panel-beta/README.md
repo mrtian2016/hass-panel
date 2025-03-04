@@ -49,12 +49,6 @@
 
 ## 安装部署
 
-### 重要提示
-从 v1.3.2 版本开始:
-- 系统使用 SQLite 数据库进行配置存储
-- 首次使用需要完成系统初始化流程
-- 摄像头功能需要正确配置 ONVIF/RTSP 地址
-
 详细的安装和配置说明请访问[官方文档](https://hass-panel.com/guide/install.html)。
 
 ### Docker方式 正式版
@@ -109,6 +103,7 @@ docker run \
 19. 通用实体卡片 (UniversalCard) - 支持自定义实体配置和分组显示
 20. PVE监控卡片 (PVECard) - 虚拟机监控
 21. 服务器监控卡片 (ServerCard)
+22. 每日一言卡片 (DailyQuoteCard)
 
 ### 卡片管理
 
@@ -133,20 +128,6 @@ npm start
 npm run build
 ```
 
-## 最新版本 (v1.3.5.2)
-
-### 🌟 主要更新
-- 主题系统全面升级，支持"跟随系统"选项
-- 全新毛玻璃效果卡片设计
-- 新增通用卡片组件，支持自定义配置
-- 新增PVE和服务器监控功能
-- 摄像头功能增强，支持多种视频流
-
-### 🔧 技术优化
-- SQLite数据库连接池优化
-- 组件升级与重构
-- 性能提升与bug修复
-- 多语言支持完善
 
 详细更新日志请查看[Releases](https://github.com/mrtian2016/hass-panel/releases)
 

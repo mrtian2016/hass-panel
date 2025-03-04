@@ -69,8 +69,6 @@ async def check_hass_token(hass_url: str, hass_token: str):
     async with aiohttp.ClientSession() as session:
         try:
             hass_token = hass_token.replace("Bearer ", "")
-            logger.info(f"hass_token: {hass_token}")
-            logger.info(f"hass_url: {hass_url}")
             async with session.get(
                 f"{hass_url}/api/",
                 headers={"Authorization": f"Bearer {hass_token}"}

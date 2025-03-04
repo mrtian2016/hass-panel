@@ -54,3 +54,6 @@ chown -R nginx:nginx "$CONFIG_DIR/upload"
 chmod -R 755 "$CONFIG_DIR/upload"
 
 /usr/bin/supervisord -c /etc/supervisord.conf
+
+tail -f /config/hass-panel/logs/supervisord/fastapi.out.log
+

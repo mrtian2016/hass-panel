@@ -83,7 +83,6 @@ async def save_config(
             
             with open(go2rtc_config_path, "r", encoding="utf-8") as f:
                 go2rtc_config = yaml.safe_load(f) or {}
-            logger.info(f"go2rtc_config: {go2rtc_config}")
             
             # 确保streams是一个字典
             if not go2rtc_config.get("streams"):
@@ -98,14 +97,10 @@ async def save_config(
             
             if "cards" in config:
                 for card in config["cards"]:
-                    logger.info(f"card: {card}")
                     if card.get("type") == "CameraCard":
-                        logger.info(f"card.get('config'): {card.get('config')}")
                         cameras = card.get("config", {}).get("cameras", [])
-                        logger.info(f"cameras: {cameras}")
                         updated_cameras = []
                         for camera in cameras:
-                            logger.info(f"camera: {camera}")
                             if camera.get("stream_url"):
                                 # 生成基础key
                                 base_name = camera.get("name") or camera.get("entity_id") or camera["stream_url"]
@@ -149,13 +144,11 @@ async def save_config(
             # 保存更新后的用户配置（包含播放地址）
             with open(config_file, "w", encoding="utf-8") as f:
                 json.dump(config, f, indent=2, ensure_ascii=False)
-            
-            logger.info("已更新go2rtc配置文件")
+       
             
             # 重启go2rtc服务
             try:
                 subprocess.run(["supervisorctl", "restart", "go2rtc"], check=True)
-                logger.info("已重启go2rtc服务")
             except subprocess.CalledProcessError as e:
                 logger.error(f"重启go2rtc服务失败: {str(e)}")
                 return generate_resp(code=500, error=f"重启go2rtc服务失败: {str(e)}")
@@ -255,7 +248,6 @@ async def update_hass_config(config: HassConfigUpdate):
     db = SessionLocal()
     try:
         # 检查存在hass_url和hass_token是否正确
-        logger.info(f"config: {config.hass_url}，{config.hass_token}")
         check_result = await check_hass_token(config.hass_url, config.hass_token)
         logger.info(f"check_result: {check_result}")
         if not check_result:
