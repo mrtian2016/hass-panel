@@ -80,7 +80,14 @@ function UniversalCard({ config }) {
     }
 
     const unit = entity.entity.attributes?.unit_of_measurement || '';
-    return `${entity.entity.state} ${unit}`;
+    const value = entity.entity.state;
+    if (!isNaN(parseFloat(value))) {
+      // 如果值是数字，则保留一位小数 但是如果最后一位是0，则不保留
+      const fixedValue = parseFloat(value).toFixed(1);
+      const resultValue = fixedValue.endsWith('.0') ? fixedValue.slice(0, -2) : fixedValue;
+      return `${resultValue}${unit}`;
+    }
+    return `${value}${unit}`;
   };
 
 

@@ -8,7 +8,6 @@
 }
 
 .config-field label {
-  display: block;
   margin-bottom: 8px;
   color: var(--color-text-secondary);
   font-size: 13px;

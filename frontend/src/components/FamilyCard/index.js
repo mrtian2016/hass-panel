@@ -5,7 +5,8 @@ import { useEntity } from '@hakit/core';
 import Icon from '@mdi/react';
 import { useTheme } from '../../theme/ThemeContext';
 import './style.css';
-function FamilyCard({ config, visible = true, titleVisible = true }) {
+function FamilyCard({ config }) {
+  const titleVisible = config.titleVisible;
   const hassUrl = localStorage.getItem('hass_url');
   
   const { theme } = useTheme();
@@ -46,8 +47,6 @@ function FamilyCard({ config, visible = true, titleVisible = true }) {
       </div>
     );
   };
-
-  if (!visible) return null;
 
   return (
     <BaseCard

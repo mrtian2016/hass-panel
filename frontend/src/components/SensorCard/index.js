@@ -253,7 +253,14 @@ function SensorCard({ config }) {
       return t('sensor.noValue');
     }
     const unit = sensor.entity.attributes?.unit_of_measurement || '';
-    return `${sensor.entity.state}${unit}`;
+    const value = sensor.entity.state;
+    if (!isNaN(parseFloat(value))) {
+      // 如果值是数字，则保留一位小数 但是如果最后一位是0，则不保留
+      const fixedValue = parseFloat(value).toFixed(1);
+      const resultValue = fixedValue.endsWith('.0') ? fixedValue.slice(0, -2) : fixedValue;
+      return `${resultValue}${unit}`;
+    }
+    return `${value}${unit}`;
   };
 
   // 获取传感器图标
@@ -278,7 +285,7 @@ function SensorCard({ config }) {
                   className="sensor-icon" 
                 />
               </div>
-              <div className="sensor-value">
+              <div className="sensor-card-sensor-value">
                 {getSensorValue(sensor)}
               </div>
               <div className="sensor-chart-placeholder">

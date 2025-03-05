@@ -1,7 +1,7 @@
 FROM ghcr.io/hassio-addons/base:17.1.0
 
 # 安装依赖
-RUN apk add --no-cache nginx gettext curl jq unzip tzdata python3 py3-pip rsync vim supervisor
+RUN apk add --no-cache nginx gettext curl jq unzip tzdata python3 py3-pip rsync vim supervisor 
 
 # 安装go2rtc 判断系统架构
 COPY docker/software/go2rtc_* /tmp/
@@ -43,7 +43,8 @@ RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple \
     sqlalchemy \
     pyjwt \
     passlib[bcrypt] \
-    apscheduler
+    apscheduler \
+    onvif-zeep
 
 # 创建必要的目录
 RUN mkdir -p /config/hass-panel  # 为SQLite数据库创建目录

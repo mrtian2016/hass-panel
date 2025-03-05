@@ -304,7 +304,7 @@ export const cameraApi = {
   // 获取ONVIF摄像头源
   getOnvifSources: async () => {
     try {
-      const response = await axios.get('./go2rtc/api/onvif');
+      const response = await axios.get('./go2rtc/onvif');
       
       // 过滤只保留IPv4地址的源
       const filteredSources = response.data.sources.map(source => ({
@@ -314,6 +314,120 @@ export const cameraApi = {
       
       return filteredSources;
     } catch (error) {
+      throw error;
+    }
+  },
+  
+  // 获取预设位置
+  getPresets: async (entityId, stream_url) => {
+    try {
+      const params = new URLSearchParams();
+      if (stream_url) {
+        params.append('stream_url', stream_url);
+      }
+      
+      const url = `/onvif/presets/${entityId}${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await axiosInstance.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get presets:', error);
+      throw error;
+    }
+  },
+  
+  // PTZ控制
+  ptzControl: async (ptzData) => {
+    try {
+      const response = await axiosInstance.post('/onvif/ptz', ptzData);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to control PTZ:', error);
+      throw error;
+    }
+  },
+  
+  // 移动到预设位置
+  gotoPreset: async (entityId, presetToken, speed = 0.5, stream_url) => {
+    try {
+      const params = new URLSearchParams();
+      params.append('speed', speed);
+      if (stream_url) {
+        params.append('stream_url', stream_url);
+      }
+      
+      const url = `/onvif/preset/${entityId}/${presetToken}?${params.toString()}`;
+      const response = await axiosInstance.post(url);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to goto preset:', error);
+      throw error;
+    }
+  },
+  
+  // 设置预设位置
+  setPreset: async (entityId, presetName, stream_url) => {
+    try {
+      const params = new URLSearchParams();
+      if (stream_url) {
+        params.append('stream_url', stream_url);
+      }
+      
+      const url = `/onvif/preset/set/${entityId}/${presetName}${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await axiosInstance.post(url);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to set preset:', error);
+      throw error;
+    }
+  },
+  
+  // 删除预设位置
+  removePreset: async (entityId, presetToken, stream_url) => {
+    try {
+      const params = new URLSearchParams();
+      if (stream_url) {
+        params.append('stream_url', stream_url);
+      }
+      
+      const url = `/onvif/preset/${entityId}/${presetToken}${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await axiosInstance.delete(url);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to remove preset:', error);
+      throw error;
+    }
+  },
+  
+  // 获取摄像头信息
+  getCameraInfo: async (entityId, stream_url) => {
+    try {
+      const params = new URLSearchParams();
+      if (stream_url) {
+        params.append('stream_url', stream_url);
+      }
+      
+      const url = `/onvif/info/${entityId}${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await axiosInstance.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get camera info:', error);
+      throw error;
+    }
+  },
+  
+  // 重启摄像头
+  rebootCamera: async (entityId, stream_url) => {
+    try {
+      const params = new URLSearchParams();
+      if (stream_url) {
+        params.append('stream_url', stream_url);
+      }
+      
+      const url = `/onvif/reboot/${entityId}${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await axiosInstance.post(url);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to reboot camera:', error);
       throw error;
     }
   }

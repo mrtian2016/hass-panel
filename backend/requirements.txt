@@ -1,0 +1,10 @@
+fastapi>=0.95.0
+uvicorn>=0.21.1
+pydantic>=1.10.7
+python-jose>=3.3.0
+python-multipart>=0.0.6
+requests>=2.28.2
+loguru>=0.6.0
+toml>=0.10.2
+onvif-zeep>=0.2.12
+zeep>=4.2.1 

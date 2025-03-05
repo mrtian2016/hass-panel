@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { SpinLoading } from 'antd-mobile';
-import ReactPlayer from 'react-player';
+import { Spin } from 'antd';
 import Modal from '../Modal';
 import { useLanguage } from '../../i18n/LanguageContext';
+import PTZControls from '../PTZControls';
 import './style.css';
 
-function CameraCard({ camera, streamUrl, name, playUrl }) {
+function CameraCard({ camera, streamUrl, name, playUrl,supports_ptz }) {
+
+
+  const entityId = camera.entity_id;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [useHls, setUseHls] = useState(false);
   const { t } = useLanguage();
-  const webrtc_play_url = playUrl || streamUrl;
+  const webrtc_play_url =  playUrl || streamUrl;
+  
+  // 检查摄像头是否支持PTZ控制
+  const supportsPTZ = supports_ptz === true;
 
   useEffect(() => {
     if (webrtc_play_url) {
@@ -86,7 +92,7 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
         <div className="camera-stream">
           {isLoading && (
             <div className="loading-container">
-              <SpinLoading color='white' />
+              <Spin />
               <span className="loading-text">{t('camera.loading')}</span>
             </div>
           )}
@@ -113,28 +119,11 @@ function CameraCard({ camera, streamUrl, name, playUrl }) {
             }}
             onError={handleVideoError}
           />}
-          {useHls && hlsUrl && (
-            <div className="player-wrapper">
-              <ReactPlayer
-                url={hlsUrl}
-                className="react-player"
-                width="100%"
-                height="100%"
-                playing
-                controls
-                playsinline
-                config={{
-                  file: {
-                    forceHLS: true,
-                    attributes: {
-                      crossOrigin: "anonymous"
-                    }
-                  }
-                }}
-                onReady={handleVideoReady}
-                onError={handleVideoError}
-              />
-            </div>
+          
+          
+          {/* 只有当摄像头支持PTZ控制时才显示控制按钮 */}
+          {!useHls && entityId && entityId.startsWith('camera.') && supportsPTZ && (
+            <PTZControls entityId={entityId} stream_url={streamUrl}/>
           )}
         </div>
       </Modal>

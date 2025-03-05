@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
-import { translations } from './translations';
+import { zh } from './zh';
+import { en } from './en';
 
 const LanguageContext = createContext();
 
@@ -17,7 +18,7 @@ export function LanguageProvider({ children }) {
 
   const t = (key) => {
     const keys = key.split('.');
-    let value = translations[language];
+    let value = language === 'zh' ? zh : en;
     for (const k of keys) {
       value = value?.[k];
     }

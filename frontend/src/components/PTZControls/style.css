@@ -1,0 +1,204 @@
+.ptz-controls {
+  position: absolute;
+  bottom: 30px;
+  left: 10px;
+  right: 0;
+  z-index: 10;
+  background-color: transparent;
+  padding: 15px;
+  color: white;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  touch-action: manipulation;
+  pointer-events: none; /* Allow clicks to pass through the container */
+}
+
+.ptz-controls-header {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  pointer-events: auto; /* Enable clicks on the header */
+}
+
+.ptz-controls-header h3 {
+  margin: 0;
+  font-size: 16px;
+  margin-right: 10px;
+  display: none; /* Hide the title to save space */
+}
+
+.ptz-header-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.settings-button,
+.preset-button {
+  color: white !important;
+  padding: 5px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  border: none !important;
+  z-index: 1001;
+}
+
+.ptz-settings {
+  position: absolute;
+  bottom: 150px;
+  right: 15px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  width: 250px;
+  z-index: 1001;
+  pointer-events: auto; /* Enable clicks on settings */
+}
+
+.ptz-setting {
+  margin-bottom: 10px;
+}
+
+.ptz-setting label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.ptz-setting input {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.ptz-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ptz-direction-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto; /* Enable clicks on direction controls */
+ 
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.ptz-zoom-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto; /* Enable clicks on zoom controls */
+  border-radius: 8px;
+  padding: 5px;
+  gap: 10px;
+}
+
+.ptz-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ptz-button {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 4px !important;
+  color: white !important;
+  width: 50px !important;
+  height: 50px !important;
+  margin: 3px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  touch-action: manipulation;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ptz-button:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  transform: scale(1.05);
+}
+
+.ptz-button:active {
+  background-color: rgba(255, 255, 255, 0.35) !important;
+  transform: scale(0.95);
+}
+
+.ptz-spacer, .ptz-center {
+  width: 50px;
+  height: 50px;
+  margin: 3px;
+}
+
+.ptz-presets {
+  position: absolute;
+  bottom: 150px;
+  right: 15px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  width: 250px;
+  z-index: 1001;
+  pointer-events: auto; /* Enable clicks on presets */
+}
+
+.ptz-preset-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.ptz-preset-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.ptz-preset-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.ptz-no-presets {
+  text-align: center;
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ptz-add-preset {
+  display: flex;
+  gap: 5px;
+}
+
+.ptz-add-preset input {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  padding: 8px;
+}
+

@@ -5,7 +5,7 @@ from fastapi import FastAPI, Depends
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from hass_panel.core.middlewares import proc_custom_exception
-from hass_panel.routers import update, user_config, common, auth, users, hass, daily_quote
+from hass_panel.routers import update, user_config, common, auth, users, hass, daily_quote, onvif_ctl
 from hass_panel.core.initial import lifespan
 from hass_panel.utils.config import cfg
 from loguru import logger
@@ -16,7 +16,8 @@ ROUTERS = [
     auth.router,
     users.router,
     hass.router,
-    daily_quote.router
+    daily_quote.router,
+    onvif_ctl.router
 ]
 
 

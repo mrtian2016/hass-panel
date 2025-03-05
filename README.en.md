@@ -111,7 +111,7 @@ For detailed feature configuration and usage instructions, please visit the [doc
 20. PVE Card (PVECard) - Virtual machine monitoring
 21. Server Card (ServerCard)
 22. Daily Quote Card (DailyQuoteCard)
-
+23. Family Card (FamilyCard)
 ### Card Management
 
 - Support show/hide control

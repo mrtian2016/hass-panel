@@ -11,10 +11,10 @@ engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
     connect_args={"check_same_thread": False},
     poolclass=QueuePool,
-    pool_size=20,  # 增加连接池大小
-    max_overflow=30,  # 增加最大溢出连接数
-    pool_timeout=60,  # 增加超时时间
-    pool_recycle=3600  # 设置连接回收时间为1小时
+    pool_size=50,  # 增加连接池大小
+    max_overflow=50,  # 增加最大溢出连接数
+    pool_timeout=120,  # 增加超时时间
+    pool_recycle=1800  # 设置连接回收时间为30分钟
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

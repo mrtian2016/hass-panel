@@ -1,7 +1,8 @@
 import { useLanguage } from '../../i18n/LanguageContext';   
-import { Input, AutoComplete, Radio, Button } from 'antd';
+import { Input, AutoComplete, Radio, Button, Checkbox, Tooltip } from 'antd';
 import { useState, useEffect } from 'react';
 import { cameraApi } from '../../utils/api';
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 function CameraConfig({ field, value, onChange, getFilteredEntities }) {
     const { t } = useLanguage();
@@ -29,7 +30,8 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
           stream_url: '',
           onvif_username: '',
           onvif_password: '',
-          url_type: 'auto'
+          url_type: 'auto',
+          supports_ptz: false
         };
         onChange(newCameras);
         return;
@@ -124,7 +126,8 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
                     url_type: e.target.value,
                     stream_url: '',
                     onvif_username: '',
-                    onvif_password: ''
+                    onvif_password: '',
+                    supports_ptz: false
                   };
                   onChange(newCameras);
                 }}
@@ -179,6 +182,22 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
                     onChange={(e) => handleOnvifCredentialsChange(index, camera, 'onvif_password', e.target.value)}
                     placeholder={t('configField.onvifPassword')}
                   />
+                    <Checkbox
+                      checked={camera.supports_ptz || false}
+                      onChange={(e) => {
+                        const newCameras = [...value];
+                        newCameras[index] = {
+                          ...camera,
+                          supports_ptz: e.target.checked
+                        };
+                        onChange(newCameras);
+                      }}
+                    >
+                      {t('configField.supportsPTZ') || '支持云台控制'}
+                      <Tooltip title={t('configField.ptzTooltip') || '启用此选项将显示云台控制按钮，仅适用于支持PTZ功能的ONVIF摄像头'}>
+                        <InfoCircleOutlined style={{ marginLeft: '5px' }} />
+                      </Tooltip>
+                    </Checkbox>
                 </>
               )}
               
@@ -209,7 +228,8 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
                   onvif_username: '',
                   onvif_password: '',
                   url_type: 'auto',
-                  room: ''
+                  room: '',
+                  supports_ptz: false
                 }
               ]);
             }}

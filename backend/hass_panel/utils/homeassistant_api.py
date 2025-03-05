@@ -29,6 +29,7 @@ class HomeAssistantAPI:
         
     def _check_token_sync(self) -> None:
         """同步方法检查 token 有效性"""
+        db = None
         try:
             response = requests.get(f"{self.base_url}/", headers=self.headers)
             if response.status_code != 200:
@@ -38,11 +39,16 @@ class HomeAssistantAPI:
                     hass_config.hass_token = ''
                     db.commit()
                     db.close()
+                    db = None
                 logger.error("Home Assistant token 无效")
                 raise Exception("Invalid Home Assistant token")
         except Exception as e:
             logger.error(f"检查 Home Assistant token 失败: {str(e)}")
             raise Exception(f"Failed to check Home Assistant token: {str(e)}")
+        finally:
+            if db:
+                db.close()
+                logger.debug("Database connection closed in _check_token_sync")
             
     def _init_config(self):
         """初始化时的配置加载（同步方法）"""

@@ -16,20 +16,20 @@
 }
 
 .sensor-tile {
-  display: flex;
-  flex-direction: column;
   background: var(--color-card-bg-transparent);
   border-radius: 20px;
   padding: var(--spacing-md);
   position: relative;
   overflow: hidden;
   min-height: 120px;
+  gap: 0;
 }
 
 .sensor-tile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 20px;
   margin-bottom: var(--spacing-sm);
 }
 
@@ -44,11 +44,10 @@
   color: var(--color-text-primary);
 }
 
-.sensor-value {
+.sensor-card-sensor-value {
   font-size: 28px;
   font-weight: 500;
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-md);
 }
 
 .sensor-chart-placeholder {
@@ -69,7 +68,7 @@
     min-height: 130px;
   }
   
-  .sensor-value {
+  .sensor-card-sensor-value {
     font-size: 24px;
   }
 }

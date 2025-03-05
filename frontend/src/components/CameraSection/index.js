@@ -4,11 +4,13 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import BaseCard from '../BaseCard';
 import CameraCard from '../CameraCard';
 import './style.css';
-import { useCamera } from '@hakit/core';
+import { useCamera} from '@hakit/core';
 import { notification } from 'antd';
 
 function CameraSection({ config, titleVisible }) {
   const { t } = useLanguage();
+
+
   const debugMode = localStorage.getItem('debugMode') === 'true';
 
   const cameraEntities = config.cameras.map(camera => {
@@ -51,6 +53,7 @@ function CameraSection({ config, titleVisible }) {
             streamUrl={camera.stream_url}
             playUrl={camera.play_url}
             name={camera.name}
+            supports_ptz={camera.supports_ptz}
           />
         ))}
       </div>

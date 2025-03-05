@@ -15,6 +15,7 @@ scheduler = AsyncIOScheduler()
 
 
 async def update_energy_statistics():
+    db = None
     try:
         db = SessionLocal()
         entity = db.query(Entity).filter(Entity.name == 'total_usage').first()
@@ -32,6 +33,10 @@ async def update_energy_statistics():
         logger.info(f"update_energy_statistics success")
     except Exception as e:
         logger.error(f"update_energy_statistics error: {e}")
+    finally:
+        if db:
+            db.close()
+            logger.debug("Database connection closed in update_energy_statistics")
 
 async def async_task():
     await update_energy_statistics()
