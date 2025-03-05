@@ -304,7 +304,7 @@ export const cameraApi = {
   // 获取ONVIF摄像头源
   getOnvifSources: async () => {
     try {
-      const response = await axios.get('./go2rtc/onvif');
+      const response = await axios.get('./go2rtc/api/onvif');
       
       // 过滤只保留IPv4地址的源
       const filteredSources = response.data.sources.map(source => ({
