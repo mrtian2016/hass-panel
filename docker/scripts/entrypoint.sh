@@ -55,5 +55,8 @@ chmod -R 755 "$CONFIG_DIR/upload"
 
 /usr/bin/supervisord -c /etc/supervisord.conf
 
-tail -f /config/hass-panel/logs/supervisord/fastapi.out.log
+# 确保日志文件存在并监控它
+touch -a "$CONFIG_DIR/logs/supervisord/fastapi.out.log"
+tail -f "$CONFIG_DIR/logs/supervisord/fastapi.out.log"
+
 
