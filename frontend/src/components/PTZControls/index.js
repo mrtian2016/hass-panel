@@ -2,15 +2,12 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button, Slider, message } from 'antd';
 import Icon from '@mdi/react';
 import {
-    mdiArrowUp,
-    mdiArrowDown,
-    mdiArrowLeft,
-    mdiArrowRight,
     mdiMagnifyPlus,
     mdiMagnifyMinus,
     mdiCogOutline,
     mdiBookmarkOutline
 } from '@mdi/js';
+import {  Icon as IconifyIcon } from '@iconify/react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { cameraApi } from '../../utils/api';
 import './style.css';
@@ -176,56 +173,64 @@ function PTZControls({ entityId, stream_url }) {
 
             <div className="ptz-buttons">
                 <div className="ptz-direction-controls">
-                    <div className="ptz-row">
-                        <div className="ptz-spacer"></div>
+                    <div className="ptz-circle">
                         <Button
-                            className="ptz-button"
+                            className="ptz-button ptz-up ptz-sector"
                             onMouseDown={() => handlePTZStart('tilt', 'UP')}
                             onMouseUp={handlePTZStop}
                             onMouseLeave={handlePTZStop}
                             onTouchStart={() => handlePTZStart('tilt', 'UP')}
                             onTouchEnd={handlePTZStop}
                             title={t('ptz.tilt.up')}
-                            icon={<Icon path={mdiArrowUp} size={1} />}
-                        />
-                        <div className="ptz-spacer"></div>
-                    </div>
-                    <div className="ptz-row">
+                        >
+                            <div className="ptz-icon-container">
+                                <IconifyIcon icon="mdi:keyboard-arrow-up" width={48} color="white" />
+                            </div>
+                        </Button>
+                       
                         <Button
-                            className="ptz-button"
+                            className="ptz-button ptz-left ptz-sector"
                             onMouseDown={() => handlePTZStart('pan', 'LEFT')}
                             onMouseUp={handlePTZStop}
                             onMouseLeave={handlePTZStop}
                             onTouchStart={() => handlePTZStart('pan', 'LEFT')}
                             onTouchEnd={handlePTZStop}
                             title={t('ptz.pan.left')}
-                            icon={<Icon path={mdiArrowLeft} size={1} />}
-                        />
-                        <div className="ptz-center"></div>
+                        >
+                            <div className="ptz-icon-container">
+                            <IconifyIcon icon="mdi:keyboard-arrow-left" width={48} color="white" />
+                            </div>
+                        </Button>
                         <Button
-                            className="ptz-button"
+                            className="ptz-button ptz-right ptz-sector"
                             onMouseDown={() => handlePTZStart('pan', 'RIGHT')}
                             onMouseUp={handlePTZStop}
                             onMouseLeave={handlePTZStop}
                             onTouchStart={() => handlePTZStart('pan', 'RIGHT')}
                             onTouchEnd={handlePTZStop}
                             title={t('ptz.pan.right')}
-                            icon={<Icon path={mdiArrowRight} size={1} />}
-                        />
-                    </div>
-                    <div className="ptz-row">
-                        <div className="ptz-spacer"></div>
+                        >
+                            <div className="ptz-icon-container">
+                                <IconifyIcon icon="mdi:keyboard-arrow-right" width={48} color="white" />
+                            </div>
+                        </Button>
+                      
                         <Button
-                            className="ptz-button"
+                            className="ptz-button ptz-down ptz-sector"
                             onMouseDown={() => handlePTZStart('tilt', 'DOWN')}
                             onMouseUp={handlePTZStop}
                             onMouseLeave={handlePTZStop}
                             onTouchStart={() => handlePTZStart('tilt', 'DOWN')}
                             onTouchEnd={handlePTZStop}
                             title={t('ptz.tilt.down')}
-                            icon={<Icon path={mdiArrowDown} size={1} />}
-                        />
-                        <div className="ptz-spacer"></div>
+                        >
+                            <div className="ptz-icon-container">
+                                <IconifyIcon icon="mdi:keyboard-arrow-down" width={48} color="white" />
+                            </div>
+                        </Button>
+                        
+                        <div className="ptz-center">
+                        </div>
                     </div>
                 </div>
 
@@ -238,7 +243,7 @@ function PTZControls({ entityId, stream_url }) {
                         onTouchStart={() => handlePTZStart('zoom', 'ZOOM_IN')}
                         onTouchEnd={handlePTZStop}
                         title={t('ptz.zoom.in')}
-                        icon={<Icon path={mdiMagnifyPlus} size={1} />}
+                        icon={<Icon path={mdiMagnifyPlus} size={1.5} />}
                     />
                     <Button
                         className="ptz-button"
@@ -248,7 +253,7 @@ function PTZControls({ entityId, stream_url }) {
                         onTouchStart={() => handlePTZStart('zoom', 'ZOOM_OUT')}
                         onTouchEnd={handlePTZStop}
                         title={t('ptz.zoom.out')}
-                        icon={<Icon path={mdiMagnifyMinus} size={1} />}
+                        icon={<Icon path={mdiMagnifyMinus} size={1.5} />}
                     />
                 </div>
             </div>

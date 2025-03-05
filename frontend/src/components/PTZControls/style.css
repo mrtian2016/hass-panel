@@ -14,7 +14,20 @@
   touch-action: manipulation;
   pointer-events: none; /* Allow clicks to pass through the container */
 }
-
+@media (max-width: 768px) {
+  .ptz-controls {
+    position: fixed;
+    bottom: 100px;
+  }
+  .ptz-circle {
+    width: 140px !important;
+    height: 140px !important;
+  }
+  .ptz-center {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
 .ptz-controls-header {
   position: absolute;
   top: 15px;
@@ -95,9 +108,124 @@
   display: flex;
   flex-direction: column;
   pointer-events: auto; /* Enable clicks on direction controls */
- 
-  border-radius: 8px;
   padding: 5px;
+}
+
+.ptz-circle {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1px solid rgba(100, 100, 100, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  /* 旋转45度 */
+  transform: rotate(45deg);
+}
+
+.ptz-button {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  touch-action: manipulation;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: absolute;
+  
+  z-index: 2;
+}
+
+/* 扇形按钮样式 */
+.ptz-sector {
+  background-color: rgba(40, 40, 40, 0.7) !important;
+  border: 1px solid rgba(100, 100, 100, 0.2) !important;
+  transition: background-color 0.2s ease !important;
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.ptz-up {
+  top: 0;
+  left: 0;
+  width: 50% !important;
+  height: 50% !important;
+  border-radius: 110px 0 0 0 !important;
+}
+
+.ptz-down {
+  bottom: 0;
+  right: 0;
+  width: 50% !important;
+  height: 50% !important;
+  border-radius: 0 0 110px 0 !important;
+}
+
+.ptz-left {
+  bottom: 0;
+  left: 0;
+  width: 50% !important;
+  height: 50% !important;
+  border-radius: 0 0 0 110px !important;
+}
+
+.ptz-right {
+  top: 0;
+  right: 0;
+  width: 50% !important;
+  height: 50% !important;
+  border-radius: 0 110px 0 0 !important;
+}
+
+.ptz-button:hover {
+  background-color: rgba(60, 60, 60, 0.8) !important;
+}
+
+.ptz-button:active {
+  background-color: rgba(80, 80, 80, 0.9) !important;
+}
+
+.ptz-center {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(50, 50, 50, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 分隔线 */
+.ptz-circle::before,
+.ptz-circle::after {
+  content: '';
+  position: absolute;
+  background-color: rgba(100, 100, 100, 0.3);
+  z-index: 2;
+}
+
+.ptz-circle::before {
+  width: 100%;
+  height: 1px;
+  top: 50%;
+  left: 0;
+}
+
+.ptz-circle::after {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  left: 50%;
 }
 
 .ptz-zoom-controls {
@@ -112,39 +240,23 @@
   gap: 10px;
 }
 
-.ptz-row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.ptz-button {
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 4px !important;
-  color: white !important;
+.ptz-zoom-controls .ptz-button {
+  position: relative;
   width: 50px !important;
   height: 50px !important;
-  margin: 3px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-  touch-action: manipulation;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  border-radius: 50% !important;
+  margin: 5px;
 }
 
-.ptz-button:hover {
-  background-color: rgba(255, 255, 255, 0.25) !important;
-  transform: scale(1.05);
+.ptz-zoom-controls .ptz-button:hover {
+  background-color: rgba(50, 50, 50, 0.7) !important;
 }
 
-.ptz-button:active {
-  background-color: rgba(255, 255, 255, 0.35) !important;
-  transform: scale(0.95);
+.ptz-zoom-controls .ptz-button:active {
+  background-color: rgba(70, 70, 70, 0.7) !important;
 }
 
-.ptz-spacer, .ptz-center {
+.ptz-spacer {
   width: 50px;
   height: 50px;
   margin: 3px;
@@ -176,7 +288,6 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-
 .ptz-preset-actions {
   display: flex;
   gap: 5px;
@@ -200,5 +311,39 @@
   border-radius: 4px;
   color: white;
   padding: 8px;
+}
+
+.ptz-icon-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  z-index: 5;
+}
+
+.ptz-up .ptz-icon-container {
+ 
+  left: calc(50% - 20px);
+  transform: rotate(-45deg);
+}
+
+.ptz-down .ptz-icon-container {
+
+  right: calc(50% - 20px);
+  transform: rotate(-45deg);
+}
+
+.ptz-left .ptz-icon-container {
+
+  left: calc(50% - 20px);
+  transform: rotate(-45deg);
+}
+
+.ptz-right .ptz-icon-container {
+ 
+  right: calc(50% - 20px);
+  transform: rotate(-45deg);
 }
 
