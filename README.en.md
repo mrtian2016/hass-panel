@@ -17,7 +17,7 @@ English | [简体中文](README.md)
 
 ## Discussion Group
 
-<img src="https://i.imgur.com/ct6Tu5R.jpeg" width="300" alt="Discussion Group" />
+<img src="https://i.imgur.com/jrRFIvT.jpeg" width="300" alt="Discussion Group" />
 
 ## Key Features
 
