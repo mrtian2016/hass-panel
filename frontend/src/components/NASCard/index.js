@@ -65,7 +65,7 @@ function NASCard({ config }) {
         titleVisible={titleVisible}
         headerRight={
           <div className="header-right" onClick={() => setShowDriveModal(true)} style={{ cursor: 'pointer' }}>
-            <Icon path={mdiDotsHorizontal} size={0.8} />
+            <Icon path={mdiDotsHorizontal} size={12} />
           </div>
         }
       >
@@ -107,7 +107,7 @@ function NASCard({ config }) {
                     <div className="volume-item">
                       <div className="volume-header-row">
                         <div className="volume-name">
-                          <Icon path={mdiHarddisk} size={0.8} />
+                          <Icon path={mdiHarddisk} size={12} />
                           <span className="label">{volume.name}</span>
                         </div>
                         <div className="volume-status-group">
@@ -195,7 +195,7 @@ function NASCard({ config }) {
               <React.Fragment key={index}>
                 <div className="nas-drive-item">
                   <div className="nas-drive-metric-label">
-                    <Icon path={mdiHarddisk} size={0.8} />
+                    <Icon path={mdiHarddisk} size={12} />
                     <span className="label">{drive.name}</span>
                   </div>
                   <div className="nas-drive-status">
@@ -245,7 +245,7 @@ function NASCard({ config }) {
                   <React.Fragment key={index}>
                     <div className="nas-drive-item">
                       <div className="nas-drive-metric-label">
-                        <Icon path={mdiHarddisk} size={0.8} />
+                        <Icon path={mdiHarddisk} size={12} />
                         <span className="label">{drive.name}</span>
                       </div>
                       <div className="nas-drive-status">

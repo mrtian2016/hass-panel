@@ -27,7 +27,7 @@ function AddCardModal({ onClose, onSelect, cardTypes }) {
             onClick={onClose}
             title={t('config.cancel')}
           >
-            <Icon path={mdiClose} size={1} />
+            <Icon path={mdiClose} size={14} />
           </button>
         </div>
         <div className="card-types">
@@ -40,7 +40,7 @@ function AddCardModal({ onClose, onSelect, cardTypes }) {
                 onClick={() => onSelect(type)}
                 title={t(`cardTitles.${translationKey}`)}
               >
-                <Icon path={config.icon} size={1} />
+                <Icon path={config.icon} size={14} />
                 <span>{t(`cardTitles.${translationKey}`)}</span>
               </button>
             );

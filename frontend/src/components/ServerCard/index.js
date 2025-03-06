@@ -189,7 +189,7 @@ function PVECard({ config }) {
                   <div key={index} className="pve-drive-item">
                     <div className="pve-drive-header">
                       <div className="pve-drive-title">
-                        <Icon path={mdiHarddisk} size={0.8} className="pve-drive-icon" />
+                        <Icon path={mdiHarddisk} size={12} className="pve-drive-icon" />
                         <span className="pve-drive-name">{drive.name}</span>
                         {driveDiskSize && (
                           <span className="pve-drive-size">({safeParseFloat(driveDiskSize.state, '0').toFixed(2)} {driveDiskSize?.attributes?.unit_of_measurement})</span>

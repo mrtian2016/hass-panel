@@ -151,7 +151,7 @@ function InitializePage() {
                 <div className="initialize-header">
                     <Icon
                         path={mdiHomeAutomation}
-                        size={2}
+                        size={28}
                         className="initialize-logo"
                         color="var(--color-primary)"
                     />
@@ -258,7 +258,7 @@ function InitializePage() {
                         >
                             <Icon
                                 path={getThemeIcon()}
-                                size={1}
+                                size={14}
                                 color="var(--color-text-primary)"
                             />
                         </button>
@@ -272,7 +272,7 @@ function InitializePage() {
                                         setThemeMenuVisible(false);
                                     }}
                                 >
-                                    <Icon path={mdiWhiteBalanceSunny} size={0.8} />
+                                    <Icon path={mdiWhiteBalanceSunny} size={12} />
                                     <span>{t('theme.light')}</span>
                                 </button>
                                 <button
@@ -282,7 +282,7 @@ function InitializePage() {
                                         setThemeMenuVisible(false);
                                     }}
                                 >
-                                    <Icon path={mdiWeatherNight} size={0.8} />
+                                    <Icon path={mdiWeatherNight} size={12} />
                                     <span>{t('theme.dark')}</span>
                                 </button>
                                 <button
@@ -292,7 +292,7 @@ function InitializePage() {
                                         setThemeMenuVisible(false);
                                     }}
                                 >
-                                    <Icon path={mdiMonitor} size={0.8} />
+                                    <Icon path={mdiMonitor} size={12} />
                                     <span>{t('theme.system')}</span>
                                 </button>
                             </div>
@@ -305,7 +305,7 @@ function InitializePage() {
                     >
                         <Icon
                             path={mdiGoogleTranslate}
-                            size={1}
+                            size={14}
                             color="var(--color-text-primary)"
                         />
                     </button>
@@ -316,7 +316,7 @@ function InitializePage() {
                     >
                         <Icon
                             path={mdiGithub}
-                            size={1}
+                            size={14}
                             color="var(--color-text-primary)"
                         />
                     </button>

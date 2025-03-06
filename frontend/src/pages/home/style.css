@@ -438,22 +438,6 @@
   display: none;
 }
 
-.media-player .control-button {
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0.5rem;
-  font-size: 1rem;
-}
-
-.media-player .control-button .icon {
-  font-size: 1.2em;
-}
-
-.volume-buttons .control-button {
-  width: 2.5rem;
-  height: 2.5rem;
-}
-
 .content::-webkit-scrollbar {
   display: none;
 }

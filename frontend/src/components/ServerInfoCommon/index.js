@@ -42,13 +42,13 @@ function ServerInfoCommon({ cpuUsage, memoryUsage, uploadSpeed, downloadSpeed })
       <div className="server-network-speeds">
         <div className="server-speed-row">
           <div className="server-speed-item">
-            <Icon path={mdiUpload} size={0.8} />
+            <Icon path={mdiUpload} size={12} />
             <span className="server-speed-value">
               {uploadSpeed}<span> {t('nas.labels.unit.speed')}</span>
             </span>
           </div>
           <div className="server-speed-item">
-            <Icon path={mdiDownload} size={0.8} />
+            <Icon path={mdiDownload} size={12} />
             <span className="server-speed-value">
               {downloadSpeed}<span> {t('nas.labels.unit.speed')}</span>
             </span>

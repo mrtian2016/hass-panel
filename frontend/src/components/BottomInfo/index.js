@@ -183,7 +183,7 @@ function BottomInfo() {
     <div className='bottom-buttons'>
       {versionInfo && (
         <div className="version-info">
-          <Icon path={mdiInformationOutline} size={0.8} />
+          <Icon path={mdiInformationOutline} size={12} />
           <span>
             {t('currentVersion')}: {versionInfo.version}
             {latestVersion && compareVersions(latestVersion.version, versionInfo.version) > 0 ? (
@@ -216,7 +216,7 @@ function BottomInfo() {
                     onClick={() => updateFileRef.current?.click()}
                     style={{ padding: '0 4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                   >
-                    <Icon path={mdiUpload} size={0.8} />
+                    <Icon path={mdiUpload} size={12} />
                     {t('update.manualUpdate')}
                   </Button>
                 </Tooltip>
@@ -262,7 +262,7 @@ function BottomInfo() {
             window.open('https://github.com/mrtian2016/hass-panel', '_blank');
           }}
         >
-          <Icon path={mdiGithub} size={0.8} />
+          <Icon path={mdiGithub} size={12} />
         </Button>
       </span>
 

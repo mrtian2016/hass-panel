@@ -255,7 +255,7 @@ function LightControl({ lightEntity, onClose }) {
             <div className="slider-handle"></div>
           </div>
           <div className="control-label">
-            <Icon path={mdiBrightness6} size={0.8} />
+            <Icon path={mdiBrightness6} size={12} />
             <span>{t('lightOverview.lightControl.brightness')}</span>
           </div>
         </div>
@@ -274,7 +274,7 @@ function LightControl({ lightEntity, onClose }) {
             <div className="slider-handle"></div>
           </div>
           <div className="control-label">
-            <Icon path={mdiThermometer} size={0.8} />
+            <Icon path={mdiThermometer} size={12} />
             <span>{t('lightOverview.lightControl.colorTemp')}</span>
           </div>
         </div>
@@ -291,7 +291,7 @@ function LightControl({ lightEntity, onClose }) {
                   {entity.attributes?.effect || t('lightOverview.lightControl.effect')}
                 </span>
                 <div className="control-label">
-                  <Icon path={mdiCreationOutline} size={0.8} />
+                  <Icon path={mdiCreationOutline} size={12} />
                   <span>{t('lightOverview.lightControl.effect')}</span>
                 </div>
               </div>
@@ -304,7 +304,7 @@ function LightControl({ lightEntity, onClose }) {
             className={`power-button ${entity.state === 'on' ? 'active' : ''}`}
             onClick={() => entity.service.toggle()}
           >
-            <Icon path={mdiPower} size={1} />
+            <Icon path={mdiPower} size={14} />
           </button>
         </div>
       </div>

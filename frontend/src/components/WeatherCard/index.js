@@ -258,7 +258,7 @@ function WeatherCard({config}) {
             <div className="weather-icon">
               <Icon 
                 path={getWeatherIcon(day.condition)}
-                size={1}
+                size={14}
                 color={theme === 'dark' ? '#ffffff' : '#333333'}
               />
             </div>

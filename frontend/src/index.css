@@ -1,3 +1,14 @@
+/* 
+ * 根字体大小设置
+ * 现在通过JavaScript动态计算，而不是使用固定的媒体查询
+ * 计算公式：fontSize = 16 * (当前屏幕宽度 / 1920)
+ * 最小值：10px，最大值：18px
+ */
+:root {
+  /* 默认值，会被JavaScript中的动态计算覆盖 */
+  font-size: 16px;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

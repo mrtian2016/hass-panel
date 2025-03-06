@@ -84,6 +84,9 @@ export const zh = {
       saving: '保存中...',
       resetSuccess: '重置成功',
       resetFailed: '重置失败',
+      resetLayoutConfirm: '确认重置布局',
+      resetLayoutWarning: '重置布局将会丢失您的自定义排列，确定要继续吗？',
+      selectColumnCount: '选择列数',
       roomName: '房间名称',
       enterRoomName: '输入房间名称',
       lightEntity: '灯光实体',
@@ -933,23 +936,6 @@ export const zh = {
           hours: '小时'
         },
         uptime: '运行时间'
-      },
-      vms: {
-        title: '虚拟机状态',
-        actions: {
-          start: '启动',
-          shutdown: '关机',
-          restart: '重启',
-          stop: '停止',
-          startWarning: '虚拟机已在运行中',
-          startSuccess: '正在启动虚拟机',
-          stopWarning: '虚拟机已经停止',
-          stopSuccess: '正在停止虚拟机',
-          restartWarning: '虚拟机已经停止，无法重启',
-          restartSuccess: '正在重启虚拟机',
-          shutdownWarning: '虚拟机已经停止，无法关机',
-          shutdownSuccess: '正在关闭虚拟机'
-        }
       },
       deviceStatus: '设备状态',
     },

@@ -179,7 +179,7 @@ function PVECard({ config }) {
         titleVisible={titleVisible}
         headerRight={
           <div className="pve-header-right" onClick={() => setShowDriveModal(true)} style={{ cursor: 'pointer' }}>
-            <Icon path={mdiDotsHorizontal} size={0.8} />
+            <Icon path={mdiDotsHorizontal} size={12} />
           </div>
         }
       >
@@ -231,7 +231,7 @@ function PVECard({ config }) {
                     <div key={index} className="pve-vm-item">
                       <div className="pve-vm-header">
                         <div className="pve-vm-name">
-                          <Icon path={mdiServer} size={0.8} className="pve-vm-name-icon" />
+                          <Icon path={mdiServer} size={12} className="pve-vm-name-icon" />
                           {vm.name}
                         </div>
                         <div className="pve-vm-actions">
@@ -239,28 +239,28 @@ function PVECard({ config }) {
                             <div className={`pve-vm-action-btn ${isVmRunning ? 'pve-disabled' : ''}`}
                               onClick={() => optionClickHandler(vmStartOption, 'start', isVmRunning)}
                               title={t('pve_server.vms.actions.start')}>
-                              <Icon path={mdiPlayCircleOutline} size={0.8} />
+                              <Icon path={mdiPlayCircleOutline} size={12} />
                             </div>
                           )}
                           {vmShutdownOption && (
                             <div className={`pve-vm-action-btn ${!isVmRunning ? 'pve-disabled' : ''}`}
                               onClick={() => optionClickHandler(vmShutdownOption, 'shutdown', isVmRunning)}
                               title={t('pve_server.vms.actions.shutdown')}>
-                              <Icon path={mdiPowerStandby} size={0.8} />
+                              <Icon path={mdiPowerStandby} size={12} />
                             </div>
                           )}
                           {vmRestartOption && (
                             <div className={`pve-vm-action-btn ${!isVmRunning ? 'pve-disabled' : ''}`}
                               onClick={() => optionClickHandler(vmRestartOption, 'restart', isVmRunning)}
                               title={t('pve_server.vms.actions.restart')}>
-                              <Icon path={mdiRefreshCircle} size={0.8} />
+                              <Icon path={mdiRefreshCircle} size={12} />
                             </div>
                           )}
                           {vmStopOption && (
                             <div className={`pve-vm-action-btn ${!isVmRunning ? 'pve-disabled' : ''}`}
                               onClick={() => optionClickHandler(vmStopOption, 'stop', isVmRunning)}
                               title={t('pve_server.vms.actions.stop')}>
-                              <Icon path={mdiStopCircleOutline} size={0.8} />
+                              <Icon path={mdiStopCircleOutline} size={12} />
                             </div>
                           )}
                         </div>
@@ -271,7 +271,7 @@ function PVECard({ config }) {
                         </div>
                         {isVmRunning && lastBoot && (
                           <div className="pve-vm-uptime">
-                            <Icon path={mdiClockOutline} size={0.6} />
+                            <Icon path={mdiClockOutline} size={9} />
                             {calculateDaysSince(safeGetState(lastBoot, '-'))}
                           </div>
                         )}
@@ -348,7 +348,7 @@ function PVECard({ config }) {
                     <div key={index} className="pve-drive-item">
                       <div className="pve-drive-header">
                         <div className="pve-drive-title">
-                          <Icon path={mdiHarddisk} size={0.8} className="pve-drive-icon" />
+                          <Icon path={mdiHarddisk} size={12} className="pve-drive-icon" />
                           <span className="pve-drive-name">{drive.name}</span>
                           {driveDiskSize && (
                             <span className="pve-drive-size">({safeParseFloat(driveDiskSize.state, '0').toFixed(2)} {driveDiskSize?.attributes?.unit_of_measurement})</span>

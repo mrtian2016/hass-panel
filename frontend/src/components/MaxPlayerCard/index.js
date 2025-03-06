@@ -125,7 +125,7 @@ function MaxPlayerCard({
             onClick={() => handlePrevious(entity)}
             disabled={entityState === 'off'}
           >
-            <Icon path={mdiSkipPrevious} size={1.2} />
+            <Icon path={mdiSkipPrevious} size={17} />
           </button>
           <button 
             className="max-control-button play"
@@ -134,7 +134,7 @@ function MaxPlayerCard({
           >
             <Icon 
               path={entityState === 'playing' ? mdiPause : mdiPlay} 
-              size={1.5} 
+              size={21} 
             />
           </button>
           <button 
@@ -142,12 +142,12 @@ function MaxPlayerCard({
             onClick={() => handleNext(entity)}
             disabled={entityState === 'off'}
           >
-            <Icon path={mdiSkipNext} size={1.2} />
+            <Icon path={mdiSkipNext} size={17} />
           </button>
     
         </div>
         <div className="max-progress-bar">
-          <Icon path={mdiVolumeHigh} size={1} />
+          <Icon path={mdiVolumeHigh} size={14} />
           <Slider disabled={getEntityState(entity) === 'off'} min={0} max={1} step={0.01} tooltip={null} defaultValue={getVolumeLevel(entity)} onChange={(value) => handleVolumeSet(entity, value)} style={{ flex: 1 }} />
         </div>
         </div>

@@ -63,8 +63,8 @@
   background: var(--color-card-bg);
   border: none;
   border-radius: 50%;
-  width: 26px;
-  height: 26px;
+  width: 30rem;
+  height: 30rem;
   padding: 0;
   cursor: pointer;
   transition: all 0.3s ease;

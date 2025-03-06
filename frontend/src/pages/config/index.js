@@ -817,31 +817,31 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
     {
       key: 'import',
       label: t('config.import'),
-      icon: <Icon path={mdiImport} size={0.8} />,
+      icon: <Icon path={mdiImport} size={12} />,
       onClick: () => fileInputRef.current.click()
     },
     {
       key: 'export',
       label: t('config.export'),
-      icon: <Icon path={mdiExport} size={0.8} />,
+      icon: <Icon path={mdiExport} size={12} />,
       onClick: handleExport
     },
     {
       key: 'importLayout',
       label: t('config.importLayout'),
-      icon: <Icon path={mdiImport} size={0.8} />,
+      icon: <Icon path={mdiImport} size={12} />,
       onClick: () => document.getElementById('layoutFileInput').click()
     },
     {
       key: 'exportLayout',
       label: t('config.exportLayout'),
-      icon: <Icon path={mdiExport} size={0.8} />,
+      icon: <Icon path={mdiExport} size={12} />,
       onClick: handleExportLayout
     },
     {
       key: 'versions',
       label: t('config.versionList'),
-      icon: <Icon path={mdiFileFind} size={0.8} />,
+      icon: <Icon path={mdiFileFind} size={12} />,
       onClick: handleVersionList
     }
   ];
@@ -855,7 +855,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
            {!isMobile && <Button 
                 className="back-button"
                 onClick={() => navigate('/')}
-                icon={<Icon path={mdiArrowLeft} size={0.8} />}
+                icon={<Icon path={mdiArrowLeft} size={12} />}
               >
                 {t('nav.home')}
               </Button>
@@ -864,7 +864,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
             <Button
               className="global-config-button"
               onClick={() => setShowGlobalConfig(true)}
-              icon={<Icon path={mdiCog} size={0.8} />}
+              icon={<Icon path={mdiCog} size={12} />}
             >
               {t('config.globalConfig')}
             </Button>
@@ -887,7 +887,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
             <Dropdown menu={{ items: configMenuItems }} placement="bottomLeft">
               <Button>
                 {t('config.title')}
-                <Icon path={mdiImport} size={0.8} style={{ marginLeft: 8 }} />
+                <Icon path={mdiImport} size={12} style={{ marginLeft: 8 }} />
               </Button>
             </Dropdown>
           </Space>
@@ -898,7 +898,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
             <div key={card.id} className="config-card">
               <div className="card-header">
                 <div className="card-icon">
-                  <Icon path={getCardTypes(t)[card.type].icon} size={1} />
+                  <Icon path={getCardTypes(t)[card.type].icon} size={14} />
                 </div>
                 <h3 className="card-title">{card.config.title}</h3>
               </div>
@@ -923,7 +923,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
               <div className="card-actions">
                 <Button
                   size="small"
-                  icon={<Icon path={mdiPencil} size={0.8} />}
+                  icon={<Icon path={mdiPencil} size={12} />}
                   onClick={() => handleEditCard(card)}
                 >
                   {t('config.edit')}
@@ -938,7 +938,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
                     size="small"
                     type="text"
                     danger
-                    icon={<Icon path={mdiDelete} size={0.8} />}
+                    icon={<Icon path={mdiDelete} size={12} />}
                   >
                     {t('config.delete')}
                   </Button>
@@ -988,7 +988,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
         className={`save-button ${hasUnsavedChanges ? 'has-changes' : ''}`}
         onClick={handleSave}
       >
-        <Icon path={mdiCheck} size={2} />
+        <Icon path={mdiCheck} size={28} />
       </button>
 
       {/* 添加卡片按钮 */}
@@ -996,7 +996,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
         className="add-card-button"
         onClick={() => setShowAddModal(true)}
       >
-        <Icon path={mdiPlus} size={3} />
+        <Icon path={mdiPlus} size={42} />
       </button>
 
       {loading && (

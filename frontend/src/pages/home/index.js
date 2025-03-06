@@ -7,7 +7,6 @@ import {
   mdiCheck,
   mdiPencil,
   mdiRefresh,
-  mdiMenu,
   mdiViewDashboard,
   mdiGoogleTranslate,
   mdiFullscreen,
@@ -19,7 +18,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { Responsive } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { message, Spin, Popconfirm } from 'antd';
+import { message, Spin, Modal, Slider } from 'antd';
 import WeatherCard from '../../components/WeatherCard';
 import SensorCard from '../../components/SensorCard';
 import TimeCard from '../../components/TimeCard';
@@ -65,7 +64,10 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [touchStartY, setTouchStartY] = useState(0);
   const [touchStartX, setTouchStartX] = useState(0);
-  const [columnCount, setColumnCount] = useState({ lg: 30, md: 30, sm: 1 });
+  const [columnCount, setColumnCount] = useState({ lg: 40, md: 40, sm: 1 });
+
+  // 使用Modal.useModal创建模态对话框实例，确保使用全局主题
+  const [modal, contextHolder] = Modal.useModal();
 
   // 添加主题菜单状态
   const [themeMenuVisible, setThemeMenuVisible] = useState(false);
@@ -118,12 +120,20 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     return true;
   }, []);
   // 添加一个函数，计算默认布局
-  const calculateDefaultLayouts = useCallback((cards) => {
-    // 基础布局参数
+  const calculateDefaultLayouts = useCallback((cards, columnCount = 5) => {
+    // 基础布局参数 - 根据传入的列数自动计算列宽
+    const totalCols = 40; // 总列数保持不变
+    
+    // 使用精确的除法计算每个卡片的宽度
+    // 这样可以确保所有卡片刚好填满一行
+    const cardWidth = Math.floor(totalCols / columnCount); // 向下取整，确保不会超出总宽度
+    // 计算最后一列的宽度，确保总宽度仍为40
+    const lastColumnWidth = totalCols - (cardWidth * (columnCount - 1));
+    
     const baseParams = {
-      lg: { cols: 30, cardWidth: 6 },  // 从5改为4，使卡片更窄，可以在一行放置更多卡片
-      md: { cols: 30, cardWidth: 6 },
-      sm: { cols: 1, cardWidth: 1 }
+      lg: { cols: totalCols, cardWidth: cardWidth, lastColumnWidth: lastColumnWidth }, 
+      md: { cols: totalCols, cardWidth: cardWidth, lastColumnWidth: lastColumnWidth },
+      sm: { cols: 1, cardWidth: 1, lastColumnWidth: 1 }
     };
     // 添加卡片高度配置
     const cardHeights = {
@@ -214,7 +224,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       }
       // 为每个断点计算布局
       Object.keys(layouts).forEach(breakpoint => {
-        const { cardWidth } = baseParams[breakpoint];
+        const { cardWidth, lastColumnWidth } = baseParams[breakpoint];
 
         // 计算卡片位置
         let col, row;
@@ -225,17 +235,31 @@ function Home({ sidebarVisible, setSidebarVisible }) {
           row = index;
         } else {
           // 非移动端使用多列布局
-          // 在30列布局中，
-          col = (index % 5) * 6
-          row = Math.floor(index / 5);
+          // 根据列数动态计算位置
+          const columnPosition = index % columnCount;
+          
+          // 计算列位置
+          if (columnPosition < columnCount - 1) {
+            // 非最后一列使用标准宽度
+            col = columnPosition * cardWidth;
+          } else {
+            // 最后一列需要特殊处理，使用剩余宽度
+            col = (columnCount - 1) * cardWidth;
+          }
+          
+          row = Math.floor(index / columnCount);
         }
+
+        // 确定卡片宽度 - 最后一列可能有特殊宽度
+        const isLastColumn = (index % columnCount) === columnCount - 1;
+        const width = isLastColumn ? lastColumnWidth : cardWidth;
 
         layouts[breakpoint].push({
           card_type: card.type,
           i: cardId,
           x: col,
           y: row * 10, // 简单的行间距
-          w: cardWidth,
+          w: width,
           h: card_height
         });
       });
@@ -288,7 +312,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         if (newIsMobile) {
           setColumnCount({ lg: 1, md: 1, sm: 1 });
         } else {
-          setColumnCount({ lg: 30, md: 30, sm: 1 });
+          setColumnCount({ lg: 40, md: 40, sm: 1 });
         }
       }
     }
@@ -484,20 +508,88 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     }
   };
 
+  // 添加一个组件，用于显示列数选择器
+  const ColumnSelector = ({ onColumnChange }) => {
+    const [columns, setColumns] = useState(5);
+    
+    useEffect(() => {
+      onColumnChange(columns);
+    }, [columns, onColumnChange]);
+    
+    return (
+      <div>
+        <p>{t('config.resetLayoutWarning')}</p>
+        <p style={{ marginTop: 10 }}>{t('config.selectColumnCount')}: {columns}</p>
+        <Slider
+          min={2}
+          max={40}
+          value={columns}
+          marks={{
+            2: '2',
+            5: '5',
+            8: '8',
+            10: '10',
+            20: '20',
+            30: '30',
+            40: '40'
+          }}
+          onChange={setColumns}
+        />
+      </div>
+    );
+  };
+
   // 修改重置布局功能
   const handleResetLayout = () => {
     try {
-      // 不再从后端获取默认布局，而是重新计算
-      const newLayouts = calculateDefaultLayouts(cards);
+      // 手机端也需要确认，但不需要选择列数
+      if (isMobile) {
+        // 使用modal实例而非Modal.confirm
+        modal.confirm({
+          title: t('config.resetLayoutConfirm'),
+          content: <p>{t('config.resetLayoutWarning')}</p>,
+          onOk: () => {
+            // 手机端使用固定的列数为1进行重置
+            const newLayouts = calculateDefaultLayouts(cards, 1);
 
-      setCurrentLayouts(newLayouts);
+            setCurrentLayouts(newLayouts);
 
-      // 保存到本地存储
-      const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
-      localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
+            // 保存到本地存储
+            localStorage.setItem('mobile-dashboard-layouts', JSON.stringify(newLayouts));
 
-      setIsEditing(false);
-      message.success(t('config.resetSuccess'));
+            setIsEditing(false);
+            message.success(t('config.resetSuccess'));
+          }
+        });
+      } else {
+        // 非手机端显示列数选择对话框
+        let selectedColumns = 5;
+        
+        // 使用modal实例而非Modal.confirm
+        modal.confirm({
+          title: t('config.resetLayoutConfirm'),
+          content: <ColumnSelector onColumnChange={(value) => { selectedColumns = value; }} />,
+          onOk: () => {
+            // 使用最新的列数值
+            const newLayouts = calculateDefaultLayouts(cards, selectedColumns);
+
+            // 更新列数状态
+            setColumnCount({ 
+              lg: 40, // 总列数保持不变
+              md: 40, 
+              sm: 1 
+            });
+
+            setCurrentLayouts(newLayouts);
+
+            // 保存到本地存储
+            localStorage.setItem('desktop-dashboard-layouts', JSON.stringify(newLayouts));
+
+            setIsEditing(false);
+            message.success(t('config.resetSuccess'));
+          }
+        });
+      }
     } catch (error) {
       console.error('重置布局失败:', error);
       message.error('重置布局失败');
@@ -598,56 +690,40 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   }, [themeMenuVisible, handleClickOutside]);
 
   const renderCard = (card) => {
-    switch (card.type) {
-      case 'TimeCard':
-        return <TimeCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'WeatherCard':
-        return <WeatherCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'LightStatusCard':
-        return <LightStatusCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'SensorCard':
-        return <SensorCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'MediaPlayerCard':
-        return <MediaPlayerCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'CurtainCard':
-        return <CurtainCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'ElectricityCard':
-        return <ElectricityCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'ScriptPanel':
-        return <ScriptPanel key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'WaterPurifierCard':
-        return <WaterPurifierCard config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'IlluminanceCard':
-        return <IlluminanceCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'RouterCard':
-        return <RouterCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'NASCard':
-        return <NASCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'CameraCard':
-        return <CameraSection key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'ClimateCard':
-        return <ClimateCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'MotionCard':
-        return <MotionCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'LightOverviewCard':
-        return <LightOverviewCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'SocketStatusCard':
-        return <SocketStatusCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'MaxPlayerCard':
-        return <MaxPlayerCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'UniversalCard':
-        return <UniversalCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'FamilyCard':
-        return <FamilyCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'PVECard':
-        return <PVECard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'ServerCard':
-        return <ServerCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      case 'DailyQuoteCard':
-        return <DailyQuoteCard key={card.id} config={{ ...card.config, titleVisible: card.titleVisible }} />;
-      default:
-        return null;
-    }
+    // 组件映射表
+    const CardComponents = {
+      'TimeCard': TimeCard,
+      'WeatherCard': WeatherCard,
+      'LightStatusCard': LightStatusCard,
+      'SensorCard': SensorCard,
+      'MediaPlayerCard': MediaPlayerCard,
+      'CurtainCard': CurtainCard,
+      'ElectricityCard': ElectricityCard,
+      'ScriptPanel': ScriptPanel,
+      'WaterPurifierCard': WaterPurifierCard,
+      'IlluminanceCard': IlluminanceCard,
+      'RouterCard': RouterCard,
+      'NASCard': NASCard,
+      'CameraCard': CameraSection,
+      'ClimateCard': ClimateCard,
+      'MotionCard': MotionCard,
+      'LightOverviewCard': LightOverviewCard,
+      'SocketStatusCard': SocketStatusCard,
+      'MaxPlayerCard': MaxPlayerCard,
+      'UniversalCard': UniversalCard,
+      'FamilyCard': FamilyCard,
+      'PVECard': PVECard,
+      'ServerCard': ServerCard,
+      'DailyQuoteCard': DailyQuoteCard,
+    };
+
+    const Component = CardComponents[card.type];
+    if (!Component) return null;
+    
+    return <Component 
+      key={card.id} 
+      config={{ ...card.config, titleVisible: card.titleVisible }} 
+    />;
   };
 
 
@@ -717,6 +793,9 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     >
+      {/* 添加contextHolder以确保模态对话框使用全局主题 */}
+      {contextHolder}
+      
       {/* <PullToRefresh
         onRefresh={handleRefresh}
         pullingText="下拉刷新"
@@ -741,7 +820,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 >
                   <Icon
                     path={getThemeIcon()}
-                    size={1}
+                    size={14}
                     color="var(--color-text-primary)"
                   />
                 </button>
@@ -755,7 +834,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                         setThemeMenuVisible(false);
                       }}
                     >
-                      <Icon path={mdiWhiteBalanceSunny} size={0.8} />
+                      <Icon path={mdiWhiteBalanceSunny} size={12} />
                       <span>{t('theme.light')}</span>
                     </button>
                     <button
@@ -765,7 +844,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                         setThemeMenuVisible(false);
                       }}
                     >
-                      <Icon path={mdiWeatherNight} size={0.8} />
+                      <Icon path={mdiWeatherNight} size={12} />
                       <span>{t('theme.dark')}</span>
                     </button>
                     <button
@@ -775,7 +854,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                         setThemeMenuVisible(false);
                       }}
                     >
-                      <Icon path={mdiMonitor} size={0.8} />
+                      <Icon path={mdiMonitor} size={12} />
                       <span>{t('theme.system')}</span>
                     </button>
                   </div>
@@ -789,7 +868,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               >
                 <Icon
                   path={mdiGoogleTranslate}
-                  size={1}
+                  size={14}
                   color="var(--color-text-primary)"
                 />
               </button>
@@ -801,7 +880,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               >
                 <Icon
                   path={mdiCog}
-                  size={1}
+                  size={14}
                   color="var(--color-text-primary)"
                 />
               </button>
@@ -814,31 +893,23 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 >
                   <Icon
                     path={mdiPencil}
-                    size={1}
+                    size={14}
                     color="var(--color-text-primary)"
                   />
                 </button>
               )}
               {isEditing && (
-                <Popconfirm
-                  title="重置布局"
-                  description="确定要重置布局吗？"
-                  okText="确定"
-                  cancelText="取消"
-                  onConfirm={() => handleResetLayout()}
+                <button
+                  className="reset-layout"
+                  onClick={handleResetLayout}
+                  title={t('reset')}
                 >
-                  <button
-                    className="reset-layout"
-                    title={t('reset')}
-                  >
-                    <Icon
-                      path={mdiRefresh}
-                      size={1}
-                      color="var(--color-text-primary)"
-                    />
-                  </button>
-                </Popconfirm>
-
+                  <Icon
+                    path={mdiRefresh}
+                    size={14}
+                    color="var(--color-text-primary)"
+                  />
+                </button>
               )}
               {isEditing && !isMobile && (
                 <button
@@ -850,21 +921,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 >
                   <Icon
                     path={mdiCheck}
-                    size={1}
-                    color="var(--color-text-primary)"
-                  />
-                </button>
-              )}
-
-              {!isMobile && false && (
-                <button
-                  className="sidebar-toggle"
-                  onClick={() => setSidebarVisible(!sidebarVisible)}
-                  title={t(`sidebar.${sidebarVisible ? 'hide' : 'show'}`)}
-                >
-                  <Icon
-                    path={mdiMenu}
-                    size={1}
+                    size={14}
                     color="var(--color-text-primary)"
                   />
                 </button>
@@ -877,7 +934,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               >
                 <Icon
                   path={isFullscreen ? mdiFullscreenExit : mdiFullscreen}
-                  size={1}
+                  size={14}
                   color="var(--color-text-primary)"
                 />
               </button>
@@ -922,13 +979,13 @@ function Home({ sidebarVisible, setSidebarVisible }) {
                 onClick={handleSaveLayout}
                 title={t('config.save')}
               >
-                <Icon path={mdiCheck} size={2} />
+                <Icon path={mdiCheck} size={28} />
               </button>
             )}
 
             {cards.filter(card => card.visible !== false).length === 0 && (
               <div className="empty-state" onClick={() => navigate('/config')}>
-                <Icon path={mdiViewDashboard} size={3} color="var(--color-text-secondary)" />
+                <Icon path={mdiViewDashboard} size={42} color="var(--color-text-secondary)" />
                 <h2>{t('empty.title')}</h2>
                 <p>{t('empty.desc')}</p>
               </div>
@@ -944,7 +1001,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               >
                 <Icon
                   path={mdiCheck}
-                  size={1.2}
+                  size={17}
                 />
               </button>
             )}

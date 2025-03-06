@@ -11,7 +11,7 @@ function My() {
     <div className="my-page">
       <div className="menu-list">
         <div className="menu-item" onClick={() => navigate('/config')}>
-          <Icon path={mdiCog} size={1} />
+          <Icon path={mdiCog} size={14} />
           <span>卡片配置</span>
         </div>
       </div>

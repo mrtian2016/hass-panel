@@ -25,7 +25,7 @@ function BaseCard({
               }) :
               <Icon 
                 path={icon} 
-                size={1} 
+                size={14} 
                 style={{ marginRight: '8px', verticalAlign: 'bottom' }} 
               />
           )}

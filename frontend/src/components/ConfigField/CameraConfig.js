@@ -59,16 +59,15 @@ function CameraConfig({ field, value, onChange, getFilteredEntities }) {
         const urlParts = urlStr.split('://');
         const hostPath = urlParts[1].split('/');
         const hostPart = hostPath[0];
-        const pathPart = hostPath.slice(1).join('/');
         
         // 移除主机部分中可能存在的所有认证信息
         const cleanHost = hostPart.split('@').pop();
         
         // 只有当用户名和密码都存在时才添加认证信息
         if (newCameras[index].onvif_username && newCameras[index].onvif_password) {
-          newCameras[index].stream_url = `onvif://${newCameras[index].onvif_username}:${newCameras[index].onvif_password}@${cleanHost}/${pathPart}`;
+          newCameras[index].stream_url = `onvif://${newCameras[index].onvif_username}:${newCameras[index].onvif_password}@${cleanHost}/onvif/device_service`;
         } else {
-          newCameras[index].stream_url = `onvif://${cleanHost}/${pathPart}`;
+          newCameras[index].stream_url = `onvif://${cleanHost}/onvif/device_service`;
         }
       }
       

@@ -302,7 +302,6 @@
   justify-content: space-between;
   gap: var(--spacing-sm);
   margin-top: var(--spacing-lg);
-  padding: 0 var(--spacing-md);
 }
 
 .function-button {
@@ -319,7 +318,6 @@
   cursor: pointer;
   transition: all 0.3s;
   font-size: 0.8em;
-  min-width: 60px;
   position: relative;
   overflow: hidden;
 }

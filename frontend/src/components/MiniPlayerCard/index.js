@@ -46,7 +46,7 @@ function MiniPlayerCard({
             ) : (
               <div className="mini-cover-placeholder" >
                 <div className="mini-cover-placeholder-icon">
-                  <Icon path={mdiPlayCircle} color="var(--color-primary)" size={1.2} />
+                  <Icon path={mdiPlayCircle} color="var(--color-primary)" size={17} />
                 </div>
               </div>
             )}
@@ -60,7 +60,7 @@ function MiniPlayerCard({
         </div>
         <div className="mini-player-controls-row">
           <div className="mini-volume-slider">
-            <Icon path={mdiVolumeHigh} size={0.8} />
+            <Icon path={mdiVolumeHigh} size={12} />
             <Slider min={0} max={1} step={0.01} tooltip={null} defaultValue={getVolumeLevel(entity)} onChange={(value) => handleVolumeSet(entity, value)} style={{ flex: 1 }} />
           </div>
           <div className="mini-player-controls">
@@ -70,7 +70,7 @@ function MiniPlayerCard({
               disabled={entityState === 'off'}
               title={t('mediaPlayer.controls.previous')}
             >
-              <Icon path={mdiSkipPrevious} size={1} />
+              <Icon path={mdiSkipPrevious} size={14} />
             </button>
             <button 
               className="mini-control-button mini-play-button"
@@ -78,7 +78,7 @@ function MiniPlayerCard({
               disabled={entityState === 'off'}
               title={t('mediaPlayer.controls.playPause')}
             >
-              <Icon path={entityState === 'playing' ? mdiPause : mdiPlay} size={1} />
+              <Icon path={entityState === 'playing' ? mdiPause : mdiPlay} size={14} />
             </button>
             <button 
               className="mini-control-button"
@@ -86,7 +86,7 @@ function MiniPlayerCard({
               disabled={entityState === 'off'}
               title={t('mediaPlayer.controls.next')}
             >
-              <Icon path={mdiSkipNext} size={1} />
+              <Icon path={mdiSkipNext} size={14} />
             </button>
           </div>
         </div>

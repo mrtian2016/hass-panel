@@ -204,7 +204,7 @@ function ClimateCard({
           onClick={handlePowerClick}
           title={t('climate.power')}
         >
-          <Icon path={mdiPower} size={1} />
+          <Icon path={mdiPower} size={14} />
         </button>
       }
     >
@@ -213,7 +213,7 @@ function ClimateCard({
           <div className="climate-readings">
             <div className="reading">
               <div className="reading-label">
-                <Icon path={mdiThermometer} size={0.8} />
+                <Icon path={mdiThermometer} size={12} />
                 <span>{t('climate.currentTemp')}</span>
               </div>
               <div className="reading-value">
@@ -223,7 +223,7 @@ function ClimateCard({
             </div>
             <div className="reading">
               <div className="reading-label">
-                <Icon path={mdiWaterPercent} size={0.8} />
+                <Icon path={mdiWaterPercent} size={12} />
                 <span>{t('climate.currentHumidity')}</span>
               </div>
               <div className="reading-value">
@@ -245,14 +245,14 @@ function ClimateCard({
               onClick={() => handleTempChange(-target_temp_step)}
               disabled={!isOn || !canAdjustTemperature(climate?.state) || (targetTemp <= climate?.attributes?.min_temp)}
             >
-              <Icon path={mdiMinus} size={1} />
+              <Icon path={mdiMinus} size={14} />
             </button>
             <button 
               className="temp-button" 
               onClick={() => handleTempChange(target_temp_step)}
               disabled={!isOn || !canAdjustTemperature(climate?.state) || (targetTemp >= climate?.attributes?.max_temp)}
             >
-              <Icon path={mdiPlus} size={1} />
+              <Icon path={mdiPlus} size={14} />
             </button>
           </div>
         </div>
@@ -262,7 +262,7 @@ function ClimateCard({
             className="mode-button"
             onClick={() => setShowHvacModes(true)}
           >
-            <Icon path={getHvacModeIcon(climate?.state)} size={1} />
+            <Icon path={getHvacModeIcon(climate?.state)} size={14} />
             <span>{t('climate.operationMode')}</span>
             <span className="mode-value">{getHvacModeLabel(climate?.state)}</span>
           </button>
@@ -271,7 +271,7 @@ function ClimateCard({
             onClick={() => setShowFanModes(true)}
             disabled={!isOn}
           >
-            <Icon path={mdiFan} size={1} />
+            <Icon path={mdiFan} size={14} />
             <span>{t('climate.fanMode')}</span>
             <span className="mode-value">{fanMode}</span>
           </button>
@@ -280,7 +280,7 @@ function ClimateCard({
             onClick={() => setShowSwingModes(true)}
             disabled={!isOn}
           >
-            <Icon path={mdiArrowOscillating} size={1} />
+            <Icon path={mdiArrowOscillating} size={14} />
             <span>{t('climate.swingMode')}</span>
             <span className="mode-value">{getSwingModeLabel(swingMode)}</span>
           </button>
@@ -301,7 +301,7 @@ function ClimateCard({
                 onClick={() => feature.entity?.service?.toggle()}
                 disabled={isDisabled}
               >
-                <Icon path={ICON_MAP[feature.icon]} size={1} />
+                <Icon path={ICON_MAP[feature.icon]} size={14} />
                 <span>{feature.name}</span>
               </button>
             );
@@ -323,7 +323,7 @@ function ClimateCard({
         <div className="fan-mode-popup">
           <div className="popup-header">
             <h3>{t('climate.fanMode')}</h3>
-            <Icon path={mdiFan} size={1} />
+            <Icon path={mdiFan} size={14} />
           </div>
           <List>
             {fanModes.map((mode) => (
@@ -352,7 +352,7 @@ function ClimateCard({
         <div className="fan-mode-popup">
           <div className="popup-header">
             <h3>{t('climate.swingMode')}</h3>
-            <Icon path={mdiFan} size={1} className="rotate-90" />
+            <Icon path={mdiFan} size={14} className="rotate-90" />
           </div>
           <List>
             {swingModes.map((mode) => (
@@ -382,7 +382,7 @@ function ClimateCard({
         <div className="fan-mode-popup">
           <div className="popup-header">
             <h3>{t('climate.operationMode')}</h3>
-            <Icon path={mdiPower} size={1} />
+            <Icon path={mdiPower} size={14} />
           </div>
           <List>
             {climate?.attributes?.hvac_modes.map((mode) => (
@@ -390,7 +390,7 @@ function ClimateCard({
                 key={mode}
                 onClick={() => handleHvacModeChange(mode)}
                 className={climate?.state === mode ? 'active-mode' : ''}
-                prefix={<Icon path={getHvacModeIcon(mode)} size={1} />}
+                prefix={<Icon path={getHvacModeIcon(mode)} size={14} />}
               >
                 {getHvacModeLabel(mode)}
               </List.Item>

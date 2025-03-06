@@ -28,7 +28,7 @@ function FamilyCard({ config }) {
             <div className="default-avatar" >
             <Icon 
               path={mdiAccount} 
-              size={3} 
+              size={42} 
               color="white"
             />
             </div>
@@ -36,7 +36,7 @@ function FamilyCard({ config }) {
           <div className="status-indicator">
             <Icon 
               path={isHome ? mdiHome : mdiWalk} 
-              size={0.7} 
+              size={9} 
               color={theme === 'dark' ? 'white' : 'black'}
             />
           </div>

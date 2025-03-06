@@ -49,7 +49,7 @@ function Sidebar({ visible }) {
             onClick={() => navigate(item.key)}
             title={item.title}
           >
-            <Icon path={item.icon} size={1} />
+            <Icon path={item.icon} size={14} />
             <span className="menu-title">{item.title}</span>
           </button>
         ))}

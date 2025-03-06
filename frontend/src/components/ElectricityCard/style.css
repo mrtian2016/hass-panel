@@ -20,18 +20,18 @@
 }
 
 .electricity-main-value .value {
-  font-size: 2.8em;
+  font-size: 10rem;
   font-weight: 500;
   color: var(--color-text-primary);
 }
 
 .electricity-main-value .unit {
-  font-size: 1.2em;
+  font-size: 12rem;
   color: var(--color-text-secondary);
 }
 
 .electricity-chart {
-  height: 80px;
+  height: 60rem;
   margin: var(--spacing-lg) 0;
   position: relative;
 }
@@ -58,7 +58,7 @@
   gap: var(--spacing-xs);
   text-align: center;
   border-radius: var(--border-radius-small);
-  padding: var(--spacing-md);
+  padding: var(--spacing-md) 0;
   background: var(--color-card-bg-transparent);
   border: 1px solid var(--color-card-bg-transparent);
   width: 100%;
@@ -71,7 +71,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   color: var(--color-text-secondary);
-  font-size: 0.9em;
+  font-size: 12rem;
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
@@ -89,7 +89,7 @@
 }
 
 .electricity-value .value {
-  font-size: 1.6em;
+  font-size: 20rem;
   font-weight: 500;
   color: var(--color-text-primary);
   word-break: break-word;
@@ -97,7 +97,7 @@
 }
 
 .electricity-value .unit {
-  font-size: 0.9em;
+  font-size: 8rem;
   color: var(--color-text-secondary);
 }
 
@@ -112,8 +112,6 @@
   flex-wrap: wrap;
   width: 100%;
 }
-
-
 
 .yearly-item {
   flex: 1;
@@ -135,42 +133,3 @@
   justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .electricity-yearly-info .electricity-info-item {
-    min-width: calc(50% - var(--spacing-md));
-  }
-}
-
-@media (max-width: 480px) {
-  .electricity-content {
-    padding: var(--spacing-md);
-  }
-  
-  .electricity-info-grid {
-    gap: var(--spacing-md);
-  }
-  
-  .electricity-main-value .value {
-    font-size: 2.4em;
-  }
-  
-  .electricity-value .value {
-    font-size: 1.4em;
-  }
-  
-  .electricity-yearly-info {
-    padding: var(--spacing-md) 0;
-    margin: var(--spacing-md) 0;
-    gap: var(--spacing-md);
-    flex-direction: row;
-  }
-
-  .electricity-yearly-info .electricity-info-item {
-    min-width: 100%;
-  }
-
-  .electricity-info-item {
-    width: 100%;
-    flex: none;
-  }
-} 

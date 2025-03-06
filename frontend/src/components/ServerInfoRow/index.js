@@ -16,7 +16,7 @@ const ServerInfoRow = ({ cpuUsage, memoryUsage, uploadSpeed, downloadSpeed, titl
                 Boolean(item.value) && <div className="server-info-row" key={index}>
                     <div className="server-info-item">
                         <div className="server-info-label-group">
-                            <Icon path={item.icon} size={0.8} />
+                            <Icon path={item.icon} size={12} />
                             <span className="server-info-label">{item.label}</span>
                         </div>
                         <span className={`server-info-value ${item.className || ''}`}>

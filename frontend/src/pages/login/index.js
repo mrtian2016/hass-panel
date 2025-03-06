@@ -135,7 +135,7 @@ function Login() {
         <div className="login-header">
           <Icon
             path={mdiHomeAutomation}
-            size={2}
+            size={28}
             className="login-logo"
             color="var(--color-primary)"
           />
@@ -186,7 +186,7 @@ function Login() {
             >
               <Icon
                 path={getThemeIcon()}
-                size={1}
+                size={14}
                 color="var(--color-text-primary)"
               />
             </button>
@@ -200,7 +200,7 @@ function Login() {
                     setThemeMenuVisible(false);
                   }}
                 >
-                  <Icon path={mdiWhiteBalanceSunny} size={0.8} />
+                  <Icon path={mdiWhiteBalanceSunny} size={12} />
                   <span>{t('theme.light')}</span>
                 </button>
                 <button
@@ -210,7 +210,7 @@ function Login() {
                     setThemeMenuVisible(false);
                   }}
                 >
-                  <Icon path={mdiWeatherNight} size={0.8} />
+                  <Icon path={mdiWeatherNight} size={12} />
                   <span>{t('theme.dark')}</span>
                 </button>
                 <button
@@ -220,7 +220,7 @@ function Login() {
                     setThemeMenuVisible(false);
                   }}
                 >
-                  <Icon path={mdiMonitor} size={0.8} />
+                  <Icon path={mdiMonitor} size={12} />
                   <span>{t('theme.system')}</span>
                 </button>
               </div>
@@ -233,7 +233,7 @@ function Login() {
           >
             <Icon
               path={mdiGoogleTranslate}
-              size={1}
+              size={14}
               color="var(--color-text-primary)"
             />
           </button>
@@ -244,7 +244,7 @@ function Login() {
           >
             <Icon
               path={mdiGithub}
-              size={1}
+              size={14}
               color="var(--color-text-primary)"
             />
           </button>

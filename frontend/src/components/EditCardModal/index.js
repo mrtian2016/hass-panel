@@ -95,7 +95,7 @@ function EditCardModal({
       </Button>
       <Button 
         type="primary"
-        icon={<Icon path={mdiCheck} size={0.8} />}
+        icon={<Icon path={mdiCheck} size={12} />}
         onClick={handleSave}
         style={{ background: 'var(--color-primary)', borderColor: 'var(--color-primary)' }}
       >
@@ -131,7 +131,7 @@ function EditCardModal({
             className="close-preview"
             onClick={() => setShowPreview(false)}
           >
-            <Icon path={mdiClose} size={1} />
+            <Icon path={mdiClose} size={14} />
           </button>
           <LightOverviewCard
             key={JSON.stringify(previewConfig)}

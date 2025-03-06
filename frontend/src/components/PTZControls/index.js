@@ -158,14 +158,14 @@ function PTZControls({ entityId, stream_url }) {
                         className="preset-button"
                         onClick={togglePresets}
                         type="text"
-                        icon={<Icon path={mdiBookmarkOutline} size={1} />}
+                        icon={<Icon path={mdiBookmarkOutline} size={14} />}
                         title={t('ptz.presets')}
                     />
                     <Button
                         className="settings-button"
                         onClick={toggleSettings}
                         type="text"
-                        icon={<Icon path={mdiCogOutline} size={1} />}
+                        icon={<Icon path={mdiCogOutline} size={14} />}
                         title={t('ptz.settings')}
                     />
                 </div>
@@ -243,7 +243,7 @@ function PTZControls({ entityId, stream_url }) {
                         onTouchStart={() => handlePTZStart('zoom', 'ZOOM_IN')}
                         onTouchEnd={handlePTZStop}
                         title={t('ptz.zoom.in')}
-                        icon={<Icon path={mdiMagnifyPlus} size={1.5} />}
+                        icon={<Icon path={mdiMagnifyPlus} size={21} />}
                     />
                     <Button
                         className="ptz-button"
@@ -253,7 +253,7 @@ function PTZControls({ entityId, stream_url }) {
                         onTouchStart={() => handlePTZStart('zoom', 'ZOOM_OUT')}
                         onTouchEnd={handlePTZStop}
                         title={t('ptz.zoom.out')}
-                        icon={<Icon path={mdiMagnifyMinus} size={1.5} />}
+                        icon={<Icon path={mdiMagnifyMinus} size={21} />}
                     />
                 </div>
             </div>

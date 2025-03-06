@@ -32,7 +32,7 @@
 .initialize-box {
   width: 100%;
   max-width: 400px;
-  padding: 2rem;
+  padding: 20rem;
   background-color: var(--component-background);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -40,13 +40,13 @@
 
 .initialize-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 25rem;
   color: var(--color-text-primary);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 0.8rem;
+  gap: 8rem;
 }
 
 .initialize-logo {
@@ -67,7 +67,7 @@
 
 .initialize-header h2 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 30rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   color: var(--color-text-primary);
@@ -76,9 +76,9 @@
 .initialize-footer {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
+  gap: 10rem;
+  margin-top: 15rem;
+  padding-top: 15rem;
   border-top: 1px solid var(--color-border);
 }
 

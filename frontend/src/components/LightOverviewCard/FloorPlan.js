@@ -80,8 +80,7 @@ function FloorPlan({ lights }) {
             >
               <Icon 
                 icon={light.icon || 'mdi:ceiling-light'}
-                width={22}
-                height={22}
+                width={"24rem"}
                 className="light-icon"
               />
             </button>

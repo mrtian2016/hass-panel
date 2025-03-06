@@ -1,13 +1,3 @@
-.time-card {
-  width: calc(100vw - 40px);
-  background: var(--color-card-bg);
-  border-radius: var(--border-radius-medium);
-  margin-top: var(--spacing-lg);
-  box-shadow: 0 2px 8px var(--color-shadow);
-  box-sizing: border-box;
-  padding: 0;
-  overflow: hidden;
-}
 
 .time-content {
   padding: var(--spacing-md);
@@ -18,14 +8,14 @@
 }
 
 .time {
-  font-size: 2.5rem !important;
+  font-size: 42rem !important;
   font-weight: bold;
   color: var(--color-text-primary);
   margin-bottom: var(--spacing-sm);
 }
 
 .date {
-  font-size: 1.2rem !important;
+  font-size: 18rem !important;
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-sm);
   display: flex;
@@ -34,12 +24,12 @@
 }
 
 .weekday {
-  font-size: 1.2rem !important;
+  font-size: 16rem !important;
   color: var(--color-text-secondary);
 }
 
 .lunar-date {
-  font-size: 1rem;
+  font-size: 18rem;
   color: var(--color-text-secondary);
   opacity: 0.8;
 } 
