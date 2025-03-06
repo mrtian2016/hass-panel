@@ -58,12 +58,12 @@ function FloorPlan({ lights }) {
 
         return (
           <React.Fragment key={light.entity?.entity_id}>
-            <img
-              src={light.image || lights.background}
+            {light.image && <img
+              src={light.image}
               alt={light.name}
               className={`light-layer ${light.state === 'on' ? 'active' : ''}`}
               style={{ pointerEvents: 'none' }}
-            />
+            />}
             <button
               className={`room-light-button ${light.state === 'on' ? 'active' : ''}`}
               style={{
