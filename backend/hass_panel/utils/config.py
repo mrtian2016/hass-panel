@@ -3,7 +3,7 @@ from omegaconf import OmegaConf
 import os
 
 def is_running_in_docker():
-    return os.path.exists('/.dockerenv') or os.path.exists('/.containerenv')
+    return os.path.exists('/.dockerenv') or os.path.exists('/run/.containerenv')
 
 cfg_type = 'prod' if is_running_in_docker() else 'dev'
 
