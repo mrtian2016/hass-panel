@@ -90,6 +90,7 @@ function LightStatusCard({ config }) {
 
   return (
     <BaseCard 
+    titleVisible={config.titleVisible}
     icon={mdiLightbulbGroup}
     title={config.title || t('cardTitles.lightStatus')}
     color={theme === 'dark' ? 'var(--color-text-primary)' : '#FFB74D'}
