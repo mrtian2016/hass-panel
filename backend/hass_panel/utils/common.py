@@ -48,6 +48,9 @@ async def handle_upload_file(file: UploadFile, file_dir=None, file_path=None):
 
 
 def get_file_name(filename, file_dir):
+    # Reemplazar espacios con guiones bajos en el nombre del archivo
+    filename = filename.replace(" ", "_")
+    
     full_path = osp.join(file_dir, filename)
     if full_path not in glob(f"{file_dir}/*"):
         return filename

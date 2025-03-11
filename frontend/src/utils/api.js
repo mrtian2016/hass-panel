@@ -51,10 +51,9 @@ axiosInstance.interceptors.response.use(
 export const applyBackgroundToBody = (globalConfig) => {
   if (!globalConfig) return;
 
-  // 检测当前主题模式
+  // 检测当前主题模式 - 只检查应用内部的主题标记，不考虑系统偏好
   const isDarkMode = document.documentElement.classList.contains('dark') || 
-                     document.documentElement.getAttribute('data-theme') === 'dark' ||
-                     window.matchMedia('(prefers-color-scheme: dark)').matches;
+                     document.documentElement.getAttribute('data-theme') === 'dark';
 
   // 设置背景颜色
   if (globalConfig.backgroundColor) {
