@@ -16,7 +16,7 @@
 
 ## 交流群
 
-<img src="https://i.imgur.com/jrRFIvT.jpeg" width="300" alt="交流群" />
+<img src="https://i.imgur.com/8fMpdZS.jpeg" width="300" alt="交流群" />
 
 ## 主要特性
 
