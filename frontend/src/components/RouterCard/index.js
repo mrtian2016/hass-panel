@@ -31,8 +31,8 @@ function RouterCard({ config }) {
   }, {});
 
   // 使用安全解析函数处理所有数值
-  const cpuUsage = safeParseFloat(entities.cpuUsage?.state);
-  const memoryUsage = safeParseFloat(entities.memoryUsage?.state);
+  const cpuUsage = safeParseFloat(entities.cpuUsage?.state).toFixed(1);
+  const memoryUsage = safeParseFloat(entities.memoryUsage?.state).toFixed(1);
   const wanDownloadSpeed = safeParseFloat(entities.wanDownloadSpeed?.state).toFixed(2);
   const wanUploadSpeed = safeParseFloat(entities.wanUploadSpeed?.state).toFixed(2);
   const onlineUsers = safeGetState(entities.onlineUsers);
