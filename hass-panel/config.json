@@ -1,6 +1,6 @@
 {
   "name": "Hass Panel",
-  "version": "v1.3.7.2",
+  "version": "v1.3.7.3",
   "slug": "hass_panel",
   "description": "史上最简单的 Home Assistant 控制面板，基于 React 开发 | 一键部署到 HAOS | 有手就能用 | 无需编程经验 | 开箱即用。",
   "url": "https://github.com/mrtian2016/hass-panel",
