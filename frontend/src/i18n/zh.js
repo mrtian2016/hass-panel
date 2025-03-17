@@ -937,6 +937,23 @@ export const zh = {
         },
         uptime: '运行时间'
       },
+      vms: {
+        title: '虚拟机状态',
+        actions: {
+            start: '启动',
+            shutdown: '关机',
+            restart: '重启',
+            stop: '停止',
+            startWarning: '虚拟机已在运行',
+            startSuccess: '虚拟机正在启动',
+            stopWarning: '虚拟机已停止',
+            stopSuccess: '虚拟机正在停止',
+            restartWarning: '虚拟机未运行，无法重启',
+            restartSuccess: '虚拟机正在重启',
+            shutdownWarning: '虚拟机未运行，无法关机',
+            shutdownSuccess: '虚拟机正在关机'
+        }
+    },
       deviceStatus: '设备状态',
     },
     // PTZ Controls

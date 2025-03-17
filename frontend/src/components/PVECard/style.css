@@ -450,12 +450,11 @@
 
 /* 添加状态颜色样式 */
 .pve-status-on, .pve-status-true {
-  color: var(--color-error);
+  color: var(--color-success);
 }
 
 .pve-status-off, .pve-status-false {
-  
-  color: var(--color-success);
+  color: var(--color-error);
 }
 
 .pve-status-unknown {
