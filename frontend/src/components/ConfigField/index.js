@@ -16,6 +16,7 @@ import SensorGroup from './SensorGroup';
 import ClimateFeaturesConfig from './ClimateFeaturesConfig';
 import { configApi } from '../../utils/api';
 import DailyQuoteConfig from './DailyQuoteConfig';
+import WashingMachineConfig from './WashingMachineConfig';
 
 
 function ConfigField({ field, value, onChange }) {
@@ -206,6 +207,9 @@ function ConfigField({ field, value, onChange }) {
 
     case 'cameras-config':
       return <CameraConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
+
+    case 'washing-machine-config':
+      return <WashingMachineConfig field={field} value={value} onChange={onChange} getFilteredEntities={getFilteredEntities} />
 
     case 'media-players':
       const mediaPlayerEntities = getFilteredEntities('media_player.*');

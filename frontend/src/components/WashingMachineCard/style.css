@@ -1,0 +1,284 @@
+.washing-machine-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.washing-machine-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Status Row at the top */
+.status-row {
+  display: flex;
+  justify-content: space-around;
+  background: var(--color-background-primary);
+  border-radius: var(--border-radius-small);
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.status-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.status-value.active {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Controls Row at the bottom */
+.controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-background-primary);
+  border-radius: var(--border-radius-small);
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  margin-top: auto;
+  gap: 24px;
+}
+
+.control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+/* Shared button style for the two controls */
+.wash-control-btn {
+  width: 100%;
+  height: 32px;
+  border-radius: 30px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  text-align: center;
+  color: var(--color-text-primary);
+}
+
+.wash-control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mode button specific style */
+.mode-btn {
+  background-color: var(--color-primary);
+}
+
+/* Start button specific style */
+.start-btn {
+  background-color:  var(--color-primary);
+}
+
+/* Stop button specific style */
+.stop-btn {
+  background-color: var(--color-error);
+  color: #fff;
+}
+
+
+/* Mode selector button */
+.mode-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  min-width: 120px;
+}
+
+.mode-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mode-button:not(:disabled):hover,
+.mode-button:not(:disabled):focus {
+  background-color: var(--color-primary-dark);
+}
+
+/* Popup styling */
+.mode-popup {
+  max-height: 40vh;
+  overflow-y: auto;
+  background-color: var(--color-background-popup);
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+/* List item styling */
+:global(.adm-list-item) {
+  padding: 16px;
+  color: var(--color-text-primary);
+}
+
+:global(.adm-list-item.active-mode) {
+  color: var(--color-primary);
+  font-weight: 500;
+  position: relative;
+}
+
+:global(.adm-list-item.active-mode)::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background-color: var(--color-primary);
+  border-radius: 0 2px 2px 0;
+}
+
+:global(.adm-popup-body) {
+  background-color: var(--color-background-popup);
+  border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+}
+
+/* Mode select */
+.mode-select {
+  flex: 1;
+  margin: 0 16px;
+  max-width: 50%;
+}
+
+.mode-selector {
+  width: 100%;
+  border-radius: 30px !important;
+}
+
+.mode-selector .ant-select-selector {
+  border: none !important;
+  border-radius: 30px !important;
+  height: 36px !important;
+  padding: 0 16px !important;
+  display: flex;
+  align-items: center;
+}
+
+/* Start/Stop button */
+.start-stop-button {
+  height: 36px !important;
+  padding: 0 16px !important;
+  border-radius: 30px !important;
+  font-weight: 500;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.start-stop-button:not(.ant-btn-dangerous) {
+  background-color: #e6c06e !important;
+  color: #000000 !important;
+}
+
+.start-stop-button.ant-btn-dangerous {
+  background-color: #e67e6e !important;
+  color: #ffffff !important;
+}
+
+.ant-btn[disabled] {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+}
+
+/* Ant Design component customizations */
+.washing-machine-card .ant-select-disabled .ant-select-selector {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+}
+
+.washing-machine-card .ant-select-focused .ant-select-selector {
+  box-shadow: none !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .washing-machine-content {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .status-row {
+    padding: 10px;
+  }
+  
+  .controls-row {
+    padding: 12px;
+    gap: 8px;
+  }
+  
+  .status-label {
+    font-size: 11px;
+  }
+  
+  .status-value {
+    font-size: 13px;
+  }
+  
+  .power-button,
+  .start-stop-button {
+    font-size: 12px;
+    height: 32px !important;
+    padding: 0 12px !important;
+  }
+  
+  .mode-select {
+    margin: 0 8px;
+  }
+  
+  .mode-selector .ant-select-selector {
+    height: 32px !important;
+    padding: 0 12px !important;
+    font-size: 12px;
+  }
+} 

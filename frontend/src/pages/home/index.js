@@ -42,6 +42,7 @@ import FamilyCard from '../../components/FamilyCard';
 import ServerCard from '../../components/ServerCard';
 import PVECard from '../../components/PVECard';
 import DailyQuoteCard from '../../components/DailyQuoteCard';
+import WashingMachineCard from '../../components/WashingMachineCard';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi, applyBackgroundToBody } from '../../utils/api';
@@ -714,6 +715,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
       'FamilyCard': FamilyCard,
       'PVECard': PVECard,
       'ServerCard': ServerCard,
+      'WashingMachineCard': WashingMachineCard,
       'DailyQuoteCard': DailyQuoteCard,
     };
 

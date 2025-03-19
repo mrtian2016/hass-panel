@@ -659,3 +659,71 @@
   }
 }
 
+/* WashingMachine Config styles */
+.washing-machine-config {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.washing-machine-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  padding: 16px;
+}
+
+.washing-machine-section h4 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.washing-machine-field,
+.program-field,
+.state-field,
+.sensor-field {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.program-config,
+.state-config,
+.sensor-config {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  padding: 16px;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .washing-machine-field,
+  .program-field,
+  .state-field,
+  .sensor-field {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .washing-machine-section {
+    padding: 12px;
+  }
+  
+  .program-config,
+  .state-config,
+  .sensor-config {
+    padding: 12px;
+  }
+}
+

@@ -156,6 +156,7 @@ export const en = {
         socketStatus: 'Socket Status',
         universal: 'Universal Card',
         quotes: 'Daily Quote',
+        washingMachine: 'Washing Machine',
     },
 
     // Card Actions
@@ -198,6 +199,8 @@ export const en = {
         pve: 'PVE Status',
         quotes: 'Daily Quote',
         dailyquote: 'Daily Quote',
+        washingMachine: 'Washing Machine',
+        washingmachine: 'Washing Machine',
     },
 
     // Configuration Fields
@@ -231,6 +234,7 @@ export const en = {
         serverConfig: 'Server Configuration',
         serverName: 'Server Name',
         quotesConfig: 'Quotes Configuration',
+        washingMachineConfig: 'Washing Machine Configuration',
     },
 
     // WebDAV Related
@@ -682,7 +686,6 @@ export const en = {
         addRoom: 'Add Room',
         addLight: 'Add Light',
         addScript: 'Add Script',
-        addSensor: 'Add Sensor',
         addCamera: 'Add Camera',
         addCurtain: 'Add Curtain',
         addMediaPlayer: 'Add Media Player',
@@ -703,6 +706,28 @@ export const en = {
         manualStreamUrl: "Input ONVIF/RTSP Address",
         onvifUsername: "ONVIF Username",
         onvifPassword: "ONVIF Password",
+
+        // Washing machine specific translations
+        basicControls: 'Basic Controls',
+        switchEntity: 'Power Switch Entity',
+        startEntity: 'Start Button Entity',
+        stopEntity: 'Stop Button Entity',
+        modeEntity: 'Mode Selection Entity',
+        sensorEntities: 'Sensor Entities',
+        statusEntity: 'Status Entity',
+        cycleEntity: 'Cycle/Error Entity',
+        remainingTimeEntity: 'Remaining Time Entity',
+        programEntities: 'Program Slider Entities',
+        addProgramEntity: 'Add Program Slider',
+        stateEntities: 'Status Selection Entities',
+        addStateEntity: 'Add Status Selection',
+        additionalSensors: 'Additional Sensors',
+        addSensor: 'Add Sensor',
+        entity: 'Entity',
+        entityName: 'Entity Name',
+        icon: 'Icon',
+        unit: 'Unit',
+
         features: {
             temperature: 'Temperature Control',
             fanSpeed: 'Fan Speed Control',
@@ -720,7 +745,6 @@ export const en = {
         moveUp: 'Move Up',
         moveDown: 'Move Down',
         groupName: 'Group Name',
-        entityName: 'Entity Name',
         selectType: 'Select Type',
         addEntity: 'Add Entity',
         deleteEntity: 'Delete Entity',
@@ -876,6 +900,33 @@ export const en = {
             on: 'On',
             off: 'Off',
         }
+    },
+    washingMachine: {
+        loadError: 'Failed to load washing machine',
+        loadErrorDesc: 'Failed to load washing machine, entity ID:',
+        loadFailed: 'Load Failed',
+        control: 'Control',
+        sensors: 'Sensors',
+        status: {
+            title: 'Status',
+            on: 'On',
+            off: 'Off',
+            error: 'Error',
+            standby: 'Standby',
+            running: 'Running',
+            paused: 'Paused',
+            completed: 'Completed'
+        },
+        power: 'Power',
+        startWash: 'Start Wash',
+        pauseWash: 'Pause Wash',
+        mode: 'Mode',
+        remainingTime: 'Remaining Time',
+        program: 'Program',
+        temperature: 'Temperature',
+        spin: 'Spin Speed',
+        soil: 'Soil Level',
+        addToDashboard: 'Add to Dashboard'
     },
     pve_server: {
         loadError: 'PVE Server Load Failed',

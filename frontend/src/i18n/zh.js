@@ -164,6 +164,7 @@ export const zh = {
       socketstatus: '插座状态',
       pve: 'PVE监控',
       quotes: '每日一言',
+      washingMachine: '洗衣机',
     },
 
     // 卡片操作
@@ -208,7 +209,8 @@ export const zh = {
       quotes: '每日一言',
       dailyQuote: '每日一言',
       dailyquote: '每日一言',
-      
+      washingMachine: '洗衣机',
+      washingmachine: '洗衣机',
     },
 
     // 配置字段
@@ -244,6 +246,7 @@ export const zh = {
       pveConfig: 'PVE配置',
       serverConfig: '服务器配置',
       quotesConfig: '每日一言配置',
+      washingMachineConfig: '洗衣机配置',
     },
 
     version: {
@@ -700,7 +703,6 @@ export const zh = {
       addRoom: '添加房间',
       addLight: '添加灯光',
       addScript: '添加脚本',
-      addSensor: '添加传感器',
       addCamera: '添加摄像头',
       addCurtain: '添加窗帘',
       addMediaPlayer: '添加播放器',
@@ -782,6 +784,25 @@ export const zh = {
       apiEndpoint: '选择 API',
       quoteAuthor: '署名',
       enterAuthor: '请输入署名',
+      // 洗衣机特定翻译
+      basicControls: '基本控制',
+      switchEntity: '电源开关实体',
+      startEntity: '开始按钮实体',
+      stopEntity: '停止按钮实体',
+      modeEntity: '模式选择实体',
+      sensorEntities: '传感器实体',
+      statusEntity: '状态实体',
+      cycleEntity: '故障/循环实体',
+      remainingTimeEntity: '剩余时间实体',
+      programEntities: '程序滑块实体',
+      addProgramEntity: '添加程序滑块',
+      stateEntities: '状态选择实体',
+      addStateEntity: '添加状态选择',
+      additionalSensors: '附加传感器',
+      addSensor: '添加传感器',
+      entity: '实体',
+      icon: '图标',
+      unit: '单位',
     },
     'fullscreen.enter': '进入全屏',
     'fullscreen.exit': '退出全屏',
@@ -875,10 +896,10 @@ export const zh = {
       },
       labels: {
         cpuUsage: 'CPU使用率',
+        threads: '线程数量',
         memoryUsage: '内存使用率',
         uploadSpeed: '上传速度',
         downloadSpeed: '下载速度',
-        threads: '线程数量',
         uptime: '运行时间',
         status: '状态',
         cpuTemp: 'CPU温度',
@@ -894,6 +915,33 @@ export const zh = {
         on: '开启',
         off: '关闭',
       }
+    },
+    washingMachine: {
+      loadError: '洗衣机加载失败',
+      loadErrorDesc: '洗衣机加载失败,实体ID:',
+      loadFailed: '加载失败',
+      control: '控制',
+      sensors: '传感器',
+
+      status: {
+        title: '状态',
+        on: '开启',
+        off: '关闭',
+        error: '故障',
+        standby: '待机',
+        running: '运行中',
+        paused: '已暂停',
+        completed: '已完成'
+      },
+      power: '电源',
+      startWash: '开始洗涤',
+      pauseWash: '暂停洗涤',
+      mode: '模式',
+      remainingTime: '剩余时间',
+      program: '程序',
+      temperature: '温度',
+      spin: '转速',
+      soil: '污渍程度',
     },
     pve_server: {
       loadError: 'PVE服务器加载失败',

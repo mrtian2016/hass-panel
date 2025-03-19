@@ -33,6 +33,7 @@ import {
   mdiAccountGroup,
   mdiServer,
   mdiFormatQuoteClose,
+  mdiWashingMachine,
 } from '@mdi/js';
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
@@ -484,6 +485,24 @@ const getCardTypes = (t) => ({
         label: t('fields.personsConfig'),
         type: 'persons-config',
         default: []
+      }
+    ]
+  },
+  WashingMachineCard: {
+    name: t('cards.washingMachine'),
+    icon: mdiWashingMachine,
+    fields: [
+      {
+        key: 'title',
+        label: t('fields.title'),
+        type: 'text',
+        default: t('cardTitles.washingMachine')
+      },
+      {
+        key: 'config',
+        label: t('fields.washingMachineConfig'),
+        type: 'washing-machine-config',
+        default: {}
       }
     ]
   },

@@ -1,0 +1,377 @@
+/* Container for the washing machine animation */
+.washing-animation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+
+/* The circular window of the washing machine */
+.washing-window {
+  width: 80%;
+  /* 让高度和宽度保持一致 自动计算 */
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-background-primary);
+  position: relative;
+  overflow: hidden;
+  border: 10px solid var(--color-border);
+  box-shadow: 
+    inset 0 0 10px rgba(0,0,0,0.2),
+    0 0 0 5px #d0d0d0,
+    0 5px 15px rgba(0,0,0,0.3);
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+}
+
+/* Glass effect on the washing machine window */
+.washing-glass {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: inset 0 0 15px rgba(255,255,255,0.8);
+}
+
+/* Glass reflection for realism */
+.glass-reflection {
+  position: absolute;
+  width: 80%;
+  height: 40%;
+  top: 5%;
+  left: 10%;
+  border-radius: 50% / 100% 100% 0 0;
+  background: linear-gradient(to bottom, 
+    rgba(255,255,255,0.5) 0%, 
+    rgba(255,255,255,0.2) 50%, 
+    rgba(255,255,255,0) 100%);
+  transform: rotateX(10deg);
+  z-index: 11;
+  pointer-events: none;
+}
+
+/* Water container */
+.water-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Main water layer */
+.water-layer {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: rgba(64, 164, 223, 0.4);
+  border-radius: 40%;
+  z-index: 2;
+  transition: transform 0.5s ease-out;
+}
+
+/* Water wave effect */
+.water-wave {
+  position: absolute;
+  width: 220%;
+  height: 220%;
+  top: -60%;
+  left: -60%;
+  background: rgba(64, 164, 223, 0.2);
+  border-radius: 35%;
+  z-index: 3;
+  transition: transform 0.5s ease-out;
+}
+
+/* Water particles for added realism */
+.water-particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  z-index: 4;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
+  animation: particle-float 3s ease-in-out infinite;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* Center axis of the washing machine */
+.center-axis {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #999;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  box-shadow: 
+    0 0 0 4px #888,
+    0 0 5px 2px rgba(0,0,0,0.3);
+}
+
+/* Center axis shadow/reflection */
+.center-axis::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  top: 0;
+  left: 0;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50% 50% 0 0;
+}
+
+/* Status indicator light */
+.status-indicator {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+  bottom: 10px;
+  right: 10px;
+  z-index: 12;
+  box-shadow: 0 0 3px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.status-indicator.active {
+  background: #4CAF50;
+  box-shadow: 
+    0 0 5px #4CAF50,
+    0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+/* Container for clothes */
+.clothes-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+
+/* Individual clothing items */
+.clothing-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  filter: saturate(0.8) brightness(0.9);
+  opacity: 0.9;
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+/* Container for bubbles */
+.bubbles-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Individual bubble */
+.bubble {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  bottom: 0;
+  z-index: 5;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+  will-change: transform, opacity;
+}
+
+/* Set custom properties for each bubble */
+.bubble:nth-child(1) { --animation-duration: 3.5s; }
+.bubble:nth-child(2) { --animation-duration: 4.2s; }
+.bubble:nth-child(3) { --animation-duration: 3.8s; }
+.bubble:nth-child(4) { --animation-duration: 4.5s; }
+.bubble:nth-child(5) { --animation-duration: 3.2s; }
+.bubble:nth-child(6) { --animation-duration: 4.7s; }
+.bubble:nth-child(7) { --animation-duration: 3.9s; }
+.bubble:nth-child(8) { --animation-duration: 4.1s; }
+.bubble:nth-child(9) { --animation-duration: 3.7s; }
+.bubble:nth-child(10) { --animation-duration: 4.3s; }
+.bubble:nth-child(11) { --animation-duration: 3.6s; }
+.bubble:nth-child(12) { --animation-duration: 4.8s; }
+.bubble:nth-child(13) { --animation-duration: 3.3s; }
+.bubble:nth-child(14) { --animation-duration: 4.4s; }
+.bubble:nth-child(15) { --animation-duration: 3.5s; }
+
+/* Set custom properties for each clothing item */
+.clothing-item:nth-child(1) { 
+  --random-x-start: 20px; 
+  --random-y-start: 15px; 
+  --animation-delay: 0s;
+}
+.clothing-item:nth-child(2) { 
+  --random-x-start: -30px; 
+  --random-y-start: -10px; 
+  --animation-delay: 0.7s;
+}
+.clothing-item:nth-child(3) { 
+  --random-x-start: 10px; 
+  --random-y-start: -25px; 
+  --animation-delay: 1.4s;
+}
+.clothing-item:nth-child(4) { 
+  --random-x-start: -15px; 
+  --random-y-start: 20px; 
+  --animation-delay: 2.1s;
+}
+
+/* Animation for running state */
+.washing-animation-container.running .water-layer {
+  animation: rotate 8s linear infinite;
+}
+
+.washing-animation-container.running .water-wave {
+  animation: rotate 12s linear infinite reverse;
+}
+
+.washing-animation-container.running .clothing-item {
+  animation: tumble 5s ease-in-out infinite;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+.washing-animation-container.running .bubble {
+  animation: float-bubble var(--animation-duration, 4s) ease-in-out infinite;
+}
+
+.washing-animation-container.running .water-particle {
+  animation: particle-float var(--animation-duration, 3s) ease-in-out infinite;
+}
+
+/* Running window effect */
+.washing-animation-container.running .washing-window {
+  box-shadow: 
+    inset 0 0 10px rgba(0,0,0,0.2),
+    0 0 0 5px #d0d0d0,
+    0 5px 15px rgba(0,0,0,0.3),
+    0 0 20px rgba(64, 164, 223, 0.3);
+}
+
+/* Paused state */
+.washing-animation-container.paused .water-layer,
+.washing-animation-container.paused .water-wave,
+.washing-animation-container.paused .clothing-item,
+.washing-animation-container.paused .bubble,
+.washing-animation-container.paused .water-particle {
+  animation-play-state: paused;
+}
+
+/* Animation definitions */
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes tumble {
+  0% {
+    transform: translate(calc(-50% + var(--random-x-start, 0px)), 
+                         calc(-50% + var(--random-y-start, 0px))) 
+               rotate(0deg);
+    opacity: 0.9;
+  }
+  25% {
+    transform: translate(calc(-50% + 30px), 
+                         calc(-50% - 20px)) 
+               rotate(90deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(calc(-50% - 20px), 
+                         calc(-50% + 30px)) 
+               rotate(180deg);
+    opacity: 0.9;
+  }
+  75% {
+    transform: translate(calc(-50% - 40px), 
+                         calc(-50% - 30px)) 
+               rotate(270deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--random-x-start, 0px)), 
+                         calc(-50% + var(--random-y-start, 0px))) 
+               rotate(360deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes float-bubble {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-70px) scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-150px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-10px, -5px) scale(1.1);
+  }
+  50% {
+    transform: translate(5px, -15px) scale(0.9);
+  }
+  75% {
+    transform: translate(15px, -8px) scale(1.05);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* Subtle wobble effect for when washing machine is running */
+.washing-animation-container.running {
+  animation: subtle-wobble 5s ease-in-out infinite;
+}
+
+@keyframes subtle-wobble {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-1px);
+  }
+  75% {
+    transform: translateX(1px);
+  }
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .washing-window {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .washing-animation-container {
+    height: 150px;
+  }
+} 
