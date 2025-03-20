@@ -67,39 +67,42 @@
 /* Main water layer */
 .water-layer {
   position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background: rgba(64, 164, 223, 0.4);
-  border-radius: 40%;
-  z-index: 2;
-  transition: transform 0.5s ease-out;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(30, 144, 255, 0.8) 0%,
+    rgba(65, 105, 225, 0.7) 25%,
+    rgba(100, 149, 237, 0.6) 50%,
+    rgba(135, 206, 235, 0.7) 75%,
+    rgba(30, 144, 255, 0.8) 100%
+  );
+  border-radius: 50%;
+  opacity: 0.8;
+  z-index: 1;
+  animation: water-rotate 8s linear infinite;
 }
 
 /* Water wave effect */
 .water-wave {
   position: absolute;
-  width: 220%;
-  height: 220%;
-  top: -60%;
-  left: -60%;
-  background: rgba(64, 164, 223, 0.2);
-  border-radius: 35%;
-  z-index: 3;
-  transition: transform 0.5s ease-out;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 40%;
+  z-index: 2;
+  animation: wave-animation 6s infinite linear, wave-rotate 12s infinite linear;
 }
 
 /* Water particles for added realism */
 .water-particle {
   position: absolute;
-  background: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  z-index: 4;
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
-  animation: particle-float 3s ease-in-out infinite;
-  will-change: transform;
-  pointer-events: none;
+  z-index: 3;
+  animation: float-particle 3s ease-in-out infinite, swirl-particle 6s linear infinite;
 }
 
 /* Center axis of the washing machine */
@@ -164,12 +167,55 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 6;
-  filter: saturate(0.8) brightness(0.9);
+  transform-origin: center;
   opacity: 0.9;
-  transition: transform 0.3s ease;
-  will-change: transform;
+  z-index: 3;
+  filter: saturate(0.8);
+  transform: translate(-50%, -50%) rotate(var(--start-rotation)) translateY(var(--distance));
+}
+
+.clothing-item.clockwise {
+  animation: spin-clockwise linear infinite;
+}
+
+.clothing-item.counter-clockwise {
+  animation: spin-counter-clockwise linear infinite;
+}
+
+@keyframes spin-clockwise {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--start-rotation)) translateY(var(--distance));
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(calc(var(--start-rotation) + 90deg)) translateY(calc(var(--distance) * 0.9));
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(calc(var(--start-rotation) + 180deg)) translateY(calc(var(--distance) * 0.8));
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(calc(var(--start-rotation) + 270deg)) translateY(calc(var(--distance) * 0.9));
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(calc(var(--start-rotation) + 360deg)) translateY(var(--distance));
+  }
+}
+
+@keyframes spin-counter-clockwise {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--start-rotation)) translateY(var(--distance));
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(calc(var(--start-rotation) - 90deg)) translateY(calc(var(--distance) * 0.9));
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(calc(var(--start-rotation) - 180deg)) translateY(calc(var(--distance) * 0.8));
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(calc(var(--start-rotation) - 270deg)) translateY(calc(var(--distance) * 0.9));
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(calc(var(--start-rotation) - 360deg)) translateY(var(--distance));
+  }
 }
 
 /* Container for bubbles */
@@ -374,4 +420,322 @@
   .washing-animation-container {
     height: 150px;
   }
+}
+
+/* Water swirl effects */
+.water-swirl {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Different rotation directions */
+.water-swirl.clockwise {
+  animation: rotate-clockwise linear infinite;
+  border-style: dashed;
+}
+
+.water-swirl.counter-clockwise {
+  animation: rotate-counter-clockwise linear infinite;
+  border-style: dotted;
+}
+
+@keyframes rotate-clockwise {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes rotate-counter-clockwise {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+@keyframes water-rotate {
+  0% {
+    transform: rotate(0deg);
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    transform: rotate(360deg);
+    background-position: 0% 0%;
+  }
+}
+
+@keyframes float-particle {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.2);
+  }
+}
+
+@keyframes swirl-particle {
+  0% {
+    transform: rotate(0deg) translateX(5px) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) translateX(15px) rotate(-90deg) scale(0.9);
+  }
+  50% {
+    transform: rotate(180deg) translateX(25px) rotate(-180deg) scale(0.8);
+  }
+  75% {
+    transform: rotate(270deg) translateX(15px) rotate(-270deg) scale(0.9);
+  }
+  100% {
+    transform: rotate(360deg) translateX(5px) rotate(-360deg) scale(1);
+  }
+}
+
+@keyframes wave-animation {
+  0% {
+    transform: rotate(0deg) scale(0.8);
+  }
+  50% {
+    transform: rotate(180deg) scale(1);
+  }
+  100% {
+    transform: rotate(360deg) scale(0.8);
+  }
+}
+
+@keyframes wave-rotate {
+  0% {
+    border-radius: 40%;
+  }
+  50% {
+    border-radius: 45%;
+  }
+  100% {
+    border-radius: 40%;
+  }
+}
+
+/* Add a vortex/whirlpool effect using a gradient mask */
+.washing-animation-container.running .water-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  height: 70%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at center,
+    rgba(10, 50, 150, 0.7) 0%,
+    rgba(30, 120, 200, 0.5) 30%,
+    rgba(100, 180, 240, 0.3) 70%,
+    rgba(135, 206, 235, 0) 100%
+  );
+  border-radius: 50%;
+  z-index: 3;
+  animation: vortex-spin 6s linear infinite;
+  pointer-events: none;
+}
+
+/* Add a central depression to the water to simulate the vortex */
+.washing-animation-container.running .water-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  height: 40%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 30, 100, 0.8) 0%,
+    rgba(10, 80, 150, 0.5) 50%,
+    rgba(30, 120, 200, 0) 100%
+  );
+  border-radius: 50%;
+  z-index: 2;
+  animation: vortex-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Animation for the vortex spinning */
+@keyframes vortex-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Animation for the vortex pulsing */
+@keyframes vortex-pulse {
+  0%, 100% {
+    width: 40%;
+    height: 40%;
+    opacity: 0.8;
+  }
+  50% {
+    width: 35%;
+    height: 35%;
+    opacity: 0.6;
+  }
+}
+
+/* Water container effects */
+.water-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,120,215,0) 70%);
+  opacity: 0.7;
+  z-index: 2;
+  animation: vortex-pulse 4s ease-in-out infinite;
+}
+
+.water-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,120,215,0) 30%, rgba(0,120,215,0.3) 50%, rgba(0,120,215,0) 70%);
+  opacity: 0.5;
+  z-index: 2;
+  animation: vortex-spin 10s linear infinite;
+}
+
+@keyframes vortex-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes vortex-pulse {
+  0%, 100% { width: 35%; height: 35%; opacity: 0.7; }
+  50% { width: 45%; height: 45%; opacity: 0.9; }
+}
+
+/* Water layer with conic gradient for swirling effect */
+.water-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0.8;
+  z-index: 1;
+  background: conic-gradient(
+    at 50% 50%,
+    rgba(0, 150, 255, 0.6),
+    rgba(0, 110, 220, 0.7),
+    rgba(0, 90, 200, 0.8),
+    rgba(0, 70, 180, 0.7),
+    rgba(0, 150, 255, 0.6)
+  );
+  animation: water-rotate 12s linear infinite;
+}
+
+@keyframes water-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Water wave */
+.water-wave {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  z-index: 2;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 70%);
+  animation: wave-animation 4s ease-in-out infinite, wave-rotate 10s linear infinite;
+}
+
+@keyframes wave-animation {
+  0%, 100% { 
+    border-radius: 50%; 
+    transform: scale(1);
+  }
+  50% { 
+    border-radius: 48% 52% 51% 49% / 52% 49% 51% 48%; 
+    transform: scale(1.05);
+  }
+}
+
+@keyframes wave-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Water particles */
+.water-particle {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 3;
+  animation: float-particle 3s ease-in-out infinite, swirl-particle 5s linear infinite;
+}
+
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.1); }
+}
+
+@keyframes swirl-particle {
+  0% { transform: rotate(0deg) translateX(10px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(10px) rotate(-360deg); }
+}
+
+/* Water swirls */
+.water-swirl {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.water-swirl.clockwise {
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  animation: clockwise-rotation linear infinite;
+}
+
+.water-swirl.counter-clockwise {
+  border: 2px dotted rgba(255, 255, 255, 0.3);
+  animation: counter-clockwise-rotation linear infinite;
+}
+
+@keyframes clockwise-rotation {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes counter-clockwise-rotation {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
 } 
