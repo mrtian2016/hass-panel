@@ -14,6 +14,18 @@ import { useEntity } from '@hakit/core';
 import { safeParseFloat, safeGetState } from '../../utils/helper';
 import ServerInfoRow from '../ServerInfoRow';
 
+/**
+ * Renders a router performance card displaying key status metrics.
+ *
+ * This functional component maps over provided router configuration details to retrieve and format performance data such as CPU usage, memory usage, WAN speeds, online device count, network connections, CPU temperature, public IP, and uptime. It then displays these metrics within a base card along with a server information row.
+ *
+ * @param {Object} config - Configuration for the router card.
+ * @param {boolean} config.titleVisible - Determines whether the card title is visible.
+ * @param {string} [config.title] - Custom title for the card; defaults to a translated title if omitted.
+ * @param {Object} config.router - Object mapping metric keys to their respective feature configurations.
+ *
+ * @returns {JSX.Element} A React element representing the router performance and status card.
+ */
 function RouterCard({ config }) {
   const titleVisible = config.titleVisible;
   const { t } = useLanguage();
