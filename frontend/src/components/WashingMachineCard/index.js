@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { mdiWashingMachine, mdiPower } from '@mdi/js';
+import { mdiWashingMachine, mdiPower, mdiMenuDown } from '@mdi/js';
 import {  notification } from 'antd';
 import { Popup, List } from 'antd-mobile';
 import BaseCard from '../BaseCard';
@@ -24,16 +24,15 @@ function WashingMachineCard({ config }) {
   const statusEntity = useEntity(config?.config?.statusEntity || '', {returnNullIfNotFound: true});
   const cycleEntity = useEntity(config?.config?.cycleEntity || '', {returnNullIfNotFound: true});
   const remainingTimeEntity = useEntity(config?.config?.remainingTimeEntity || '', {returnNullIfNotFound: true});
-  
+  console.log(switchEntity)
   
   // Determine if the washing machine is running
-  const isWashingRunning = true|| statusEntity?.state === 'on' || switchEntity?.state === 'on';
-  const isPowerOn = true|| switchEntity?.state === 'on';
+  const isWashingRunning =  switchEntity?.state === 'on' && statusEntity?.state === '启动';
+  const isPowerOn =  switchEntity?.state === 'on';
   
   // Check if required entities are loaded
   if (
-    (config?.config?.switchEntity && !switchEntity) ||
-    (config?.config?.statusEntity && !statusEntity)
+    (config?.config?.switchEntity && !switchEntity)
   ) {
     if (debugMode) {
       notification.error({
@@ -57,11 +56,11 @@ function WashingMachineCard({ config }) {
   const handleStartStop = () => {
     if (isWashingRunning) {
       if (stopEntity) {
-        stopEntity.service.turn_on();
+        stopEntity.service.press();
       }
     } else {
       if (startEntity) {
-        startEntity.service.turn_on();
+        startEntity.service.press();
       }
     }
   };
@@ -69,7 +68,7 @@ function WashingMachineCard({ config }) {
   // Handle mode selection
   const handleModeChange = (value) => {
     if (modeEntity) {
-      modeEntity.service.select_option({ option: value });
+      modeEntity.service.select_option({serviceData:{ option: value }});
       setShowModePopup(false);
     }
   };
@@ -91,13 +90,13 @@ function WashingMachineCard({ config }) {
     >
       <div className="washing-machine-content">
         {/* Status Section - Single Row */}
-        {(statusEntity || cycleEntity || remainingTimeEntity) && (
+        {(switchEntity || cycleEntity || remainingTimeEntity) && (
           <div className="status-row">
-            {statusEntity && (
+            {switchEntity && (
               <div className="status-item">
                 <span className="status-label">{t('washingMachine.status.title')}</span>
-                <span className={`status-value ${statusEntity.state === 'on' ? 'active' : ''}`}>
-                  {statusEntity.state === 'on' ? 
+                <span className={`status-value ${switchEntity.state === 'on' ? 'active' : ''}`}>
+                  {switchEntity.state === 'on' ? 
                     t('washingMachine.status.on') : 
                     t('washingMachine.status.off')}
                 </span>
@@ -127,6 +126,7 @@ function WashingMachineCard({ config }) {
                 disabled={!isPowerOn}
               >
                 {modeEntity.state || t('washingMachine.mode')}
+                  <Icon path={mdiMenuDown} size={14} />
               </button>
               
               <Popup

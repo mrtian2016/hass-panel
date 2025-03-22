@@ -8,7 +8,7 @@ function WashingMachineConfig({ field, value, onChange, getFilteredEntities }) {
   const switchEntities = getFilteredEntities('switch.*|button.*');
   const selectEntities = getFilteredEntities('input_select.*|select.*');
   const scriptEntities = getFilteredEntities('switch.*|button.*');
-  const sensorEntities = getFilteredEntities('sensor.*|binary_sensor.*');
+  const sensorEntities = getFilteredEntities('sensor.*|binary_sensor.*|select.*');
   
   // Default value structure
   const defaultValue = {
