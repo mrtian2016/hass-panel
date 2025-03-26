@@ -34,6 +34,7 @@ import {
   mdiServer,
   mdiFormatQuoteClose,
   mdiWashingMachine,
+  mdiHelpCircle,
 } from '@mdi/js';
 import AddCardModal from '../../components/AddCardModal';
 import EditCardModal from '../../components/EditCardModal';
@@ -46,6 +47,10 @@ import GlobalConfig from '../../components/GlobalConfig';
 import './style.css';
 import VersionListModal from '../../components/VersionList';
 import BottomInfo from '../../components/BottomInfo';
+
+// 添加默认图标常量
+const DEFAULT_CARD_ICON = mdiHelpCircle;
+
 const getCardTypes = (t) => ({
   TimeCard: {
     name: t('cards.time'),
@@ -917,7 +922,7 @@ function ConfigPage({ sidebarVisible, setSidebarVisible }) {
             <div key={card.id} className="config-card">
               <div className="card-header">
                 <div className="card-icon">
-                  <Icon path={getCardTypes(t)[card.type].icon} size={14} />
+                  <Icon path={getCardTypes(t)[card.type]?.icon || DEFAULT_CARD_ICON} size={14} />
                 </div>
                 <h3 className="card-title">{card.config.title}</h3>
               </div>
