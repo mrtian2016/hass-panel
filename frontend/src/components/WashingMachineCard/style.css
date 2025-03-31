@@ -78,6 +78,7 @@
   cursor: pointer;
   transition: opacity 0.3s ease;
   text-align: center;
+  background-color: var(--color-background-primary);
   color: var(--color-text-primary);
   display: flex;
   align-items: center;
@@ -103,33 +104,6 @@
 }
 
 
-/* Mode selector button */
-.mode-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  border-radius: var(--border-radius-small);
-  color: white;
-  font-size: 14px;
-  line-height: 1.5;
-  font-weight: 500;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  min-width: 120px;
-}
-
-.mode-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.mode-button:not(:disabled):hover,
-.mode-button:not(:disabled):focus {
-}
 
 /* Popup styling */
 .mode-popup {
