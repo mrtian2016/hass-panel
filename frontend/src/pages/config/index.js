@@ -33,7 +33,7 @@ import {
   mdiAccountGroup,
   mdiServer,
   mdiFormatQuoteClose,
-  mdiWashingMachine,
+  // mdiWashingMachine,
   mdiHelpCircle,
 } from '@mdi/js';
 import AddCardModal from '../../components/AddCardModal';
