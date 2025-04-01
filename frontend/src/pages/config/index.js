@@ -493,24 +493,24 @@ const getCardTypes = (t) => ({
       }
     ]
   },
-  WashingMachineCard: {
-    name: t('cards.washingMachine'),
-    icon: mdiWashingMachine,
-    fields: [
-      {
-        key: 'title',
-        label: t('fields.title'),
-        type: 'text',
-        default: t('cardTitles.washingMachine')
-      },
-      {
-        key: 'config',
-        label: t('fields.washingMachineConfig'),
-        type: 'washing-machine-config',
-        default: {}
-      }
-    ]
-  },
+  // WashingMachineCard: {
+  //   name: t('cards.washingMachine'),
+  //   icon: mdiWashingMachine,
+  //   fields: [
+  //     {
+  //       key: 'title',
+  //       label: t('fields.title'),
+  //       type: 'text',
+  //       default: t('cardTitles.washingMachine')
+  //     },
+  //     {
+  //       key: 'config',
+  //       label: t('fields.washingMachineConfig'),
+  //       type: 'washing-machine-config',
+  //       default: {}
+  //     }
+  //   ]
+  // },
   DailyQuoteCard: {
     name: t('cards.dailyQuote'),
     icon: mdiFormatQuoteClose,

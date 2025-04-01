@@ -59,6 +59,11 @@
   color: var(--color-text-primary);
 }
 
+/* 搜索框样式 */
+.search-container {
+  padding: 16px 16px 8px;
+}
+
 .card-types {
   padding: 16px;
   display: grid;

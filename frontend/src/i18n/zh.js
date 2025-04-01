@@ -58,6 +58,8 @@ export const zh = {
 
     // 配置页面
     config: {
+      searchCards: '搜索卡片',
+      noCardsFound: '没有找到卡片',
       edit: '编辑',
       delete: '删除',
       preview: '预览',

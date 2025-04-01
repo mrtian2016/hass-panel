@@ -59,26 +59,16 @@ class HomeAssistantAPI:
                 logger.error("未找到 Home Assistant 配置")
                 raise Exception("Home Assistant configuration not found")
             
-            # 检查是否存在 SUPERVISOR_TOKEN
-            supervisor_token = os.environ.get("SUPERVISOR_TOKEN")
-            if supervisor_token:
-                logger.info("检测到 SUPERVISOR_TOKEN，使用 supervisor API")
-                self.base_url = "http://supervisor/core/api"
-                self.headers = {
-                    "Authorization": f"Bearer {supervisor_token}",
-                    "Content-Type": "application/json",
-                }
-            else:
-                # 如果数据库中的 token 为空，尝试使用 SUPERVISOR_TOKEN
-                if not hass_config.hass_token:
-                    logger.error("数据库中的 token 为空且未找到 SUPERVISOR_TOKEN")
-                    raise Exception("No valid token found")
-                
-                self.base_url = f"{hass_config.hass_url}/api"
-                self.headers = {
-                    "Authorization": f"Bearer {hass_config.hass_token}",
-                    "Content-Type": "application/json",
-                }
+            
+            if not hass_config.hass_token:
+                logger.error("数据库中的 token 为空且未找到 SUPERVISOR_TOKEN")
+                raise Exception("No valid token found")
+            
+            self.base_url = f"{hass_config.hass_url}/api"
+            self.headers = {
+                "Authorization": f"Bearer {hass_config.hass_token}",
+                "Content-Type": "application/json",
+            }
         finally:
             db.close()
 

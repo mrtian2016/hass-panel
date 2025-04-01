@@ -58,6 +58,8 @@ export const en = {
 
     // Config Page
     config: {
+        searchCards: 'Search Cards',
+        noCardsFound: 'No cards found',
         saving: 'Saving...',
         edit: 'Edit',
         preview: 'Preview',

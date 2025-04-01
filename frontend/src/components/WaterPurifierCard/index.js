@@ -17,6 +17,13 @@ function WaterPurifierCard({ config }) {
   const roFilterLife = useEntity(config.waterpuri?.ro_filter_life?.entity_id || '', {returnNullIfNotFound: true});
   const status = useEntity(config.waterpuri?.status?.entity_id || '', {returnNullIfNotFound: true});
 
+  function safeGetState(entity) {
+    if (!entity || !entity.state || entity.state === 'unknown' || entity.state === 'unavailable' || entity.state === 'loading') {
+      return 0;
+    }
+    return entity.state;
+  }
+
   if (!temperature || !tdsIn || !tdsOut || !ppFilterLife || !roFilterLife || !status) {
     if (debugMode) {
       notification.error({
@@ -36,17 +43,17 @@ function WaterPurifierCard({ config }) {
       titleVisible={titleVisible}
       headerRight={
         <div className="device-status">
-          {status?.state}
+          {safeGetState(status) || ''}
         </div>
       }
     >
       <div className="water-purifier-content">
         <div className="tds-display">
-          <div className="tds-value">{tdsOut?.state || '0'}</div>
+          <div className="tds-value">{safeGetState(tdsOut) || '0'}</div>
           <div className="tds-label">
             <span>{t('waterPurifier.tds.pure')}</span>
-            <span className={tdsOut?.state < 50 ? 'good' : 'warning'}>
-              {tdsOut?.state < 50 
+            <span className={safeGetState(tdsOut) < 50 ? 'good' : 'warning'}>
+              {safeGetState(tdsOut) < 50 
                 ? t('waterPurifier.tds.purityHigh') 
                 : t('waterPurifier.tds.purityLow')}
             </span>
@@ -55,12 +62,12 @@ function WaterPurifierCard({ config }) {
             <div className="info-item">
               <span className="label">{t('waterPurifier.temperature')}:</span>
               <span className="value">
-                {temperature?.state || '0'}{t('waterPurifier.unit.temp')}
+                {safeGetState(temperature)}{t('waterPurifier.unit.temp')}
               </span>
             </div>
             <div className="info-item">
               <span className="label">{t('waterPurifier.tds.tap')}:</span>
-              <span className="value">{tdsIn?.state || '0'}</span>
+              <span className="value">{safeGetState(tdsIn)}</span>
             </div>
           </div>
         </div>
