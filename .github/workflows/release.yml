@@ -117,3 +117,10 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.inputs.version || github.ref_name }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:latest
+      
+      - name: Trigger B Repo Workflow
+        run: |
+          curl -X POST -H "Accept: application/vnd.github.v3+json" \
+               -H "Authorization: token ${{ secrets.LAO_WANG_GITHUB_TOKEN }}" \
+               https://api.github.com/repos/Desmond-Dong/hassio-addons/dispatches \
+               -d '{"event_type":"external_trigger"}'
