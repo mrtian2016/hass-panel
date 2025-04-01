@@ -56,7 +56,6 @@ export const en = {
         my: 'My'
     },
 
-    // Config Page
     config: {
         searchCards: 'Search Cards',
         noCardsFound: 'No cards found',
