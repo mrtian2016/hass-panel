@@ -162,19 +162,6 @@ npm run build
 
 欢迎提交 Pull Request 和 Issue！
 
-## 许可证
-
-本项目采用 GNU Affero General Public License v3.0 (AGPL-3.0) 许可证。这意味着：
-
-- 您可以自由使用、修改和分发本软件
-- 如果您修改并分发本软件，您必须：
-  - 向所有用户提供您修改后的源代码
-  - 使用 AGPL-3.0 许可证授权您的修改
-  - 说明您所做的更改
-- 任何网络使用（如 Web 应用程序）都视为分发
-- 所有衍生作品也必须使用 AGPL-3.0 许可证
-
-详细信息请查看[完整许可证文本](https://www.gnu.org/licenses/agpl-3.0.zh-cn.html)。
 
 ## 赞助
 
