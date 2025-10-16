@@ -134,6 +134,27 @@ export const en = {
         reinitializeFailed: 'Reinitialize failed',
     },
 
+    // Groups
+    groups: {
+        manage: 'Manage Groups',
+        add: 'Add Group',
+        edit: 'Edit Group',
+        delete: 'Delete Group',
+        deleteConfirm: 'Confirm delete this group?',
+        deleteSuccess: 'Group deleted successfully',
+        deleteFailed: 'Failed to delete group',
+        all: 'All',
+        default: 'Default Group',
+        name: 'Group Name',
+        namePlaceholder: 'Enter group name',
+        nameRequired: 'Group name is required',
+        selectGroup: 'Select Group',
+        saveSuccess: 'Group saved successfully',
+        saveFailed: 'Failed to save group',
+        moveToDefault: 'Cards will move to default group',
+        order: 'Order',
+    },
+
     // Card Types
     cards: {
         time: 'Time',

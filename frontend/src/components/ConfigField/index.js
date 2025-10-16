@@ -503,6 +503,9 @@ function ConfigField({ field, value, onChange }) {
         { key: 'electric_current', name: t('configField.electricCurrent') },
         { key: 'totalUsage', name: t('configField.totalUsage') },
         { key: 'todayUsage', name: t('configField.todayUsage') },
+        { key: 'yesterdayUsage', name: t('configField.yesterdayUsage') },
+        { key: 'monthlyUsage', name: t('configField.monthlyUsage') },
+        { key: 'yearlyUsage', name: t('configField.yearlyUsage') },
       ];
 
       return (
@@ -701,6 +704,31 @@ function ConfigField({ field, value, onChange }) {
 
     case 'quotes-config':
       return <DailyQuoteConfig field={field} value={value} onChange={onChange} />
+
+    case 'group-select':
+      const { groups = [] } = field;
+      const groupOptions = [
+        { id: 'default', name: t('groups.default') },
+        ...groups.sort((a, b) => a.order - b.order)
+      ];
+
+      return (
+        <div className="config-field">
+          <div className="config-field-row">
+            <label>{field.label || t('groups.selectGroup')}</label>
+            <AutoComplete
+              allowClear
+              value={value || 'default'}
+              onChange={onChange}
+              placeholder={t('groups.selectGroup')}
+              options={groupOptions.map(group => ({
+                value: group.id,
+                label: group.name
+              }))}
+            />
+          </div>
+        </div>
+      );
 
     default:
       return null;

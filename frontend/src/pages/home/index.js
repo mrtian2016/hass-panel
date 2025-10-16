@@ -43,6 +43,7 @@ import ServerCard from '../../components/ServerCard';
 import PVECard from '../../components/PVECard';
 import DailyQuoteCard from '../../components/DailyQuoteCard';
 import WashingMachineCard from '../../components/WashingMachineCard';
+import GroupTabs from '../../components/GroupTabs';
 import './style.css';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { configApi, applyBackgroundToBody } from '../../utils/api';
@@ -72,6 +73,12 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
   // 添加主题菜单状态
   const [themeMenuVisible, setThemeMenuVisible] = useState(false);
+
+  // 分组相关状态
+  const [groups, setGroups] = useState([]);
+  const [activeGroup, setActiveGroup] = useState(() => {
+    return localStorage.getItem('active-group') || '_all';
+  });
 
   // 获取主题图标
   const getThemeIcon = () => {
@@ -269,6 +276,48 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     return layouts;
   }, []);
 
+  // 分组切换处理
+  const handleGroupChange = (groupId) => {
+    console.log('切换到分组:', groupId);
+    setActiveGroup(groupId);
+    localStorage.setItem('active-group', groupId);
+
+    // 加载对应分组的布局
+    const layoutKey = isMobile ? `mobile-${groupId}-layouts` : `desktop-${groupId}-layouts`;
+    const savedLayouts = localStorage.getItem(layoutKey);
+
+    const filteredCards = groupId === '_all'
+      ? cards.filter(card => card.visible !== false)
+      : cards.filter(card => card.visible !== false && (card.group === groupId || (!card.group && groupId === 'default')));
+
+    console.log('切换分组时的所有卡片:', cards.map(c => ({ id: c.id, type: c.type, group: c.group, visible: c.visible })));
+    console.log('切换分组后筛选的卡片:', filteredCards.map(c => ({ id: c.id, type: c.type, group: c.group })));
+
+    if (savedLayouts) {
+      try {
+        const parsedLayouts = JSON.parse(savedLayouts);
+        if (Object.keys(parsedLayouts).length > 0) {
+          setCurrentLayouts(parsedLayouts);
+        } else {
+          // 生成新布局
+          const newLayouts = calculateDefaultLayouts(filteredCards);
+          setCurrentLayouts(newLayouts);
+          localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
+        }
+      } catch (error) {
+        console.error('加载布局失败:', error);
+        const newLayouts = calculateDefaultLayouts(filteredCards);
+        setCurrentLayouts(newLayouts);
+        localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
+      }
+    } else {
+      // 没有保存的布局，生成新布局
+      const newLayouts = calculateDefaultLayouts(filteredCards);
+      setCurrentLayouts(newLayouts);
+      localStorage.setItem(layoutKey, JSON.stringify(newLayouts));
+    }
+  };
+
   // 监听窗口大小变化
   useEffect(() => {
     function handleResize() {
@@ -279,7 +328,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
       // 如果设备类型发生变化（从移动端到桌面端或反之），重新加载对应的布局
       if (newIsMobile !== isMobile) {
-        const layoutKey = newIsMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+        const layoutKey = newIsMobile ? `mobile-${activeGroup}-layouts` : `desktop-${activeGroup}-layouts`;
         const savedLayouts = localStorage.getItem(layoutKey);
 
         if (savedLayouts) {
@@ -372,43 +421,59 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         }
         let config = response.data;
 
+        // 设置分组配置
+        if (config.globalConfig && config.globalConfig.groups) {
+          setGroups(config.globalConfig.groups);
+        }
+
         // 设置卡片配置
         if (config.cards) {
           const updatedCards = config.cards.map(card => ({
             ...card,
             visible: card.visible !== false,
-            titleVisible: card.titleVisible !== false
+            titleVisible: card.titleVisible !== false,
+            group: card.config.group || 'default' // 如果没有分组，默认为 default
           }));
           setCards(updatedCards);
 
           // 设置布局配置（从本地存储加载）
-          const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+          const layoutKey = isMobile ? `mobile-${activeGroup}-layouts` : `desktop-${activeGroup}-layouts`;
           const savedLayouts = localStorage.getItem(layoutKey);
+
+          // 根据当前活动分组筛选卡片
+          const filteredCards = activeGroup === '_all'
+            ? updatedCards.filter(card => card.visible !== false)
+            : updatedCards.filter(card => card.visible !== false && (card.group === activeGroup || (!card.group && activeGroup === 'default')));
+
+          // 调试信息
+          console.log('当前活动分组:', activeGroup);
+          console.log('所有卡片:', updatedCards.map(c => ({ id: c.id, type: c.type, group: c.group })));
+          console.log('筛选后的卡片:', filteredCards.map(c => ({ id: c.id, type: c.type, group: c.group })));
 
           let loadedLayouts;
           if (savedLayouts) {
             try {
               loadedLayouts = JSON.parse(savedLayouts);
-              // 验证布局是否完整
-              if (!isLayoutValid(loadedLayouts, updatedCards)) {
+              // 验证布局是否完整（使用当前分组的卡片进行验证）
+              if (!isLayoutValid(loadedLayouts, filteredCards)) {
                 // 布局不完整，需要合并默认布局
-                const defaultLayouts = calculateDefaultLayouts(updatedCards);
+                const defaultLayouts = calculateDefaultLayouts(filteredCards);
                 loadedLayouts = mergeLayouts(
                   defaultLayouts,
                   loadedLayouts,
-                  updatedCards.filter(card => card.visible !== false).map(card => card.id.toString())
+                  filteredCards.map(card => card.id.toString())
                 );
                 // 保存更新后的布局
                 localStorage.setItem(layoutKey, JSON.stringify(loadedLayouts));
               }
             } catch (error) {
               console.error('解析本地布局失败:', error);
-              loadedLayouts = calculateDefaultLayouts(updatedCards);
+              loadedLayouts = calculateDefaultLayouts(filteredCards);
               localStorage.setItem(layoutKey, JSON.stringify(loadedLayouts));
             }
           } else {
             // 没有本地布局，计算默认布局
-            loadedLayouts = calculateDefaultLayouts(updatedCards);
+            loadedLayouts = calculateDefaultLayouts(filteredCards);
             localStorage.setItem(layoutKey, JSON.stringify(loadedLayouts));
           }
 
@@ -487,16 +552,16 @@ function Home({ sidebarVisible, setSidebarVisible }) {
   const handleLayoutChange = (layout, layouts) => {
     setCurrentLayouts(layouts);
 
-    // 保存布局到本地存储
-    const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+    // 保存布局到本地存储（按分组存储）
+    const layoutKey = isMobile ? `mobile-${activeGroup}-layouts` : `desktop-${activeGroup}-layouts`;
     localStorage.setItem(layoutKey, JSON.stringify(layouts));
   };
 
   // 修改保存布局函数
   const handleSaveLayout = () => {
     try {
-      // 保存布局到本地存储
-      const layoutKey = isMobile ? 'mobile-dashboard-layouts' : 'desktop-dashboard-layouts';
+      // 保存布局到本地存储（按分组存储）
+      const layoutKey = isMobile ? `mobile-${activeGroup}-layouts` : `desktop-${activeGroup}-layouts`;
       localStorage.setItem(layoutKey, JSON.stringify(currentLayouts));
 
       // 不再保存列数到本地存储
@@ -555,8 +620,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
             setCurrentLayouts(newLayouts);
 
-            // 保存到本地存储
-            localStorage.setItem('mobile-dashboard-layouts', JSON.stringify(newLayouts));
+            // 保存到本地存储（按分组存储）
+            localStorage.setItem(`mobile-${activeGroup}-layouts`, JSON.stringify(newLayouts));
 
             setIsEditing(false);
             message.success(t('config.resetSuccess'));
@@ -583,8 +648,8 @@ function Home({ sidebarVisible, setSidebarVisible }) {
 
             setCurrentLayouts(newLayouts);
 
-            // 保存到本地存储
-            localStorage.setItem('desktop-dashboard-layouts', JSON.stringify(newLayouts));
+            // 保存到本地存储（按分组存储）
+            localStorage.setItem(`desktop-${activeGroup}-layouts`, JSON.stringify(newLayouts));
 
             setIsEditing(false);
             message.success(t('config.resetSuccess'));
@@ -814,7 +879,16 @@ function Home({ sidebarVisible, setSidebarVisible }) {
         ) : (
           <>
             <div className={`header ${isFullscreen ? 'hidden' : ''}`}>
+              {/* 分组标签栏 */}
+              
+            <GroupTabs
+              groups={groups}
+              activeGroup={activeGroup}
+              onGroupChange={handleGroupChange}
+              isEditing={isEditing}
+            />
               <div className="theme-menu-container">
+                 
                 <button
                   className="theme-toggle"
                   onClick={() => setThemeMenuVisible(!themeMenuVisible)}
@@ -942,7 +1016,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               </button>
             </div>
 
-
+           
 
             <Responsive
               className={`layout ${isEditing ? 'editing' : ''}`}
@@ -966,7 +1040,13 @@ function Home({ sidebarVisible, setSidebarVisible }) {
               resizeHandleWrapperClass="resize-handle-wrapper"
             >
               {cards
-                .filter(card => card.visible !== false)
+                .filter(card => {
+                  if (card.visible === false) return false;
+                  // 如果是"全部"分组，显示所有卡片
+                  if (activeGroup === '_all') return true;
+                  // 否则只显示属于当前分组的卡片（如果卡片没有分组属性，默认属于default分组）
+                  return (card.group === activeGroup) || (!card.group && activeGroup === 'default');
+                })
                 .map(card => (
                   <div key={card.id}>
                     {renderCard(card)}

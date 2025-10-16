@@ -134,6 +134,27 @@ export const zh = {
       reinitializeSuccess: '重新初始化成功',
       reinitializeFailed: '重新初始化失败',
     },
+
+    // 分组相关
+    groups: {
+      manage: '管理分组',
+      add: '添加分组',
+      edit: '编辑分组',
+      delete: '删除分组',
+      deleteConfirm: '确认删除此分组?',
+      deleteSuccess: '分组删除成功',
+      deleteFailed: '分组删除失败',
+      all: '全部',
+      default: '默认分组',
+      name: '分组名称',
+      namePlaceholder: '请输入分组名称',
+      nameRequired: '分组名称不能为空',
+      selectGroup: '选择分组',
+      saveSuccess: '分组保存成功',
+      saveFailed: '分组保存失败',
+      moveToDefault: '卡片将移至默认分组',
+      order: '排序',
+    },
     
     // 卡片类型
     cards: {
