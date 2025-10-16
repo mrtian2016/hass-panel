@@ -132,6 +132,7 @@ export const en = {
         reinitialize: 'Reinitialize',
         reinitializeSuccess: 'Reinitialized successfully',
         reinitializeFailed: 'Reinitialize failed',
+        clearFilter: 'Clear Filter',
     },
 
     // Groups

@@ -133,6 +133,7 @@ export const zh = {
       reinitialize: '重新初始化',
       reinitializeSuccess: '重新初始化成功',
       reinitializeFailed: '重新初始化失败',
+      clearFilter: '清除筛选',
     },
 
     // 分组相关

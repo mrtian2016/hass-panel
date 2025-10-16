@@ -97,6 +97,81 @@
   width: 100%;
 }
 
+/* 分组筛选器样式 - 弱化版本 */
+.group-filter-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: transparent;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+
+.filter-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.group-filter-container .ant-select {
+  flex-shrink: 0;
+}
+
+.group-filter-container .ant-select-selector {
+  border-radius: 6px !important;
+  border: 1px solid var(--color-border) !important;
+  background: var(--color-background) !important;
+  transition: all 0.2s ease;
+  height: 28px !important;
+  min-height: 28px !important;
+  font-size: 13px;
+}
+
+.group-filter-container .ant-select-selection-item {
+  line-height: 26px !important;
+}
+
+.group-filter-container .ant-select-selector:hover {
+  border-color: var(--color-primary) !important;
+}
+
+.group-filter-container .ant-select-focused .ant-select-selector {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(255, 183, 77, 0.08) !important;
+}
+
+.group-filter-container .ant-btn-text {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  height: 28px;
+  padding: 0 8px;
+  opacity: 0.7;
+}
+
+.group-filter-container .ant-btn-text:hover {
+  color: var(--color-primary);
+  background: rgba(255, 183, 77, 0.08);
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .group-filter-container {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .group-filter-container .ant-select {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
 .config-header .ant-btn {
   background: var(--color-primary) !important;
   color: white !important;
@@ -429,6 +504,31 @@
 
 .switch-item .ant-switch-checked {
   background: var(--color-primary) !important;
+}
+
+/* 自定义 Select 样式 */
+.switch-item .ant-select {
+  font-size: 13px;
+}
+
+.switch-item .ant-select-selector {
+  background: var(--color-background) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease;
+}
+
+.switch-item .ant-select-selector:hover {
+  border-color: var(--color-primary) !important;
+}
+
+.switch-item .ant-select-focused .ant-select-selector {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(255, 183, 77, 0.1) !important;
+}
+
+.switch-item .ant-select-selection-item {
+  color: var(--color-text) !important;
 }
 
 .card-actions {
