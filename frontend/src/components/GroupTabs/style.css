@@ -34,6 +34,7 @@
 .group-tab {
   flex-shrink: 0;
   padding: 8px 16px;
+  margin-bottom: -1px;
   border: none;
   background: transparent;
   color: var(--color-text-secondary, #666);
@@ -53,7 +54,7 @@
 .group-tab.active {
   color: var(--color-primary, #1890ff);
   font-weight: 600;
-  border-bottom-color: var(--color-primary, #1890ff);
+  border-bottom-color: 2px var(--color-primary, #1890ff);
 }
 
 .group-scroll-arrow {
