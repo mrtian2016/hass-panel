@@ -370,7 +370,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [cards, isMobile, calculateDefaultLayouts]);
+  }, [cards, isMobile, calculateDefaultLayouts, activeGroup]);
   // 添加一个函数，合并现有布局和新计算的布局
   const mergeLayouts = useCallback((defaultLayouts, currentLayouts, cardIds) => {
     const result = {};
@@ -494,7 +494,7 @@ function Home({ sidebarVisible, setSidebarVisible }) {
     };
 
     loadConfig();
-  }, [isMobile, calculateDefaultLayouts, mergeLayouts, isLayoutValid]); // 恢复 isMobile 依赖，因为移动设备和桌面设备的布局不同
+  }, [isMobile, calculateDefaultLayouts, mergeLayouts, isLayoutValid, activeGroup]); // 恢复 isMobile 依赖,因为移动设备和桌面设备的布局不同
 
 
   // const handleRefresh = () => {
