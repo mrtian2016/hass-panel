@@ -1,0 +1,130 @@
+.group-tabs-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 4px;
+  float: left;
+  margin-left: 20px;
+  margin-right: auto;
+
+}
+
+.group-tabs-scroll {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.group-tabs-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.group-tabs {
+  display: flex;
+  gap: 8px;
+  min-width: min-content;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+}
+
+.group-tab {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary, #666);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  border-bottom: 2px solid transparent;
+}
+
+.group-tab:hover {
+  color: var(--color-text-primary, #333);
+}
+
+.group-tab.active {
+  color: var(--color-primary, #1890ff);
+  font-weight: 600;
+  border-bottom-color: var(--color-primary, #1890ff);
+}
+
+.group-scroll-arrow {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-background-secondary, rgba(0, 0, 0, 0.05));
+  color: var(--color-text-primary, #333);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.group-scroll-arrow:hover {
+  background-color: var(--color-background-hover, rgba(0, 0, 0, 0.1));
+}
+
+.group-scroll-arrow.left {
+  margin-right: 8px;
+}
+
+.group-scroll-arrow.right {
+  margin-left: 8px;
+}
+
+/* 暗色模式 */
+body[data-theme='dark'] .group-tabs {
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+body[data-theme='dark'] .group-tab {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+body[data-theme='dark'] .group-tab:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body[data-theme='dark'] .group-tab.active {
+  color: var(--color-primary, #1890ff);
+  border-bottom-color: var(--color-primary, #1890ff);
+}
+
+body[data-theme='dark'] .group-scroll-arrow {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body[data-theme='dark'] .group-scroll-arrow:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .group-tabs-container {
+    margin-bottom: 12px;
+    padding: 0 2px;
+  }
+
+  .group-tab {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .group-scroll-arrow {
+    width: 28px;
+    height: 28px;
+  }
+}
